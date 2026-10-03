@@ -1,0 +1,17 @@
+{
+ "version": "1.5",
+ "date": "2026-10-03",
+ "notes": [
+  "Novità e aggiornamenti dentro l'app: il numero di versione in alto apre la finestra.",
+  "Pulsante «Aggiorna»: il bridge scarica da solo la nuova versione e si riavvia; il file per PC si sovrascrive con un clic.",
+  "Il bridge controlla gli aggiornamenti a ogni avvio."
+ ],
+ "bridge": {
+  "file": "DataEngineerBridge.exe",
+  "sha256": "d2735b41b85febdd74462cf8b79b62556e74ef9e7781466e11f4a6b694febb29"
+ },
+ "app": {
+  "file": "Data_Engineer.html",
+  "sha256": "bbf522ae72d718f58731eab990920e86c12254da82561c1a7731e52ceda5f90b"
+ }
+}
