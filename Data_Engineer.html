@@ -3631,9 +3631,10 @@ const tr=I18N.tr;
 })();
 const AI_LANG=()=>LANG==='en'?'\n\nIMPORTANT: write your whole answer in English (the instructions above are in Italian, but the driver reads English).':'';
 // ================= VERSIONE, NOVITÀ E AGGIORNAMENTI =================
-const APP_VERSION='1.5';
-const DEFAULT_UPD='';   // update channel (folder with version.json), set when the team repository exists
+const APP_VERSION='1.5.1';
+const DEFAULT_UPD='https://raw.githubusercontent.com/KubaMovitech/Race-Engineer/main/';   // update channel (folder with version.json), set when the team repository exists
 const CHANGELOG=[
+ {v:'1.5.1',d:'03/10/2026',items:['Aggiornamenti automatici attivi: canale della squadra già impostato, nessuna configurazione.']},
  {v:'1.5',d:'03/10/2026',items:['Novità e aggiornamenti dentro l\'app: il numero di versione in alto apre questa finestra.','Pulsante «Aggiorna»: il bridge scarica da solo la nuova versione (sua e dell\'app) e si riavvia; il file per PC si sovrascrive con un clic.','Il bridge controlla gli aggiornamenti a ogni avvio.']},
  {v:'1.4',d:'03/10/2026',items:['Debrief della sessione (con «Chiedi all\'AI» sulla pagina claude.ai).','Aggancio: in che giro prendi l\'auto davanti o ti prende quella dietro.','Setup in uso letto dal garage del gioco, con avviso quando il pilota lo cambia.','Classifica: colonna VE · benzina sempre visibile, anche online (dalla classifica interna del gioco).','Gomme viste dall\'alto, colorate per mescola.','Strategie degli avversari: soste, stint, tempi ai box, gomme cambiate, cambi pilota, consumi, soste mancanti.','Nomi auto leggibili (modello · numero · squadra) al posto di «Custom Team».','Stato PISTA / BOX / FERMO / GARAGE molto più visibile.','Dati di strategia del gioco in unità leggibili.']},
  {v:'1.3',d:'03/10/2026',items:['Corretti i giri inesistenti che comparivano online.','All\'avvio il Muretto non mostra più la sessione precedente.','Condizioni e consumi in tempo reale nella Panoramica, «Adesso in pista» nel Meteo.','Relativo in pista, durata delle gomme, secondi senza pedali a giro.','Icona dell\'app e del bridge, app installabile da http://localhost:8790, logo della squadra.','Bridge e app più leggeri.']},

@@ -1,17 +1,16 @@
 {
- "version": "1.5",
+ "version": "1.5.1",
  "date": "2026-10-03",
  "notes": [
-  "Novità e aggiornamenti dentro l'app: il numero di versione in alto apre la finestra.",
-  "Pulsante «Aggiorna»: il bridge scarica da solo la nuova versione e si riavvia; il file per PC si sovrascrive con un clic.",
-  "Il bridge controlla gli aggiornamenti a ogni avvio."
+  "Aggiornamenti automatici attivi: canale della squadra già impostato, nessuna configurazione.",
+  "Novità e aggiornamenti dentro l'app, pulsante «Aggiorna»."
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "d2735b41b85febdd74462cf8b79b62556e74ef9e7781466e11f4a6b694febb29"
+  "sha256": "702850e76fbf01842116227394c536ff784c3cfe4343efd7bcccc61ac0cb9bfe"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "bbf522ae72d718f58731eab990920e86c12254da82561c1a7731e52ceda5f90b"
+  "sha256": "9940d2cb83830f0b6505f5bb4f0d9f6b400394708a97193545a19949923ceff1"
  }
 }
