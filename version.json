@@ -1,16 +1,21 @@
 {
- "version": "1.5.1",
- "date": "2026-10-03",
+ "version": "1.6",
+ "date": "2026-10-04",
  "notes": [
-  "Aggiornamenti automatici attivi: canale della squadra già impostato, nessuna configurazione.",
-  "Novità e aggiornamenti dentro l'app, pulsante «Aggiorna»."
+  "Settori S1 S2 S3 in diretta in classifica, colorati come in F1 e WEC.",
+  "Strategia: quanta energia e benzina mettere a ogni sosta fino alla bandiera, con il ratio.",
+  "Giri possibili con l'energia attuale per ogni pilota.",
+  "Mappa con P1, auto davanti e dietro.",
+  "Finestra di sosta e undercut/overcut in diretta.",
+  "Overlay per OBS.",
+  "Confronto tra due setup."
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "702850e76fbf01842116227394c536ff784c3cfe4343efd7bcccc61ac0cb9bfe"
+  "sha256": "e32770538c7bd8fbc4ceb8155972475ed012fd834bccdce654d9dad409fc04c5"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "9940d2cb83830f0b6505f5bb4f0d9f6b400394708a97193545a19949923ceff1"
+  "sha256": "be7caf494031cd194382f810361faeb7b1a1531fec24d89b9adf7e89ff0d0cf7"
  }
 }
