@@ -4217,7 +4217,7 @@ const tr=I18N.tr;
 })();
 const AI_LANG=()=>LANG==='en'?'\n\nIMPORTANT: write your whole answer in English (the instructions above are in Italian, but the driver reads English).':'';
 // ================= VERSIONE, NOVITÀ E AGGIORNAMENTI =================
-const APP_VERSION='1.7.1';
+const APP_VERSION='1.7.2';
 const DEFAULT_UPD='https://raw.githubusercontent.com/KubaMovitech/Race-Engineer/main/';   // update channel (folder with version.json), set when the team repository exists
 const CHANGELOG=[
 {v:'1.6',d:'04/10/2026',items:['Classifica: settori S1 S2 S3 in diretta, colorati come in F1 e WEC (viola miglior della classe, verde personale, giallo più lento).','Strategia › Fino alla bandiera: quanta energia e benzina mettere a ogni sosta e il ratio, con l\'ultima sosta in evidenza.','Giri possibili con l\'energia attuale per ogni pilota, con i suoi consumi.','Mappa: P1, auto davanti e auto dietro evidenziate con il distacco.','Finestra di sosta: dove rientri fermandoti adesso o nei prossimi giri, con traffico e chi deve ancora fermarsi. Tempo perso al box correggibile a mano.','Undercut e overcut in diretta sulle auto vicine, con chi è ai box in quel momento.','Overlay per OBS configurabile: classifica, duello, settori, energia, rientro, sessione, gomme, mappa, relativo.','Setup › Confronto setup: differenze tra base e un altro set con gli effetti attesi, e confronto in pista con due telemetrie.','Muretto riordinato: barra in alto più compatta, strategia raggruppata, riquadro Settori nella Panoramica.']},
@@ -4865,11 +4865,13 @@ TVView.prototype.banners=function(s,x){const el=this.st.querySelector('.tvban');
   if(!this.banCur&&this.ban.length){const b=this.ban.shift();this.banCur={...b,until:now+6500};el.className='tvz tvban on k-'+b.k;el.innerHTML=b.h;}};
 
 // ---------- control state transport ----------
-function tvSend(st){LS.set('tv:state',st);const msg={...st,at:Date.now()};
+// sent at most ~4 times a second and only when something changed (sliders fire continuously)
+let tvQ=null,tvTm=0,tvLast='';
+function tvSend(st){LS.set('tv:state',st);LIVE.ovc={...st,at:Date.now()};tvQ=st;clearTimeout(tvTm);tvTm=setTimeout(tvFlush,250);}
+function tvFlush(){const st=tvQ;tvQ=null;if(!st)return;const js=JSON.stringify(st);if(js===tvLast)return;tvLast=js;const msg={...st,at:Date.now()};
   if(isBridgeHost())fetch('/ovc',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(msg)}).catch(()=>{});
-  const t=teamParse(LS.get('live:team',''));if(t&&LIVE.mq)liveSeal(t,msg).then(b=>LIVE.mq.pub('de/'+t.t+'/regia/ovc',b,true)).catch(()=>{});
-  LIVE.ovc=msg;}
-(function(){const base=liveIn_;window.liveIn_=liveIn_=function(id,kind,d){if(kind==='ovc'){if(d&&typeof d==='object'&&(!LIVE.ovc||!(LIVE.ovc.at>d.at)))LIVE.ovc=d;return;}return base(id,kind,d);};})();
+  const t=teamParse(LS.get('live:team',''));if(t&&LIVE.mq)liveSeal(t,msg).then(b=>LIVE.mq.pub('de/'+t.t+'/regia/ovc',b,true)).catch(()=>{});}
+(function(){const base=liveIn_;window.liveIn_=liveIn_=function(id,kind,d){if(kind==='ovc'){if(d&&typeof d==='object')LIVE.ovc=d;return;}return base(id,kind,d);};})();
 
 // ---------- the OBS page (#tv) ----------
 (function(){if(!/^#tv(&|$)/.test(location.hash))return;const p=new URLSearchParams(location.hash.replace(/^#tv&?/,''));document.documentElement.classList.add('ovmode','tvmode');

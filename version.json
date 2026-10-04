@@ -1,16 +1,16 @@
 {
- "version": "1.7.1",
+ "version": "1.7.2",
  "date": "2026-10-04",
  "notes": [
-  "Classifica più leggibile: gomme allineate, energia e benzina ben visibili, tutta la larghezza dello schermo.",
-  "Cambiare o togliere il codice squadra direttamente dalla finestra del bridge o dall'app."
+  "Corretto: due bridge aperti sullo stesso PC si scollegavano a vicenda e il Muretto online si fermava.",
+  "Grafica TV: le modifiche della Regia arrivano a OBS anche da un altro PC o dal file per PC."
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "378f698c1037b3abfe419ab4ac17f0ad4261fad1e084a3c5d8dd978d4ed28f8e"
+  "sha256": "c22c16b12a66e21b5f0461b8812199b79d61816fcaa0090d966f21231561f4ad"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "c0141616d1496aa17199cb9c1cff2df8a2a4e7850b1c45d124897fcc1115bd02"
+  "sha256": "e7bbfe05012685b27aa682ca4ba21f78e0b820c40d69f890371ca8d22c27c118"
  }
 }
