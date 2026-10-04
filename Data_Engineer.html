@@ -675,6 +675,26 @@ html.tvmode #ovRoot{position:fixed;inset:0}
 .rgp{display:flex;flex-wrap:wrap;gap:8px}
 .rgpre{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:var(--r);border:1px solid var(--line);background:var(--panel2);color:var(--ink);font:600 13px var(--f-body);cursor:pointer}
 .rgpre i{width:34px;height:16px;border-radius:3px;background:linear-gradient(90deg,var(--a) 0 35%,var(--b) 35% 80%,var(--h) 80%)}.rgpre.on{outline:2px solid var(--accent)}
+/* ---- 1.8 leaderboard ---- */
+body.vwide main,body.vwide .top-in,body.vwide .top>.tabs{max-width:2400px}
+table.lbt{border-collapse:separate;border-spacing:0}
+table.lbt tbody tr:nth-child(even) td{background:color-mix(in srgb,var(--panel2) 45%,transparent)}
+table.lbt tbody tr:hover td{background:var(--panel2)}
+table.lbt td{padding:4px 6px;vertical-align:middle}table.lbt th{padding:6px;white-space:nowrap}
+table.lbt td.l{max-width:300px}table.lbt td.l>div.muted{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:300px}
+td.tyc2{text-align:center;white-space:nowrap;width:56px}
+td.tyc2 small{display:block;font-size:.68rem;color:var(--muted);margin-top:1px}
+.tyb{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--f);font:700 12px/1 var(--f-mono);box-shadow:inset 0 0 0 2px rgba(0,0,0,.25)}
+.tyb.split{width:34px;border-radius:12px;background:linear-gradient(90deg,var(--f) 0 50%,var(--r) 50% 100%);gap:4px;font-size:11px}
+.tyb i{font-style:normal}
+td.egc{width:128px;min-width:128px}
+.eg{display:grid;grid-template-columns:20px 1fr 28px;align-items:center;gap:5px;line-height:1.25}
+.eg em{font-style:normal;font-size:.66rem;color:var(--muted);font-weight:700;letter-spacing:.04em}
+.eg .t{height:7px;border-radius:4px;background:var(--grid);overflow:hidden}.eg .t i{display:block;height:100%;border-radius:4px;background:var(--lapA)}
+.eg.fu .t i{background:#F5C518}.eg.low .t i{background:var(--bad)}
+.eg b{font:700 .78rem var(--f-mono);text-align:right;color:var(--ink)}.eg.low b{color:var(--bad)}
+.eg+.eg{margin-top:3px}
+table.lbt td.sxc{text-align:center}
 </style>
 <header class="top">
   <div class="top-in">
@@ -3072,33 +3092,33 @@ function lvBoard(x){const {sc,I,kind,rows,me,names}=x;if(!sc){$('#lvStand').inne
   const star=r=>`<button type="button" class="star${riv.includes(r.veh)?' on':''}" data-rv="${esc(r.veh)}" title="${esc(tr('Segui come rivale'))}">${riv.includes(r.veh)?'★':'☆'}</button>`;
   const stat=r=>statusChip(r);
   const name=(r,s)=>{const sw=s.swaps[s.swaps.length-1];const recent=sw&&Number.isFinite(I.et)&&I.et-sw.et<300;return `${esc(r.drv)}${s.drivers.length>1?` <span class="muted small" title="${esc(s.drivers.join(', '))}">+${s.drivers.length-1}</span>`:''}${recent?' <span class="tag warn">⇄</span>':''}<div class="muted small">${esc(r.label||r.veh)}</div>`;};
-  let shown=rows.filter(r=>!LIVE.cls||r.cls===LIVE.cls);let H,B;
+  let shown=rows.filter(r=>!LIVE.cls||r.cls===LIVE.cls);let H,B;const hasV=rows.some(r=>vmaxOf(r).ses>0);
   if(kind==='race'){shown.sort((a,b)=>a.pos-b.pos);const leaderOf={};const lt=r=>carStats(r.veh,r).pace5||r.estL||100;
     shown.forEach(r=>{if(!leaderOf[r.cls])leaderOf[r.cls]=r;});const prevIn={};
     $('#lvLbT').textContent=tr('Classifica di gara');$('#lvLbNote').textContent=tr('clic su una riga per tempi, soste e cambi pilota');
     const cb=secClassBest(rows);const vb=vmaxBest(rows);
-    H=`<th></th><th>Pos</th><th>Cl.</th><th class="l">Pilota</th><th>Stato</th><th>VE · benzina</th><th>Giri</th><th>${gm==='cls'?'Dal 1° di classe':'Distacco'}</th><th>Interv.</th><th class="sxh">S1</th><th class="sxh">S2</th><th class="sxh">S3</th><th>Ultimo</th><th>Best · passo</th><th title="velocità massima: sessione · stint · ultimo giro">Vel. max</th><th>Soste · stint</th><th>Box tra</th><th>Gomme</th><th>Danni · limiti</th>`;
+    H=`<th></th><th>Pos</th><th>Cl.</th><th class="l">Pilota</th><th>Stato</th><th class="l">VE · benzina</th><th>Giri</th><th>${gm==='cls'?'Dal 1° di classe':'Distacco'}</th><th>Interv.</th><th class="sxh">S1</th><th class="sxh">S2</th><th class="sxh">S3</th><th>Ultimo</th><th>Best · passo</th>${hasV?'<th title="velocità massima: sessione · stint · ultimo giro">Vel. max</th>':''}<th>Soste</th><th>Box tra</th><th title="mescola e giri delle gomme">Gomme</th><th>Danni · limiti</th>`;
     B=shown.map(r=>{const s=carStats(r.veh,r);const ld=leaderOf[r.cls];let gap,intv;
       if(gm==='cls'){const L=lt(r);gap=r===ld?'—':(r.lapsL-ld.lapsL>0?`+${r.lapsL-ld.lapsL}G`:'+'+fx((r.gapL+r.lapsL*L)-(ld.gapL+ld.lapsL*L),1));const pv=prevIn[r.cls];intv=pv?((r.lapsL-pv.lapsL)>0&&(r.gapL+r.lapsL*L)-(pv.gapL+pv.lapsL*L)>L?`+${r.lapsL-pv.lapsL}G`:'+'+fx((r.gapL+r.lapsL*L)-(pv.gapL+pv.lapsL*L),1)):'—';prevIn[r.cls]=r;}
       else{gap=r.pos===1?tr('leader'):r.lapsL>0?`+${r.lapsL}G`:'+'+fx(r.gapL,1);intv=r.pos===1?'—':r.lapsN>0?`+${r.lapsN}G`:'+'+fx(r.gapN,1);}
       const ch=r.qual>0?r.qual-r.pos:0;const lp=s.lastPit;const best=r.best>0&&r.best===cbest[r.cls];
-      return `<tr class="${ours.has(r.veh)?'ours':''}${riv.includes(r.veh)?' riv':''}${r.inPit||r.gar?' inpit':''}" data-car="${esc(r.veh)}"><td>${star(r)}</td><td>${r.pos}${ch?` <span class="${ch>0?'pos':'neg'} small">${ch>0?'▲':'▼'}${Math.abs(ch)}</span>`:''}</td><td><span class="clsdot" style="background:${LV_CLS(r.cls)}"></span>${r.pic}</td><td class="l">${name(r,s)}</td><td>${stat(r)}</td><td>${veCell(r)}</td><td>${r.laps}</td><td>${gap}</td><td>${intv}</td>
-        ${secCells(r,cb)}<td class="${s.lastInv?'neg':''}">${fmtLap(s.lastT>0?s.lastT:r.last)}</td><td class="${best?'bestc':''}">${fmtLap(r.best)}<div class="muted small" title="${esc(tr('media ultimi 5 giri'))}">${fmtLap(s.pace5)}</div></td>${vmaxCell(r,vb)}
-        <td${lp?` title="${esc(tr('Ultima sosta')+': '+tr('giro')+' '+lp.lap+' · '+tr('fermo')+' '+fx(lp.stop,1)+' s · '+tr('corsia')+' '+fx(lp.lane,1)+' s'+(lp.tyres?' · '+lp.tyres+' '+tr('gomme'):''))}"`:''}>${r.pits} <small class="muted">· ${s.stintLaps}${tr('g')}</small>${lp?`<div class="muted small">${fx(lp.stop,1)}s${lp.tyres?' · '+lp.tyres+'G':''}</div>`:''}${r.pen?` <span class="tag bad">P${r.pen}</span>`:''}</td>
+      return `<tr class="${ours.has(r.veh)?'ours':''}${riv.includes(r.veh)?' riv':''}${r.inPit||r.gar?' inpit':''}" data-car="${esc(r.veh)}"><td>${star(r)}</td><td>${r.pos}${ch?` <span class="${ch>0?'pos':'neg'} small">${ch>0?'▲':'▼'}${Math.abs(ch)}</span>`:''}</td><td><span class="clsdot" style="background:${LV_CLS(r.cls)}"></span>${r.pic}</td><td class="l">${name(r,s)}</td><td>${stat(r)}</td>${energyCell(r)}<td>${r.laps}</td><td>${gap}</td><td>${intv}</td>
+        ${secCells(r,cb)}<td class="${s.lastInv?'neg':''}">${fmtLap(s.lastT>0?s.lastT:r.last)}</td><td class="${best?'bestc':''}">${fmtLap(r.best)}<div class="muted small" title="${esc(tr('media ultimi 5 giri'))}">${fmtLap(s.pace5)}</div></td>${hasV?vmaxCell(r,vb):''}
+        <td${lp?` title="${esc(tr('Ultima sosta')+': '+tr('giro')+' '+lp.lap+' · '+tr('fermo')+' '+fx(lp.stop,1)+' s · '+tr('corsia')+' '+fx(lp.lane,1)+' s'+(lp.tyres?' · '+lp.tyres+' '+tr('gomme'):''))}"`:''}><b>${r.pits}</b>${lp?`<div class="muted small">${fx(lp.stop,1)}s${lp.tyres?' · '+lp.tyres+'G':''}</div>`:''}${r.pen?` <span class="tag bad">P${r.pen}</span>`:''}</td>
         <td>${Number.isFinite(s.left)?`<span class="${s.left<2?'neg':''}">${Math.floor(s.left)}</span>`:'—'}</td>
-        <td>${compHTML(r.comp,r.cf,r.cr)}</td><td>${r.det?'<span class="tag bad">!</span>':r.dents?`<span class="${r.dents>3?'neg':'muted'}">${Math.round(r.dents/16*100)}%</span>`:''}${r.tl?` <small class="${I.tlPen&&r.tl>=I.tlPen-1?'neg':'muted'}" title="${esc(tr('Limiti di pista'))}">TL ${r.tl}</small>`:''}</td></tr>`;}).join('');}
+        ${tyreCell(r)}<td>${r.det?'<span class="tag bad">!</span>':r.dents?`<span class="${r.dents>3?'neg':'muted'}">${Math.round(r.dents/16*100)}%</span>`:''}${r.tl?` <small class="${I.tlPen&&r.tl>=I.tlPen-1?'neg':'muted'}" title="${esc(tr('Limiti di pista'))}">TL ${r.tl}</small>`:''}</td></tr>`;}).join('');}
   else{shown=shown.sort((a,b)=>(a.best>0?a.best:1e9)-(b.best>0?b.best:1e9));const prev={};
     $('#lvLbT').textContent=kind==='qual'?tr('Classifica di qualifica'):tr('Tempi delle prove');$('#lvLbNote').textContent=tr('ordinata per miglior giro · settori in diretta');
     // sectors of each car's best lap: from the game, or from the lap history
     const secOf=r=>{if(r.blS1>0&&r.blS2>r.blS1&&r.best>r.blS2)return [r.blS1,r.blS2-r.blS1,r.best-r.blS2];const L=fLaps(r.veh).filter(l=>!l[7]&&l[1]>0&&l[4]>0&&l[5]>l[4]&&l[1]>l[5]);if(!L.length)return [NaN,NaN,NaN];const b=L.reduce((a,l)=>l[1]<a[1]?l:a);return [b[4],b[5]-b[4],b[1]-b[5]];};
     shown.forEach(r=>{r.ss=secOf(r);});const cbq=secClassBest(rows);const vbq=vmaxBest(rows);const bs={};shown.forEach(r=>{r.ss.forEach((v,i)=>{const k=r.cls+i;if(v>0&&(!bs[k]||v<bs[k]))bs[k]=v;});});
-    H=`<th></th><th>Pos</th><th>Cl.</th><th class="l">Pilota</th><th>Stato</th><th>Best</th><th>${gm==='cls'?'Dalla pole di classe':'Dalla pole'}</th><th>Dal precedente</th><th class="sxh">S1</th><th class="sxh">S2</th><th class="sxh">S3</th><th>Ideale</th><th>Vel. max</th><th>Ultimo</th><th>Giri</th><th>VE · benzina</th><th>Gomme</th>`;
+    H=`<th></th><th>Pos</th><th>Cl.</th><th class="l">Pilota</th><th>Stato</th><th>Best</th><th>${gm==='cls'?'Dalla pole di classe':'Dalla pole'}</th><th>Dal precedente</th><th class="sxh">S1</th><th class="sxh">S2</th><th class="sxh">S3</th><th>Ideale</th>${hasV?'<th>Vel. max</th>':''}<th>Ultimo</th><th>Giri</th><th class="l">VE · benzina</th><th>Gomme</th>`;
     let i=0;const cp={};B=shown.map(r=>{const s=carStats(r.veh,r);i++;cp[r.cls]=(cp[r.cls]||0)+1;const ref=gm==='cls'?cbest[r.cls]:obest;const pv=gm==='cls'?prev[r.cls]:prev.all;
       const secs=secCells(r,cbq);const bl=r.ss.every(v=>v>0)?`${tr('Settori del giro migliore')}: ${r.ss.map(v=>fx(v,3)).join(' · ')}`:'';
       const out=`<tr class="${ours.has(r.veh)?'ours':''}${riv.includes(r.veh)?' riv':''}${r.inPit||r.gar?' inpit':''}" data-car="${esc(r.veh)}"><td>${star(r)}</td><td>${r.best>0?i:'—'}</td><td><span class="clsdot" style="background:${LV_CLS(r.cls)}"></span>${r.best>0?cp[r.cls]:'—'}</td><td class="l">${name(r,s)}</td><td>${stat(r)}</td>
-        <td class="${r.best>0&&r.best===cbest[r.cls]?'bestc':''}" title="${esc(bl)}">${fmtLap(r.best)}</td><td>${r.best>0&&ref?(r.best===ref?'—':'+'+fx(r.best-ref,3)):'—'}</td><td>${pv&&r.best>0?'+'+fx(r.best-pv.best,3):'—'}</td>${secs}<td>${fmtLap(s.ideal)}</td>${vmaxCell(r,vbq)}<td class="${s.lastInv?'neg':''}">${fmtLap(s.lastT>0?s.lastT:r.last)}</td><td>${r.laps}</td><td>${veCell(r)}</td><td>${compHTML(r.comp,r.cf,r.cr)}</td></tr>`;
+        <td class="${r.best>0&&r.best===cbest[r.cls]?'bestc':''}" title="${esc(bl)}">${fmtLap(r.best)}</td><td>${r.best>0&&ref?(r.best===ref?'—':'+'+fx(r.best-ref,3)):'—'}</td><td>${pv&&r.best>0?'+'+fx(r.best-pv.best,3):'—'}</td>${secs}<td>${fmtLap(s.ideal)}</td>${hasV?vmaxCell(r,vbq):''}<td class="${s.lastInv?'neg':''}">${fmtLap(s.lastT>0?s.lastT:r.last)}</td><td>${r.laps}</td>${energyCell(r)}${tyreCell(r)}</tr>`;
       if(r.best>0){prev[r.cls]=r;prev.all=r;}return out;}).join('');}
-  $('#lvStand').innerHTML=`<table><thead><tr>${H}</tr></thead><tbody>${B}</tbody></table>`;}
+  $('#lvStand').innerHTML=`<table class="lbt"><thead><tr>${H}</tr></thead><tbody>${B}</tbody></table>`;}
 
 // ---------- Auto ----------
 function lvCar(x){const {c,stt}=x;
@@ -4133,6 +4153,18 @@ const I18N_EN=[
 ["Per la grafica TV completa (stile WEC / F1, con regia) usa Muretto › Regia TV.", "For the full TV graphics (WEC / F1 style, with a control panel) use Pit wall › TV control."],
 ["Colore principale", "Main colour"],
 ["Durata", "Duration"],
+["Codice squadra del bridge", "Bridge team code"],
+["Il bridge di questo PC ora manda i dati alla squadra", "This PC's bridge is now sending data to the team"],
+["Il bridge di questo PC ora non è in nessuna squadra. ", "This PC's bridge is not in any team now. "],
+["Incolla il nuovo codice (DE1-…) e premi OK; lascia vuoto e premi OK per toglierlo. Il bridge si riavvia da solo.", "Paste the new code (DE1-…) and press OK; leave it empty and press OK to remove it. The bridge restarts by itself."],
+["Codice salvato nel bridge: riavvio in corso…", "Code saved in the bridge: restarting…"],
+["Codice tolto dal bridge: riavvio in corso…", "Code removed from the bridge: restarting…"],
+["Il bridge non ha accettato il codice", "The bridge did not accept the code"],
+["Codice del bridge di questo PC", "This PC's bridge code"],
+["Incolla il codice squadra (inizia con DE1-): lo usano sia questa pagina sia il bridge di questo PC, che si riavvia da solo.", "Paste the team code (starts with DE1-): both this page and this PC's bridge will use it; the bridge restarts by itself."],
+["Collegato alla squadra: il bridge si riavvia con il nuovo codice", "Connected to the team: the bridge restarts with the new code"],
+["Soste", "Stops"],
+["mescola e giri delle gomme", "compound and tyre laps"],
 ];
 // ================= I18N (IT → EN) =================
 const LANG=LS.get('lang','it')==='en'?'en':'it';
@@ -4185,7 +4217,7 @@ const tr=I18N.tr;
 })();
 const AI_LANG=()=>LANG==='en'?'\n\nIMPORTANT: write your whole answer in English (the instructions above are in Italian, but the driver reads English).':'';
 // ================= VERSIONE, NOVITÀ E AGGIORNAMENTI =================
-const APP_VERSION='1.7';
+const APP_VERSION='1.7.1';
 const DEFAULT_UPD='https://raw.githubusercontent.com/KubaMovitech/Race-Engineer/main/';   // update channel (folder with version.json), set when the team repository exists
 const CHANGELOG=[
 {v:'1.6',d:'04/10/2026',items:['Classifica: settori S1 S2 S3 in diretta, colorati come in F1 e WEC (viola miglior della classe, verde personale, giallo più lento).','Strategia › Fino alla bandiera: quanta energia e benzina mettere a ogni sosta e il ratio, con l\'ultima sosta in evidenza.','Giri possibili con l\'energia attuale per ogni pilota, con i suoi consumi.','Mappa: P1, auto davanti e auto dietro evidenziate con il distacco.','Finestra di sosta: dove rientri fermandoti adesso o nei prossimi giri, con traffico e chi deve ancora fermarsi. Tempo perso al box correggibile a mano.','Undercut e overcut in diretta sulle auto vicine, con chi è ai box in quel momento.','Overlay per OBS configurabile: classifica, duello, settori, energia, rientro, sessione, gomme, mappa, relativo.','Setup › Confronto setup: differenze tra base e un altro set con gli effetti attesi, e confronto in pista con due telemetrie.','Muretto riordinato: barra in alto più compatta, strategia raggruppata, riquadro Settori nella Panoramica.']},
@@ -4651,6 +4683,27 @@ function lvStintLive(x){const {c,kind,I}=x;const el=$('#lvStr');if(!el)return;co
       <p class="muted small" style="margin:6px 0 0">${tr('Si aggiorna in continuo con benzina ed energia a bordo e i consumi degli ultimi 5 giri. Soste da')} ${fx(o.loss,0)} s.</p>`;}
   el.innerHTML=h;}
 (function(){const base=lvStrategy;window.lvStrategy=lvStrategy=function(x){base(x);try{lvStintLive(x);}catch(e){console.error(e);}};})();
+
+// ---------- leaderboard cells: tyres and energy, fixed width and aligned ----------
+function tyreCell(r){const c=r.comp||'';if(!c)return `<td class="tyc2"><span class="muted small">${esc((r.cf||r.cr||'—').slice(0,6))}</span></td>`;
+  const f=c[0],b=c[2]||c[c.length-1];const same=[...c].every(x=>x===c[0]);const tip=[...c].map((x,i)=>tr(['Ant. sx','Ant. dx','Post. sx','Post. dx'][i])+': '+(COMP_N[x]||x)).join(' · ');
+  const col=k=>COMP_COL[k]||COMP_COL['?'];const st=carStats(r.veh,r);
+  return `<td class="tyc2" title="${esc(tip)}"><span class="tyb${same?'':' split'}" style="--f:${col(f)};--r:${col(b)};color:${COMP_INK(f)}">${same?f:`${f}<i style="color:${COMP_INK(b)}">${b}</i>`}</span><small>${st.stintLaps}${tr('g')}</small></td>`;}
+function energyCell(r){const row=(lab,v,cls)=>{const p=Math.max(0,Math.min(1,v));return `<span class="eg ${cls}${p<0.12?' low':''}"><em>${lab}</em><span class="t"><i style="width:${(p*100).toFixed(1)}%"></i></span><b>${Math.round(p*100)}</b></span>`;};
+  if(!(r.ve>=0)&&!(r.fuel>=0))return '<td class="egc muted">—</td>';
+  return `<td class="egc">${r.ve>=0?row('VE',r.ve,'ve'):''}${r.fuel>=0?row(LANG==='en'?'F':'B',r.fuel,'fu'):''}</td>`;}
+// the Muretto uses the whole screen width
+(function(){const os=showView;window.showView=showView=function(v){os(v);document.body.classList.toggle('vwide',v==='live');};document.body.classList.toggle('vwide',curView()==='live');})();
+
+// ---------- team code of the local bridge (change / remove it from the app) ----------
+async function bridgeTeam(code){const r=await fetch('/team',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code})});const j=await r.json();if(!j.ok)throw new Error(j.error||'errore');return j;}
+function openBridgeTeam(){fetch('/team',{cache:'no-store'}).then(r=>r.json()).catch(()=>({})).then(st=>{
+  openCode({title:tr('Codice squadra del bridge'),help:(st.team?tr('Il bridge di questo PC ora manda i dati alla squadra')+(st.name?' «'+st.name+'»':'')+'. ':tr('Il bridge di questo PC ora non è in nessuna squadra. '))+tr('Incolla il nuovo codice (DE1-…) e premi OK; lascia vuoto e premi OK per toglierlo. Il bridge si riavvia da solo.'),text:'',
+    onOk:txt=>{if(txt&&!teamParse(txt))throw new Error(tr('codice squadra non valido'));bridgeTeam(txt).then(()=>{if(txt){LS.set('live:team',txt);}toast(txt?tr('Codice salvato nel bridge: riavvio in corso…'):tr('Codice tolto dal bridge: riavvio in corso…'));setTimeout(()=>location.reload(),4000);}).catch(e=>toast(tr('Il bridge non ha accettato il codice')+': '+e.message));}});});}
+(function(){const add=()=>{if(!isBridgeHost())return;const ml=$('#v-live .menu-list');if(!ml||$('#lvBTeam'))return;const b=document.createElement('button');b.type='button';b.id='lvBTeam';b.textContent=tr('Codice del bridge di questo PC');b.onclick=openBridgeTeam;ml.insertBefore(b,$('#lvSave'));
+    // joining a team from the bridge's own page also moves the bridge to that team
+    const j=$('#lvJoin');if(j)j.onclick=()=>openCode({title:tr('Entra con codice'),help:tr('Incolla il codice squadra (inizia con DE1-): lo usano sia questa pagina sia il bridge di questo PC, che si riavvia da solo.'),text:'',onOk:txt=>{if(!teamParse(txt))throw new Error(tr('codice squadra non valido'));LS.set('live:team',txt.trim());liveStart();bridgeTeam(txt.trim()).then(()=>toast(tr('Collegato alla squadra: il bridge si riavvia con il nuovo codice'))).catch(()=>toast(tr('Collegato alla squadra')));}});};
+  const os=liveSkeleton;window.liveSkeleton=liveSkeleton=function(){os();add();};})();
 // ================= 1.7: GRAFICA TV (overlay stile WEC / F1) + REGIA =================
 // The overlay page (#tv) draws broadcast graphics on a transparent 1920×1080 canvas for OBS.
 // The "Regia" (Muretto › Regia TV) decides what is on screen; its state reaches every overlay

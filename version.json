@@ -1,18 +1,16 @@
 {
- "version": "1.7",
+ "version": "1.7.1",
  "date": "2026-10-04",
  "notes": [
-  "Grafica TV per OBS in stile WEC / F1 con Regia TV nel Muretto.",
-  "Classifica con velocità massima (sessione, stint, giro).",
-  "Colori gomme: soft bianche, medie gialle, dure rosse, wet azzurre.",
-  "Strategia: stint in tempo reale con tempo e giri di guida rimasti e stint previsti fino alla bandiera."
+  "Classifica più leggibile: gomme allineate, energia e benzina ben visibili, tutta la larghezza dello schermo.",
+  "Cambiare o togliere il codice squadra direttamente dalla finestra del bridge o dall'app."
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "a74445e9d3986918090bcb25b8aa135fbeee770ea869679124f3432f7089d1d0"
+  "sha256": "378f698c1037b3abfe419ab4ac17f0ad4261fad1e084a3c5d8dd978d4ed28f8e"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "2241bb9a61330508ba3dc9f4219051cfb8fd2011108c973fb48e51b655583c28"
+  "sha256": "c0141616d1496aa17199cb9c1cff2df8a2a4e7850b1c45d124897fcc1115bd02"
  }
 }
