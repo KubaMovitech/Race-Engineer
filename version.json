@@ -1,21 +1,18 @@
 {
- "version": "1.6",
+ "version": "1.7",
  "date": "2026-10-04",
  "notes": [
-  "Settori S1 S2 S3 in diretta in classifica, colorati come in F1 e WEC.",
-  "Strategia: quanta energia e benzina mettere a ogni sosta fino alla bandiera, con il ratio.",
-  "Giri possibili con l'energia attuale per ogni pilota.",
-  "Mappa con P1, auto davanti e dietro.",
-  "Finestra di sosta e undercut/overcut in diretta.",
-  "Overlay per OBS.",
-  "Confronto tra due setup."
+  "Grafica TV per OBS in stile WEC / F1 con Regia TV nel Muretto.",
+  "Classifica con velocità massima (sessione, stint, giro).",
+  "Colori gomme: soft bianche, medie gialle, dure rosse, wet azzurre.",
+  "Strategia: stint in tempo reale con tempo e giri di guida rimasti e stint previsti fino alla bandiera."
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "e32770538c7bd8fbc4ceb8155972475ed012fd834bccdce654d9dad409fc04c5"
+  "sha256": "a74445e9d3986918090bcb25b8aa135fbeee770ea869679124f3432f7089d1d0"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "be7caf494031cd194382f810361faeb7b1a1531fec24d89b9adf7e89ff0d0cf7"
+  "sha256": "2241bb9a61330508ba3dc9f4219051cfb8fd2011108c973fb48e51b655583c28"
  }
 }
