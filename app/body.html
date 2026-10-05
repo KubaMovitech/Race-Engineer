@@ -1,0 +1,234 @@
+<header class="top">
+  <div class="top-in">
+    <div class="brand" aria-label="Data Engineer">
+      <svg class="logo" viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--accent)"/><stop offset="1" stop-color="var(--accent2)"/></linearGradient></defs>
+        <rect x="2" y="2" width="44" height="44" rx="11" fill="url(#lg)"/>
+        <path d="M9 31 L15 31 L18 21 L22 35 L26 15 L30 29 L33 25 L39 25" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+        <g fill="#fff" opacity=".9"><rect x="31" y="8" width="3.5" height="3.5"/><rect x="34.5" y="11.5" width="3.5" height="3.5"/><rect x="38" y="8" width="3.5" height="3.5" opacity=".5"/><rect x="31" y="15" width="3.5" height="3.5" opacity=".5"/></g></svg>
+      <div class="bt" data-noi18n><b>Data <span>Engineer</span></b><small>race telemetry</small></div>
+    </div>
+    <div class="hdr-tools">
+      <select id="gSess" aria-label="Sessione attiva"></select>
+      <button class="btn dark" id="btnFiles" type="button" aria-expanded="false">File <span id="nFiles" class="mono">0</span></button>
+      <button class="btn dark" id="btnSync" type="button" title="Carica i file nuovi dalla cartella di Le Mans Ultimate">Aggiorna da LMU</button>
+      <button class="btn primary" id="btnLoad" type="button">Carica</button>
+      <span class="seg lang" role="group" aria-label="Lingua"><button type="button" data-lang="it">IT</button><button type="button" data-lang="en">EN</button></span>
+      <button class="btn dark icon" id="btnSettings" type="button" title="Personalizza" aria-label="Personalizza"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
+    </div>
+    <input type="file" id="fileIn" multiple accept=".ld,.xml,.svm,.gz,.json" hidden>
+  </div>
+  <nav class="tabs" role="tablist" aria-label="Sezioni">
+    <button class="tab" role="tab" id="t-stint" data-view="stint" aria-selected="true">Sessione</button>
+    <button class="tab" role="tab" id="t-lap" data-view="lap" aria-selected="false">Giro</button>
+    <button class="tab" role="tab" id="t-cmp" data-view="cmp" aria-selected="false">Confronto</button>
+    <button class="tab" role="tab" id="t-coach" data-view="coach" aria-selected="false">Coach</button>
+    <button class="tab" role="tab" id="t-setup" data-view="setup" aria-selected="false">Setup</button>
+    <button class="tab" role="tab" id="t-diary" data-view="diary" aria-selected="false">Diario</button>
+    <button class="tab" role="tab" id="t-prog" data-view="prog" aria-selected="false">Progressi</button>
+    <button class="tab" role="tab" id="t-str" data-view="str" aria-selected="false">Strategia</button>
+    <button class="tab" role="tab" id="t-team" data-view="team" aria-selected="false">Squadra</button>
+  </nav>
+</header>
+<div class="drawer" id="drawer" hidden><div class="drawer-in" id="lib"></div></div>
+
+<main>
+<section class="hero" id="hero"></section>
+
+<!-- SESSION / STINT -->
+<section class="view" id="v-stint">
+  <div id="stBody"></div>
+</section>
+
+<!-- LAP -->
+<section class="view" id="v-lap" hidden>
+  <div class="panel">
+    <div class="panel-h">
+      <h2>Analisi del giro</h2>
+      <label class="f" style="min-width:260px">Giro<select id="lapSel"></select></label>
+    </div>
+    <div id="lapHead" class="kpis"></div>
+  </div>
+  <div class="grid-work">
+    <div class="panel" id="lapChartPanel">
+      <div class="panel-h"><h3>Tracce</h3><div class="toolbar" id="lapTools"></div></div>
+      <canvas class="chart" id="lapChart"></canvas>
+      <div class="hint">Trascina per zoomare · rotellina = zoom · Maiusc+trascina o striscia in basso = scorri · doppio clic = giro intero</div>
+    </div>
+    <div class="side">
+      <div class="panel">
+        <div class="panel-h"><h3>Mappa</h3>
+          <select id="lapMapCh" aria-label="Colore mappa"><option value="speed">Velocità</option><option value="pedals">Gas / freno</option><option value="gear">Marcia</option><option value="glat">G laterale</option></select>
+        </div>
+        <canvas class="mapc" id="lapMap"></canvas>
+        <div class="maptools"><button class="btn" type="button" data-rot="lap">Ruota</button><button class="btn" type="button" data-flip="lap">Specchia</button></div>
+        <div class="readout" id="lapReadout"></div>
+      </div>
+    </div>
+  </div>
+  <div class="grid2">
+    <div class="panel"><div class="panel-h"><h3>Curve</h3><span class="hint">clic su una riga per zoomare</span></div><div class="tw" id="lapCorners"></div></div>
+    <div class="panel"><div class="panel-h"><h3>Gomme e freni nel giro</h3></div><div id="lapTyres"></div></div>
+  </div>
+  <div class="panel" id="limP"><div class="panel-h"><h3>Limiti di pista · tutta la sessione</h3><span class="hint" id="limNote"></span></div>
+    <div class="grid-work" style="grid-template-columns:minmax(0,1fr) minmax(0,1.2fr)"><div><canvas class="mapc" id="limMap" style="max-width:520px;margin:0 auto"></canvas>
+    <div class="slegend" style="margin-top:8px"><span><i style="background:var(--warn);border-radius:50%"></i>al limite (0,3–1 m oltre il bordo)</span><span><i style="background:var(--lapB);border-radius:50%"></i>fuori con 4 ruote (&gt;1 m)</span><span><i style="background:transparent;border:2px solid var(--bad);border-radius:50%"></i>segnalato dal gioco</span></div></div>
+    <div><div id="limSum"></div><div class="tw" id="limTable" style="margin-top:10px"></div></div></div></div>
+</section>
+
+<!-- COMPARE -->
+<section class="view" id="v-cmp" hidden>
+  <div class="panel">
+    <div class="panel-h"><h2>Confronto giri</h2>
+      <div class="toolbar"><label class="f" style="flex-direction:row;align-items:center;gap:6px">Colore A <input type="color" id="colA"></label><label class="f" style="flex-direction:row;align-items:center;gap:6px">Colore B <input type="color" id="colB"></label><button class="btn" type="button" id="swapAB">Scambia A ↔ B</button><button class="btn primary" type="button" id="vsRef">Io contro riferimento</button></div>
+    </div>
+    <div class="row">
+      <label class="f" style="flex:1 1 240px">Sessione A<select id="cmpSessA"></select></label>
+      <label class="f" style="flex:1 1 220px">Giro A<select id="cmpLapA"></select></label>
+      <label class="f" style="flex:1 1 240px">Sessione B<select id="cmpSessB"></select></label>
+      <label class="f" style="flex:1 1 220px">Giro B<select id="cmpLapB"></select></label>
+    </div>
+    <div id="cmpWarn"></div>
+    <div id="cmpHead" class="kpis" style="margin-top:12px"></div>
+  </div>
+  <div class="grid-work">
+    <div class="panel" id="cmpChartPanel">
+      <div class="panel-h"><h3>Sovrapposizione</h3><div class="toolbar" id="cmpTools"></div></div>
+      <canvas class="chart" id="cmpChart"></canvas>
+      <div class="hint">Trascina per zoomare · rotellina = zoom · Maiusc+trascina o striscia in basso = scorri · doppio clic = giro intero</div>
+    </div>
+    <div class="side">
+      <div class="panel">
+        <div class="panel-h"><h3>Dove si guadagna</h3></div>
+        <canvas class="mapc" id="cmpMap"></canvas>
+        <div class="maptools"><button class="btn" type="button" data-rot="cmp">Ruota</button><button class="btn" type="button" data-flip="cmp">Specchia</button></div>
+        <div class="legend" id="cmpLegend"></div>
+        <div class="readout" id="cmpReadout"></div>
+      </div>
+    </div>
+  </div>
+  <div class="panel"><div class="panel-h"><h3>Curva per curva</h3><span class="hint">Δ = tempo di B meno tempo di A nel tratto · clic per zoomare</span></div><div class="tw" id="cmpCorners"></div></div>
+  <div class="panel ai" id="cmpAI">
+    <div class="panel-h"><h3>Coach AI</h3><button class="btn primary" id="cmpAsk" type="button">Analizza il confronto</button></div>
+    <div id="cmpAnswer"></div>
+  </div>
+</section>
+
+<!-- SETUP -->
+<section class="view" id="v-setup" hidden>
+  <div class="panel">
+    <div class="panel-h">
+      <h2>Setup e diagnosi</h2>
+      <label class="f" style="min-width:260px">File setup<select id="suFile"></select></label>
+    </div>
+    <div id="suWarn"></div>
+    <details class="set"><summary>Obiettivi di riferimento (modificabili)</summary>
+      <div class="setgrid">
+        <label class="f">Pressione calda min (kPa)<input type="number" id="cfgPmin" step="0.5"></label>
+        <label class="f">Pressione calda max (kPa)<input type="number" id="cfgPmax" step="0.5"></label>
+        <label class="f">Diff. int−est min (°C)<input type="number" id="cfgIOmin" step="0.5"></label>
+        <label class="f">Diff. int−est max (°C)<input type="number" id="cfgIOmax" step="0.5"></label>
+        <label class="f">Freni max (°C)<input type="number" id="cfgBmax" step="10"></label>
+        <label class="f">Altezza di allarme (mm)<input type="number" id="cfgRH" step="1"></label>
+        <label class="f">Finestra carcassa min (°C)<input type="number" id="cfgTmin" step="1"></label>
+        <label class="f">Finestra carcassa max (°C)<input type="number" id="cfgTmax" step="1"></label>
+      </div>
+      <p class="muted small">Le finestre ideali cambiano con auto, mescola e temperatura della pista. Lascia vuota la pressione se non hai un riferimento: la diagnosi userà il profilo di temperatura.</p>
+    </details>
+  </div>
+  <div class="panel"><div class="panel-h"><h3>Controlli automatici</h3><span class="muted small" id="suDiagNote"></span></div><div id="suDiag"></div></div>
+  <div class="panel" id="doc">
+    <div class="panel-h"><h3>Dottore setup</h3><span class="badge off">funziona offline · regole fisse, niente AI</span></div>
+    <p class="muted small" style="margin:0 0 10px">Scegli cosa senti in macchina. Per ogni problema trovi le modifiche classiche in ordine di efficacia, con il valore attuale del tuo setup e cosa dicono i dati della telemetria. I problemi evidenziati sono quelli che la telemetria ha già rilevato.</p>
+    <div class="chips" id="suChips"></div>
+    <div id="docOut" style="margin-top:14px"></div>
+  </div>
+  <div class="panel ai" id="suAI">
+    <div class="panel-h"><h3>Ingegnere AI</h3><span class="muted small">facoltativo · usa i problemi scelti sopra e consuma l'uso del tuo piano Claude</span></div>
+    <textarea id="suText" placeholder="Aggiungi dettagli: in quali curve, in quale fase (ingresso, centro, uscita), da quando succede…"></textarea>
+    <div class="row"><button class="btn primary" id="suAsk" type="button">Chiedi all'ingegnere AI</button></div>
+    <div id="suAnswer"></div>
+    <div class="row" id="suFollowWrap" hidden><input type="text" id="suFollow" placeholder="Domanda di approfondimento…" style="flex:1;min-width:200px"><button class="btn" id="suFollowBtn" type="button">Invia</button></div>
+  </div>
+  <div class="panel"><div class="panel-h"><h3>Scheda setup</h3><span class="muted small" id="suMeta"></span></div><div class="sheet" id="suSheet"></div></div>
+</section>
+<!-- COACH -->
+<section class="view" id="v-coach" hidden>
+  <div class="panel">
+    <div class="panel-h"><h2>Coach</h2>
+      <label class="f" style="min-width:260px">Il tuo giro da analizzare<select id="coLap"></select></label>
+      <label class="f" style="min-width:300px">Riferimento<select id="coRef"></select></label>
+    </div>
+    <p class="muted small" style="margin:0">Tutto calcolato sulla telemetria, senza AI. Il riferimento può essere il giro di un pro (segna il suo file con ★ in «File») o il tuo miglior giro. Le curve sono quelle del riferimento.</p>
+  </div>
+  <div class="panel"><div class="panel-h"><h3>Giro ideale</h3><span class="hint">i tuoi tratti migliori della sessione messi insieme</span></div><div id="coIdeal"></div></div>
+  <div class="panel"><div class="panel-h"><h3>Consigli di guida</h3><span class="hint">il tuo giro contro il riferimento, curva per curva</span></div><div id="coTips"></div><div class="tw" id="coStyle" style="margin-top:12px"></div></div>
+  <div class="grid2">
+    <div class="panel"><div class="panel-h"><h3>Costanza</h3><span class="hint">quanto cambi da un giro all'altro</span></div><div class="tw" id="coCons"></div></div>
+    <div class="panel"><div class="panel-h"><h3>Cerchio di aderenza</h3><span class="hint">G laterale e longitudinale</span></div><canvas id="coGG" class="mapc" style="max-width:460px;margin:0 auto"></canvas><div id="coGGtxt"></div></div>
+  </div>
+</section>
+
+<!-- DIARY -->
+<section class="view" id="v-diary" hidden>
+  <div class="panel">
+    <div class="panel-h"><h2>Diario del setup</h2></div>
+    <p class="muted small" style="margin:0">Per ogni telemetria scegli il setup che usavi. Il diario trova cosa hai cambiato rispetto alla prova precedente sulla stessa pista e misura l'effetto su tempi, gomme e bilanciamento. Note e abbinamenti restano salvati in questo browser.</p>
+  </div>
+  <div id="diRuns"></div>
+  <div class="panel">
+    <div class="panel-h"><h3>Confronta due setup</h3>
+      <label class="f" style="min-width:220px">Setup A<select id="diA"></select></label>
+      <label class="f" style="min-width:220px">Setup B<select id="diB"></select></label>
+    </div>
+    <div class="tw" id="diDiff"></div>
+  </div>
+</section>
+
+<!-- STRATEGY -->
+<section class="view" id="v-str" hidden>
+  <div class="panel">
+    <div class="panel-h"><h2>Strategia gara</h2><button class="btn" type="button" id="stFromTele">Prendi i dati dalla telemetria</button></div>
+    <p class="muted small" style="margin:0 0 12px">Funziona offline. I consumi si compilano dalla sessione selezionata in alto (e dal .xml per l'energia virtuale); puoi correggere ogni valore a mano.</p>
+    <div class="setgrid" id="stForm"></div>
+  </div>
+  <div id="stOut"></div>
+  <div id="rainWrap"></div>
+</section>
+<!-- PROGRESS -->
+<section class="view" id="v-prog" hidden>
+  <div class="panel"><div class="panel-h"><h2>Progressi</h2><label class="f" style="min-width:280px">Pista e auto<select id="pgKey"></select></label></div>
+    <p class="muted small" style="margin:0">Tutte le sessioni caricate e quelle viste in passato su questa pista: il miglior giro e il passo restano salvati in questo browser anche quando togli i file.</p></div>
+  <div id="pgBody"></div>
+</section>
+
+<!-- TEAM / ENDURANCE -->
+<section class="view" id="v-team" hidden>
+  <div class="panel"><div class="panel-h"><h2>Squadra · strategia endurance</h2>
+    <label class="f" style="min-width:220px">Piano<select id="tmPlan"></select></label>
+    <button class="btn" type="button" id="tmNew">Nuovo piano</button><button class="btn" type="button" id="tmDup">Duplica</button><button class="btn" type="button" id="tmDel">Elimina</button>
+    <button class="btn" type="button" id="tmExport">Esporta</button><button class="btn" type="button" id="tmImport">Importa</button></div>
+    <p class="muted small" style="margin:0">I piani restano salvati in questo browser. Con «Esporta» ottieni un codice (o un file .json) da mandare ai compagni; con «Importa» lo carichi.</p></div>
+  <div class="grid2">
+    <div class="panel"><div class="panel-h"><h3>Gara</h3></div><div class="setgrid" id="tmRace"></div></div>
+    <div class="panel"><div class="panel-h"><h3>Piloti</h3><button class="btn" type="button" id="tmAddDrv">+ Pilota</button></div><div id="tmDrivers"></div></div>
+  </div>
+  <div id="tmOut"></div>
+</section>
+</main>
+<div class="modal" id="mSettings" hidden><div class="mbox"><div class="panel-h"><h2>Personalizza</h2><button class="btn" type="button" data-close>Chiudi</button></div>
+  <h3>Colore principale</h3><div class="swatches" id="swAccent"></div>
+  <div class="row" style="margin-top:8px"><label class="f" style="flex-direction:row;align-items:center;gap:8px">Colore personalizzato <input type="color" id="cAccent"></label></div>
+  <h3 style="margin-top:16px">Sfondo</h3><div class="swatches" id="swBg"></div>
+  <h3 style="margin-top:16px">Colori dei grafici</h3><div class="row"><label class="f" style="flex-direction:row;align-items:center;gap:8px">Giro A <input type="color" id="cA2"></label><label class="f" style="flex-direction:row;align-items:center;gap:8px">Giro B <input type="color" id="cB2"></label></div>
+  <h3 style="margin-top:16px">Densità</h3><span class="seg" id="segDensity"><button type="button" data-d="compact">Compatta</button><button type="button" data-d="normal">Normale</button><button type="button" data-d="large">Grande</button></span>
+  <h3 style="margin-top:16px">Backup</h3><div class="row"><button class="btn" type="button" id="bkExport">Esporta impostazioni, note e piani</button><button class="btn" type="button" id="bkImport">Importa backup</button><button class="btn" type="button" id="uiReset">Ripristina colori</button></div>
+</div></div>
+<div class="modal" id="mCode" hidden><div class="mbox"><div class="panel-h"><h2 id="mCodeT">Codice</h2><button class="btn" type="button" data-close>Chiudi</button></div>
+  <p class="muted small" id="mCodeHelp"></p><textarea id="mCodeTxt" style="min-height:180px;font-family:var(--f-mono);font-size:.78rem"></textarea>
+  <div class="row" style="margin-top:8px"><button class="btn primary" type="button" id="mCodeGo">OK</button><button class="btn" type="button" id="mCodeCopy">Copia</button><button class="btn" type="button" id="mCodeFile">Salva come file</button><button class="btn" type="button" id="mCodeOpen">Apri file…</button></div></div></div>
+<div class="modal" id="mReport" hidden><div class="mbox wide"><div class="panel-h no-print"><h2>Report</h2><button class="btn" type="button" id="rpPrint">Stampa / PDF</button><button class="btn" type="button" id="rpCopy">Copia testo</button><button class="btn" type="button" data-close>Chiudi</button></div><div id="rpBody" class="report"></div></div></div>
+<div class="modal" id="mLive" hidden><div class="mbox"><div class="panel-h"><h2>Crea squadra</h2><button class="btn" type="button" data-close>Chiudi</button></div>
+  <p class="muted small">I dati viaggiano cifrati: il server li inoltra senza poterli leggere. Solo chi ha il codice squadra li vede. Il server pubblico è gratuito e non serve registrarsi; per un server tutto vostro puoi usare un piano gratuito (es. HiveMQ Cloud) e inserire qui indirizzo e credenziali.</p>
+  <div class="setgrid"><label class="f">Nome squadra<input id="lvTName" placeholder="es. Team Rosso"></label><label class="f">Server<select id="lvBroker"></select></label></div>
+  <div class="setgrid" id="lvCustom" hidden><label class="f">Indirizzo server<input id="lvH" placeholder="xxxx.s1.eu.hivemq.cloud"></label><label class="f">Porta WebSocket (wss)<input id="lvWP" value="8884"></label><label class="f">Porta TLS<input id="lvTP" value="8883"></label><label class="f">Utente<input id="lvU" autocomplete="off"></label><label class="f">Password<input id="lvP" type="password" autocomplete="off"></label></div>
+  <div class="row" style="margin-top:12px"><button class="btn primary" type="button" id="lvMake">Crea codice squadra</button></div></div></div>

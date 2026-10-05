@@ -3,3 +3,9 @@ databridge.json
 *.new
 app.html
 app.version
+
+# generati da app/build.sh e release.sh
+app/pitwall.html
+app/test.html
+bridge/app.html
+release/
