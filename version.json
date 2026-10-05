@@ -1,17 +1,15 @@
 {
- "version": "2.0",
+ "version": "2.0.1",
  "date": "2026-10-05",
  "notes": [
-  "Data Engineer diventa un'app: un solo programma per tutti, si apre in una finestra sua e si aggiorna da solo.",
-  "Muretto più affidabile: niente più dati scartati per gli orologi dei PC, riconnessione in pochi secondi.",
-  "Pronto per il nuovo server della squadra (Cloudflare)."
+  "La classifica si aggiorna ogni secondo anche quando nessuno della squadra è in auto."
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "180eb36ec763127415db5c59387716c3a921f4f8c83003e4787d191fe53d147b"
+  "sha256": "4785e8f86316b3e1c90b199bb49c2453d2272fb7f1851f27f03d481a63026c6c"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "6ec5fcdfdf75332a4a93eb037ca09537eb329855ac4f29fa2348d9f257c67c54"
+  "sha256": "4996fc1064c12aa4e730287ef45c21c5fa37f8163ab08dd307a8f65130ffc740"
  }
 }
