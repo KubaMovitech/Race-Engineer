@@ -1,8 +1,9 @@
 {
- "version": "2.0.1",
+ "version": "2.0.2",
  "date": "2026-10-05",
  "notes": [
-  "La classifica si aggiorna ogni secondo anche quando nessuno della squadra è in auto."
+  "Le novità mostrano di nuovo tutte le versioni, dalla 1.7 in poi.",
+  "Con un bridge vecchio (1.6 o prima) che non sa aggiornarsi, il pulsante «Aggiorna» scarica il nuovo DataEngineerBridge.exe da sostituire."
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
@@ -10,6 +11,6 @@
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "4996fc1064c12aa4e730287ef45c21c5fa37f8163ab08dd307a8f65130ffc740"
+  "sha256": "31d1e2fcc0506ec898e034534fa33fecb193bc972f9322c8442af1264193ede2"
  }
 }
