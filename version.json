@@ -1,16 +1,17 @@
 {
- "version": "2.0.1",
+ "version": "2.0.2",
  "date": "2026-10-05",
  "notes": [
   "Le novità mostrano di nuovo tutte le versioni, dalla 1.7 in poi.",
-  "Con un bridge vecchio (1.6 o prima) che non sa aggiornarsi, il pulsante «Aggiorna» scarica il nuovo DataEngineerBridge.exe da sostituire."
+  "Con un bridge vecchio (1.6 o 1.7) il pulsante «Aggiorna» scarica il nuovo DataEngineerBridge.exe da sostituire.",
+  "Il bridge non si riavvia più all'infinito se trova lo stesso programma già installato."
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "4785e8f86316b3e1c90b199bb49c2453d2272fb7f1851f27f03d481a63026c6c"
+  "sha256": "079c106199962515e467530f24272d99ba40e29d5171e79ff4c07ad7e57014fe"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "31d1e2fcc0506ec898e034534fa33fecb193bc972f9322c8442af1264193ede2"
+  "sha256": "cc90211a5d7595cfd0153038d987252d784cabf18126fcc1128a0dc4c0f6a6da"
  }
 }
