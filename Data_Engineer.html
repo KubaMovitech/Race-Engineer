@@ -695,6 +695,9 @@ td.egc{width:128px;min-width:128px}
 .eg b{font:700 .78rem var(--f-mono);text-align:right;color:var(--ink)}.eg.low b{color:var(--bad)}
 .eg+.eg{margin-top:3px}
 table.lbt td.sxc{text-align:center}
+.bchip{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted);margin-left:2px;font-family:var(--f-mono)}
+.bchip i{width:7px;height:7px;border-radius:50%;background:var(--faint)}.bchip.good i{background:var(--good)}.bchip.warn i{background:var(--warn)}.bchip.bad i{background:var(--bad)}.bchip.warn{color:var(--warn)}.bchip.bad{color:var(--bad)}
+.pclog{max-height:260px;overflow:auto;background:var(--panel2);border-radius:var(--r);padding:10px;font:11.5px/1.45 var(--f-mono);color:var(--muted);white-space:pre-wrap}
 </style>
 <header class="top">
   <div class="top-in">
@@ -2612,8 +2615,8 @@ function mqttWS(url,{user,pass,subs,onMsg,onState}){
         if(buf.length<i+n)break;const h=buf[0],body=buf.subarray(i,i+n);buf=buf.slice(i+n);const ty=h>>4;
         if(ty===2){if(body[1]!==0){onState('refused');ws.close();return;}retry=1500;
           ws.send(pkt(0x82,[0,1,...subs.flatMap(s=>[...str(s),0])]));clearInterval(ping);ping=setInterval(()=>{try{ws.send(new Uint8Array([0xC0,0]));}catch(e){}},25000);onState('on');}
-        else if(ty===3){const tl=(body[0]<<8)|body[1];const topic=td.decode(body.subarray(2,2+tl));let off=2+tl;if((h>>1)&3)off+=2;onMsg(topic,body.slice(off));}}};
-    ws.onclose=()=>{clearInterval(ping);if(closed)return;onState(opened?'off':'blocked');setTimeout(connect,retry);retry=Math.min(retry*2,30000);};
+        else if(ty===3){const tl=(body[0]<<8)|body[1];const topic=td.decode(body.subarray(2,2+tl));let off=2+tl;if((h>>1)&3)off+=2;onMsg(topic,body.slice(off),(h&1)===1);}}};
+    ws.onclose=()=>{clearInterval(ping);if(closed)return;onState(opened?'off':'blocked');setTimeout(connect,retry);retry=Math.min(retry*2,8000);};
     ws.onerror=()=>{};
   }
   connect();
@@ -2622,25 +2625,47 @@ function mqttWS(url,{user,pass,subs,onMsg,onState}){
 }
 
 async function liveKey(t){if(!t._k)t._k=await crypto.subtle.importKey('raw',b64u.dec(t.k),'AES-GCM',false,['decrypt']);return t._k;}
+// ---- Data Engineer relay (our own server on Cloudflare): WebSocket, same topics and payloads as MQTT ----
+function relayWS(base,{room,sub,onMsg,onState}){const te=new TextEncoder(),td=new TextDecoder();let ws,closed=false,retry=1000,opened=false,ping,last=0;
+  const url=base.replace(/\/+$/,'').replace(/^http/,'ws')+'/ws?room='+encodeURIComponent(room)+'&sub='+(sub||'all')+'&v=1';
+  const rec=(type,flags,topic,payload)=>{const t=te.encode(topic);const b=new Uint8Array(8+t.length+payload.length),dv=new DataView(b.buffer);b[0]=type;b[1]=flags;dv.setUint16(2,t.length);dv.setUint32(4,payload.length);b.set(t,8);b.set(payload,8+t.length);return b;};
+  function connect(){opened=false;onState('connecting');try{ws=new WebSocket(url);}catch(e){onState('blocked');return;}ws.binaryType='arraybuffer';
+    ws.onopen=()=>{opened=true;retry=1000;last=Date.now();onState('on');clearInterval(ping);ping=setInterval(()=>{try{ws.send('ping');}catch(e){}if(Date.now()-last>50e3){try{ws.close();}catch(e){}}},20e3);};
+    ws.onmessage=e=>{last=Date.now();if(typeof e.data==='string')return;const b=new Uint8Array(e.data),dv=new DataView(e.data);let o=0;
+      while(o+8<=b.length){const ty=b[o],fl=b[o+1],tl=dv.getUint16(o+2),pl=dv.getUint32(o+4);o+=8;if(o+tl+pl>b.length)break;const topic=td.decode(b.subarray(o,o+tl));const p=b.slice(o+tl,o+tl+pl);o+=tl+pl;if(ty===2)onMsg(topic,p,(fl&1)===1);}};
+    ws.onclose=()=>{clearInterval(ping);if(closed)return;onState(opened?'off':'blocked');setTimeout(connect,retry);retry=Math.min(retry*2,8000);};ws.onerror=()=>{};}
+  connect();
+  return {close(){closed=true;clearInterval(ping);try{ws.close();}catch(e){}},pub(topic,bytes,retain){try{if(!ws||ws.readyState!==1)return false;ws.send(rec(1,retain?1:0,topic,bytes));return true;}catch(e){return false;}}};}
 async function liveSeal(t,obj){if(!t._ke)t._ke=await crypto.subtle.importKey('raw',b64u.dec(t.k),'AES-GCM',false,['encrypt']);
   const z=new Blob([new TextEncoder().encode(JSON.stringify(obj))]).stream().pipeThrough(new CompressionStream('deflate-raw'));const pt=new Uint8Array(await new Response(z).arrayBuffer());
   const iv=crypto.getRandomValues(new Uint8Array(12));const ct=new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM',iv},t._ke,pt));const out=new Uint8Array(12+ct.length);out.set(iv);out.set(ct,12);return out;}
 async function liveOpen(t,bytes){const k=await liveKey(t);const pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:bytes.slice(0,12)},k,bytes.slice(12));
   const s=new Blob([pt]).stream().pipeThrough(new DecompressionStream('deflate-raw'));return JSON.parse(await new Response(s).text());}
 
-function liveIn(id,kind,d){LIVE._w=true;try{liveIn_(id,kind,d);}finally{LIVE._w=false;}}
-// Retained messages stay on the server after a bridge closes: ignore the old ones,
-// so reopening the app does not show a finished session as if it were live.
+function liveIn(id,kind,d,ret){LIVE._w=true;try{liveIn_(id,kind,d,ret);}finally{LIVE._w=false;}}
+// Old data must not come back as if it were live (a closed bridge, a finished session).
+// From the team server: the server marks the "retained" copies it replays on connect.
+// Those wait until the same bridge sends something live; then they are the latest state.
+// No clock comparison between PCs (their clocks can differ by minutes).
+// From the bridge on this PC (same clock): the age of the data decides.
 const LIVE_STALE={setup:100e3,sc:30e3,field:100e3,laps:100e3,ev:100e3,pit:100e3,wx:100e3,car:30e3,fl:100e3,stl:100e3,rst:100e3};
-function liveIn_(id,kind,d){
+const LIVE_GATED=new Set(Object.keys(LIVE_STALE));
+function liveRegate(){Object.values(LIVE.gate||{}).forEach(g=>{g.live=false;g.pend=[];});}
+function liveIn_(id,kind,d,ret){
   if(kind==='id'){LIVE.myId=d;return;}
-  if(LIVE_STALE[kind]&&d&&typeof d==='object'){if(d.t){if(Date.now()-d.t>LIVE_STALE[kind])return;}else if(Date.now()-(LIVE.subAt||0)<4000)return;}
-  // a bridge's data is shown only while its "hello" says it is online with LMU running now:
-  // data from a closed bridge or a finished session never comes back when the app starts
-  const G=LIVE.gate||(LIVE.gate={});const g=G[id]||(G[id]={live:false,pend:[]});
-  if(kind==='hi'){const fresh=d.t?Date.now()-d.t<45e3:Date.now()-(LIVE.subAt||0)>4000;const was=g.live;g.live=d.on!==false&&!!d.lmu&&fresh;
-    if(g.live&&!was){const P=g.pend;g.pend=[];P.forEach(([k,x])=>liveIn_(id,k,x));}if(!g.live)g.pend=[];}
-  else if(LIVE_STALE[kind]&&!g.live){g.pend.push([kind,d]);if(g.pend.length>30)g.pend.shift();return;}
+  const G=LIVE.gate||(LIVE.gate={});const g=G[id]||(G[id]={live:false,pend:[],lastLive:0});
+  if(ret===undefined){ // local bridge (Server-Sent Events): same PC, same clock
+    if(LIVE_STALE[kind]&&d&&typeof d==='object'){if(d.t){if(Date.now()-d.t>LIVE_STALE[kind])return;}else if(Date.now()-(LIVE.subAt||0)<4000)return;}
+    if(kind==='hi'){const was=g.live;g.live=d.on!==false&&!!d.lmu;g.lastLive=Date.now();if(g.live&&!was){const P=g.pend;g.pend=[];P.forEach(([k,x])=>liveIn_(id,k,x));}if(!g.live)g.pend=[];}
+  }else if(ret){ // replayed by the server: hold until the bridge shows it is live now
+    if(!g.live||Date.now()-g.lastLive>60e3){if(LIVE_GATED.has(kind)||kind==='hi'){g.pend=g.pend.filter(x=>x[0]!==kind);g.pend.push([kind,d]);}return;}
+  }else{ // live message
+    g.lastLive=Date.now();const on=kind==='hi'?(d.on!==false&&!!d.lmu):true;
+    if(kind==='hi'&&d.on===false){g.live=false;g.pend=[];}
+    else if(on&&!g.live){g.live=true;const P=g.pend;g.pend=[];P.forEach(([k,x])=>{if(k!==kind)liveIn_(id,k,x,false);});}
+    else if(!on){g.live=false;g.pend=[];}
+  }
+  if(LIVE_GATED.has(kind)&&ret===undefined&&!g.live&&id!==''){g.pend=g.pend.filter(x=>x[0]!==kind);g.pend.push([kind,d]);return;}
   if(kind==='field'||kind==='fl'){fieldMerge(d,kind==='field');LIVE.dirty=true;return;}
   if(kind==='wx'){LIVE.wx=d;LIVE.dirty=true;return;}
   if(kind==='stl'){if(d.ses&&LIVE.L.field.ses&&d.ses!==LIVE.L.field.ses)return;streamAdd(d.l||[],true);LIVE.dirty=true;return;}
@@ -2671,10 +2696,13 @@ function liveStart(){
     es.onmessage=e=>{try{const m=JSON.parse(e.data);liveIn(m.k==='id'?'':LIVE.myId||'local',m.k,m.d);}catch(x){}};
     LIVE.conns.push({close:()=>es.close()});}
   const t=teamParse(LS.get('live:team',''));
-  if(t){const url=(t.s===false?'ws://':'wss://')+t.h+':'+t.wp+'/mqtt';
+  const relay=t&&(t.r||LS.get('relay:url',''));LIVE.via=t?(relay?'relay':'mqtt'):'';
+  const onState=s=>{LIVE.status.team=s;if(s==='on'){LIVE.subAt=Date.now();liveRegate();}if(s==='blocked')LIVE.blocked++;else if(s==='on')LIVE.blocked=0;LIVE.dirty=true;};
+  const onMsg=async(topic,bytes,ret)=>{const p=topic.split('/');if(p.length!==4||!bytes.length)return;try{liveIn(p[2],p[3],await liveOpen(t,bytes),ret);}catch(e){LIVE.err='Dati non leggibili: il codice squadra è diverso da quello dei piloti.';LIVE.dirty=true;}};
+  if(t&&relay){LIVE.conns.push(LIVE.mq=relayWS(relay,{room:t.t,sub:'all',onState,onMsg}));}
+  else if(t){const url=(t.s===false?'ws://':'wss://')+t.h+':'+t.wp+'/mqtt';
     LIVE.conns.push(LIVE.mq=mqttWS(url,{user:t.u,pass:t.p,subs:['de/'+t.t+'/+/+'],
-      onState:s=>{LIVE.status.team=s;if(s==='on')LIVE.subAt=Date.now();if(s==='blocked')LIVE.blocked++;else if(s==='on')LIVE.blocked=0;LIVE.dirty=true;},
-      onMsg:async(topic,bytes)=>{const p=topic.split('/');if(p.length!==4||!bytes.length)return;try{liveIn(p[2],p[3],await liveOpen(t,bytes));}catch(e){LIVE.err='Dati non leggibili: il codice squadra è diverso da quello dei piloti.';LIVE.dirty=true;}}}));}
+      onState,onMsg}));}
   LIVE.dirty=true;
 }
 
@@ -2998,7 +3026,7 @@ function renderLive(force){
   liveSrcSel();const rec=LIVE.rec;$('#v-live').classList.toggle('rec',!!rec);
   const st=[];if(local)st.push(`<span class="pill ${S.local==='on'?'on':''}">${S.local==='on'?'● Bridge di questo PC':'○ Bridge non attivo'}</span>`);
   if(team)st.push(`<span class="pill ${S.team==='on'?'on':S.team==='blocked'||S.team==='refused'?'bad':''}">${S.team==='on'?'● Squadra online':S.team==='refused'?'Server: accesso rifiutato':S.team==='blocked'?'Server non raggiungibile':'○ Connessione al server…'}${team.n?' · '+esc(team.n):''}</span>`);
-  if(!team&&!local)st.push(`<span class="pill">Nessuna squadra</span>`);$('#lvStat').innerHTML=st.join(' ');
+  if(!team&&!local)st.push(`<span class="pill">Nessuna squadra</span>`);st.push(liveBridgeChips());$('#lvStat').innerHTML=st.join(' ');
   let help='';const hosted=!local&&location.protocol!=='file:';
   if(!team&&!local&&!rec)help=`<p class="muted small" style="margin:6px 0 0">Il Muretto mostra in diretta telemetria, gomme, danni, meteo e classifica. Ogni pilota avvia <b>Data Engineer Bridge</b> sul PC con cui corre; l'ingegnere crea la squadra (menu «Squadra») e manda il codice ai piloti.</p>`;
   if(hosted&&team&&LIVE.blocked>=2)help+=`<div class="warnbar" style="margin-top:8px">Questa pagina ospitata non può collegarsi a server esterni. Apri il file <b>Data_Engineer.html</b> sul PC (o <b>http://localhost:8790</b> se hai il bridge acceso) e incolla lì il codice squadra.</div>`;
@@ -4165,6 +4193,27 @@ const I18N_EN=[
 ["Collegato alla squadra: il bridge si riavvia con il nuovo codice", "Connected to the team: the bridge restarts with the new code"],
 ["Soste", "Stops"],
 ["mescola e giri delle gomme", "compound and tyre laps"],
+["Questo PC", "This PC"],
+["Collegamento al bridge…", "Connecting to the bridge…"],
+["Codice squadra", "Team code"],
+["Esci da Data Engineer", "Quit Data Engineer"],
+["Registro (ultime righe)", "Log (last lines)"],
+["Chiudere Data Engineer? I dati smettono di arrivare alla squadra.", "Close Data Engineer? Data stops reaching the team."],
+["Data Engineer è chiuso. Puoi chiudere questa finestra.", "Data Engineer is closed. You can close this window."],
+["Il bridge di questo PC non risponde.", "This PC's bridge does not answer."],
+["Versione", "Version"],
+["collegato, non in auto", "connected, not driving"],
+["non aperto o nel menu", "not open or in the menu"],
+["Squadra", "Team"],
+["collegata", "connected"],
+["Server", "Server"],
+["online", "online"],
+["riconnessione…", "reconnecting…"],
+["Dati inviati", "Data sent"],
+["Ultimo errore", "Last error"],
+["nessuna: il Muretto funziona solo su questo PC", "none: the Pit wall works on this PC only"],
+["nessun dato in diretta", "no live data"],
+["ultimo dato", "last data"],
 ];
 // ================= I18N (IT → EN) =================
 const LANG=LS.get('lang','it')==='en'?'en':'it';
@@ -4217,7 +4266,7 @@ const tr=I18N.tr;
 })();
 const AI_LANG=()=>LANG==='en'?'\n\nIMPORTANT: write your whole answer in English (the instructions above are in Italian, but the driver reads English).':'';
 // ================= VERSIONE, NOVITÀ E AGGIORNAMENTI =================
-const APP_VERSION='1.7.2';
+const APP_VERSION='2.0';
 const DEFAULT_UPD='https://raw.githubusercontent.com/KubaMovitech/Race-Engineer/main/';   // update channel (folder with version.json), set when the team repository exists
 const CHANGELOG=[
 {v:'1.6',d:'04/10/2026',items:['Classifica: settori S1 S2 S3 in diretta, colorati come in F1 e WEC (viola miglior della classe, verde personale, giallo più lento).','Strategia › Fino alla bandiera: quanta energia e benzina mettere a ogni sosta e il ratio, con l\'ultima sosta in evidenza.','Giri possibili con l\'energia attuale per ogni pilota, con i suoi consumi.','Mappa: P1, auto davanti e auto dietro evidenziate con il distacco.','Finestra di sosta: dove rientri fermandoti adesso o nei prossimi giri, con traffico e chi deve ancora fermarsi. Tempo perso al box correggibile a mano.','Undercut e overcut in diretta sulle auto vicine, con chi è ai box in quel momento.','Overlay per OBS configurabile: classifica, duello, settori, energia, rientro, sessione, gomme, mappa, relativo.','Setup › Confronto setup: differenze tra base e un altro set con gli effetti attesi, e confronto in pista con due telemetrie.','Muretto riordinato: barra in alto più compatta, strategia raggruppata, riquadro Settori nella Panoramica.']},
@@ -4282,7 +4331,7 @@ function openNews(tab){let m=$('#mNews');if(!m){m=document.createElement('div');
 
 (function(){const tools=$('.hdr-tools');if(tools&&!$('#verChip')){const b=document.createElement('button');b.type='button';b.id='verChip';b.className='verchip';b.textContent='v'+APP_VERSION;b.onclick=()=>openNews();tools.insertBefore(b,$('#btnSettings'));}
   // after an update (or on first run of a new version) show what changed
-  const seen=LS.get('seenVer','');if(seen&&seen!==APP_VERSION){setTimeout(()=>openNews(),800);}LS.set('seenVer',APP_VERSION);
+  const seen=LS.get('seenVer','');if(seen!==APP_VERSION&&!document.documentElement.classList.contains('ovmode')&&!/^#(ov|tv)/.test(location.hash)){setTimeout(()=>openNews(),800);}LS.set('seenVer',APP_VERSION);
   if(!isHosted()&&(UPD.base||isBridgeHost()))setTimeout(updCheck,3000);
   updRender();})();
 // ================= 1.6: fine gara, piloti, finestra di sosta, undercut, mappa, overlay OBS, confronto setup =================
@@ -4704,6 +4753,33 @@ function openBridgeTeam(){fetch('/team',{cache:'no-store'}).then(r=>r.json()).ca
     // joining a team from the bridge's own page also moves the bridge to that team
     const j=$('#lvJoin');if(j)j.onclick=()=>openCode({title:tr('Entra con codice'),help:tr('Incolla il codice squadra (inizia con DE1-): lo usano sia questa pagina sia il bridge di questo PC, che si riavvia da solo.'),text:'',onOk:txt=>{if(!teamParse(txt))throw new Error(tr('codice squadra non valido'));LS.set('live:team',txt.trim());liveStart();bridgeTeam(txt.trim()).then(()=>toast(tr('Collegato alla squadra: il bridge si riavvia con il nuovo codice'))).catch(()=>toast(tr('Collegato alla squadra')));}});};
   const os=liveSkeleton;window.liveSkeleton=liveSkeleton=function(){os();add();};})();
+
+// ---------- every bridge of the team: last live data, at a glance ----------
+function liveBridgeChips(){const now=Date.now();const G=LIVE.gate||{};const Ds=Object.values(LIVE.drivers).filter(D=>D.hi&&D.id);
+  return Ds.map(D=>{const g=G[D.id]||{};const age=g.lastLive?Math.round((now-g.lastLive)/1000):null;const off=D.hi.on===false||age==null||age>60;
+    const k=off?'bad':age>12?'warn':'good';const nm=(D.hi.name||'pilota').split(' ')[0];
+    return `<span class="bchip ${k}" title="${esc((D.hi.name||'')+' · '+(off?tr('nessun dato in diretta'):tr('ultimo dato')+' '+age+' s fa')+(D.hi.ver?' · bridge '+D.hi.ver:''))}"><i></i>${esc(nm)}${off?' · off':age>3?` · ${age}s`:''}</span>`;}).join('');}
+
+// ---------- which server the team uses: our relay when published (version.json › "relay") ----------
+(function(){const setRelay=r=>{if(typeof r!=='string')return;r=r.trim();if(r&&!/^(https|wss):\/\//.test(r))return;if(r===LS.get('relay:url',''))return;LS.set('relay:url',r);if(LS.get('live:team',''))liveStart();};
+  if(isBridgeHost())fetch('/version',{cache:'no-store'}).then(x=>x.json()).then(v=>{if('relay' in v)setRelay(v.relay||'');}).catch(()=>{});
+  else if(DEFAULT_UPD&&!isHosted())fetch(DEFAULT_UPD+'version.json?t='+Date.now(),{cache:'no-store'}).then(x=>x.json()).then(v=>setRelay(v.relay||'')).catch(()=>{});})();
+
+// ---------- Questo PC: what the bridge window used to show, plus team code, updates and exit ----------
+function openPcPanel(){let m=$('#mPc');if(!m){m=document.createElement('div');m.className='modal';m.id='mPc';m.hidden=true;document.body.appendChild(m);}
+  m.innerHTML=`<div class="mbox wide"><div class="panel-h"><h2>${tr('Questo PC')}</h2><button class="btn" type="button" data-close>${tr('Chiudi')}</button></div><div id="pcBody"><div class="muted small">${tr('Collegamento al bridge…')}</div></div>
+    <div class="row" style="gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn" type="button" id="pcTeam">${tr('Codice squadra')}</button><button class="btn" type="button" id="pcUpd">${tr('Novità e aggiornamenti')}</button><span style="flex:1"></span><button class="btn" type="button" id="pcQuit">${tr('Esci da Data Engineer')}</button></div>
+    <details style="margin-top:12px"><summary class="muted small">${tr('Registro (ultime righe)')}</summary><pre id="pcLog" class="pclog"></pre></details></div>`;
+  $('#pcTeam').onclick=openBridgeTeam;$('#pcUpd').onclick=()=>{m.hidden=true;openNews();};
+  $('#pcQuit').onclick=()=>{if(!confirm(tr('Chiudere Data Engineer? I dati smettono di arrivare alla squadra.')))return;fetch('/quit',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'}).then(()=>{m.hidden=true;const o=document.createElement('div');o.style.cssText='position:fixed;inset:0;z-index:999;background:var(--bg);display:flex;align-items:center;justify-content:center;font:18px var(--f-body);color:var(--ink)';o.textContent=tr('Data Engineer è chiuso. Puoi chiudere questa finestra.');document.body.appendChild(o);try{window.close();}catch(e){}}).catch(()=>{});};
+  const row=(l,v,k='')=>`<div class="lvrow"><span>${l}</span><b class="${k}">${v}</b></div>`;
+  const tick=async()=>{if(m.hidden)return clearInterval(t);let s;try{s=await (await fetch('/status',{cache:'no-store'})).json();}catch(e){$('#pcBody').innerHTML=`<div class="warnbar">${tr('Il bridge di questo PC non risponde.')}</div>`;return;}
+    $('#pcBody').innerHTML=`<div class="grid2" style="gap:16px"><div>${row(tr('Versione'),'v'+esc(s.version||''))}${row('Le Mans Ultimate',s.lmu?(s.driving?`${tr('in auto')} · ${esc(s.driver||'')}${s.lap?' · '+tr('giro')+' '+s.lap:''}`:tr('collegato, non in auto')):tr('non aperto o nel menu'),s.lmu?'pos':'muted')}</div>
+      <div>${s.team?row(tr('Squadra'),esc(s.teamName||tr('collegata')))+row(tr('Server'),(s.relay?'Data Engineer':'MQTT pubblico')+' · '+(s.up?`<span class="pos">${tr('online')}</span>`:`<span class="neg">${tr('riconnessione…')}</span>`))+row(tr('Dati inviati'),Math.round((s.sent||0)/1024)+' KB')+(s.err&&!s.up?row(tr('Ultimo errore'),esc(s.err),'neg'):''):row(tr('Squadra'),tr('nessuna: il Muretto funziona solo su questo PC'),'muted')}</div></div>`;
+    $('#pcLog').textContent=(s.log||[]).join('\n');};
+  const t=setInterval(tick,2000);tick();openModal('#mPc');}
+(function(){const add=()=>{if(!isBridgeHost())return;const d=$('#lvDeb');if(!d||$('#lvPc'))return;const b=document.createElement('button');b.className='btn';b.type='button';b.id='lvPc';b.textContent=tr('Questo PC');b.onclick=openPcPanel;d.before(b);};
+  const os=liveSkeleton;window.liveSkeleton=liveSkeleton=function(){os();add();};})();
 // ================= 1.7: GRAFICA TV (overlay stile WEC / F1) + REGIA =================
 // The overlay page (#tv) draws broadcast graphics on a transparent 1920×1080 canvas for OBS.
 // The "Regia" (Muretto › Regia TV) decides what is on screen; its state reaches every overlay
@@ -4871,7 +4947,7 @@ function tvSend(st){LS.set('tv:state',st);LIVE.ovc={...st,at:Date.now()};tvQ=st;
 function tvFlush(){const st=tvQ;tvQ=null;if(!st)return;const js=JSON.stringify(st);if(js===tvLast)return;tvLast=js;const msg={...st,at:Date.now()};
   if(isBridgeHost())fetch('/ovc',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(msg)}).catch(()=>{});
   const t=teamParse(LS.get('live:team',''));if(t&&LIVE.mq)liveSeal(t,msg).then(b=>LIVE.mq.pub('de/'+t.t+'/regia/ovc',b,true)).catch(()=>{});}
-(function(){const base=liveIn_;window.liveIn_=liveIn_=function(id,kind,d){if(kind==='ovc'){if(d&&typeof d==='object')LIVE.ovc=d;return;}return base(id,kind,d);};})();
+(function(){const base=liveIn_;window.liveIn_=liveIn_=function(id,kind,d,ret){if(kind==='ovc'){if(d&&typeof d==='object')LIVE.ovc=d;return;}return base(id,kind,d,ret);};})();
 
 // ---------- the OBS page (#tv) ----------
 (function(){if(!/^#tv(&|$)/.test(location.hash))return;const p=new URLSearchParams(location.hash.replace(/^#tv&?/,''));document.documentElement.classList.add('ovmode','tvmode');

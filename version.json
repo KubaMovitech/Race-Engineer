@@ -1,16 +1,17 @@
 {
- "version": "1.7.2",
- "date": "2026-10-04",
+ "version": "2.0",
+ "date": "2026-10-05",
  "notes": [
-  "Corretto: due bridge aperti sullo stesso PC si scollegavano a vicenda e il Muretto online si fermava.",
-  "Grafica TV: le modifiche della Regia arrivano a OBS anche da un altro PC o dal file per PC."
+  "Data Engineer diventa un'app: un solo programma per tutti, si apre in una finestra sua e si aggiorna da solo.",
+  "Muretto più affidabile: niente più dati scartati per gli orologi dei PC, riconnessione in pochi secondi.",
+  "Pronto per il nuovo server della squadra (Cloudflare)."
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "c22c16b12a66e21b5f0461b8812199b79d61816fcaa0090d966f21231561f4ad"
+  "sha256": "180eb36ec763127415db5c59387716c3a921f4f8c83003e4787d191fe53d147b"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "e7bbfe05012685b27aa682ca4ba21f78e0b820c40d69f890371ca8d22c27c118"
+  "sha256": "6ec5fcdfdf75332a4a93eb037ca09537eb329855ac4f29fa2348d9f257c67c54"
  }
 }

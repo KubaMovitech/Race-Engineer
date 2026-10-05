@@ -1,0 +1,5 @@
+databridge.json
+*.old
+*.new
+app.html
+app.version
