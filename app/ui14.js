@@ -45,7 +45,11 @@ function carStats_(veh,r){const c=fCar(veh);const L=fLaps(veh);const cl=cleanLap
   const fuel=r?.fuel,ve=r?.ve;const lf=fuel>=0&&fpl>0?fuel/fpl:NaN,lv=ve>=0&&vpl>0?ve/vpl:NaN;const left=Math.min(Number.isFinite(lf)?lf:Infinity,Number.isFinite(lv)?lv:Infinity);
   const sec=L.filter(l=>!l[7]&&!l[3]&&l[4]>0&&l[5]>l[4]&&l[1]>l[5]);const ideal=sec.length?Math.min(...sec.map(l=>l[4]))+Math.min(...sec.map(l=>l[5]-l[4]))+Math.min(...sec.map(l=>l[1]-l[5])):NaN;
   const lastL=L[L.length-1];
-  return {c,L,cl,pace5:avg_(t.slice(-5)),pace10:avg_(t.slice(-10)),paceAll:avg_(t),sd:sd_(t.slice(-10)),best:t.length?Math.min(...t):NaN,ideal,
+  // race pace: the last 5 laps run, whatever their time (not only the laps close to the best one, which kept
+  // old fast laps and ignored traffic, rain or worn tyres); out of it lap 1, laps in or out of the pits and a lap
+  // more than 10% slower than the others (a spin, an off)
+  const r5=L.filter(l=>l[0]>1&&!l[3]&&l[1]>0).slice(-5).map(l=>l[1]);const m5=med_(r5);
+  return {c,L,cl,pace5:avg_(r5.filter(x=>x<=m5*1.1)),pace10:avg_(t.slice(-10)),paceAll:avg_(t),sd:sd_(t.slice(-10)),best:t.length?Math.min(...t):NaN,ideal,
     pits,lastPit,stintLaps,fpl,vpl,lf,lv,left:Number.isFinite(left)?left:NaN,nextPit:Number.isFinite(left)&&r?r.laps+1+Math.floor(left):NaN,limit:Number.isFinite(lv)&&(!Number.isFinite(lf)||lv<lf)?'ve':'fuel',
     lastInv:lastL?!!lastL[7]:false,lastT:lastL?lastL[1]:NaN,swaps:c?.swaps||[],drivers:c?.drivers||[]};}
 function soloPlan(){const v=LS.get('strategy',null);if(!v)return null;const lap=parseLapT(v.lap),fuel=+v.fuel,tank=+v.tank,ve=+v.ve||0,veMax=+v.veMax||100,res=+v.res||0;

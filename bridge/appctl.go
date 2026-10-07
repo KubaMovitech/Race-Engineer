@@ -46,6 +46,7 @@ func closeWindow() {
 	if appWin.cmd != nil && appWin.cmd.Process != nil {
 		appWin.cmd.Process.Kill()
 	}
+	closeAppWindows()
 }
 
 // what the console used to show, for the app (Muretto › Questo PC)

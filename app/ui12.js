@@ -112,7 +112,9 @@ function liveIn_(id,kind,d,ret){
   else if(kind==='car'){D.car=d;D.carAt=Date.now();const k=d.car||id;const B=LIVE.buf[k]||(LIVE.buf[k]=[]);(d.smp||[]).forEach(s=>{if(!B.length||s[0]>B[B.length-1][0])B.push(s);else if(s[0]<B[B.length-1][0]-5)B.length=0,B.push(s);});
     while(B.length&&B[B.length-1][0]-B[0][0]>90)B.shift();
     if(LIVE.trailKey&&(d.x||d.z)&&!d.pit){const x=Math.round(d.x/4)*4,z=Math.round(d.z/4)*4,k=x+','+z;if(!LIVE.trail.has(k)&&LIVE.trail.size<6000)LIVE.trail.set(k,[x,z]);}}
-  else if(kind==='sc'){if(!LIVE.sc||Date.now()-LIVE.scAt>1500||d.i?.et>=(LIVE.sc.i?.et||0)||d.i?.trk!==LIVE.sc.i?.trk){LIVE.sc=d;LIVE.scAt=Date.now();liveTrail(d);
+  // standings from one bridge at a time: every PC sees them a little differently, mixing them made the board jump.
+  // Another bridge takes over only when this one has been silent for 4 s.
+  else if(kind==='sc'){if(!LIVE.sc||id===LIVE.scSrc||Date.now()-LIVE.scAt>4000){LIVE.sc=d;LIVE.scSrc=id;LIVE.scAt=Date.now();liveTrail(d);
     const H=LIVE.L.wxh||(LIVE.L.wxh=[]);const I=d.i||{};if(!H.length||I.et<H[H.length-1][0]||I.et-H[H.length-1][0]>=30)H.push([I.et,I.air,I.tt,I.rain,I.wavg]);if(H.length&&I.et<H[0][0]-1)LIVE.L.wxh=[[I.et,I.air,I.tt,I.rain,I.wavg]];if(H.length>2000)H.shift();}}
   else if(kind==='laps')D.laps=d;
   else if(kind==='ev')D.ev=d;
@@ -151,7 +153,9 @@ const FCY=['','in arrivo','box chiusi','box aperti ai doppiati','box aperti','ul
 const ZONES=['anteriore','anteriore sx','fianco sx','fianco dx','posteriore sx','posteriore dx','posteriore','anteriore dx'];
 const WN=['Ant. sx','Ant. dx','Post. sx','Post. dx'];
 function liveCars(){const g={};Object.values(LIVE.drivers).forEach(D=>{const car=D.car?.car||D.hi?.car||D.laps?.car;if(!car)return;(g[car]=g[car]||[]).push(D);});return g;}
-function liveCarState(car){const Ds=liveCars()[car]||[];const act=Ds.filter(D=>D.car&&Date.now()-D.carAt<8000).sort((a,b)=>b.carAt-a.carAt)[0];
+function liveCarState(car){const Ds=liveCars()[car]||[];const now=Date.now();const A=LIVE.actOf||(LIVE.actOf={});
+  // the driver shown stays the same while their data keeps arriving (no jumping between two bridges)
+  const fresh=Ds.filter(D=>D.car&&now-D.carAt<8000);const act=fresh.find(D=>D.id===A[car])||fresh.sort((a,b)=>b.carAt-a.carAt)[0];if(act)A[car]=act.id;
   const lapsM=new Map();let ses='';Ds.forEach(D=>{if(D.laps?.ses&&(!ses||D===act))ses=D.laps.ses;});
   Ds.filter(D=>D.laps&&(!ses||D.laps.ses===ses)).forEach(D=>(D.laps.laps||[]).forEach(l=>lapsM.set(l.n,l)));
   const evs=new Map();Ds.forEach(D=>(D.ev?.list||[]).forEach(e=>evs.set(e.k+'|'+e.et+'|'+(e.drv||''),e)));

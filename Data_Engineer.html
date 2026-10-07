@@ -682,8 +682,10 @@ table.lbt tbody tr:nth-child(even) td{background:color-mix(in srgb,var(--panel2)
 table.lbt tbody tr:hover td{background:var(--panel2)}
 table.lbt td{padding:4px 6px;vertical-align:middle}table.lbt th{padding:6px;white-space:nowrap}
 table.lbt td.l{max-width:300px}table.lbt td.l>div.muted{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:300px}
-td.tyc2{text-align:center;white-space:nowrap;width:56px}
-td.tyc2 small{display:block;font-size:.68rem;color:var(--muted);margin-top:1px}
+td.tyc2{text-align:center;white-space:nowrap;width:64px}
+td.tyc2 small{display:inline-block;vertical-align:middle;font-size:.68rem;color:var(--muted);margin-left:4px;min-width:22px;text-align:left}
+.ty4{display:inline-grid;grid-template-columns:12px 12px;column-gap:7px;row-gap:3px;vertical-align:middle;padding:1px 3px;border-radius:5px;background:linear-gradient(var(--line),var(--line)) center/3px 100% no-repeat}
+.ty4 i{display:block;height:14px;border-radius:3px;font:700 9px/14px var(--f-mono);font-style:normal;text-align:center;box-shadow:inset 0 0 0 1px rgba(0,0,0,.25)}
 .tyb{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--f);font:700 12px/1 var(--f-mono);box-shadow:inset 0 0 0 2px rgba(0,0,0,.25)}
 .tyb.split{width:34px;border-radius:12px;background:linear-gradient(90deg,var(--f) 0 50%,var(--r) 50% 100%);gap:4px;font-size:11px}
 .tyb i{font-style:normal}
@@ -2675,7 +2677,9 @@ function liveIn_(id,kind,d,ret){
   else if(kind==='car'){D.car=d;D.carAt=Date.now();const k=d.car||id;const B=LIVE.buf[k]||(LIVE.buf[k]=[]);(d.smp||[]).forEach(s=>{if(!B.length||s[0]>B[B.length-1][0])B.push(s);else if(s[0]<B[B.length-1][0]-5)B.length=0,B.push(s);});
     while(B.length&&B[B.length-1][0]-B[0][0]>90)B.shift();
     if(LIVE.trailKey&&(d.x||d.z)&&!d.pit){const x=Math.round(d.x/4)*4,z=Math.round(d.z/4)*4,k=x+','+z;if(!LIVE.trail.has(k)&&LIVE.trail.size<6000)LIVE.trail.set(k,[x,z]);}}
-  else if(kind==='sc'){if(!LIVE.sc||Date.now()-LIVE.scAt>1500||d.i?.et>=(LIVE.sc.i?.et||0)||d.i?.trk!==LIVE.sc.i?.trk){LIVE.sc=d;LIVE.scAt=Date.now();liveTrail(d);
+  // standings from one bridge at a time: every PC sees them a little differently, mixing them made the board jump.
+  // Another bridge takes over only when this one has been silent for 4 s.
+  else if(kind==='sc'){if(!LIVE.sc||id===LIVE.scSrc||Date.now()-LIVE.scAt>4000){LIVE.sc=d;LIVE.scSrc=id;LIVE.scAt=Date.now();liveTrail(d);
     const H=LIVE.L.wxh||(LIVE.L.wxh=[]);const I=d.i||{};if(!H.length||I.et<H[H.length-1][0]||I.et-H[H.length-1][0]>=30)H.push([I.et,I.air,I.tt,I.rain,I.wavg]);if(H.length&&I.et<H[0][0]-1)LIVE.L.wxh=[[I.et,I.air,I.tt,I.rain,I.wavg]];if(H.length>2000)H.shift();}}
   else if(kind==='laps')D.laps=d;
   else if(kind==='ev')D.ev=d;
@@ -2714,7 +2718,9 @@ const FCY=['','in arrivo','box chiusi','box aperti ai doppiati','box aperti','ul
 const ZONES=['anteriore','anteriore sx','fianco sx','fianco dx','posteriore sx','posteriore dx','posteriore','anteriore dx'];
 const WN=['Ant. sx','Ant. dx','Post. sx','Post. dx'];
 function liveCars(){const g={};Object.values(LIVE.drivers).forEach(D=>{const car=D.car?.car||D.hi?.car||D.laps?.car;if(!car)return;(g[car]=g[car]||[]).push(D);});return g;}
-function liveCarState(car){const Ds=liveCars()[car]||[];const act=Ds.filter(D=>D.car&&Date.now()-D.carAt<8000).sort((a,b)=>b.carAt-a.carAt)[0];
+function liveCarState(car){const Ds=liveCars()[car]||[];const now=Date.now();const A=LIVE.actOf||(LIVE.actOf={});
+  // the driver shown stays the same while their data keeps arriving (no jumping between two bridges)
+  const fresh=Ds.filter(D=>D.car&&now-D.carAt<8000);const act=fresh.find(D=>D.id===A[car])||fresh.sort((a,b)=>b.carAt-a.carAt)[0];if(act)A[car]=act.id;
   const lapsM=new Map();let ses='';Ds.forEach(D=>{if(D.laps?.ses&&(!ses||D===act))ses=D.laps.ses;});
   Ds.filter(D=>D.laps&&(!ses||D.laps.ses===ses)).forEach(D=>(D.laps.laps||[]).forEach(l=>lapsM.set(l.n,l)));
   const evs=new Map();Ds.forEach(D=>(D.ev?.list||[]).forEach(e=>evs.set(e.k+'|'+e.et+'|'+(e.drv||''),e)));
@@ -2911,7 +2917,11 @@ function carStats_(veh,r){const c=fCar(veh);const L=fLaps(veh);const cl=cleanLap
   const fuel=r?.fuel,ve=r?.ve;const lf=fuel>=0&&fpl>0?fuel/fpl:NaN,lv=ve>=0&&vpl>0?ve/vpl:NaN;const left=Math.min(Number.isFinite(lf)?lf:Infinity,Number.isFinite(lv)?lv:Infinity);
   const sec=L.filter(l=>!l[7]&&!l[3]&&l[4]>0&&l[5]>l[4]&&l[1]>l[5]);const ideal=sec.length?Math.min(...sec.map(l=>l[4]))+Math.min(...sec.map(l=>l[5]-l[4]))+Math.min(...sec.map(l=>l[1]-l[5])):NaN;
   const lastL=L[L.length-1];
-  return {c,L,cl,pace5:avg_(t.slice(-5)),pace10:avg_(t.slice(-10)),paceAll:avg_(t),sd:sd_(t.slice(-10)),best:t.length?Math.min(...t):NaN,ideal,
+  // race pace: the last 5 laps run, whatever their time (not only the laps close to the best one, which kept
+  // old fast laps and ignored traffic, rain or worn tyres); out of it lap 1, laps in or out of the pits and a lap
+  // more than 10% slower than the others (a spin, an off)
+  const r5=L.filter(l=>l[0]>1&&!l[3]&&l[1]>0).slice(-5).map(l=>l[1]);const m5=med_(r5);
+  return {c,L,cl,pace5:avg_(r5.filter(x=>x<=m5*1.1)),pace10:avg_(t.slice(-10)),paceAll:avg_(t),sd:sd_(t.slice(-10)),best:t.length?Math.min(...t):NaN,ideal,
     pits,lastPit,stintLaps,fpl,vpl,lf,lv,left:Number.isFinite(left)?left:NaN,nextPit:Number.isFinite(left)&&r?r.laps+1+Math.floor(left):NaN,limit:Number.isFinite(lv)&&(!Number.isFinite(lf)||lv<lf)?'ve':'fuel',
     lastInv:lastL?!!lastL[7]:false,lastT:lastL?lastL[1]:NaN,swaps:c?.swaps||[],drivers:c?.drivers||[]};}
 function soloPlan(){const v=LS.get('strategy',null);if(!v)return null;const lap=parseLapT(v.lap),fuel=+v.fuel,tank=+v.tank,ve=+v.ve||0,veMax=+v.veMax||100,res=+v.res||0;
@@ -3562,7 +3572,7 @@ function openDebrief(){let m=$('#mDeb');if(!m){m=document.createElement('div');m
 const I18N_EN=[
 ["Novità e aggiornamenti","What's new & updates"],["Aggiornamenti","Updates"],["Cosa è cambiato","What changed"],["installata","installed"],["Aggiornato alla versione","Updated to version"],["Versione dell'app","App version"],["Canale degli aggiornamenti","Update channel"],["Controlla aggiornamenti","Check for updates"],["Aggiorna alla","Update to"],["Controllo…","Checking…"],["Aggiornamento in corso…","Updating…"],["Hai già l'ultima versione.","You already have the latest version."],["Aggiornato.","Updated."],["Non riesco ad aggiornare","Can't update"],["Novità della","What's new in"],
 ["Il bridge scarica la nuova versione sua e dell'app e si riavvia da solo. Controlla gli aggiornamenti anche a ogni avvio.","The bridge downloads the new version of itself and of the app, then restarts. It also checks for updates every time it starts."],["Il file si sostituisce con un clic (Chrome o Edge); la prima volta scegli il file Data_Engineer.html che usi.","The file is replaced with one click (Chrome or Edge); the first time, pick the Data_Engineer.html file you use."],
-["Scarica il nuovo bridge","Download the new bridge"],["Nuovo bridge scaricato: chiudi il bridge, sostituisci DataEngineerBridge.exe e riaprilo.","New bridge downloaded: close the bridge, replace DataEngineerBridge.exe and open it again."],["Questo bridge è di una versione vecchia e non sa aggiornarsi da solo: scarica il nuovo DataEngineerBridge.exe e sostituisci quello vecchio (basta una volta).","This bridge is an old version and can't update itself: download the new DataEngineerBridge.exe and replace the old one (only once)."],
+["Scarica il nuovo bridge","Download the new bridge"],["Data Engineer è aperto in un'altra finestra","Data Engineer is open in another window"],["Questa finestra non si aggiorna più: chiudila e usa quella nuova.","This window no longer updates: close it and use the new one."],["Nuovo bridge scaricato: chiudi il bridge, sostituisci DataEngineerBridge.exe e riaprilo.","New bridge downloaded: close the bridge, replace DataEngineerBridge.exe and open it again."],["Questo bridge è di una versione vecchia e non sa aggiornarsi da solo: scarica il nuovo DataEngineerBridge.exe e sostituisci quello vecchio (basta una volta).","This bridge is an old version and can't update itself: download the new DataEngineerBridge.exe and replace the old one (only once)."],
 ["Questa pagina su claude.ai si aggiorna da sola: è sempre l'ultima versione.","This page on claude.ai updates itself: it's always the latest version."],["Imposta prima il canale degli aggiornamenti.","Set the update channel first."],["Scegli il file Data_Engineer.html che stai usando: verrà sostituito con la nuova versione.","Pick the Data_Engineer.html file you're using: it will be replaced with the new version."],["Aggiornato: riapro l'app…","Updated: reopening the app…"],["Nuova versione scaricata: sostituisci il vecchio file.","New version downloaded: replace the old file."],["Il canale deve essere un indirizzo web","The channel must be a web address"],["È disponibile una nuova versione","A new version is available"],["Aggiorna","Update"],["file scaricato non valido (controllo SHA-256 fallito)","downloaded file not valid (SHA-256 check failed)"],
 ["Per giro","Per lap"],["Soste · stint","Stops · stint"],
 ["Stato","Status"],["VE · benzina","VE · fuel"],["benz.","fuel"],["Soste · stint","Stops · stint"],["Aggancio","Catch"],["non lo prendi","won't catch him"],["non ti prende","won't catch you"],["dopo la bandiera","after the flag"],["ti prende al giro","catches you on lap"],
@@ -4267,9 +4277,10 @@ const tr=I18N.tr;
 })();
 const AI_LANG=()=>LANG==='en'?'\n\nIMPORTANT: write your whole answer in English (the instructions above are in Italian, but the driver reads English).':'';
 // ================= VERSIONE, NOVITÀ E AGGIORNAMENTI =================
-const APP_VERSION='2.0.2';
+const APP_VERSION='2.0.3';
 const DEFAULT_UPD='https://raw.githubusercontent.com/KubaMovitech/Race-Engineer/main/';   // update channel (folder with version.json), set when the team repository exists
 const CHANGELOG=[
+{v:'2.0.3',d:'07/10/2026',items:['Muretto con più piloti online: non salta più da un pilota all\'altro. Ogni auto ha lo stesso nome su tutti i PC della squadra e la classifica arriva da un bridge alla volta.','Una sola app aperta: riaprendo Data Engineer torna in primo piano la finestra già aperta.','Classifica: le quattro gomme viste dall\'alto (anteriori sopra, posteriori sotto).','Passo gara sugli ultimi 5 giri fatti (senza giro 1, giri dei box e un giro molto lento), non sui giri più veloci.']},
 {v:'2.0.2',d:'05/10/2026',items:['Le novità mostrano di nuovo tutte le versioni, dalla 1.7 in poi.','Con un bridge vecchio (1.6 o 1.7) che non sa aggiornarsi, il pulsante «Aggiorna» scarica il nuovo DataEngineerBridge.exe da sostituire.','Il bridge non si riavvia più all\'infinito se trova lo stesso programma già installato.']},
 {v:'2.0.1',d:'05/10/2026',items:['La classifica si aggiorna ogni secondo anche quando nessuno della squadra è in auto.']},
 {v:'2.0',d:'05/10/2026',items:['Data Engineer diventa un\'app: un solo programma per tutti, si apre in una finestra sua e si aggiorna da solo.','Muretto più affidabile: niente più dati scartati per gli orologi dei PC, riconnessione in pochi secondi.','Pronto per il nuovo server della squadra (Cloudflare).']},
@@ -4348,6 +4359,14 @@ function openNews(tab){let m=$('#mNews');if(!m){m=document.createElement('div');
   const seen=LS.get('seenVer','');if(seen!==APP_VERSION&&!document.documentElement.classList.contains('ovmode')&&!/^#(ov|tv)/.test(location.hash)){setTimeout(()=>openNews(),800);}LS.set('seenVer',APP_VERSION);
   if(!isHosted()&&(UPD.base||isBridgeHost()))setTimeout(updCheck,3000);
   updRender();})();
+
+// ---------- one app window at a time: a newer window replaces the older ones ----------
+(function(){if(!window.BroadcastChannel||/^#(ov|tv)/.test(location.hash))return;
+  const t0=Date.now()+Math.random();const ch=new BroadcastChannel('de-app');
+  ch.onmessage=e=>{const m=e.data||{};if(m.t!=='open'||!(m.at>t0))return;ch.close();
+    try{LIVE.conns.forEach(c=>c.close());LIVE.conns=[];}catch(x){}window.close();
+    setTimeout(()=>{const d=document.createElement('div');d.className='modal';d.innerHTML=`<div class="mbox"><h2>${tr('Data Engineer è aperto in un\'altra finestra')}</h2><p class="muted">${tr('Questa finestra non si aggiorna più: chiudila e usa quella nuova.')}</p></div>`;document.body.appendChild(d);},300);};
+  ch.postMessage({t:'open',at:t0});})();
 // ================= 1.6: fine gara, piloti, finestra di sosta, undercut, mappa, overlay OBS, confronto setup =================
 const avgN=(a,n)=>{const b=a.filter(Number.isFinite);return b.length?avg_(b.slice(-n)):NaN;};
 const fmtPct=(v,d=1)=>Number.isFinite(v)?fx(v*100,d)+' %':'—';
@@ -4749,9 +4768,10 @@ function lvStintLive(x){const {c,kind,I}=x;const el=$('#lvStr');if(!el)return;co
 
 // ---------- leaderboard cells: tyres and energy, fixed width and aligned ----------
 function tyreCell(r){const c=r.comp||'';if(!c)return `<td class="tyc2"><span class="muted small">${esc((r.cf||r.cr||'—').slice(0,6))}</span></td>`;
-  const f=c[0],b=c[2]||c[c.length-1];const same=[...c].every(x=>x===c[0]);const tip=[...c].map((x,i)=>tr(['Ant. sx','Ant. dx','Post. sx','Post. dx'][i])+': '+(COMP_N[x]||x)).join(' · ');
-  const col=k=>COMP_COL[k]||COMP_COL['?'];const st=carStats(r.veh,r);
-  return `<td class="tyc2" title="${esc(tip)}"><span class="tyb${same?'':' split'}" style="--f:${col(f)};--r:${col(b)};color:${COMP_INK(f)}">${same?f:`${f}<i style="color:${COMP_INK(b)}">${b}</i>`}</span><small>${st.stintLaps}${tr('g')}</small></td>`;}
+  // the four tyres seen from above: front left / right on top, rear left / right below
+  const k=[0,1,2,3].map(i=>c[i]||c[c.length-1]);const tip=k.map((x,i)=>tr(['Ant. sx','Ant. dx','Post. sx','Post. dx'][i])+': '+(COMP_N[x]||x)).join(' · ');
+  const col=x=>COMP_COL[x]||COMP_COL['?'];const st=carStats(r.veh,r);
+  return `<td class="tyc2" title="${esc(tip)}"><span class="ty4">${k.map(x=>`<i style="background:${col(x)};color:${COMP_INK(x)}">${esc(x)}</i>`).join('')}</span><small>${st.stintLaps}${tr('g')}</small></td>`;}
 function energyCell(r){const row=(lab,v,cls)=>{const p=Math.max(0,Math.min(1,v));return `<span class="eg ${cls}${p<0.12?' low':''}"><em>${lab}</em><span class="t"><i style="width:${(p*100).toFixed(1)}%"></i></span><b>${Math.round(p*100)}</b></span>`;};
   if(!(r.ve>=0)&&!(r.fuel>=0))return '<td class="egc muted">—</td>';
   return `<td class="egc">${r.ve>=0?row('VE',r.ve,'ve'):''}${r.fuel>=0?row(LANG==='en'?'F':'B',r.fuel,'fu'):''}</td>`;}

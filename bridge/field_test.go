@@ -32,7 +32,7 @@ func TestSameVehicleNameGetsOwnKey(t *testing.T) {
 		t.Fatalf("want 2 cars, got %d", len(fd.cars))
 	}
 	if fd.cars["Team X #1"] == nil || fd.cars["Team X #1"].Name != "Me" {
-		t.Fatalf("player car must keep the plain name")
+		t.Fatalf("lowest slot must keep the plain name")
 	}
 	for _, c := range fd.cars {
 		if len(c.Swaps) != 0 {
@@ -83,5 +83,20 @@ func TestLapCounterJumpsAreIgnored(t *testing.T) {
 	set(4, 90) // real lap
 	if n := len(fd.cars["Car #5"].Laps); n != 2 {
 		t.Fatalf("want 2 laps, got %d: %v", n, fd.cars["Car #5"].Laps)
+	}
+}
+
+// two teammates in cars with the same name: both bridges must use the same keys
+func TestSameKeysOnEveryBridge(t *testing.T) {
+	a, b := newField(), newField()
+	a.update(frameAt(1, mkRow(7, "Anna", "Team X #1", true), mkRow(3, "Beppe", "Team X #1", false)), "s", time.Now())
+	b.update(frameAt(1, mkRow(7, "Anna", "Team X #1", false), mkRow(3, "Beppe", "Team X #1", true)), "s", time.Now())
+	for _, id := range []int{3, 7} {
+		if a.keys[id] != b.keys[id] {
+			t.Fatalf("slot %d: %q on one bridge, %q on the other", id, a.keys[id], b.keys[id])
+		}
+	}
+	if a.keys[3] != "Team X #1" || a.keys[7] != "Team X #1 (7)" {
+		t.Fatalf("lowest slot keeps the plain name, got %v", a.keys)
 	}
 }

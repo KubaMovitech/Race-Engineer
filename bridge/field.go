@@ -2,7 +2,6 @@ package main
 
 import (
 	"math"
-	"sort"
 	"strings"
 	"time"
 )
@@ -74,36 +73,24 @@ func newField() *Field {
 }
 
 // assignKeys gives each car a stable key: its vehicle name, or "name (slot)"
-// when another car in the session uses the same name. The player's car always
-// keeps the plain name.
+// when another car in the session uses the same name. The lowest slot keeps the
+// plain name, so every bridge of the team gives every car the same key (with the
+// player's car first, two teammates in cars with the same name both called
+// theirs by the plain name and the Muretto jumped from one to the other).
 func (fd *Field) assignKeys(f *Frame) {
-	used := map[string]int{}
-	rows := append([][]byte(nil), f.Veh...)
-	sort.SliceStable(rows, func(a, b int) bool { return rows[a][V_mIsPlayer] > rows[b][V_mIsPlayer] })
-	// keep existing assignments first
-	for _, v := range rows {
-		id := i32(v, V_mID)
-		if k, ok := fd.keys[id]; ok && strings.HasPrefix(k, cstr(v, V_mVehicleName, 64)) {
-			if _, taken := used[k]; !taken {
-				used[k] = id
-				continue
-			}
+	low := map[string]int{}
+	for _, v := range f.Veh {
+		veh, id := cstr(v, V_mVehicleName, 64), i32(v, V_mID)
+		if l, ok := low[veh]; !ok || id < l {
+			low[veh] = id
 		}
-		delete(fd.keys, id)
 	}
-	for _, v := range rows {
-		id := i32(v, V_mID)
-		if _, ok := fd.keys[id]; ok {
-			if used[fd.keys[id]] == id {
-				continue
-			}
-		}
-		veh := cstr(v, V_mVehicleName, 64)
+	for _, v := range f.Veh {
+		veh, id := cstr(v, V_mVehicleName, 64), i32(v, V_mID)
 		k := veh
-		if _, taken := used[k]; taken {
+		if low[veh] != id {
 			k = veh + " (" + itoa(id) + ")"
 		}
-		used[k] = id
 		fd.keys[id] = k
 	}
 }

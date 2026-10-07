@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"sync"
 	"syscall"
 	"unsafe"
 )
@@ -14,6 +15,14 @@ var (
 	pConsoleWin = k32.NewProc("GetConsoleWindow")
 	u32         = syscall.NewLazyDLL("user32.dll")
 	pMsgBox     = u32.NewProc("MessageBoxW")
+	pEnumWin    = u32.NewProc("EnumWindows")
+	pWinText    = u32.NewProc("GetWindowTextW")
+	pWinClass   = u32.NewProc("GetClassNameW")
+	pWinVisible = u32.NewProc("IsWindowVisible")
+	pIsIconic   = u32.NewProc("IsIconic")
+	pShowWin    = u32.NewProc("ShowWindow")
+	pSetFg      = u32.NewProc("SetForegroundWindow")
+	pPostMsg    = u32.NewProc("PostMessageW")
 )
 
 // started by double click as a windows app (no console)?
@@ -62,4 +71,55 @@ func msgBox(title, text string) {
 	t, _ := syscall.UTF16PtrFromString(title)
 	m, _ := syscall.UTF16PtrFromString(text)
 	pMsgBox.Call(0, uintptr(unsafe.Pointer(m)), uintptr(unsafe.Pointer(t)), 0x40)
+}
+
+// appWindows lists the open app windows: Edge/Chrome in "app" mode take the page
+// title as is ("Data Engineer"), browser tabs add the browser name to it.
+var enumCb = syscall.NewCallback(func(h, lp uintptr) uintptr {
+	if v, _, _ := pWinVisible.Call(h); v == 0 {
+		return 1
+	}
+	buf := make([]uint16, 128)
+	n, _, _ := pWinClass.Call(h, uintptr(unsafe.Pointer(&buf[0])), uintptr(len(buf)))
+	if syscall.UTF16ToString(buf[:n]) != "Chrome_WidgetWin_1" {
+		return 1
+	}
+	n, _, _ = pWinText.Call(h, uintptr(unsafe.Pointer(&buf[0])), uintptr(len(buf)))
+	if syscall.UTF16ToString(buf[:n]) == "Data Engineer" {
+		enumFound = append(enumFound, h)
+	}
+	return 1
+})
+
+var (
+	enumMu    sync.Mutex
+	enumFound []uintptr
+)
+
+func appWindows() []uintptr {
+	enumMu.Lock()
+	defer enumMu.Unlock()
+	enumFound = nil
+	pEnumWin.Call(enumCb, 0)
+	return enumFound
+}
+
+// focusAppWindow brings the open app window to the front; false if there is none.
+func focusAppWindow() bool {
+	l := appWindows()
+	if len(l) == 0 {
+		return false
+	}
+	if ic, _, _ := pIsIconic.Call(l[0]); ic != 0 {
+		pShowWin.Call(l[0], 9) // SW_RESTORE
+	}
+	pSetFg.Call(l[0])
+	return true
+}
+
+// closeAppWindows closes every app window (Edge may run the window in another process than the one we started).
+func closeAppWindows() {
+	for _, h := range appWindows() {
+		pPostMsg.Call(h, 0x0010, 0, 0) // WM_CLOSE
+	}
 }
