@@ -1,7 +1,8 @@
 // ================= VERSIONE, NOVITÀ E AGGIORNAMENTI =================
-const APP_VERSION='2.0.2';
+const APP_VERSION='2.0.3';
 const DEFAULT_UPD='https://raw.githubusercontent.com/KubaMovitech/Race-Engineer/main/';   // update channel (folder with version.json), set when the team repository exists
 const CHANGELOG=[
+{v:'2.0.3',d:'07/10/2026',items:['Muretto con più piloti online: non salta più da un pilota all\'altro. Segue la sessione di «Nostra auto»: classifica, giri e meteo di un compagno su un altro server o in un\'altra sessione non si mescolano più con i nostri.','Crea squadra dall\'app del bridge: il nuovo codice vale anche per il bridge di questo PC.','Meteo più preciso: intensità della pioggia e come cambia, pista che si asciuga o si bagna con la stima di quando sarà asciutta, vento in km/h, umidità dalle previsioni.','Una sola app aperta: riaprendo Data Engineer torna in primo piano la finestra già aperta.','Classifica: le quattro gomme viste dall\'alto (anteriori sopra, posteriori sotto).','Passo gara sugli ultimi 5 giri fatti (senza giro 1, giri dei box e un giro molto lento), non sui giri più veloci.']},
 {v:'2.0.2',d:'05/10/2026',items:['Le novità mostrano di nuovo tutte le versioni, dalla 1.7 in poi.','Con un bridge vecchio (1.6 o 1.7) che non sa aggiornarsi, il pulsante «Aggiorna» scarica il nuovo DataEngineerBridge.exe da sostituire.','Il bridge non si riavvia più all\'infinito se trova lo stesso programma già installato.']},
 {v:'2.0.1',d:'05/10/2026',items:['La classifica si aggiorna ogni secondo anche quando nessuno della squadra è in auto.']},
 {v:'2.0',d:'05/10/2026',items:['Data Engineer diventa un\'app: un solo programma per tutti, si apre in una finestra sua e si aggiorna da solo.','Muretto più affidabile: niente più dati scartati per gli orologi dei PC, riconnessione in pochi secondi.','Pronto per il nuovo server della squadra (Cloudflare).']},
@@ -80,3 +81,11 @@ function openNews(tab){let m=$('#mNews');if(!m){m=document.createElement('div');
   const seen=LS.get('seenVer','');if(seen!==APP_VERSION&&!document.documentElement.classList.contains('ovmode')&&!/^#(ov|tv)/.test(location.hash)){setTimeout(()=>openNews(),800);}LS.set('seenVer',APP_VERSION);
   if(!isHosted()&&(UPD.base||isBridgeHost()))setTimeout(updCheck,3000);
   updRender();})();
+
+// ---------- one app window at a time: a newer window replaces the older ones ----------
+(function(){if(!window.BroadcastChannel||/^#(ov|tv)/.test(location.hash))return;
+  const t0=Date.now()+Math.random();const ch=new BroadcastChannel('de-app');
+  ch.onmessage=e=>{const m=e.data||{};if(m.t!=='open'||!(m.at>t0))return;ch.close();
+    try{LIVE.conns.forEach(c=>c.close());LIVE.conns=[];}catch(x){}window.close();
+    setTimeout(()=>{const d=document.createElement('div');d.className='modal';d.innerHTML=`<div class="mbox"><h2>${tr('Data Engineer è aperto in un\'altra finestra')}</h2><p class="muted">${tr('Questa finestra non si aggiorna più: chiudila e usa quella nuova.')}</p></div>`;document.body.appendChild(d);},300);};
+  ch.postMessage({t:'open',at:t0});})();

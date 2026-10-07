@@ -19,7 +19,7 @@ import (
 	"time"
 )
 
-const VERSION = "2.0.2"
+const VERSION = "2.0.3"
 
 //go:embed app.html
 var appHTML []byte
@@ -401,7 +401,10 @@ func main() {
 		}
 		if other != "" {
 			if gui || *winF {
-				openAppWindow(url)
+				// one app at a time: show the window already open (a new one only if it was closed)
+				if !focusAppWindow() {
+					openAppWindow(url)
+				}
 				return
 			}
 			fmt.Printf("\nC'è già un Data Engineer aperto su questo PC (versione %s).\n", other)
@@ -647,6 +650,10 @@ func main() {
 			if full {
 				fd.std = rs.standings()
 				fd.update(f, tr.sesKey, now)
+			}
+			// our car under the same key the standings use (unique when two cars share a name)
+			if pr := playerRow(f); pr != nil && len(fd.keys) > 0 {
+				tr.car = fd.keyOf(pr)
 			}
 			rec.sample(f, tr.sesKey, shm)
 			rs.mu.Lock()

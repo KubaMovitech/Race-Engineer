@@ -1,17 +1,20 @@
 {
- "version": "2.0.2",
- "date": "2026-10-05",
+ "version": "2.0.3",
+ "date": "2026-10-07",
  "notes": [
-  "Le novità mostrano di nuovo tutte le versioni, dalla 1.7 in poi.",
-  "Con un bridge vecchio (1.6 o 1.7) il pulsante «Aggiorna» scarica il nuovo DataEngineerBridge.exe da sostituire.",
-  "Il bridge non si riavvia più all'infinito se trova lo stesso programma già installato."
+  "Muretto con più piloti online: non salta più da un pilota all'altro e segue la sessione della nostra auto.",
+  "Una sola app aperta: riaprendo Data Engineer torna in primo piano la finestra già aperta.",
+  "Classifica: le quattro gomme viste dall'alto.",
+  "Passo gara sugli ultimi 5 giri fatti, non sui giri più veloci.",
+  "Meteo più preciso: intensità e andamento della pioggia, pista che si asciuga o si bagna, vento, umidità.",
+  "Crea squadra dall'app: il nuovo codice vale anche per il bridge di questo PC."
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "079c106199962515e467530f24272d99ba40e29d5171e79ff4c07ad7e57014fe"
+  "sha256": "54492a9fe5926ef29e4166eba52b0ea229a40999d4492293086b06cc770594c5"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "cc90211a5d7595cfd0153038d987252d784cabf18126fcc1128a0dc4c0f6a6da"
+  "sha256": "dd9be0ccc2817bec716e0f01c3bd0d8cef64992bd6f4b58ecef5b4f8a1889889"
  }
 }

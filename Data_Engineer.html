@@ -682,8 +682,10 @@ table.lbt tbody tr:nth-child(even) td{background:color-mix(in srgb,var(--panel2)
 table.lbt tbody tr:hover td{background:var(--panel2)}
 table.lbt td{padding:4px 6px;vertical-align:middle}table.lbt th{padding:6px;white-space:nowrap}
 table.lbt td.l{max-width:300px}table.lbt td.l>div.muted{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:300px}
-td.tyc2{text-align:center;white-space:nowrap;width:56px}
-td.tyc2 small{display:block;font-size:.68rem;color:var(--muted);margin-top:1px}
+td.tyc2{text-align:center;white-space:nowrap;width:64px}
+td.tyc2 small{display:inline-block;vertical-align:middle;font-size:.68rem;color:var(--muted);margin-left:4px;min-width:22px;text-align:left}
+.ty4{display:inline-grid;grid-template-columns:12px 12px;column-gap:7px;row-gap:3px;vertical-align:middle;padding:1px 3px;border-radius:5px;background:linear-gradient(var(--line),var(--line)) center/3px 100% no-repeat}
+.ty4 i{display:block;height:14px;border-radius:3px;font:700 9px/14px var(--f-mono);font-style:normal;text-align:center;box-shadow:inset 0 0 0 1px rgba(0,0,0,.25)}
 .tyb{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--f);font:700 12px/1 var(--f-mono);box-shadow:inset 0 0 0 2px rgba(0,0,0,.25)}
 .tyb.split{width:34px;border-radius:12px;background:linear-gradient(90deg,var(--f) 0 50%,var(--r) 50% 100%);gap:4px;font-size:11px}
 .tyb i{font-style:normal}
@@ -2642,6 +2644,11 @@ async function liveSeal(t,obj){if(!t._ke)t._ke=await crypto.subtle.importKey('ra
 async function liveOpen(t,bytes){const k=await liveKey(t);const pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:bytes.slice(0,12)},k,bytes.slice(12));
   const s=new Blob([pt]).stream().pipeThrough(new DecompressionStream('deflate-raw'));return JSON.parse(await new Response(s).text());}
 
+const liveSes=sc=>sc?.i?(sc.i.trk||'')+'|'+sc.i.ses:'';
+// the bridge of the car we follow (Muretto › Nostra auto)
+function liveOfFocus(id){const D=LIVE.drivers[id];return !!D&&!!LIVE.focus&&(D.car?.car||D.hi?.car||D.laps?.car)===LIVE.focus;}
+// same session as the standings on screen: the bridge that sends them, or one whose session matches
+function liveSameSes(id,d){const cur=liveSes(LIVE.sc);if(!cur||id===LIVE.scSrc)return true;const ses=d?.ses&&String(d.ses).includes('|')?d.ses:LIVE.drivers[id]?.hi?.ses;return !ses||ses===cur;}
 function liveIn(id,kind,d,ret){LIVE._w=true;try{liveIn_(id,kind,d,ret);}finally{LIVE._w=false;}}
 // Old data must not come back as if it were live (a closed bridge, a finished session).
 // From the team server: the server marks the "retained" copies it replays on connect.
@@ -2666,6 +2673,9 @@ function liveIn_(id,kind,d,ret){
     else if(!on){g.live=false;g.pend=[];}
   }
   if(LIVE_GATED.has(kind)&&ret===undefined&&!g.live&&id!==''){g.pend=g.pend.filter(x=>x[0]!==kind);g.pend.push([kind,d]);return;}
+  // the Muretto follows one session: standings, laps and weather from a bridge in another server or
+  // session (a teammate practising on his own) are left out instead of replacing ours every second
+  if((kind==='field'||kind==='fl'||kind==='wx'||kind==='rst')&&!liveSameSes(id,d))return;
   if(kind==='field'||kind==='fl'){fieldMerge(d,kind==='field');LIVE.dirty=true;return;}
   if(kind==='wx'){LIVE.wx=d;LIVE.dirty=true;return;}
   if(kind==='stl'){if(d.ses&&LIVE.L.field.ses&&d.ses!==LIVE.L.field.ses)return;streamAdd(d.l||[],true);LIVE.dirty=true;return;}
@@ -2675,7 +2685,9 @@ function liveIn_(id,kind,d,ret){
   else if(kind==='car'){D.car=d;D.carAt=Date.now();const k=d.car||id;const B=LIVE.buf[k]||(LIVE.buf[k]=[]);(d.smp||[]).forEach(s=>{if(!B.length||s[0]>B[B.length-1][0])B.push(s);else if(s[0]<B[B.length-1][0]-5)B.length=0,B.push(s);});
     while(B.length&&B[B.length-1][0]-B[0][0]>90)B.shift();
     if(LIVE.trailKey&&(d.x||d.z)&&!d.pit){const x=Math.round(d.x/4)*4,z=Math.round(d.z/4)*4,k=x+','+z;if(!LIVE.trail.has(k)&&LIVE.trail.size<6000)LIVE.trail.set(k,[x,z]);}}
-  else if(kind==='sc'){if(!LIVE.sc||Date.now()-LIVE.scAt>1500||d.i?.et>=(LIVE.sc.i?.et||0)||d.i?.trk!==LIVE.sc.i?.trk){LIVE.sc=d;LIVE.scAt=Date.now();liveTrail(d);
+  // standings from one bridge at a time: every PC sees them a little differently, mixing them made the board jump.
+  // Another bridge takes over only when this one has been silent for 4 s.
+  else if(kind==='sc'){if(!LIVE.sc||id===LIVE.scSrc||Date.now()-LIVE.scAt>4000||liveOfFocus(id)&&!liveOfFocus(LIVE.scSrc)){LIVE.sc=d;LIVE.scSrc=id;LIVE.scAt=Date.now();liveTrail(d);
     const H=LIVE.L.wxh||(LIVE.L.wxh=[]);const I=d.i||{};if(!H.length||I.et<H[H.length-1][0]||I.et-H[H.length-1][0]>=30)H.push([I.et,I.air,I.tt,I.rain,I.wavg]);if(H.length&&I.et<H[0][0]-1)LIVE.L.wxh=[[I.et,I.air,I.tt,I.rain,I.wavg]];if(H.length>2000)H.shift();}}
   else if(kind==='laps')D.laps=d;
   else if(kind==='ev')D.ev=d;
@@ -2714,7 +2726,9 @@ const FCY=['','in arrivo','box chiusi','box aperti ai doppiati','box aperti','ul
 const ZONES=['anteriore','anteriore sx','fianco sx','fianco dx','posteriore sx','posteriore dx','posteriore','anteriore dx'];
 const WN=['Ant. sx','Ant. dx','Post. sx','Post. dx'];
 function liveCars(){const g={};Object.values(LIVE.drivers).forEach(D=>{const car=D.car?.car||D.hi?.car||D.laps?.car;if(!car)return;(g[car]=g[car]||[]).push(D);});return g;}
-function liveCarState(car){const Ds=liveCars()[car]||[];const act=Ds.filter(D=>D.car&&Date.now()-D.carAt<8000).sort((a,b)=>b.carAt-a.carAt)[0];
+function liveCarState(car){const Ds=liveCars()[car]||[];const now=Date.now();const A=LIVE.actOf||(LIVE.actOf={});
+  // the driver shown stays the same while their data keeps arriving (no jumping between two bridges)
+  const fresh=Ds.filter(D=>D.car&&now-D.carAt<8000);const act=fresh.find(D=>D.id===A[car])||fresh.sort((a,b)=>b.carAt-a.carAt)[0];if(act)A[car]=act.id;
   const lapsM=new Map();let ses='';Ds.forEach(D=>{if(D.laps?.ses&&(!ses||D===act))ses=D.laps.ses;});
   Ds.filter(D=>D.laps&&(!ses||D.laps.ses===ses)).forEach(D=>(D.laps.laps||[]).forEach(l=>lapsM.set(l.n,l)));
   const evs=new Map();Ds.forEach(D=>(D.ev?.list||[]).forEach(e=>evs.set(e.k+'|'+e.et+'|'+(e.drv||''),e)));
@@ -2741,7 +2755,11 @@ function liveNewTeam(){openModal('#mLive');const sel=$('#lvBroker');sel.innerHTM
   $('#lvMake').onclick=()=>{const name=$('#lvTName').value.trim();let o;if(sel.value==='c'){o={host:$('#lvH').value.trim(),wp:$('#lvWP').value||8884,tp:$('#lvTP').value||8883,user:$('#lvU').value.trim(),pass:$('#lvP').value};if(!o.host){toast(tr('Inserisci l\'indirizzo del server'));return;}}
     else{const b=BROKERS[+sel.value];o={host:b[1],wp:b[2],tp:b[3]};}
     const code=teamMake({name,...o});LS.set('live:team',code);$('#mLive').hidden=true;liveStart();
-    openCode({title:tr('Codice squadra'),help:tr('Squadra creata. Manda questo codice ai piloti: lo incollano nel bridge alla prima apertura. Chi ha il codice vede i dati: non pubblicarlo.'),text:code});};}
+    openCode({title:tr('Codice squadra'),help:tr('Squadra creata. Manda questo codice ai compagni: in Data Engineer vanno in Muretto › Squadra › Entra con codice e lo incollano. Chi ha il codice vede i dati: non pubblicarlo.'),text:code});
+    // in the app of the bridge the new team is also the bridge's (it sends this PC's data with the new code);
+    // the bridge restarts with it, so only once the code has been copied and its window closed
+    if(isBridgeHost()){const w=setInterval(()=>{if(!$('#mCode').hidden)return;clearInterval(w);
+      bridgeTeam(code).then(()=>toast(tr('Codice salvato nel bridge: riavvio in corso…'))).catch(e=>toast(tr('Il bridge non ha accettato il codice')+': '+e.message));},500);}};}
 
 function liveTile(l,v,s,cls=''){return `<div class="kpi ${cls}"><div class="l">${l}</div><div class="v">${v}</div>${s?`<div class="s">${s}</div>`:''}</div>`;}
 function drawLiveMap(sc,ours){const cv=$('#lvMap');if(!cv)return;const r=cv.getBoundingClientRect(),dpr=devicePixelRatio||1;if(!r.width)return;cv.width=r.width*dpr;cv.height=r.height*dpr;const c=cv.getContext('2d');c.scale(dpr,dpr);
@@ -2911,7 +2929,11 @@ function carStats_(veh,r){const c=fCar(veh);const L=fLaps(veh);const cl=cleanLap
   const fuel=r?.fuel,ve=r?.ve;const lf=fuel>=0&&fpl>0?fuel/fpl:NaN,lv=ve>=0&&vpl>0?ve/vpl:NaN;const left=Math.min(Number.isFinite(lf)?lf:Infinity,Number.isFinite(lv)?lv:Infinity);
   const sec=L.filter(l=>!l[7]&&!l[3]&&l[4]>0&&l[5]>l[4]&&l[1]>l[5]);const ideal=sec.length?Math.min(...sec.map(l=>l[4]))+Math.min(...sec.map(l=>l[5]-l[4]))+Math.min(...sec.map(l=>l[1]-l[5])):NaN;
   const lastL=L[L.length-1];
-  return {c,L,cl,pace5:avg_(t.slice(-5)),pace10:avg_(t.slice(-10)),paceAll:avg_(t),sd:sd_(t.slice(-10)),best:t.length?Math.min(...t):NaN,ideal,
+  // race pace: the last 5 laps run, whatever their time (not only the laps close to the best one, which kept
+  // old fast laps and ignored traffic, rain or worn tyres); out of it lap 1, laps in or out of the pits and a lap
+  // more than 10% slower than the others (a spin, an off)
+  const r5=L.filter(l=>l[0]>1&&!l[3]&&l[1]>0).slice(-5).map(l=>l[1]);const m5=med_(r5);
+  return {c,L,cl,pace5:avg_(r5.filter(x=>x<=m5*1.1)),pace10:avg_(t.slice(-10)),paceAll:avg_(t),sd:sd_(t.slice(-10)),best:t.length?Math.min(...t):NaN,ideal,
     pits,lastPit,stintLaps,fpl,vpl,lf,lv,left:Number.isFinite(left)?left:NaN,nextPit:Number.isFinite(left)&&r?r.laps+1+Math.floor(left):NaN,limit:Number.isFinite(lv)&&(!Number.isFinite(lf)||lv<lf)?'ve':'fuel',
     lastInv:lastL?!!lastL[7]:false,lastT:lastL?lastL[1]:NaN,swaps:c?.swaps||[],drivers:c?.drivers||[]};}
 function soloPlan(){const v=LS.get('strategy',null);if(!v)return null;const lap=parseLapT(v.lap),fuel=+v.fuel,tank=+v.tank,ve=+v.ve||0,veMax=+v.veMax||100,res=+v.res||0;
@@ -3262,7 +3284,7 @@ function lvWeather(x){const {I}=x;const wx=LIVE.wx;try{lvNow(x);}catch(e){consol
   else{const end=I.end>0?I.end:NaN,tod0=Number.isFinite(I.tod)&&Number.isFinite(I.et)?I.tod-I.et:NaN;const nn=wx.nodes.length;
     $('#lvWx').innerHTML=`<div class="lvwx">${wx.nodes.map((n,i)=>{const fr=i/(nn-1),t=end*fr;const sky=Math.round(n.sky);const rc=n.rain>1?n.rain:n.rain*100;
       return `<div class="lvwn${Number.isFinite(I.et)&&Number.isFinite(t)&&I.et>=t&&(i===nn-1||I.et<end*(i+1)/(nn-1))?' cur':''}"><div class="t">${i===0?'inizio':i===nn-1?'fine':Math.round(fr*100)+'%'}${Number.isFinite(t)?`<small>${hms(t)}${Number.isFinite(tod0)?' · '+hhmm((tod0+t)/60):''}</small>`:''}</div>
-        <div class="i">${SKYI[sky]||'·'}</div><div class="s">${esc(tr(SKY[sky]||''))}</div><div class="v">${fx(n.temp,0)} °C</div><div class="rb"><i style="width:${Math.min(100,rc||0)}%"></i></div><div class="s">pioggia ${fx(rc,0)}%</div></div>`;}).join('')}</div>`;}
+        <div class="i">${SKYI[sky]||'·'}</div><div class="s">${esc(tr(SKY[sky]||''))}</div><div class="v">${fx(n.temp,0)} °C</div><div class="rb"><i style="width:${Math.min(100,rc||0)}%"></i></div><div class="s">pioggia ${fx(rc,0)}%</div>${n.hum>0&&n.hum<=100?`<div class="s">${tr('umidità')} ${fx(n.hum,0)}%</div>`:''}</div>`;}).join('')}</div>`;}
   const H=LIVE.wxh||[];const cv=$('#lvWxC');if(!cv)return;const r=cv.getBoundingClientRect(),dpr=devicePixelRatio||1;if(!r.width)return;cv.width=r.width*dpr;cv.height=r.height*dpr;const c=cv.getContext('2d');c.scale(dpr,dpr);c.font='11px "JetBrains Mono",monospace';
   if(H.length<2){c.fillStyle=tok('muted');c.fillText(tr('Il grafico si riempie durante la sessione (un punto ogni 30 s).'),8,18);$('#lvWxNote').textContent='';return;}
   const L=40,Rr=40,T=12,B=22,W=r.width-L-Rr,Hh=r.height-T-B;const x0=H[0][0],x1=H[H.length-1][0];const X=t=>L+(t-x0)/((x1-x0)||1)*W;
@@ -3388,12 +3410,23 @@ function lvRel(x){const {rows,me,I}=x;const LD=I.lapDist;if(!me||!(LD>0)){$('#lv
     const lc=o.lapd>0?'lap-up':o.lapd<0?'lap-dn':'';return `<tr class="${lc}" data-car="${esc(r.veh)}"><td><span class="clsdot" style="background:${LV_CLS(r.cls)}"></span></td><td class="l">${esc(r.drv)}${r.inPit?' <span class="tag warn">BOX</span>':''}</td><td>P${r.pic}</td><td>${o.t>0?'+':''}${fx(o.t,1)}</td><td>${o.lapd?`<span class="tag ${o.lapd>0?'bad':'info'}">${o.lapd>0?'+':''}${o.lapd}G</span>`:''}</td></tr>`;}).join('')}</tbody></table>
     <p class="muted small" style="margin:6px 0 0">${tr('Sopra: davanti sul tracciato · sotto: dietro. Rosso = ha un giro in più di noi, grigio = doppiato da noi.')}</p>`;}
 
-function lvNow(x){const {I}=x;if(!LIVE.sc){$('#lvNow').innerHTML='';return;}const H=LIVE.wxh;const re=rainEta(I);
+function lvNow(x){const {I}=x;if(!LIVE.sc){$('#lvNow').innerHTML='';return;}const H=LIVE.wxh;const re=rainEta(I);const hum=humNow(I);
   $('#lvNowT').textContent=`${tr('ora in pista')} ${hhmm((I.tod||0)/60)}`;
   const t=(l,v,s)=>liveTile(l,v,s);
   $('#lvNow').innerHTML=`<div class="kpis">${[t('Cielo',`<span class="vtxt">${esc(tr(skyNow(I)))}</span>`,`${tr('nuvole')} ${Math.round((I.cloud||0)*100)}%`),t('Aria',fx(I.air,1)+' °C',sgnT(trend(H,1,10))),t('Asfalto',fx(I.tt,1)+' °C',sgnT(trend(H,2,10))),
-    t('Pioggia',Math.round((I.rain||0)*100)+'%',re&&I.rain<0.05?`${tr('prevista tra')} ${Math.max(0,Math.round(re.t/60))} min`:''),t('Pista bagnata',Math.round((I.wavg||0)*100)+'%',`min ${Math.round((I.wmin||0)*100)}% · max ${Math.round((I.wmax||0)*100)}%`),
-    t('Grip',`<span class="vtxt">${esc(tr(GRIP[I.grip]||'—'))}</span>`,''),t('Vento',fx(I.wind,1)+' m/s','')].join('')}</div>`;}
+    t('Pioggia',`${Math.round((I.rain||0)*100)}% <span class="vtxt small">${esc(tr(rainLabel(I.rain)))}</span>`,[re&&I.rain<0.05?`${tr('prevista tra')} ${Math.max(0,Math.round(re.t/60))} min`:'',pctT(trend(H,3,5),5)].filter(Boolean).join(' · ')),
+    t('Pista bagnata',Math.round((I.wavg||0)*100)+'%',`min ${Math.round((I.wmin||0)*100)}% · max ${Math.round((I.wmax||0)*100)}%`+(wetEta(H,I)?'<br>'+wetEta(H,I):'')),
+    t('Grip',`<span class="vtxt">${esc(tr(GRIP[I.grip]||'—'))}</span>`,''),t('Vento',fx(I.wind,1)+' m/s',fx((I.wind||0)*3.6,0)+' km/h'),
+    ...(Number.isFinite(hum)?[t('Umidità',fx(hum,0)+'%',tr('dalle previsioni'))]:[])].join('')}</div>`;}
+// rain intensity as the game gives it (0–1): the game has no millimetres, these words are indicative
+function rainLabel(r){r=r||0;return r<0.01?'nessuna':r<0.1?'pioviggine':r<0.3?'leggera':r<0.6?'moderata':r<0.85?'forte':'molto forte';}
+function pctT(d,mins){return Number.isFinite(d)&&Math.abs(d)>=0.005?`${d>0?'▲':'▼'} ${Math.round(Math.abs(d)*100)}% ${tr('in')} ${mins} min`:'';}
+// is the track drying or getting wetter, and when is it dry (straight line on the last 10 minutes)
+function wetEta(H,I){const d=trend(H,4,10);if(!Number.isFinite(d)||Math.abs(d)<0.01)return '';const w=I.wavg||0;
+  if(d<0){const m=w/(-d/10);return `▼ ${tr('si asciuga')}${w>0.02&&m<240?` · ${tr('asciutta tra')} ≈ ${Math.round(m)} min`:''}`;}
+  return `▲ ${tr('si bagna')}: +${Math.round(d*100)}% ${tr('in')} 10 min`;}
+// humidity of the forecast node of now
+function humNow(I){const n=LIVE.wx?.nodes;if(!n?.length||!(I.end>0))return NaN;const i=Math.max(0,Math.min(n.length-1,Math.round((I.et||0)/I.end*(n.length-1))));const h=+n[i].hum;return h>0&&h<=100?h:NaN;}
 function sgnT(d){return Number.isFinite(d)?`${d>0?'▲':d<0?'▼':''} ${fx(Math.abs(d),1)} °C ${tr('in 10 min')}`:'';}
 
 const GAME_N={currentFuel:'Carburante attuale',maxFuel:'Serbatoio',fuelCapacity:'Serbatoio',currentVirtualEnergy:'Energia attuale',maxVirtualEnergy:'Energia massima',fuelRatio:'Ratio carburante/EV',fuelPerLap:'Carburante per giro',energyPerLap:'Energia per giro',lapsRemaining:'Giri rimanenti'};
@@ -3562,7 +3595,7 @@ function openDebrief(){let m=$('#mDeb');if(!m){m=document.createElement('div');m
 const I18N_EN=[
 ["Novità e aggiornamenti","What's new & updates"],["Aggiornamenti","Updates"],["Cosa è cambiato","What changed"],["installata","installed"],["Aggiornato alla versione","Updated to version"],["Versione dell'app","App version"],["Canale degli aggiornamenti","Update channel"],["Controlla aggiornamenti","Check for updates"],["Aggiorna alla","Update to"],["Controllo…","Checking…"],["Aggiornamento in corso…","Updating…"],["Hai già l'ultima versione.","You already have the latest version."],["Aggiornato.","Updated."],["Non riesco ad aggiornare","Can't update"],["Novità della","What's new in"],
 ["Il bridge scarica la nuova versione sua e dell'app e si riavvia da solo. Controlla gli aggiornamenti anche a ogni avvio.","The bridge downloads the new version of itself and of the app, then restarts. It also checks for updates every time it starts."],["Il file si sostituisce con un clic (Chrome o Edge); la prima volta scegli il file Data_Engineer.html che usi.","The file is replaced with one click (Chrome or Edge); the first time, pick the Data_Engineer.html file you use."],
-["Scarica il nuovo bridge","Download the new bridge"],["Nuovo bridge scaricato: chiudi il bridge, sostituisci DataEngineerBridge.exe e riaprilo.","New bridge downloaded: close the bridge, replace DataEngineerBridge.exe and open it again."],["Questo bridge è di una versione vecchia e non sa aggiornarsi da solo: scarica il nuovo DataEngineerBridge.exe e sostituisci quello vecchio (basta una volta).","This bridge is an old version and can't update itself: download the new DataEngineerBridge.exe and replace the old one (only once)."],
+["Scarica il nuovo bridge","Download the new bridge"],["Squadra creata. Manda questo codice ai compagni: in Data Engineer vanno in Muretto › Squadra › Entra con codice e lo incollano. Chi ha il codice vede i dati: non pubblicarlo.","Team created. Send this code to your teammates: in Data Engineer they go to Pit wall › Team › Join with code and paste it. Anyone with the code sees the data: do not publish it."],["nessuna","none"],["pioviggine","drizzle"],["leggera","light"],["moderata","moderate"],["molto forte","very heavy"],["forte","heavy"],["si asciuga","drying"],["asciutta tra","dry in"],["si bagna","getting wetter"],["Umidità","Humidity"],["umidità","humidity"],["dalle previsioni","from the forecast"],["Data Engineer è aperto in un'altra finestra","Data Engineer is open in another window"],["Questa finestra non si aggiorna più: chiudila e usa quella nuova.","This window no longer updates: close it and use the new one."],["Nuovo bridge scaricato: chiudi il bridge, sostituisci DataEngineerBridge.exe e riaprilo.","New bridge downloaded: close the bridge, replace DataEngineerBridge.exe and open it again."],["Questo bridge è di una versione vecchia e non sa aggiornarsi da solo: scarica il nuovo DataEngineerBridge.exe e sostituisci quello vecchio (basta una volta).","This bridge is an old version and can't update itself: download the new DataEngineerBridge.exe and replace the old one (only once)."],
 ["Questa pagina su claude.ai si aggiorna da sola: è sempre l'ultima versione.","This page on claude.ai updates itself: it's always the latest version."],["Imposta prima il canale degli aggiornamenti.","Set the update channel first."],["Scegli il file Data_Engineer.html che stai usando: verrà sostituito con la nuova versione.","Pick the Data_Engineer.html file you're using: it will be replaced with the new version."],["Aggiornato: riapro l'app…","Updated: reopening the app…"],["Nuova versione scaricata: sostituisci il vecchio file.","New version downloaded: replace the old file."],["Il canale deve essere un indirizzo web","The channel must be a web address"],["È disponibile una nuova versione","A new version is available"],["Aggiorna","Update"],["file scaricato non valido (controllo SHA-256 fallito)","downloaded file not valid (SHA-256 check failed)"],
 ["Per giro","Per lap"],["Soste · stint","Stops · stint"],
 ["Stato","Status"],["VE · benzina","VE · fuel"],["benz.","fuel"],["Soste · stint","Stops · stint"],["Aggancio","Catch"],["non lo prendi","won't catch him"],["non ti prende","won't catch you"],["dopo la bandiera","after the flag"],["ti prende al giro","catches you on lap"],
@@ -4267,9 +4300,10 @@ const tr=I18N.tr;
 })();
 const AI_LANG=()=>LANG==='en'?'\n\nIMPORTANT: write your whole answer in English (the instructions above are in Italian, but the driver reads English).':'';
 // ================= VERSIONE, NOVITÀ E AGGIORNAMENTI =================
-const APP_VERSION='2.0.2';
+const APP_VERSION='2.0.3';
 const DEFAULT_UPD='https://raw.githubusercontent.com/KubaMovitech/Race-Engineer/main/';   // update channel (folder with version.json), set when the team repository exists
 const CHANGELOG=[
+{v:'2.0.3',d:'07/10/2026',items:['Muretto con più piloti online: non salta più da un pilota all\'altro. Segue la sessione di «Nostra auto»: classifica, giri e meteo di un compagno su un altro server o in un\'altra sessione non si mescolano più con i nostri.','Crea squadra dall\'app del bridge: il nuovo codice vale anche per il bridge di questo PC.','Meteo più preciso: intensità della pioggia e come cambia, pista che si asciuga o si bagna con la stima di quando sarà asciutta, vento in km/h, umidità dalle previsioni.','Una sola app aperta: riaprendo Data Engineer torna in primo piano la finestra già aperta.','Classifica: le quattro gomme viste dall\'alto (anteriori sopra, posteriori sotto).','Passo gara sugli ultimi 5 giri fatti (senza giro 1, giri dei box e un giro molto lento), non sui giri più veloci.']},
 {v:'2.0.2',d:'05/10/2026',items:['Le novità mostrano di nuovo tutte le versioni, dalla 1.7 in poi.','Con un bridge vecchio (1.6 o 1.7) che non sa aggiornarsi, il pulsante «Aggiorna» scarica il nuovo DataEngineerBridge.exe da sostituire.','Il bridge non si riavvia più all\'infinito se trova lo stesso programma già installato.']},
 {v:'2.0.1',d:'05/10/2026',items:['La classifica si aggiorna ogni secondo anche quando nessuno della squadra è in auto.']},
 {v:'2.0',d:'05/10/2026',items:['Data Engineer diventa un\'app: un solo programma per tutti, si apre in una finestra sua e si aggiorna da solo.','Muretto più affidabile: niente più dati scartati per gli orologi dei PC, riconnessione in pochi secondi.','Pronto per il nuovo server della squadra (Cloudflare).']},
@@ -4348,6 +4382,14 @@ function openNews(tab){let m=$('#mNews');if(!m){m=document.createElement('div');
   const seen=LS.get('seenVer','');if(seen!==APP_VERSION&&!document.documentElement.classList.contains('ovmode')&&!/^#(ov|tv)/.test(location.hash)){setTimeout(()=>openNews(),800);}LS.set('seenVer',APP_VERSION);
   if(!isHosted()&&(UPD.base||isBridgeHost()))setTimeout(updCheck,3000);
   updRender();})();
+
+// ---------- one app window at a time: a newer window replaces the older ones ----------
+(function(){if(!window.BroadcastChannel||/^#(ov|tv)/.test(location.hash))return;
+  const t0=Date.now()+Math.random();const ch=new BroadcastChannel('de-app');
+  ch.onmessage=e=>{const m=e.data||{};if(m.t!=='open'||!(m.at>t0))return;ch.close();
+    try{LIVE.conns.forEach(c=>c.close());LIVE.conns=[];}catch(x){}window.close();
+    setTimeout(()=>{const d=document.createElement('div');d.className='modal';d.innerHTML=`<div class="mbox"><h2>${tr('Data Engineer è aperto in un\'altra finestra')}</h2><p class="muted">${tr('Questa finestra non si aggiorna più: chiudila e usa quella nuova.')}</p></div>`;document.body.appendChild(d);},300);};
+  ch.postMessage({t:'open',at:t0});})();
 // ================= 1.6: fine gara, piloti, finestra di sosta, undercut, mappa, overlay OBS, confronto setup =================
 const avgN=(a,n)=>{const b=a.filter(Number.isFinite);return b.length?avg_(b.slice(-n)):NaN;};
 const fmtPct=(v,d=1)=>Number.isFinite(v)?fx(v*100,d)+' %':'—';
@@ -4749,9 +4791,10 @@ function lvStintLive(x){const {c,kind,I}=x;const el=$('#lvStr');if(!el)return;co
 
 // ---------- leaderboard cells: tyres and energy, fixed width and aligned ----------
 function tyreCell(r){const c=r.comp||'';if(!c)return `<td class="tyc2"><span class="muted small">${esc((r.cf||r.cr||'—').slice(0,6))}</span></td>`;
-  const f=c[0],b=c[2]||c[c.length-1];const same=[...c].every(x=>x===c[0]);const tip=[...c].map((x,i)=>tr(['Ant. sx','Ant. dx','Post. sx','Post. dx'][i])+': '+(COMP_N[x]||x)).join(' · ');
-  const col=k=>COMP_COL[k]||COMP_COL['?'];const st=carStats(r.veh,r);
-  return `<td class="tyc2" title="${esc(tip)}"><span class="tyb${same?'':' split'}" style="--f:${col(f)};--r:${col(b)};color:${COMP_INK(f)}">${same?f:`${f}<i style="color:${COMP_INK(b)}">${b}</i>`}</span><small>${st.stintLaps}${tr('g')}</small></td>`;}
+  // the four tyres seen from above: front left / right on top, rear left / right below
+  const k=[0,1,2,3].map(i=>c[i]||c[c.length-1]);const tip=k.map((x,i)=>tr(['Ant. sx','Ant. dx','Post. sx','Post. dx'][i])+': '+(COMP_N[x]||x)).join(' · ');
+  const col=x=>COMP_COL[x]||COMP_COL['?'];const st=carStats(r.veh,r);
+  return `<td class="tyc2" title="${esc(tip)}"><span class="ty4">${k.map(x=>`<i style="background:${col(x)};color:${COMP_INK(x)}">${esc(x)}</i>`).join('')}</span><small>${st.stintLaps}${tr('g')}</small></td>`;}
 function energyCell(r){const row=(lab,v,cls)=>{const p=Math.max(0,Math.min(1,v));return `<span class="eg ${cls}${p<0.12?' low':''}"><em>${lab}</em><span class="t"><i style="width:${(p*100).toFixed(1)}%"></i></span><b>${Math.round(p*100)}</b></span>`;};
   if(!(r.ve>=0)&&!(r.fuel>=0))return '<td class="egc muted">—</td>';
   return `<td class="egc">${r.ve>=0?row('VE',r.ve,'ve'):''}${r.fuel>=0?row(LANG==='en'?'F':'B',r.fuel,'fu'):''}</td>`;}

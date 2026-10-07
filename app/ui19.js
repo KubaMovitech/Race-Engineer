@@ -50,9 +50,10 @@ function lvStintLive(x){const {c,kind,I}=x;const el=$('#lvStr');if(!el)return;co
 
 // ---------- leaderboard cells: tyres and energy, fixed width and aligned ----------
 function tyreCell(r){const c=r.comp||'';if(!c)return `<td class="tyc2"><span class="muted small">${esc((r.cf||r.cr||'—').slice(0,6))}</span></td>`;
-  const f=c[0],b=c[2]||c[c.length-1];const same=[...c].every(x=>x===c[0]);const tip=[...c].map((x,i)=>tr(['Ant. sx','Ant. dx','Post. sx','Post. dx'][i])+': '+(COMP_N[x]||x)).join(' · ');
-  const col=k=>COMP_COL[k]||COMP_COL['?'];const st=carStats(r.veh,r);
-  return `<td class="tyc2" title="${esc(tip)}"><span class="tyb${same?'':' split'}" style="--f:${col(f)};--r:${col(b)};color:${COMP_INK(f)}">${same?f:`${f}<i style="color:${COMP_INK(b)}">${b}</i>`}</span><small>${st.stintLaps}${tr('g')}</small></td>`;}
+  // the four tyres seen from above: front left / right on top, rear left / right below
+  const k=[0,1,2,3].map(i=>c[i]||c[c.length-1]);const tip=k.map((x,i)=>tr(['Ant. sx','Ant. dx','Post. sx','Post. dx'][i])+': '+(COMP_N[x]||x)).join(' · ');
+  const col=x=>COMP_COL[x]||COMP_COL['?'];const st=carStats(r.veh,r);
+  return `<td class="tyc2" title="${esc(tip)}"><span class="ty4">${k.map(x=>`<i style="background:${col(x)};color:${COMP_INK(x)}">${esc(x)}</i>`).join('')}</span><small>${st.stintLaps}${tr('g')}</small></td>`;}
 function energyCell(r){const row=(lab,v,cls)=>{const p=Math.max(0,Math.min(1,v));return `<span class="eg ${cls}${p<0.12?' low':''}"><em>${lab}</em><span class="t"><i style="width:${(p*100).toFixed(1)}%"></i></span><b>${Math.round(p*100)}</b></span>`;};
   if(!(r.ve>=0)&&!(r.fuel>=0))return '<td class="egc muted">—</td>';
   return `<td class="egc">${r.ve>=0?row('VE',r.ve,'ve'):''}${r.fuel>=0?row(LANG==='en'?'F':'B',r.fuel,'fu'):''}</td>`;}

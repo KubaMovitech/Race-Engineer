@@ -16,3 +16,5 @@ func appDataDir() string {
 }
 func openAppWindow(url string) *exec.Cmd { return nil }
 func msgBox(title, text string)          {}
+func focusAppWindow() bool               { return false }
+func closeAppWindows()                   {}

@@ -45,7 +45,11 @@ function carStats_(veh,r){const c=fCar(veh);const L=fLaps(veh);const cl=cleanLap
   const fuel=r?.fuel,ve=r?.ve;const lf=fuel>=0&&fpl>0?fuel/fpl:NaN,lv=ve>=0&&vpl>0?ve/vpl:NaN;const left=Math.min(Number.isFinite(lf)?lf:Infinity,Number.isFinite(lv)?lv:Infinity);
   const sec=L.filter(l=>!l[7]&&!l[3]&&l[4]>0&&l[5]>l[4]&&l[1]>l[5]);const ideal=sec.length?Math.min(...sec.map(l=>l[4]))+Math.min(...sec.map(l=>l[5]-l[4]))+Math.min(...sec.map(l=>l[1]-l[5])):NaN;
   const lastL=L[L.length-1];
-  return {c,L,cl,pace5:avg_(t.slice(-5)),pace10:avg_(t.slice(-10)),paceAll:avg_(t),sd:sd_(t.slice(-10)),best:t.length?Math.min(...t):NaN,ideal,
+  // race pace: the last 5 laps run, whatever their time (not only the laps close to the best one, which kept
+  // old fast laps and ignored traffic, rain or worn tyres); out of it lap 1, laps in or out of the pits and a lap
+  // more than 10% slower than the others (a spin, an off)
+  const r5=L.filter(l=>l[0]>1&&!l[3]&&l[1]>0).slice(-5).map(l=>l[1]);const m5=med_(r5);
+  return {c,L,cl,pace5:avg_(r5.filter(x=>x<=m5*1.1)),pace10:avg_(t.slice(-10)),paceAll:avg_(t),sd:sd_(t.slice(-10)),best:t.length?Math.min(...t):NaN,ideal,
     pits,lastPit,stintLaps,fpl,vpl,lf,lv,left:Number.isFinite(left)?left:NaN,nextPit:Number.isFinite(left)&&r?r.laps+1+Math.floor(left):NaN,limit:Number.isFinite(lv)&&(!Number.isFinite(lf)||lv<lf)?'ve':'fuel',
     lastInv:lastL?!!lastL[7]:false,lastT:lastL?lastL[1]:NaN,swaps:c?.swaps||[],drivers:c?.drivers||[]};}
 function soloPlan(){const v=LS.get('strategy',null);if(!v)return null;const lap=parseLapT(v.lap),fuel=+v.fuel,tank=+v.tank,ve=+v.ve||0,veMax=+v.veMax||100,res=+v.res||0;
@@ -396,7 +400,7 @@ function lvWeather(x){const {I}=x;const wx=LIVE.wx;try{lvNow(x);}catch(e){consol
   else{const end=I.end>0?I.end:NaN,tod0=Number.isFinite(I.tod)&&Number.isFinite(I.et)?I.tod-I.et:NaN;const nn=wx.nodes.length;
     $('#lvWx').innerHTML=`<div class="lvwx">${wx.nodes.map((n,i)=>{const fr=i/(nn-1),t=end*fr;const sky=Math.round(n.sky);const rc=n.rain>1?n.rain:n.rain*100;
       return `<div class="lvwn${Number.isFinite(I.et)&&Number.isFinite(t)&&I.et>=t&&(i===nn-1||I.et<end*(i+1)/(nn-1))?' cur':''}"><div class="t">${i===0?'inizio':i===nn-1?'fine':Math.round(fr*100)+'%'}${Number.isFinite(t)?`<small>${hms(t)}${Number.isFinite(tod0)?' · '+hhmm((tod0+t)/60):''}</small>`:''}</div>
-        <div class="i">${SKYI[sky]||'·'}</div><div class="s">${esc(tr(SKY[sky]||''))}</div><div class="v">${fx(n.temp,0)} °C</div><div class="rb"><i style="width:${Math.min(100,rc||0)}%"></i></div><div class="s">pioggia ${fx(rc,0)}%</div></div>`;}).join('')}</div>`;}
+        <div class="i">${SKYI[sky]||'·'}</div><div class="s">${esc(tr(SKY[sky]||''))}</div><div class="v">${fx(n.temp,0)} °C</div><div class="rb"><i style="width:${Math.min(100,rc||0)}%"></i></div><div class="s">pioggia ${fx(rc,0)}%</div>${n.hum>0&&n.hum<=100?`<div class="s">${tr('umidità')} ${fx(n.hum,0)}%</div>`:''}</div>`;}).join('')}</div>`;}
   const H=LIVE.wxh||[];const cv=$('#lvWxC');if(!cv)return;const r=cv.getBoundingClientRect(),dpr=devicePixelRatio||1;if(!r.width)return;cv.width=r.width*dpr;cv.height=r.height*dpr;const c=cv.getContext('2d');c.scale(dpr,dpr);c.font='11px "JetBrains Mono",monospace';
   if(H.length<2){c.fillStyle=tok('muted');c.fillText(tr('Il grafico si riempie durante la sessione (un punto ogni 30 s).'),8,18);$('#lvWxNote').textContent='';return;}
   const L=40,Rr=40,T=12,B=22,W=r.width-L-Rr,Hh=r.height-T-B;const x0=H[0][0],x1=H[H.length-1][0];const X=t=>L+(t-x0)/((x1-x0)||1)*W;

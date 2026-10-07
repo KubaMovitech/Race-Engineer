@@ -79,6 +79,11 @@ async function liveSeal(t,obj){if(!t._ke)t._ke=await crypto.subtle.importKey('ra
 async function liveOpen(t,bytes){const k=await liveKey(t);const pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:bytes.slice(0,12)},k,bytes.slice(12));
   const s=new Blob([pt]).stream().pipeThrough(new DecompressionStream('deflate-raw'));return JSON.parse(await new Response(s).text());}
 
+const liveSes=sc=>sc?.i?(sc.i.trk||'')+'|'+sc.i.ses:'';
+// the bridge of the car we follow (Muretto › Nostra auto)
+function liveOfFocus(id){const D=LIVE.drivers[id];return !!D&&!!LIVE.focus&&(D.car?.car||D.hi?.car||D.laps?.car)===LIVE.focus;}
+// same session as the standings on screen: the bridge that sends them, or one whose session matches
+function liveSameSes(id,d){const cur=liveSes(LIVE.sc);if(!cur||id===LIVE.scSrc)return true;const ses=d?.ses&&String(d.ses).includes('|')?d.ses:LIVE.drivers[id]?.hi?.ses;return !ses||ses===cur;}
 function liveIn(id,kind,d,ret){LIVE._w=true;try{liveIn_(id,kind,d,ret);}finally{LIVE._w=false;}}
 // Old data must not come back as if it were live (a closed bridge, a finished session).
 // From the team server: the server marks the "retained" copies it replays on connect.
@@ -103,6 +108,9 @@ function liveIn_(id,kind,d,ret){
     else if(!on){g.live=false;g.pend=[];}
   }
   if(LIVE_GATED.has(kind)&&ret===undefined&&!g.live&&id!==''){g.pend=g.pend.filter(x=>x[0]!==kind);g.pend.push([kind,d]);return;}
+  // the Muretto follows one session: standings, laps and weather from a bridge in another server or
+  // session (a teammate practising on his own) are left out instead of replacing ours every second
+  if((kind==='field'||kind==='fl'||kind==='wx'||kind==='rst')&&!liveSameSes(id,d))return;
   if(kind==='field'||kind==='fl'){fieldMerge(d,kind==='field');LIVE.dirty=true;return;}
   if(kind==='wx'){LIVE.wx=d;LIVE.dirty=true;return;}
   if(kind==='stl'){if(d.ses&&LIVE.L.field.ses&&d.ses!==LIVE.L.field.ses)return;streamAdd(d.l||[],true);LIVE.dirty=true;return;}
@@ -112,7 +120,9 @@ function liveIn_(id,kind,d,ret){
   else if(kind==='car'){D.car=d;D.carAt=Date.now();const k=d.car||id;const B=LIVE.buf[k]||(LIVE.buf[k]=[]);(d.smp||[]).forEach(s=>{if(!B.length||s[0]>B[B.length-1][0])B.push(s);else if(s[0]<B[B.length-1][0]-5)B.length=0,B.push(s);});
     while(B.length&&B[B.length-1][0]-B[0][0]>90)B.shift();
     if(LIVE.trailKey&&(d.x||d.z)&&!d.pit){const x=Math.round(d.x/4)*4,z=Math.round(d.z/4)*4,k=x+','+z;if(!LIVE.trail.has(k)&&LIVE.trail.size<6000)LIVE.trail.set(k,[x,z]);}}
-  else if(kind==='sc'){if(!LIVE.sc||Date.now()-LIVE.scAt>1500||d.i?.et>=(LIVE.sc.i?.et||0)||d.i?.trk!==LIVE.sc.i?.trk){LIVE.sc=d;LIVE.scAt=Date.now();liveTrail(d);
+  // standings from one bridge at a time: every PC sees them a little differently, mixing them made the board jump.
+  // Another bridge takes over only when this one has been silent for 4 s.
+  else if(kind==='sc'){if(!LIVE.sc||id===LIVE.scSrc||Date.now()-LIVE.scAt>4000||liveOfFocus(id)&&!liveOfFocus(LIVE.scSrc)){LIVE.sc=d;LIVE.scSrc=id;LIVE.scAt=Date.now();liveTrail(d);
     const H=LIVE.L.wxh||(LIVE.L.wxh=[]);const I=d.i||{};if(!H.length||I.et<H[H.length-1][0]||I.et-H[H.length-1][0]>=30)H.push([I.et,I.air,I.tt,I.rain,I.wavg]);if(H.length&&I.et<H[0][0]-1)LIVE.L.wxh=[[I.et,I.air,I.tt,I.rain,I.wavg]];if(H.length>2000)H.shift();}}
   else if(kind==='laps')D.laps=d;
   else if(kind==='ev')D.ev=d;
@@ -151,7 +161,9 @@ const FCY=['','in arrivo','box chiusi','box aperti ai doppiati','box aperti','ul
 const ZONES=['anteriore','anteriore sx','fianco sx','fianco dx','posteriore sx','posteriore dx','posteriore','anteriore dx'];
 const WN=['Ant. sx','Ant. dx','Post. sx','Post. dx'];
 function liveCars(){const g={};Object.values(LIVE.drivers).forEach(D=>{const car=D.car?.car||D.hi?.car||D.laps?.car;if(!car)return;(g[car]=g[car]||[]).push(D);});return g;}
-function liveCarState(car){const Ds=liveCars()[car]||[];const act=Ds.filter(D=>D.car&&Date.now()-D.carAt<8000).sort((a,b)=>b.carAt-a.carAt)[0];
+function liveCarState(car){const Ds=liveCars()[car]||[];const now=Date.now();const A=LIVE.actOf||(LIVE.actOf={});
+  // the driver shown stays the same while their data keeps arriving (no jumping between two bridges)
+  const fresh=Ds.filter(D=>D.car&&now-D.carAt<8000);const act=fresh.find(D=>D.id===A[car])||fresh.sort((a,b)=>b.carAt-a.carAt)[0];if(act)A[car]=act.id;
   const lapsM=new Map();let ses='';Ds.forEach(D=>{if(D.laps?.ses&&(!ses||D===act))ses=D.laps.ses;});
   Ds.filter(D=>D.laps&&(!ses||D.laps.ses===ses)).forEach(D=>(D.laps.laps||[]).forEach(l=>lapsM.set(l.n,l)));
   const evs=new Map();Ds.forEach(D=>(D.ev?.list||[]).forEach(e=>evs.set(e.k+'|'+e.et+'|'+(e.drv||''),e)));
@@ -178,7 +190,11 @@ function liveNewTeam(){openModal('#mLive');const sel=$('#lvBroker');sel.innerHTM
   $('#lvMake').onclick=()=>{const name=$('#lvTName').value.trim();let o;if(sel.value==='c'){o={host:$('#lvH').value.trim(),wp:$('#lvWP').value||8884,tp:$('#lvTP').value||8883,user:$('#lvU').value.trim(),pass:$('#lvP').value};if(!o.host){toast(tr('Inserisci l\'indirizzo del server'));return;}}
     else{const b=BROKERS[+sel.value];o={host:b[1],wp:b[2],tp:b[3]};}
     const code=teamMake({name,...o});LS.set('live:team',code);$('#mLive').hidden=true;liveStart();
-    openCode({title:tr('Codice squadra'),help:tr('Squadra creata. Manda questo codice ai piloti: lo incollano nel bridge alla prima apertura. Chi ha il codice vede i dati: non pubblicarlo.'),text:code});};}
+    openCode({title:tr('Codice squadra'),help:tr('Squadra creata. Manda questo codice ai compagni: in Data Engineer vanno in Muretto › Squadra › Entra con codice e lo incollano. Chi ha il codice vede i dati: non pubblicarlo.'),text:code});
+    // in the app of the bridge the new team is also the bridge's (it sends this PC's data with the new code);
+    // the bridge restarts with it, so only once the code has been copied and its window closed
+    if(isBridgeHost()){const w=setInterval(()=>{if(!$('#mCode').hidden)return;clearInterval(w);
+      bridgeTeam(code).then(()=>toast(tr('Codice salvato nel bridge: riavvio in corso…'))).catch(e=>toast(tr('Il bridge non ha accettato il codice')+': '+e.message));},500);}};}
 
 function liveTile(l,v,s,cls=''){return `<div class="kpi ${cls}"><div class="l">${l}</div><div class="v">${v}</div>${s?`<div class="s">${s}</div>`:''}</div>`;}
 function drawLiveMap(sc,ours){const cv=$('#lvMap');if(!cv)return;const r=cv.getBoundingClientRect(),dpr=devicePixelRatio||1;if(!r.width)return;cv.width=r.width*dpr;cv.height=r.height*dpr;const c=cv.getContext('2d');c.scale(dpr,dpr);
