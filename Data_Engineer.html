@@ -700,6 +700,24 @@ table.lbt td.sxc{text-align:center}
 .bchip{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted);margin-left:2px;font-family:var(--f-mono)}
 .bchip i{width:7px;height:7px;border-radius:50%;background:var(--faint)}.bchip.good i{background:var(--good)}.bchip.warn i{background:var(--warn)}.bchip.bad i{background:var(--bad)}.bchip.warn{color:var(--warn)}.bchip.bad{color:var(--bad)}
 .pclog{max-height:260px;overflow:auto;background:var(--panel2);border-radius:var(--r);padding:10px;font:11.5px/1.45 var(--f-mono);color:var(--muted);white-space:pre-wrap}
+/* tyres, fuel and energy as the game shows them */
+.gw3{display:grid;grid-template-columns:minmax(300px,1.1fr) 1fr 1fr;gap:12px}
+.gw3.two{grid-template-columns:1fr 1fr}
+@media (max-width:1100px){.gw3,.gw3.two{grid-template-columns:1fr}}
+.gwbox{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.gwh{display:flex;justify-content:space-between;align-items:baseline;font-weight:700;margin-bottom:8px}.gwh span{font:600 .95rem var(--f-mono);color:var(--muted)}
+.gwtyres{display:grid;grid-template-columns:1fr 1fr;gap:10px 18px}
+.gwt{display:flex;align-items:center;gap:10px}.gwt.r{flex-direction:row-reverse;text-align:right}
+.gwt.bad .gwr{outline:2px solid var(--bad);border-radius:50%}
+.gwr{position:relative;width:74px;height:74px;flex:none}
+.gwring{width:100%;height:100%}.gwring circle{fill:none;stroke-width:6}.gwring .bg{stroke:var(--line)}.gwring .fg{stroke-linecap:round}
+.gwv{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.gwv b{font:700 1rem var(--f-mono)}.gwv i{font:700 10px/16px var(--f-mono);font-style:normal;width:16px;height:16px;border-radius:50%;text-align:center}
+.gwd{display:flex;flex-direction:column;gap:2px;font:600 .8rem var(--f-mono);color:var(--muted)}.gwd b{font-size:1.05rem}
+.gwtab{width:100%;border-collapse:collapse;font-size:.85rem}.gwtab th{font-weight:600;color:var(--muted);text-align:right;padding:2px 6px}.gwtab th:first-child{text-align:left}
+.gwtab td{padding:5px 6px;text-align:right;font-family:var(--f-mono);border-top:1px solid var(--line)}.gwtab td:first-child{text-align:left;font-family:inherit;color:var(--muted)}
+.gwtab tr.avg td{font-weight:700;color:var(--ink)}
+.gwrow{display:flex;justify-content:space-between;margin-top:6px;padding-top:6px;border-top:1px solid var(--line);font-size:.85rem}.gwrow span{color:var(--muted)}.gwrow b{font-family:var(--f-mono)}
 </style>
 <header class="top">
   <div class="top-in">
@@ -3595,7 +3613,7 @@ function openDebrief(){let m=$('#mDeb');if(!m){m=document.createElement('div');m
 const I18N_EN=[
 ["Novità e aggiornamenti","What's new & updates"],["Aggiornamenti","Updates"],["Cosa è cambiato","What changed"],["installata","installed"],["Aggiornato alla versione","Updated to version"],["Versione dell'app","App version"],["Canale degli aggiornamenti","Update channel"],["Controlla aggiornamenti","Check for updates"],["Aggiorna alla","Update to"],["Controllo…","Checking…"],["Aggiornamento in corso…","Updating…"],["Hai già l'ultima versione.","You already have the latest version."],["Aggiornato.","Updated."],["Non riesco ad aggiornare","Can't update"],["Novità della","What's new in"],
 ["Il bridge scarica la nuova versione sua e dell'app e si riavvia da solo. Controlla gli aggiornamenti anche a ogni avvio.","The bridge downloads the new version of itself and of the app, then restarts. It also checks for updates every time it starts."],["Il file si sostituisce con un clic (Chrome o Edge); la prima volta scegli il file Data_Engineer.html che usi.","The file is replaced with one click (Chrome or Edge); the first time, pick the Data_Engineer.html file you use."],
-["Scarica il nuovo bridge","Download the new bridge"],["Squadra creata. Manda questo codice ai compagni: in Data Engineer vanno in Muretto › Squadra › Entra con codice e lo incollano. Chi ha il codice vede i dati: non pubblicarlo.","Team created. Send this code to your teammates: in Data Engineer they go to Pit wall › Team › Join with code and paste it. Anyone with the code sees the data: do not publish it."],["nessuna","none"],["pioviggine","drizzle"],["leggera","light"],["moderata","moderate"],["molto forte","very heavy"],["forte","heavy"],["si asciuga","drying"],["asciutta tra","dry in"],["si bagna","getting wetter"],["Umidità","Humidity"],["umidità","humidity"],["dalle previsioni","from the forecast"],["Data Engineer è aperto in un'altra finestra","Data Engineer is open in another window"],["Questa finestra non si aggiorna più: chiudila e usa quella nuova.","This window no longer updates: close it and use the new one."],["Nuovo bridge scaricato: chiudi il bridge, sostituisci DataEngineerBridge.exe e riaprilo.","New bridge downloaded: close the bridge, replace DataEngineerBridge.exe and open it again."],["Questo bridge è di una versione vecchia e non sa aggiornarsi da solo: scarica il nuovo DataEngineerBridge.exe e sostituisci quello vecchio (basta una volta).","This bridge is an old version and can't update itself: download the new DataEngineerBridge.exe and replace the old one (only once)."],
+["Scarica il nuovo bridge","Download the new bridge"],["Gomme, carburante ed energia","Tyres, fuel and energy"],["come nel gioco","as in the game"],["Consumo massimo","Max usage"],["Consumo medio","Average usage"],["Consumo","Usage"],["Ratio carburante/EV","Fuel/VE ratio"],["Servono un paio di giri completi.","A couple of complete laps are needed."],["Carburante ed energia","Fuel and energy"],["Energia virtuale","Virtual energy"],["FORATA","PUNCTURE"],["Slick o wet?","Slicks or wets?"],["tempi degli ultimi 4 minuti, auto della nostra classe","lap times of the last 4 minutes, cars of our class"],["Con le slick","On slicks"],["Con le wet","On wets"],["Per il confronto servono almeno 2 giri recenti con le slick e 2 con le wet nella nostra classe.","The comparison needs at least 2 recent laps on slicks and 2 on wets in our class."],["Slick e wet vanno quasi uguali: è il momento del cambio.","Slicks and wets are about equal: it's time to change."],["Le wet sono più veloci di","Wets are faster by"],["Le slick sono più veloci di","Slicks are faster by"],["Conviene montare le wet.","Better fit wets."],["Conviene montare le slick.","Better fit slicks."],["Conviene montare le wet","Better fit wets"],["Conviene montare le slick","Better fit slicks"],["Abbiamo le gomme giuste.","We are on the right tyres."],["Piloti e stint","Drivers and stints"],["Stint massimo (min)","Max stint (min)"],["Alla guida","Driving"],["Cambio tra","Change in"],["stint massimo","max stint"],["imposta lo stint massimo","set the max stint"],["Prossimo pilota","Next driver"],["Tempo alla guida","Time at the wheel"],["Cambio pilota tra","Driver change in"],["Inizia a piovere","Rain is starting"],["Ha smesso di piovere","Rain has stopped"],["Pista sempre più bagnata","Track getting wetter"],["Pista quasi asciutta","Track almost dry"],["Pioggia in arrivo","Rain coming"],["intensità","intensity"],["pista bagnata","wet track"],["Squadra creata. Manda questo codice ai compagni: in Data Engineer vanno in Muretto › Squadra › Entra con codice e lo incollano. Chi ha il codice vede i dati: non pubblicarlo.","Team created. Send this code to your teammates: in Data Engineer they go to Pit wall › Team › Join with code and paste it. Anyone with the code sees the data: do not publish it."],["nessuna","none"],["pioviggine","drizzle"],["leggera","light"],["moderata","moderate"],["molto forte","very heavy"],["forte","heavy"],["si asciuga","drying"],["asciutta tra","dry in"],["si bagna","getting wetter"],["Umidità","Humidity"],["umidità","humidity"],["dalle previsioni","from the forecast"],["Data Engineer è aperto in un'altra finestra","Data Engineer is open in another window"],["Questa finestra non si aggiorna più: chiudila e usa quella nuova.","This window no longer updates: close it and use the new one."],["Nuovo bridge scaricato: chiudi il bridge, sostituisci DataEngineerBridge.exe e riaprilo.","New bridge downloaded: close the bridge, replace DataEngineerBridge.exe and open it again."],["Questo bridge è di una versione vecchia e non sa aggiornarsi da solo: scarica il nuovo DataEngineerBridge.exe e sostituisci quello vecchio (basta una volta).","This bridge is an old version and can't update itself: download the new DataEngineerBridge.exe and replace the old one (only once)."],
 ["Questa pagina su claude.ai si aggiorna da sola: è sempre l'ultima versione.","This page on claude.ai updates itself: it's always the latest version."],["Imposta prima il canale degli aggiornamenti.","Set the update channel first."],["Scegli il file Data_Engineer.html che stai usando: verrà sostituito con la nuova versione.","Pick the Data_Engineer.html file you're using: it will be replaced with the new version."],["Aggiornato: riapro l'app…","Updated: reopening the app…"],["Nuova versione scaricata: sostituisci il vecchio file.","New version downloaded: replace the old file."],["Il canale deve essere un indirizzo web","The channel must be a web address"],["È disponibile una nuova versione","A new version is available"],["Aggiorna","Update"],["file scaricato non valido (controllo SHA-256 fallito)","downloaded file not valid (SHA-256 check failed)"],
 ["Per giro","Per lap"],["Soste · stint","Stops · stint"],
 ["Stato","Status"],["VE · benzina","VE · fuel"],["benz.","fuel"],["Soste · stint","Stops · stint"],["Aggancio","Catch"],["non lo prendi","won't catch him"],["non ti prende","won't catch you"],["dopo la bandiera","after the flag"],["ti prende al giro","catches you on lap"],
@@ -4300,9 +4318,10 @@ const tr=I18N.tr;
 })();
 const AI_LANG=()=>LANG==='en'?'\n\nIMPORTANT: write your whole answer in English (the instructions above are in Italian, but the driver reads English).':'';
 // ================= VERSIONE, NOVITÀ E AGGIORNAMENTI =================
-const APP_VERSION='2.0.3';
+const APP_VERSION='2.0.4';
 const DEFAULT_UPD='https://raw.githubusercontent.com/KubaMovitech/Race-Engineer/main/';   // update channel (folder with version.json), set when the team repository exists
 const CHANGELOG=[
+{v:'2.0.4',d:'07/10/2026',items:['Gomme, carburante ed energia come nel gioco (Panoramica e Auto): usura rimasta, pressione, temperature, e per benzina ed energia consumo massimo, medio e ultimo con giri e minuti che restano. Per le altre auto benzina ed energia nel dettaglio auto.','Slick o wet? Confronto dei tempi delle auto della nostra classe con gomme diverse e avviso quando conviene cambiare.','Avvisi meteo: inizia o smette di piovere, pista che si bagna o si asciuga, pioggia prevista entro 10 minuti.','Piloti e stint (Strategia): chi guida e da quanto, cambio tra quanto, prossimo pilota, tempo alla guida di ognuno, avviso 5 e 1 minuto prima del cambio.','Aggiornamento in un clic: aprendo il file Data_Engineer.html, «Aggiorna» passa all\'app Data Engineer e fa tutto da sola.']},
 {v:'2.0.3',d:'07/10/2026',items:['Muretto con più piloti online: non salta più da un pilota all\'altro. Segue la sessione di «Nostra auto»: classifica, giri e meteo di un compagno su un altro server o in un\'altra sessione non si mescolano più con i nostri.','Crea squadra dall\'app del bridge: il nuovo codice vale anche per il bridge di questo PC.','Meteo più preciso: intensità della pioggia e come cambia, pista che si asciuga o si bagna con la stima di quando sarà asciutta, vento in km/h, umidità dalle previsioni.','Una sola app aperta: riaprendo Data Engineer torna in primo piano la finestra già aperta.','Classifica: le quattro gomme viste dall\'alto (anteriori sopra, posteriori sotto).','Passo gara sugli ultimi 5 giri fatti (senza giro 1, giri dei box e un giro molto lento), non sui giri più veloci.']},
 {v:'2.0.2',d:'05/10/2026',items:['Le novità mostrano di nuovo tutte le versioni, dalla 1.7 in poi.','Con un bridge vecchio (1.6 o 1.7) che non sa aggiornarsi, il pulsante «Aggiorna» scarica il nuovo DataEngineerBridge.exe da sostituire.','Il bridge non si riavvia più all\'infinito se trova lo stesso programma già installato.']},
 {v:'2.0.1',d:'05/10/2026',items:['La classifica si aggiorna ogni secondo anche quando nessuno della squadra è in auto.']},
@@ -4347,6 +4366,8 @@ async function updApply(){const R=UPD.remote;if(!R)return;UPD.state='working';up
       UPD.state='done';updRender();LS.set('updJust',R.version);
       // the bridge restarts if it updated itself: wait for it, then reload the new app
       const t0=Date.now();const wait=async()=>{try{const v=await (await fetch('/version',{cache:'no-store'})).json();if(!newerV(R.version,v.app))return location.reload();}catch(e){}if(Date.now()-t0<60000)setTimeout(wait,1500);else location.reload();};setTimeout(wait,r.restart?2500:300);return;}
+    // the HTML file opened by hand: if Data Engineer (the bridge) runs on this PC it does the whole update, no file to pick
+    if(isFileHost()&&await fetch('http://localhost:8790/version',{mode:'no-cors',cache:'no-store'}).then(()=>true,()=>false)){location.href='http://localhost:8790/#upd';return;}
     const url=updChannel()+(R.app?.file||'Data_Engineer.html');const buf=await (await fetch(url+'?t='+Date.now(),{cache:'no-store'})).arrayBuffer();
     if(R.app?.sha256&&(await sha256hex(buf))!==R.app.sha256.toLowerCase())throw new Error(tr('file scaricato non valido (controllo SHA-256 fallito)'));
     if(window.showSaveFilePicker){let h=await updIdb.get();
@@ -4380,7 +4401,9 @@ function openNews(tab){let m=$('#mNews');if(!m){m=document.createElement('div');
 (function(){const tools=$('.hdr-tools');if(tools&&!$('#verChip')){const b=document.createElement('button');b.type='button';b.id='verChip';b.className='verchip';b.textContent='v'+APP_VERSION;b.onclick=()=>openNews();tools.insertBefore(b,$('#btnSettings'));}
   // after an update (or on first run of a new version) show what changed
   const seen=LS.get('seenVer','');if(seen!==APP_VERSION&&!document.documentElement.classList.contains('ovmode')&&!/^#(ov|tv)/.test(location.hash)){setTimeout(()=>openNews(),800);}LS.set('seenVer',APP_VERSION);
-  if(!isHosted()&&(UPD.base||isBridgeHost()))setTimeout(updCheck,3000);
+  // arrived from the HTML file to update: check and update straight away
+  if(isBridgeHost()&&location.hash==='#upd'){history.replaceState(null,'',location.pathname);updCheck().then(()=>{if(UPD.state==='available')updApply();else openNews();});}
+  else if(!isHosted()&&(UPD.base||isBridgeHost()))setTimeout(updCheck,3000);
   updRender();})();
 
 // ---------- one app window at a time: a newer window replaces the older ones ----------
@@ -5075,6 +5098,114 @@ setInterval(()=>{const p=LIVE.tvPrev;if(!p||!p.root.isConnected||p.root.offsetPa
 
 // keyboard: 1…8 switch the Muretto tabs (not while typing)
 addEventListener('keydown',e=>{if(e.ctrlKey||e.metaKey||e.altKey||/INPUT|SELECT|TEXTAREA/.test(document.activeElement?.tagName||''))return;if(curView()!=='live')return;const i=+e.key;if(!(i>=1&&i<=LV_SUBS.length))return;const b=$$('#v-live .lvtabs button')[i-1];if(b){b.click();e.preventDefault();}});
+// ================= GOMME / CARBURANTE / ENERGIA COME NEL GIOCO, SLICK O WET, AVVISI METEO, STINT =================
+
+// ---------- tyres, fuel and virtual energy laid out as the game's own widgets ----------
+const gwLetter=n=>{n=String(n||'').trim();if(!n)return '?';if(/wet|rain/i.test(n))return 'W';const u=n[0].toUpperCase();return COMP_COL[u]?u:'?';};
+const gwWearCol=p=>p>=0.7?'var(--good)':p>=0.45?'var(--warn)':'var(--bad)';
+function gwRing(p,col,inner){const r=26,C=2*Math.PI*r;const v=Number.isFinite(p)?Math.max(0,Math.min(1,p)):0;
+  return `<svg class="gwring" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="${r}" class="bg"/><circle cx="32" cy="32" r="${r}" class="fg" style="stroke:${col}" stroke-dasharray="${(v*C).toFixed(1)} ${C.toFixed(1)}" transform="rotate(-90 32 32)"/></svg>${inner}`;}
+// four tyres seen from above: what is left of the tread, compound, pressure, tread and brake temperature
+function gwTyres(c){if(!c?.w)return '';const K=[gwLetter(c.cf),gwLetter(c.cf),gwLetter(c.cr),gwLetter(c.cr)];
+  const cell=i=>{const w=c.w[i];const p=w.wear>0?w.wear:NaN;const tread=avg_(w.s||[]);const k=K[i];
+    return `<div class="gwt ${i%2?'r':'l'}${w.flat||w.det?' bad':''}" title="${esc(tr(WN[i]))}"><div class="gwr">${gwRing(p,gwWearCol(p),`<div class="gwv"><b>${Number.isFinite(p)?Math.round(p*100)+'%':'—'}</b><i style="background:${COMP_COL[k]||COMP_COL['?']};color:${COMP_INK(k)}">${esc(k)}</i></div>`)}</div>
+      <div class="gwd"><span>${fx(w.p,1)} kPa</span><b style="color:${tHeat(tread)}">${fx(tread,1)} °C</b><span>${tr('freno')} ${fx(w.bt,0)} °C</span>${w.flat?`<span class="neg">${tr('FORATA')}</span>`:''}</div></div>`;};
+  return `<div class="gwbox"><div class="gwh">${tr('Gomme')}<span>${esc([c.cf,c.cr].filter(Boolean).join(' / '))}</span></div><div class="gwtyres">${[0,1,2,3].map(cell).join('')}</div></div>`;}
+// per-lap use → highest / average / last, with the laps and minutes left on what is in the car
+function gwCons(title,level,levelTxt,use,lapT,fmtU,extra){const ok=use.filter(v=>v>0);
+  const head=`<div class="gwh">${title}<span>${levelTxt}</span></div>`;
+  if(!ok.length||!(level>=0))return `<div class="gwbox">${head}<div class="muted small">${tr('Servono un paio di giri completi.')}</div></div>`;
+  const rows=[[tr('Consumo massimo'),Math.max(...ok)],[tr('Consumo medio'),avg_(ok)],[tr('Ultimo'),ok[ok.length-1]]];
+  return `<div class="gwbox">${head}<table class="gwtab"><thead><tr><th></th><th>${tr('Giri')}</th><th>${tr('Tempo')}</th><th>${tr('Consumo')}</th></tr></thead><tbody>${rows.map(([l,u],i)=>{const laps=level/u;
+    return `<tr${i===1?' class="avg"':''}><td>${l}</td><td>${fx(laps,1)}</td><td>${lapT>0?Math.floor(laps*lapT/60)+' min':'—'}</td><td>${fmtU(u)}</td></tr>`;}).join('')}</tbody></table>${extra||''}</div>`;}
+// our car (full telemetry from its bridge): litres and energy per lap from our own laps
+function gwOurs(c,stt){if(!c?.w)return `<div class="muted small">${tr('Nessun dato: l\'auto non è in pista.')}</div>`;
+  const L=stt.laps.filter(l=>!l.pit&&l.n>1&&l.t>0).slice(-10);const cap=c.fuelCap>0?c.fuelCap:200;
+  const fu=L.map(l=>l.fuel).filter(v=>v>0&&v<cap*0.3),vu=L.map(l=>l.ve).filter(v=>v>0&&v<0.3);
+  const lapT=avg_(L.slice(-5).map(l=>l.t))||c.estL;const ratio=fu.length&&vu.length?avg_(fu)/(avg_(vu)*100):NaN;
+  const hasVe=c.ve>=0&&(c.ve>0||vu.length);
+  return `<div class="gw3">${gwTyres(c)}${gwCons(tr('Carburante'),c.fuel,fx(c.fuel,2)+' L',fu,lapT,u=>fx(u,2)+' L')}
+    ${hasVe?gwCons(tr('Energia virtuale'),c.ve,Math.round(c.ve*100)+'%',vu,lapT,u=>fx(u*100,2)+'%',Number.isFinite(ratio)?`<div class="gwrow"><span>${tr('Ratio carburante/EV')}</span><b>${fx(ratio,2)}</b></div>`:''):''}</div>`;}
+// any other car: only the percentages the game gives for every car (no tyre wear for cars without our bridge)
+function gwOther(veh,r){const s=carStats(veh,r);const L=s.L;const fu=[],vu=[];
+  for(let i=1;i<L.length;i++){const a=L[i-1],b=L[i];if(b[0]!==a[0]+1||a[3]||b[3])continue;const f=a[8]-b[8],v=a[9]-b[9];if(f>0&&f<0.3)fu.push(f);if(v>0&&v<0.3)vu.push(v);}
+  if(!fu.length&&!vu.length)return '';const lapT=s.pace5||r?.estL;const pc=u=>fx(u*100,2)+'%';
+  return `<div class="gw3 two">${r&&r.ve>=0?gwCons(tr('Energia virtuale'),r.ve,Math.round(r.ve*100)+'%',vu.slice(-10),lapT,pc):''}${r&&r.fuel>=0?gwCons(tr('Carburante'),r.fuel,Math.round(r.fuel*100)+'%',fu.slice(-10),lapT,pc):''}</div>`;}
+
+(function(){const sk=liveSkeleton;window.liveSkeleton=liveSkeleton=function(){const v=$('#v-live');const fresh=!v.dataset.ok;sk();if(!fresh)return;
+    const box=(id)=>`<div class="panel"><div class="panel-h"><h3>${tr('Gomme, carburante ed energia')}</h3><span class="muted small">${tr('come nel gioco')}</span></div><div id="${id}"></div></div>`;
+    const car=v.querySelector('.lvsub[data-p="car"]');if(car)car.insertAdjacentHTML('afterbegin',box('lvGwCar'));
+    const ov=v.querySelector('.lvsub[data-p="ov"]');if(ov)ov.insertAdjacentHTML('afterbegin',box('lvGwOv'));
+    const wx=v.querySelector('.lvsub[data-p="wx"]');if(wx)wx.insertAdjacentHTML('afterbegin',`<div class="panel"><div class="panel-h"><h3>${tr('Slick o wet?')}</h3><span class="muted small">${tr('tempi degli ultimi 4 minuti, auto della nostra classe')}</span></div><div id="lvCross"></div></div>`);
+    const st=v.querySelector('.lvsub[data-p="str"]');if(st)st.insertAdjacentHTML('afterbegin',`<div class="panel"><div class="panel-h"><h3>${tr('Piloti e stint')}</h3><label class="f" style="min-width:170px">${tr('Stint massimo (min)')}<input type="number" id="lvStMax" min="0" step="5"></label></div><div id="lvStint"></div></div>`);
+    const mx=$('#lvStMax');if(mx){mx.value=LS.get('live:stintMax','')||'';mx.onchange=()=>{LS.set('live:stintMax',+mx.value||'');renderLive(true);};}};
+  const gw=(id,x)=>{const el=$(id);if(el)el.innerHTML=gwOurs(x.c,x.stt);};
+  const oc=lvCar;window.lvCar=lvCar=function(x){oc(x);try{gw('#lvGwCar',x);}catch(e){console.error(e);}};
+  const oo=lvOverview;window.lvOverview=lvOverview=function(x){oo(x);try{gw('#lvGwOv',x);}catch(e){console.error(e);}};
+  const ow=lvWeather;window.lvWeather=lvWeather=function(x){ow(x);try{lvCrossPanel(x);}catch(e){console.error(e);}};
+  const os=lvStrategy;window.lvStrategy=lvStrategy=function(x){os(x);try{lvStintPanel(x);}catch(e){console.error(e);}};
+  const om=openCarModal;window.openCarModal=openCarModal=function(veh){om(veh);try{const r=liveRows(LIVE.sc).find(z=>z.veh===veh);const h=gwOther(veh,r);const b=$('#mCarB');
+    if(h&&b)b.insertAdjacentHTML('afterbegin',`<h3>${tr('Carburante ed energia')} <span class="muted small">${tr('come nel gioco')}</span></h3>${h}`);}catch(e){console.error(e);}};})();
+
+// ---------- slick or wet: lap times of the cars of our class, grouped by the tyres they have on now ----------
+const isWetTyre=r=>r.comp?[...r.comp].every(k=>k==='W'):/wet|rain/i.test(r.cf||'');
+function wetCross(rows,me,I){if(!me||!Number.isFinite(I?.et))return null;const G={wet:[],slick:[]},cars={wet:new Set(),slick:new Set()};
+  rows.forEach(r=>{if(r.cls!==me.cls||(!r.comp&&!r.cf))return;const s=carStats(r.veh,r);const since=s.lastPit?(s.lastPit.out||s.lastPit.in||0):0;const g=isWetTyre(r)?'wet':'slick';
+    s.L.forEach(l=>{if(l[2]<I.et-240||l[2]<since+1||l[3]||!(l[1]>0)||l[0]<2)return;G[g].push(l[1]);cars[g].add(r.veh);});});
+  const out={wet:med_(G.wet),slick:med_(G.slick),nw:G.wet.length,ns:G.slick.length,cw:cars.wet.size,cs:cars.slick.size,ours:isWetTyre(me)?'wet':'slick'};
+  out.ok=out.nw>=2&&out.ns>=2;out.d=out.ok?out.slick-out.wet:NaN; // + = wet faster
+  out.better=!out.ok||Math.abs(out.d)<0.3?'':out.d>0?'wet':'slick';return out;}
+function lvCrossPanel(x){const el=$('#lvCross');if(!el)return;const W=wetCross(x.rows,x.me,x.I);
+  if(!W){el.innerHTML=`<div class="muted small">${tr('In attesa dei dati…')}</div>`;return;}
+  const g=(n,t,laps,cars)=>`<div class="kpi"><div class="l">${n}</div><div class="v">${fmtLap(t)}</div><div class="s">${laps} ${tr('giri')} · ${cars} ${tr('auto')}</div></div>`;
+  let msg;if(!W.ok)msg=tr('Per il confronto servono almeno 2 giri recenti con le slick e 2 con le wet nella nostra classe.');
+  else if(!W.better)msg=tr('Slick e wet vanno quasi uguali: è il momento del cambio.');
+  else msg=`${tr(W.better==='wet'?'Le wet sono più veloci di':'Le slick sono più veloci di')} <b>${fx(Math.abs(W.d),1)} s</b> ${tr('al giro')}.`+(W.better!==W.ours?` <b class="neg">${tr(W.better==='wet'?'Conviene montare le wet.':'Conviene montare le slick.')}</b>`:` <span class="pos">${tr('Abbiamo le gomme giuste.')}</span>`);
+  el.innerHTML=`<div class="kpis">${g(tr('Con le slick'),W.slick,W.ns,W.cs)}${g(tr('Con le wet'),W.wet,W.nw,W.cw)}</div><p class="small" style="margin:8px 0 0">${msg}</p>`;}
+
+// ---------- drivers and stints of our car: time at the wheel, when to change, who is next ----------
+function stintData(x){const {rows,me,I}=x;if(!me||!Number.isFinite(I?.et))return null;const c=fCar(me.veh);const sw=[...(c?.swaps||[])].filter(w=>w.et<=I.et).sort((a,b)=>a.et-b.et);
+  const seg=[];let t0=0,d=sw[0]?.from||me.drv;sw.forEach(w=>{seg.push({d,t0,t1:w.et});t0=w.et;d=w.to;});seg.push({d:me.drv||d,t0,t1:I.et,cur:true});
+  const tot={};seg.forEach(s=>{const k=s.d||'?';(tot[k]=tot[k]||{t:0,n:0}).t+=Math.max(0,s.t1-s.t0);tot[k].n++;});
+  const T=tmPlans();const P=T.plans?.find(p=>p.id===T.cur)||T.plans?.[0];const maxMin=+LS.get('live:stintMax','')||+P?.race?.maxStint||0;
+  const cur=seg[seg.length-1];const inCar=I.et-cur.t0;const left=maxMin>0?maxMin*60-inCar:NaN;
+  // next driver: the one after ours in the team plan, else the team-mate with the least time at the wheel
+  const same=(a,b)=>String(a||'').toLowerCase().trim()===String(b||'').toLowerCase().trim()||String(a||'').toLowerCase().includes(String(b||'').toLowerCase().split(' ')[0]);
+  let next='';const order=P?[...P.drivers].sort((a,b)=>(+a.order||0)-(+b.order||0)).map(d=>d.name).filter(Boolean):[];
+  const i=order.findIndex(n=>same(cur.d,n)||same(n,cur.d));if(order.length>1&&i>=0)next=order[(i+1)%order.length];
+  if(!next){const others=Object.entries(tot).filter(([k])=>k!==cur.d).sort((a,b)=>a[1].t-b[1].t);next=others[0]?.[0]||(c?.drivers||[]).find(n=>n!==cur.d)||'';}
+  return {cur:cur.d,inCar,left,maxMin,next,tot,swaps:sw.length};}
+function lvStintPanel(x){const el=$('#lvStint');if(!el)return;const S=stintData(x);if(!S){el.innerHTML=`<div class="muted small">${tr('In attesa dei dati…')}</div>`;return;}
+  const mm=s=>Number.isFinite(s)?`${s<0?'−':''}${Math.floor(Math.abs(s)/60)}:${String(Math.floor(Math.abs(s)%60)).padStart(2,'0')}`:'—';
+  const k=[liveTile('Alla guida',`<span class="vtxt">${esc(S.cur||'—')}</span>`,`${tr('da')} ${mm(S.inCar)}`),
+    liveTile('Cambio tra',S.maxMin?mm(S.left):'—',S.maxMin?`${tr('stint massimo')} ${S.maxMin} min`:tr('imposta lo stint massimo'),S.maxMin&&S.left<300?'inv':''),
+    liveTile('Prossimo pilota',`<span class="vtxt">${esc(S.next||'—')}</span>`,'')];
+  const rows=Object.entries(S.tot).sort((a,b)=>b[1].t-a[1].t).map(([d,v])=>`<tr class="${d===S.cur?'ours':''}"><td class="l">${esc(d)}</td><td>${hms(v.t)}</td><td>${v.n}</td></tr>`).join('');
+  el.innerHTML=`<div class="kpis">${k.join('')}</div><table class="lbt" style="margin-top:8px"><thead><tr><th class="l">${tr('Pilota')}</th><th>${tr('Tempo alla guida')}</th><th>Stint</th></tr></thead><tbody>${rows}</tbody></table>`;}
+
+// ---------- alerts: weather, slick/wet, driver change (once each, also when another tab of the Muretto is open) ----------
+function lvAlert(key,k,t,s){if(LS.get('live:notif','class')==='off'||LIVE.rec)return;if(NOTIF_SEEN.has(key))return;NOTIF_SEEN.set(key,Date.now());
+  NOTIF.unshift({k,t,s,at:Date.now()});if(NOTIF.length>30)NOTIF.pop();
+  let box=$('#lvToasts');if(!box){box=document.createElement('div');box.id='lvToasts';document.body.appendChild(box);}
+  const el=document.createElement('div');el.className='lvtoast '+k;el.innerHTML=`<b>${t}</b><div>${s}</div>`;box.prepend(el);
+  while(box.children.length>4)box.lastChild.remove();setTimeout(()=>{el.classList.add('out');setTimeout(()=>el.remove(),400);},12000);}
+function liveWatch(){const sc=LIVE.sc;if(!sc||LIVE.rec||Date.now()-LIVE.scAt>15000)return;const I=sc.i||{};const ses=liveSes(sc);const A=LIVE.wxA&&LIVE.wxA.ses===ses?LIVE.wxA:(LIVE.wxA={ses,rain:I.rain||0,wet:I.wavg||0});
+  const k=s=>ses+'|'+s;
+  // rain starts / stops
+  if((I.rain||0)>=0.05&&A.rain<0.02)lvAlert(k('rain+'+Math.floor(I.et/300)),'warn',tr('Inizia a piovere'),`${tr('intensità')} ${Math.round(I.rain*100)}% (${tr(rainLabel(I.rain))})`);
+  if((I.rain||0)<0.02&&A.rain>=0.05)lvAlert(k('rain-'+Math.floor(I.et/300)),'info',tr('Ha smesso di piovere'),`${tr('pista bagnata')} ${Math.round((I.wavg||0)*100)}%`);
+  if((I.rain||0)>=0.05||(I.rain||0)<0.02)A.rain=I.rain||0;
+  // track wetness crossing 10 / 30 / 60 %
+  [0.1,0.3,0.6].forEach(th=>{const w=I.wavg||0;if(w>=th&&A.wet<th)lvAlert(k('wet+'+th+'|'+Math.floor(I.et/600)),'warn',tr('Pista sempre più bagnata'),`${tr('pista bagnata')} ${Math.round(w*100)}%`);
+    if(w<th&&A.wet>=th&&th===0.1)lvAlert(k('wet-'+Math.floor(I.et/600)),'info',tr('Pista quasi asciutta'),`${tr('pista bagnata')} ${Math.round(w*100)}%`);});A.wet=I.wavg||0;
+  // rain in the forecast within 10 minutes
+  const re=rainEta(I);if(re&&(I.rain||0)<0.05&&re.t>0&&re.t<=600)lvAlert(k('eta|'+Math.round(I.end>0?re.t+I.et:0)),'warn',tr('Pioggia in arrivo'),`${tr('prevista tra')} ${Math.max(1,Math.round(re.t/60))} min (${Math.round(re.rc)}%)`);
+  const rows=liveRows(sc),me=rows.find(r=>r.veh===LIVE.focus);if(!me)return;
+  // slick / wet: the other tyres became faster
+  const W=wetCross(rows,me,I);if(W?.better&&W.better!==W.ours&&Math.abs(W.d)>=0.5)lvAlert(k('cross|'+W.better+'|'+Math.floor(I.et/600)),'bad',tr(W.better==='wet'?'Conviene montare le wet':'Conviene montare le slick'),`${tr(W.better==='wet'?'Le wet sono più veloci di':'Le slick sono più veloci di')} ${fx(Math.abs(W.d),1)} s ${tr('al giro')}`);
+  // driver change coming
+  const S=stintData({rows,me,I});if(S&&S.maxMin>0)[[300,'5'],[60,'1']].forEach(([s,m])=>{if(S.left<=s&&S.left>s-120)lvAlert(k('stint|'+S.cur+'|'+S.swaps+'|'+s),s<=60?'bad':'warn',`${tr('Cambio pilota tra')} ${m} min`,`${esc(S.cur)} → <b>${esc(S.next||'—')}</b>`);});}
+setInterval(()=>{try{liveWatch();}catch(e){console.error(e);}},2000);
 // ================= SETUP =================
 let DIAG=null;
 RENDER.setup=()=>{
