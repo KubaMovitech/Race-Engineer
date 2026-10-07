@@ -43,12 +43,23 @@ function lvRel(x){const {rows,me,I}=x;const LD=I.lapDist;if(!me||!(LD>0)){$('#lv
     const lc=o.lapd>0?'lap-up':o.lapd<0?'lap-dn':'';return `<tr class="${lc}" data-car="${esc(r.veh)}"><td><span class="clsdot" style="background:${LV_CLS(r.cls)}"></span></td><td class="l">${esc(r.drv)}${r.inPit?' <span class="tag warn">BOX</span>':''}</td><td>P${r.pic}</td><td>${o.t>0?'+':''}${fx(o.t,1)}</td><td>${o.lapd?`<span class="tag ${o.lapd>0?'bad':'info'}">${o.lapd>0?'+':''}${o.lapd}G</span>`:''}</td></tr>`;}).join('')}</tbody></table>
     <p class="muted small" style="margin:6px 0 0">${tr('Sopra: davanti sul tracciato · sotto: dietro. Rosso = ha un giro in più di noi, grigio = doppiato da noi.')}</p>`;}
 
-function lvNow(x){const {I}=x;if(!LIVE.sc){$('#lvNow').innerHTML='';return;}const H=LIVE.wxh;const re=rainEta(I);
+function lvNow(x){const {I}=x;if(!LIVE.sc){$('#lvNow').innerHTML='';return;}const H=LIVE.wxh;const re=rainEta(I);const hum=humNow(I);
   $('#lvNowT').textContent=`${tr('ora in pista')} ${hhmm((I.tod||0)/60)}`;
   const t=(l,v,s)=>liveTile(l,v,s);
   $('#lvNow').innerHTML=`<div class="kpis">${[t('Cielo',`<span class="vtxt">${esc(tr(skyNow(I)))}</span>`,`${tr('nuvole')} ${Math.round((I.cloud||0)*100)}%`),t('Aria',fx(I.air,1)+' °C',sgnT(trend(H,1,10))),t('Asfalto',fx(I.tt,1)+' °C',sgnT(trend(H,2,10))),
-    t('Pioggia',Math.round((I.rain||0)*100)+'%',re&&I.rain<0.05?`${tr('prevista tra')} ${Math.max(0,Math.round(re.t/60))} min`:''),t('Pista bagnata',Math.round((I.wavg||0)*100)+'%',`min ${Math.round((I.wmin||0)*100)}% · max ${Math.round((I.wmax||0)*100)}%`),
-    t('Grip',`<span class="vtxt">${esc(tr(GRIP[I.grip]||'—'))}</span>`,''),t('Vento',fx(I.wind,1)+' m/s','')].join('')}</div>`;}
+    t('Pioggia',`${Math.round((I.rain||0)*100)}% <span class="vtxt small">${esc(tr(rainLabel(I.rain)))}</span>`,[re&&I.rain<0.05?`${tr('prevista tra')} ${Math.max(0,Math.round(re.t/60))} min`:'',pctT(trend(H,3,5),5)].filter(Boolean).join(' · ')),
+    t('Pista bagnata',Math.round((I.wavg||0)*100)+'%',`min ${Math.round((I.wmin||0)*100)}% · max ${Math.round((I.wmax||0)*100)}%`+(wetEta(H,I)?'<br>'+wetEta(H,I):'')),
+    t('Grip',`<span class="vtxt">${esc(tr(GRIP[I.grip]||'—'))}</span>`,''),t('Vento',fx(I.wind,1)+' m/s',fx((I.wind||0)*3.6,0)+' km/h'),
+    ...(Number.isFinite(hum)?[t('Umidità',fx(hum,0)+'%',tr('dalle previsioni'))]:[])].join('')}</div>`;}
+// rain intensity as the game gives it (0–1): the game has no millimetres, these words are indicative
+function rainLabel(r){r=r||0;return r<0.01?'nessuna':r<0.1?'pioviggine':r<0.3?'leggera':r<0.6?'moderata':r<0.85?'forte':'molto forte';}
+function pctT(d,mins){return Number.isFinite(d)&&Math.abs(d)>=0.005?`${d>0?'▲':'▼'} ${Math.round(Math.abs(d)*100)}% ${tr('in')} ${mins} min`:'';}
+// is the track drying or getting wetter, and when is it dry (straight line on the last 10 minutes)
+function wetEta(H,I){const d=trend(H,4,10);if(!Number.isFinite(d)||Math.abs(d)<0.01)return '';const w=I.wavg||0;
+  if(d<0){const m=w/(-d/10);return `▼ ${tr('si asciuga')}${w>0.02&&m<240?` · ${tr('asciutta tra')} ≈ ${Math.round(m)} min`:''}`;}
+  return `▲ ${tr('si bagna')}: +${Math.round(d*100)}% ${tr('in')} 10 min`;}
+// humidity of the forecast node of now
+function humNow(I){const n=LIVE.wx?.nodes;if(!n?.length||!(I.end>0))return NaN;const i=Math.max(0,Math.min(n.length-1,Math.round((I.et||0)/I.end*(n.length-1))));const h=+n[i].hum;return h>0&&h<=100?h:NaN;}
 function sgnT(d){return Number.isFinite(d)?`${d>0?'▲':d<0?'▼':''} ${fx(Math.abs(d),1)} °C ${tr('in 10 min')}`:'';}
 
 const GAME_N={currentFuel:'Carburante attuale',maxFuel:'Serbatoio',fuelCapacity:'Serbatoio',currentVirtualEnergy:'Energia attuale',maxVirtualEnergy:'Energia massima',fuelRatio:'Ratio carburante/EV',fuelPerLap:'Carburante per giro',energyPerLap:'Energia per giro',lapsRemaining:'Giri rimanenti'};

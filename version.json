@@ -2,17 +2,19 @@
  "version": "2.0.3",
  "date": "2026-10-07",
  "notes": [
-  "Muretto con più piloti online: non salta più da un pilota all'altro.",
+  "Muretto con più piloti online: non salta più da un pilota all'altro e segue la sessione della nostra auto.",
   "Una sola app aperta: riaprendo Data Engineer torna in primo piano la finestra già aperta.",
   "Classifica: le quattro gomme viste dall'alto.",
-  "Passo gara sugli ultimi 5 giri fatti, non sui giri più veloci."
+  "Passo gara sugli ultimi 5 giri fatti, non sui giri più veloci.",
+  "Meteo più preciso: intensità e andamento della pioggia, pista che si asciuga o si bagna, vento, umidità.",
+  "Crea squadra dall'app: il nuovo codice vale anche per il bridge di questo PC."
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "6c199bd7748e9846cb1f0ece139353cff6899dab89e80452d07b4814280806c4"
+  "sha256": "54492a9fe5926ef29e4166eba52b0ea229a40999d4492293086b06cc770594c5"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "bd27be3484bb15d0d3a34580ef89996972ab16293c89cb1796f007f9f0426afd"
+  "sha256": "dd9be0ccc2817bec716e0f01c3bd0d8cef64992bd6f4b58ecef5b4f8a1889889"
  }
 }
