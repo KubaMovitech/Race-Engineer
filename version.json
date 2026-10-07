@@ -1,20 +1,19 @@
 {
- "version": "2.0.3",
+ "version": "2.0.4",
  "date": "2026-10-07",
  "notes": [
-  "Muretto con più piloti online: non salta più da un pilota all'altro e segue la sessione della nostra auto.",
-  "Una sola app aperta: riaprendo Data Engineer torna in primo piano la finestra già aperta.",
-  "Classifica: le quattro gomme viste dall'alto.",
-  "Passo gara sugli ultimi 5 giri fatti, non sui giri più veloci.",
-  "Meteo più preciso: intensità e andamento della pioggia, pista che si asciuga o si bagna, vento, umidità.",
-  "Crea squadra dall'app: il nuovo codice vale anche per il bridge di questo PC."
+  "Gomme, carburante ed energia come nel gioco, anche per le altre auto (benzina ed energia).",
+  "Slick o wet: confronto dei tempi e avviso quando conviene cambiare gomme.",
+  "Avvisi meteo: pioggia che inizia o smette, pista che si bagna o si asciuga, pioggia in arrivo.",
+  "Piloti e stint: chi guida, cambio tra quanto, prossimo pilota, avvisi prima del cambio.",
+  "Aggiornamento in un clic anche dal file Data_Engineer.html."
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "54492a9fe5926ef29e4166eba52b0ea229a40999d4492293086b06cc770594c5"
+  "sha256": "97efe63ca18654f3088553a169cdb38e41d99e79b7e12a92172edc12f094f078"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "dd9be0ccc2817bec716e0f01c3bd0d8cef64992bd6f4b58ecef5b4f8a1889889"
+  "sha256": "4e5c72844b629b99ad1800396d2efff529ef5cabecc4d332af5356f6b3af438f"
  }
 }

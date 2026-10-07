@@ -1,0 +1,23 @@
+name: Controllo versione
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  controllo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: bridge/go.mod
+      - name: Versione, SHA-256 e app coerenti
+        run: python3 tools/check_release.py
+      - name: Test del bridge
+        working-directory: bridge
+        run: |
+          cp ../Data_Engineer.html app.html
+          go vet ./...
+          GOOS=windows GOARCH=amd64 go vet ./...
+          go test ./...

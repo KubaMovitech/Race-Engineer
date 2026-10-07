@@ -695,3 +695,21 @@ table.lbt td.sxc{text-align:center}
 .bchip{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted);margin-left:2px;font-family:var(--f-mono)}
 .bchip i{width:7px;height:7px;border-radius:50%;background:var(--faint)}.bchip.good i{background:var(--good)}.bchip.warn i{background:var(--warn)}.bchip.bad i{background:var(--bad)}.bchip.warn{color:var(--warn)}.bchip.bad{color:var(--bad)}
 .pclog{max-height:260px;overflow:auto;background:var(--panel2);border-radius:var(--r);padding:10px;font:11.5px/1.45 var(--f-mono);color:var(--muted);white-space:pre-wrap}
+/* tyres, fuel and energy as the game shows them */
+.gw3{display:grid;grid-template-columns:minmax(300px,1.1fr) 1fr 1fr;gap:12px}
+.gw3.two{grid-template-columns:1fr 1fr}
+@media (max-width:1100px){.gw3,.gw3.two{grid-template-columns:1fr}}
+.gwbox{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.gwh{display:flex;justify-content:space-between;align-items:baseline;font-weight:700;margin-bottom:8px}.gwh span{font:600 .95rem var(--f-mono);color:var(--muted)}
+.gwtyres{display:grid;grid-template-columns:1fr 1fr;gap:10px 18px}
+.gwt{display:flex;align-items:center;gap:10px}.gwt.r{flex-direction:row-reverse;text-align:right}
+.gwt.bad .gwr{outline:2px solid var(--bad);border-radius:50%}
+.gwr{position:relative;width:74px;height:74px;flex:none}
+.gwring{width:100%;height:100%}.gwring circle{fill:none;stroke-width:6}.gwring .bg{stroke:var(--line)}.gwring .fg{stroke-linecap:round}
+.gwv{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.gwv b{font:700 1rem var(--f-mono)}.gwv i{font:700 10px/16px var(--f-mono);font-style:normal;width:16px;height:16px;border-radius:50%;text-align:center}
+.gwd{display:flex;flex-direction:column;gap:2px;font:600 .8rem var(--f-mono);color:var(--muted)}.gwd b{font-size:1.05rem}
+.gwtab{width:100%;border-collapse:collapse;font-size:.85rem}.gwtab th{font-weight:600;color:var(--muted);text-align:right;padding:2px 6px}.gwtab th:first-child{text-align:left}
+.gwtab td{padding:5px 6px;text-align:right;font-family:var(--f-mono);border-top:1px solid var(--line)}.gwtab td:first-child{text-align:left;font-family:inherit;color:var(--muted)}
+.gwtab tr.avg td{font-weight:700;color:var(--ink)}
+.gwrow{display:flex;justify-content:space-between;margin-top:6px;padding-top:6px;border-top:1px solid var(--line);font-size:.85rem}.gwrow span{color:var(--muted)}.gwrow b{font-family:var(--f-mono)}

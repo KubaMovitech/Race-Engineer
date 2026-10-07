@@ -1,7 +1,8 @@
 // ================= VERSIONE, NOVITÀ E AGGIORNAMENTI =================
-const APP_VERSION='2.0.3';
+const APP_VERSION='2.0.4';
 const DEFAULT_UPD='https://raw.githubusercontent.com/KubaMovitech/Race-Engineer/main/';   // update channel (folder with version.json), set when the team repository exists
 const CHANGELOG=[
+{v:'2.0.4',d:'07/10/2026',items:['Gomme, carburante ed energia come nel gioco (Panoramica e Auto): usura rimasta, pressione, temperature, e per benzina ed energia consumo massimo, medio e ultimo con giri e minuti che restano. Per le altre auto benzina ed energia nel dettaglio auto.','Slick o wet? Confronto dei tempi delle auto della nostra classe con gomme diverse e avviso quando conviene cambiare.','Avvisi meteo: inizia o smette di piovere, pista che si bagna o si asciuga, pioggia prevista entro 10 minuti.','Piloti e stint (Strategia): chi guida e da quanto, cambio tra quanto, prossimo pilota, tempo alla guida di ognuno, avviso 5 e 1 minuto prima del cambio.','Aggiornamento in un clic: aprendo il file Data_Engineer.html, «Aggiorna» passa all\'app Data Engineer e fa tutto da sola.']},
 {v:'2.0.3',d:'07/10/2026',items:['Muretto con più piloti online: non salta più da un pilota all\'altro. Segue la sessione di «Nostra auto»: classifica, giri e meteo di un compagno su un altro server o in un\'altra sessione non si mescolano più con i nostri.','Crea squadra dall\'app del bridge: il nuovo codice vale anche per il bridge di questo PC.','Meteo più preciso: intensità della pioggia e come cambia, pista che si asciuga o si bagna con la stima di quando sarà asciutta, vento in km/h, umidità dalle previsioni.','Una sola app aperta: riaprendo Data Engineer torna in primo piano la finestra già aperta.','Classifica: le quattro gomme viste dall\'alto (anteriori sopra, posteriori sotto).','Passo gara sugli ultimi 5 giri fatti (senza giro 1, giri dei box e un giro molto lento), non sui giri più veloci.']},
 {v:'2.0.2',d:'05/10/2026',items:['Le novità mostrano di nuovo tutte le versioni, dalla 1.7 in poi.','Con un bridge vecchio (1.6 o 1.7) che non sa aggiornarsi, il pulsante «Aggiorna» scarica il nuovo DataEngineerBridge.exe da sostituire.','Il bridge non si riavvia più all\'infinito se trova lo stesso programma già installato.']},
 {v:'2.0.1',d:'05/10/2026',items:['La classifica si aggiorna ogni secondo anche quando nessuno della squadra è in auto.']},
@@ -46,6 +47,8 @@ async function updApply(){const R=UPD.remote;if(!R)return;UPD.state='working';up
       UPD.state='done';updRender();LS.set('updJust',R.version);
       // the bridge restarts if it updated itself: wait for it, then reload the new app
       const t0=Date.now();const wait=async()=>{try{const v=await (await fetch('/version',{cache:'no-store'})).json();if(!newerV(R.version,v.app))return location.reload();}catch(e){}if(Date.now()-t0<60000)setTimeout(wait,1500);else location.reload();};setTimeout(wait,r.restart?2500:300);return;}
+    // the HTML file opened by hand: if Data Engineer (the bridge) runs on this PC it does the whole update, no file to pick
+    if(isFileHost()&&await fetch('http://localhost:8790/version',{mode:'no-cors',cache:'no-store'}).then(()=>true,()=>false)){location.href='http://localhost:8790/#upd';return;}
     const url=updChannel()+(R.app?.file||'Data_Engineer.html');const buf=await (await fetch(url+'?t='+Date.now(),{cache:'no-store'})).arrayBuffer();
     if(R.app?.sha256&&(await sha256hex(buf))!==R.app.sha256.toLowerCase())throw new Error(tr('file scaricato non valido (controllo SHA-256 fallito)'));
     if(window.showSaveFilePicker){let h=await updIdb.get();
@@ -79,7 +82,9 @@ function openNews(tab){let m=$('#mNews');if(!m){m=document.createElement('div');
 (function(){const tools=$('.hdr-tools');if(tools&&!$('#verChip')){const b=document.createElement('button');b.type='button';b.id='verChip';b.className='verchip';b.textContent='v'+APP_VERSION;b.onclick=()=>openNews();tools.insertBefore(b,$('#btnSettings'));}
   // after an update (or on first run of a new version) show what changed
   const seen=LS.get('seenVer','');if(seen!==APP_VERSION&&!document.documentElement.classList.contains('ovmode')&&!/^#(ov|tv)/.test(location.hash)){setTimeout(()=>openNews(),800);}LS.set('seenVer',APP_VERSION);
-  if(!isHosted()&&(UPD.base||isBridgeHost()))setTimeout(updCheck,3000);
+  // arrived from the HTML file to update: check and update straight away
+  if(isBridgeHost()&&location.hash==='#upd'){history.replaceState(null,'',location.pathname);updCheck().then(()=>{if(UPD.state==='available')updApply();else openNews();});}
+  else if(!isHosted()&&(UPD.base||isBridgeHost()))setTimeout(updCheck,3000);
   updRender();})();
 
 // ---------- one app window at a time: a newer window replaces the older ones ----------
