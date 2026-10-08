@@ -27,15 +27,16 @@ async function gunzip(buf){const ds=new DecompressionStream('gzip');return await
 function extOf(n){const m=n.toLowerCase().match(/\.(ld|xml|svm)(\.gz)?$/);return m?m[1]:null;}
 
 async function addFile(name,buf,{persist=false,sample=false}={}){
+  const orig=buf; // saved as it came: a .gz stays compressed, so it opens again next time
   if(/\.gz$/i.test(name))buf=await gunzip(buf);
   const ext=extOf(name);let item;
   if(ext==='ld'){item=buildSession(parseLD(buf),name);item.label=sessLabel(item);}
   else if(ext==='xml'){item=parseResultsXML(new TextDecoder().decode(buf),name);item.label=`${item.venue} · risultati ${item.time.slice(0,10)}`;}
   else if(ext==='svm'){item=parseSVM(new TextDecoder('latin1').decode(buf),name);item.label=name.replace(/\.svm$/i,'');}
   else throw new Error('Formato non supportato: usa .ld, .xml o .svm');
-  item.sample=sample;item.file=name;
+  item.sample=sample;item.file=name;item.size=orig.byteLength;
   const old=store.items.findIndex(x=>x.id===item.id);if(old>=0)store.items.splice(old,1,item);else store.items.push(item);
-  if(persist)IDB.put({name,buf,added:Date.now()});
+  if(persist)IDB.put({name,buf:orig,added:Date.now()});
   return item;
 }
 function sessLabel(S){const m=S.meta;return `${m.venue||'Pista'}${m.car?' · '+m.car:''} · ${m.date?m.date.slice(0,5):''} ${m.time?m.time.slice(0,5):''}`.trim();}
@@ -44,15 +45,36 @@ const byId=id=>store.items.find(x=>x.id===id);
 function relink(){lds().forEach(S=>{mergeResults(S,xmls());});}
 const active=()=>{const v=$('#gSess').value;if(!v)return null;if(v.startsWith('xml:')){const [id,si]=v.split('|');return {xml:byId(id),si:+si};}return {S:byId(v)};};
 
+// ---------- the files panel: three groups, what each one is for, where LMU saves them ----------
+const LIB_KINDS=[
+  ['ld','Telemetria MoTeC','.ld','Giri, tracce, mappa, Coach e Confronto. Un file per sessione.','Le Mans Ultimate\\UserData\\Telemetry'],
+  ['xml','Risultati','.xml','Giri non validi ufficiali, energia virtuale e tempi di tutti i piloti. Si unisce da solo alla telemetria della stessa sessione.','Le Mans Ultimate\\UserData\\Log\\Results'],
+  ['svm','Setup','.svm','Per la scheda Setup: leggerlo, confrontarlo, chiedere consigli.','Le Mans Ultimate\\UserData\\player\\Settings\\<pista>']];
+const mb=n=>n>0?(n/1048576>=1?fx(n/1048576,1)+' MB':Math.max(1,Math.round(n/1024))+' KB'):'';
+function libRemove(list){const set=new Set(list);store.items=store.items.filter(x=>!set.has(x));list.forEach(it=>{if(!it.sample)IDB.del(it.file);});relink();refreshAll();}
 function renderLib(){
-  const el=$('#lib');el.innerHTML='';$('#nFiles').textContent=store.items.length;
-  store.items.forEach(it=>{const c=document.createElement('span');c.className='chip';c.title=it.file;
-    c.innerHTML=`<span class="k">${it.kind==='ld'?'motec':it.kind==='xml'?'risultati':it.kind==='live'?'live':'setup'}</span><span class="nm">${esc(it.label)}${it.sample?' <span class="muted">· esempio</span>':''}</span><button type="button" aria-label="Rimuovi ${esc(it.label)}">×</button>`;
-    c.querySelector('button').onclick=()=>{store.items=store.items.filter(x=>x!==it);if(!it.sample)IDB.del(it.file);relink();refreshAll();};
-    if(it.kind==='ld'){const s=document.createElement('button');s.type='button';const on=isRef(it);s.textContent=on?'★ riferimento':'☆ riferimento';s.title='Usa questo file come giro di riferimento nel Coach';s.style.cssText='font-size:.75rem;color:'+(on?'var(--accent)':'var(--faint)');s.onclick=()=>{LS.set('ref:'+it.id,!isRef(it));$('#coRef').dataset.sess='';renderLib();if(curView()==='coach')RENDER.coach();};c.insertBefore(s,c.lastChild);}
-    el.appendChild(c);});
-  const d=document.createElement('button');d.type='button';d.className='drop';d.textContent='+ Aggiungi o trascina qui file .ld · .xml · .svm';d.onclick=()=>$('#fileIn').click();el.appendChild(d);
-  const p=document.createElement('span');p.className='muted small';p.textContent='I file che carichi restano solo in questo browser.';el.appendChild(p);
+  const el=$('#lib');$('#nFiles').textContent=store.items.filter(x=>!x.sample).length;const cur=$('#gSess')?.value||'';
+  const card=([k,title,ext,what,where])=>{const its=store.items.filter(x=>x.kind===k).sort((a,b)=>(a.sample?1:0)-(b.sample?1:0));
+    const row=it=>{const on=k==='ld'?it.id===cur:k==='xml'?cur.startsWith(it.id+'|')||lds().some(S=>S.merged?.R===it&&S.id===cur):false;
+      const info=k==='ld'?`${it.laps.filter(l=>l.complete).length} ${tr('giri')}${it.merged?' · '+tr('con risultati'):''}`:k==='xml'?(lds().some(S=>S.merged?.R===it)?tr('unito alla telemetria'):tr('solo risultati')):'';
+      return `<div class="lbrow${on?' on':''}" data-id="${esc(it.id)}"><div class="lbn"><b title="${esc(it.file)}">${esc(it.label)}</b><small>${[info,mb(it.size),it.sample?tr('esempio'):''].filter(Boolean).join(' · ')}</small></div>
+        ${k!=='svm'?`<button type="button" class="btn" data-a="open">${tr('Apri')}</button>`:''}${k==='ld'?`<button type="button" class="btn${isRef(it)?' on':''}" data-a="ref" title="${esc(tr('Giro di riferimento nel Coach'))}">${isRef(it)?'★':'☆'}</button>`:''}<button type="button" class="btn" data-a="del" aria-label="${esc(tr('Rimuovi'))}">×</button></div>`;};
+    return `<div class="lbcard" data-k="${k}"><div class="lbh"><b>${tr(title)}</b><span class="mono">${ext} · ${its.length}</span></div><p class="muted small">${tr(what)}</p>
+      <div class="lblist">${its.map(row).join('')||`<div class="muted small">${tr('Nessun file.')}</div>`}</div><p class="small" style="color:var(--faint)">${tr('In LMU di solito in')}: <span class="mono">${esc(where)}</span></p></div>`;};
+  const nLd=lds().filter(x=>!x.sample).length;const samples=store.items.filter(x=>x.sample);
+  el.innerHTML=`<div class="lbtop"><button type="button" class="btn primary" data-a="add">${tr('Aggiungi file')}</button><span class="muted small">${tr('oppure trascinali qui (.ld · .xml · .svm, anche più insieme)')}</span><span class="sp"></span>
+      ${samples.length?`<button type="button" class="btn" data-a="nosamples">${tr('Togli gli esempi')}</button>`:''}${store.items.some(x=>!x.sample)?`<button type="button" class="btn" data-a="clear">${tr('Togli tutti i miei file')}</button>`:''}</div>
+    ${nLd>12?`<div class="warnbar">${nLd} ${tr('telemetrie caricate: l\'app si apre più lentamente. Puoi toglierle: Progressi, tempo di sosta e passo sul bagnato restano salvati.')}</div>`:''}
+    <div class="lbgrid">${LIB_KINDS.map(card).join('')}</div>
+    <p class="muted small" style="margin:6px 0 0">${tr('I file restano solo in questo browser. Progressi, tempo di sosta per pista e passo sul bagnato si salvano a parte: restano anche se togli i file.')}</p>`;
+  el.querySelector('[data-a="add"]').onclick=()=>$('#fileIn').click();
+  const ns=el.querySelector('[data-a="nosamples"]');if(ns)ns.onclick=()=>libRemove(samples);
+  const cl=el.querySelector('[data-a="clear"]');if(cl)cl.onclick=()=>{if(confirm(tr('Togliere tutti i file caricati? Progressi e dati imparati restano.')))libRemove(store.items.filter(x=>!x.sample));};
+  el.querySelectorAll('.lbrow').forEach(r=>{const it=byId(r.dataset.id);if(!it)return;
+    r.querySelectorAll('button').forEach(b=>b.onclick=()=>{const a=b.dataset.a;
+      if(a==='del')libRemove([it]);
+      else if(a==='ref'){LS.set('ref:'+it.id,!isRef(it));$('#coRef').dataset.sess='';renderLib();if(curView()==='coach')RENDER.coach();}
+      else if(a==='open'){const v=it.kind==='ld'?it.id:(lds().find(S=>S.merged?.R===it)?.id||it.id+'|0');$('#gSess').value=v;LS.set('sess',v);renderHero();RENDER[curView()]();renderLib();}});});
 }
 async function handleFiles(files){
   for(const f of files){try{const it=await addFile(f.name,await f.arrayBuffer(),{persist:true});toast('Caricato: '+it.label);if(it.kind==='ld')$('#gSess').dataset.want=it.id;if(it.kind==='xml'){relink();if(!lds().some(S=>S.merged?.R===it))$('#gSess').dataset.want=it.id+'|0';}}catch(e){console.error(e);toast(`${f.name}: ${e.message}`);}}
@@ -82,7 +104,7 @@ function fillSelects(){
 // ---------- hero with track conditions
 function renderHero(){
   const h=$('#hero'),a=active();
-  if(!a){h.innerHTML=`<div><div class="ey">Nessuna sessione</div><h1>Carica una telemetria MoTeC</h1><div class="meta">Trascina qui un file .ld esportato da Le Mans Ultimate, il .xml dei risultati e il .svm del setup.</div></div>`;return;}
+  if(!a){h.innerHTML=`<div><div class="ey">Nessuna sessione</div><h1>Carica una sessione</h1><div class="meta">Per una sessione bastano due file della stessa uscita in pista: la telemetria <b>.ld</b> e i risultati <b>.xml</b>. Il setup <b>.svm</b> serve solo per la scheda Setup. Premi <b>File</b> per vedere cosa serve e dove li salva LMU, oppure <b>Aggiorna da LMU</b> per prenderli dalla cartella del gioco.</div></div>`;return;}
   if(a.xml){const R=a.xml,s=R.sessions[a.si];h.innerHTML=`<div><div class="ey">Risultati ufficiali · ${esc(s.name)}</div><h1>${esc(R.venue)}</h1><div class="meta">${esc(R.event)} · ${esc(R.time)} · senza telemetria: niente condizioni pista, tracce o setup</div></div><div class="cond"><button class="btn primary" type="button" id="btnReport">Report</button></div>`;$('#btnReport').onclick=openReport;return;}
   const S=a.S,m=S.meta,c=S.cond,fl=S.laps.filter(l=>l.complete).length;
   const rng=(r,d=1,u='°C')=>!r?'—':Math.abs(r.max-r.min)<0.2?fx(r.avg,d)+u:`${fx(r.start,d)}→${fx(r.end,d)}${u}`;

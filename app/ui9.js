@@ -66,9 +66,14 @@ async function syncLMU(){
   catch(e){toast(e.name==='SecurityError'?'Il browser non permette di leggere cartelle da qui: usa il file per il PC in Chrome o Edge':'Cartella non selezionata');return;}
   const seen=LS.get('synced',{});const since=LS.get('syncSince',Date.now()-7*864e5);let n=0,skipped=0;
   $('#btnSync').disabled=true;$('#btnSync').textContent='Cerco file…';
-  try{for await(const {h,path} of walk(dir)){const f=await h.getFile();const key=path+'|'+f.lastModified;if(seen[key])continue;if(f.lastModified<since){skipped++;continue;}
-      try{$('#btnSync').textContent='Carico '+f.name.slice(0,24)+'…';await addFile(f.name,await f.arrayBuffer(),{persist:f.size<60e6});seen[key]=1;n++;}catch(e){console.warn(path,e);}}}
+  // results and setups are small: all the new ones. Telemetry is heavy: only the 10 most recent
+  // (many of them slow the app down and Progressi keeps its history anyway)
+  let older=0;
+  try{const todo=[];for await(const {h,path} of walk(dir)){const f=await h.getFile();const key=path+'|'+f.lastModified;if(seen[key])continue;if(f.lastModified<since){skipped++;continue;}todo.push({f,key,path});}
+    const isLd=x=>/\.ld$/i.test(x.f.name);const lds_=todo.filter(isLd).sort((a,b)=>b.f.lastModified-a.f.lastModified);const keep=new Set(lds_.slice(0,10));older=lds_.length-keep.size;
+    for(const x of todo.filter(x=>!isLd(x)||keep.has(x)).sort((a,b)=>a.f.lastModified-b.f.lastModified)){
+      try{$('#btnSync').textContent='Carico '+x.f.name.slice(0,24)+'…';await addFile(x.f.name,await x.f.arrayBuffer(),{persist:x.f.size<60e6});seen[x.key]=1;n++;}catch(e){console.warn(x.path,e);}}}
   finally{$('#btnSync').disabled=false;$('#btnSync').textContent='Aggiorna da LMU';}
   LS.set('synced',seen);LS.set('syncSince',Date.now()-864e5);relink();learnPitLoss();refreshAll();
-  toast(n?`Caricati ${n} file nuovi dalla cartella LMU`:'Nessun file nuovo'+(skipped?` (ignorati ${skipped} più vecchi di una settimana)`:''));
+  toast((n?`Caricati ${n} file nuovi dalla cartella LMU`:'Nessun file nuovo')+(older?` · ${older} telemetrie meno recenti non caricate (puoi aggiungerle a mano)`:'')+(!n&&skipped?` (ignorati ${skipped} più vecchi di una settimana)`:''));
 }
