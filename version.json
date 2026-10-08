@@ -1,19 +1,17 @@
 {
- "version": "2.0.4",
- "date": "2026-10-07",
+ "version": "2.0.5",
+ "date": "2026-10-08",
  "notes": [
-  "Gomme, carburante ed energia come nel gioco, anche per le altre auto (benzina ed energia).",
-  "Slick o wet: confronto dei tempi e avviso quando conviene cambiare gomme.",
-  "Avvisi meteo: pioggia che inizia o smette, pista che si bagna o si asciuga, pioggia in arrivo.",
-  "Piloti e stint: chi guida, cambio tra quanto, prossimo pilota, avvisi prima del cambio.",
-  "Aggiornamento in un clic anche dal file Data_Engineer.html."
+  "Pannello File più chiaro: telemetria, risultati e setup separati, a cosa servono e dove trovarli.",
+  "Aggiorna da LMU carica solo le 10 telemetrie più recenti: l'app resta veloce.",
+  "Corretto: un file .ld.gz spariva alla riapertura dell'app."
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "97efe63ca18654f3088553a169cdb38e41d99e79b7e12a92172edc12f094f078"
+  "sha256": "efa3c8836f60b983feee38de656f5bd86cedf31daa121ac02b72f5936738829c"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "4e5c72844b629b99ad1800396d2efff529ef5cabecc4d332af5356f6b3af438f"
+  "sha256": "7367a2996b9597997f80323bfd2c842a0c69fa4e7bd6b1a8467289ddd3215f03"
  }
 }
