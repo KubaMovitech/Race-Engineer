@@ -1,17 +1,16 @@
 {
- "version": "2.0.5",
- "date": "2026-10-08",
+ "version": "2.0.6",
+ "date": "2026-10-10",
  "notes": [
-  "Pannello File più chiaro: telemetria, risultati e setup separati, a cosa servono e dove trovarli.",
-  "Aggiorna da LMU carica solo le 10 telemetrie più recenti: l'app resta veloce.",
-  "Corretto: un file .ld.gz spariva alla riapertura dell'app."
+  "Setup › Sospensioni e ammortizzatori: istogrammi degli ammortizzatori, corsa, altezze, beccheggio e rollio dalla telemetria MoTeC.",
+  "Consigli su bump e rebound e sulle barre, legati al Dottore setup e al tuo .svm."
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "efa3c8836f60b983feee38de656f5bd86cedf31daa121ac02b72f5936738829c"
+  "sha256": "798f988026f7ef8129e2eea5b3302afeb85a6971321141c57d8d107588d22d87"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "7367a2996b9597997f80323bfd2c842a0c69fa4e7bd6b1a8467289ddd3215f03"
+  "sha256": "3521d905949b2780bc2c07475c8ba55bdace245ef1ab6f51b7951eb55328100f"
  }
 }

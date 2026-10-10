@@ -726,3 +726,10 @@ table.lbt td.sxc{text-align:center}
 .lbrow .lbn{flex:1;min-width:0;display:flex;flex-direction:column}.lbrow .lbn b{font-weight:600;font-size:.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .lbrow .lbn small{color:var(--muted);font-size:.72rem}.lbrow .btn{padding:2px 8px;font-size:.78rem}.lbrow .btn.on{color:var(--accent)}
 body.dragging .drawer{outline:2px dashed var(--accent);outline-offset:-4px}
+/* suspension and dampers */
+.susgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:900px){.susgrid{grid-template-columns:1fr}}
+.suscard{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.sushist{width:100%;height:74px;display:block;margin:6px 0}
+.susz{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;font-size:.72rem;color:var(--muted);text-align:center}.susz b{display:block;font:700 .95rem var(--f-mono);color:var(--ink)}
+.sushx{display:flex;justify-content:space-between;font-size:.68rem;color:var(--faint);margin:-2px 0 6px}

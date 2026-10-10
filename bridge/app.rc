@@ -1,7 +1,7 @@
 1 ICON "app.ico"
 1 VERSIONINFO
-FILEVERSION 2,0,5,0
-PRODUCTVERSION 2,0,5,0
+FILEVERSION 2,0,6,0
+PRODUCTVERSION 2,0,6,0
 BEGIN
   BLOCK "StringFileInfo"
   BEGIN
@@ -9,9 +9,9 @@ BEGIN
     BEGIN
       VALUE "CompanyName", "Data Engineer"
       VALUE "FileDescription", "Data Engineer - telemetria e muretto per Le Mans Ultimate"
-      VALUE "FileVersion", "2.0.5"
+      VALUE "FileVersion", "2.0.6"
       VALUE "ProductName", "Data Engineer"
-      VALUE "ProductVersion", "2.0.5"
+      VALUE "ProductVersion", "2.0.6"
       VALUE "OriginalFilename", "DataEngineer.exe"
     END
   END
