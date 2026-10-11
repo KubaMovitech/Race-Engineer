@@ -737,3 +737,7 @@ body.dragging .drawer{outline:2px dashed var(--accent);outline-offset:-4px}
 /* race extras */
 .rcst{display:inline-block;padding:1px 6px;border-radius:4px;background:var(--panel2);font-family:var(--f-mono);font-size:.8rem;margin:1px 0}.rcst.best{color:var(--best);font-weight:700}
 .rcleg{display:flex;flex-wrap:wrap;gap:12px;font-size:.78rem;color:var(--muted);margin-top:6px}.rcleg i{display:inline-block;width:12px;height:3px;border-radius:2px;margin-right:5px;vertical-align:middle}
+/* setup generator */
+.genprefs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 18px;margin-top:10px}
+@media (max-width:900px){.genprefs{grid-template-columns:1fr}}
+.genp b{font-size:.85rem}.genr{display:grid;grid-template-columns:1fr 120px 1fr;gap:8px;align-items:center;font-size:.75rem;color:var(--muted)}.genr span:last-child{text-align:right}.genr input{width:100%}
