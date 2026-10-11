@@ -1,18 +1,18 @@
 {
- "version": "2.0.8",
+ "version": "2.0.9",
  "date": "2026-10-11",
  "notes": [
-  "Risultati di gara: posizioni giro per giro e strategie a confronto per tutta la classe.",
-  "Pressioni e campanature: di quanti kPa cambiare a freddo per arrivare all'obiettivo a caldo.",
-  "Degrado gomme: tempo perso a giro, usura e ogni quanti giri cambiarle.",
-  "Storico setup: ogni uscita con il suo setup, le modifiche e il loro effetto."
+  "Arrivo previsto della nostra classe con le soste ancora da fare.",
+  "Traffico: classi più veloci dietro e più lente davanti, con avviso.",
+  "Danni e freni: integrità e giri che durano i freni.",
+  "Luce e orario: alba e tramonto stimati con avviso."
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "3f84d7a2954809d49f2157a1287393bd4fff3b26ab2f613ca125b86366d83c44"
+  "sha256": "58d83893526c1084c93474cc3737607f87fc1b606598ed0dda4a71c1a86278e4"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "c0a74e590768b73ed6a06f553bbeb8aeb8c029f2610145d86144f2ca8a9a405a"
+  "sha256": "d913e047da42abeae773ec98086df6a0ac184d1fb44773246f48df843edcc4af"
  }
 }
