@@ -1,16 +1,17 @@
 {
- "version": "2.0.6",
- "date": "2026-10-10",
+ "version": "2.0.7",
+ "date": "2026-10-11",
  "notes": [
-  "Setup › Sospensioni e ammortizzatori: istogrammi degli ammortizzatori, corsa, altezze, beccheggio e rollio dalla telemetria MoTeC.",
-  "Consigli su bump e rebound e sulle barre, legati al Dottore setup e al tuo .svm."
+  "Risparmio: benzina ed energia per giro per fare 1, 2, 3 giri in più o arrivare alla bandiera.",
+  "Dottore setup: bilanciamento separato tra curve lente (meccanico) e veloci (aerodinamico).",
+  "Debrief automatico della sessione: setup, guida, stint e prossima uscita, offline."
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "798f988026f7ef8129e2eea5b3302afeb85a6971321141c57d8d107588d22d87"
+  "sha256": "a631e662cb5be5e3a7ac2ec39da32a37368f666368e5243ccfbc70647f3e7c02"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "3521d905949b2780bc2c07475c8ba55bdace245ef1ab6f51b7951eb55328100f"
+  "sha256": "dcda07393e29d74c1f5da0f6fa64fbcf22d090cf52b4b6f78a21fe00e333b40a"
  }
 }

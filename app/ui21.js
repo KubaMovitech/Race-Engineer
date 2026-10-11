@@ -19,13 +19,25 @@ function gwCons(title,level,levelTxt,use,lapT,fmtU,extra){const ok=use.filter(v=
   return `<div class="gwbox">${head}<table class="gwtab"><thead><tr><th></th><th>${tr('Giri')}</th><th>${tr('Tempo')}</th><th>${tr('Consumo')}</th></tr></thead><tbody>${rows.map(([l,u],i)=>{const laps=level/u;
     return `<tr${i===1?' class="avg"':''}><td>${l}</td><td>${fx(laps,1)}</td><td>${lapT>0?Math.floor(laps*lapT/60)+' min':'—'}</td><td>${fmtU(u)}</td></tr>`;}).join('')}</tbody></table>${extra||''}</div>`;}
 // our car (full telemetry from its bridge): litres and energy per lap from our own laps
-function gwOurs(c,stt){if(!c?.w)return `<div class="muted small">${tr('Nessun dato: l\'auto non è in pista.')}</div>`;
+// fuel / energy saver: what to use per lap to do 1, 2, 3 laps more on what is in the car, or to reach the flag
+function gwSaver(c,fu,vu,lapT,x){const fA=avg_(fu),vA=avg_(vu);const lf=c.fuel>0&&fA>0?c.fuel/fA:NaN,lv=c.ve>0&&vA>0?c.ve/vA:NaN;
+  const laps=Math.min(Number.isFinite(lf)?lf:Infinity,Number.isFinite(lv)?lv:Infinity);if(!Number.isFinite(laps))return '';
+  const I=x?.I||{},me=x?.me;let toEnd=NaN;if(x?.kind==='race'&&me){toEnd=I.maxLaps>0&&I.maxLaps<99999?I.maxLaps-me.laps:(I.rem>0&&lapT>0?Math.ceil(I.rem/lapT):NaN);}
+  const row=(lbl,T,cls)=>{const nf=c.fuel/T,nv=c.ve/T;const pf=Number.isFinite(lf)?(fA-nf)/fA*100:NaN,pv=Number.isFinite(lv)?(vA-nv)/vA*100:NaN;const need=Math.max(Number.isFinite(pf)?pf:-1e9,Number.isFinite(pv)?pv:-1e9);
+    return `<tr class="${cls||''}"><td>${lbl}</td><td>${Number.isFinite(lf)?`${fx(nf,2)} L <small>${pf>0?'−'+fx(fA-nf,2):'ok'}</small>`:'—'}</td><td>${Number.isFinite(lv)?`${fx(nv*100,2)}% <small>${pv>0?'−'+fx((vA-nv)*100,2):'ok'}</small>`:'—'}</td><td class="${need>12?'neg':need>6?'warn':''}">${need>0?fx(need,1)+'%':'—'}</td></tr>`;};
+  const base=Math.floor(laps+1e-6);const rows=[1,2,3].map(k=>row(`${base+k} ${tr('giri')} (+${k})`,base+k));
+  let end='';if(Number.isFinite(toEnd)&&toEnd>0){if(toEnd<=laps)end=`<p class="small pos" style="margin:6px 0 0">${tr('Arriviamo alla bandiera senza fermarci')} (${toEnd} ${tr('giri')}).</p>`;
+    else{const need=Math.max(Number.isFinite(lf)?(1-lf/toEnd)*100:0,Number.isFinite(lv)?(1-lv/toEnd)*100:0);if(need<=25)rows.push(row(`${tr('Alla bandiera')} (${toEnd})`,toEnd,'avg'));
+      end=`<p class="small ${need>12?'muted':'pos'}" style="margin:6px 0 0">${need>25?`${tr('Alla bandiera mancano')} ${toEnd} ${tr('giri: servono ancora soste.')}`:need>12?tr('Alla bandiera serve un\'altra sosta: risparmiare il')+` ${fx(need,0)}% `+tr('è troppo.'):tr('Alla bandiera si arriva risparmiando il')+` ${fx(need,1)}% `+tr('per giro.')}</p>`;}}
+  return `<div class="gwbox gwsave"><div class="gwh">${tr('Risparmio')}<span>${fx(laps,1)} ${tr('giri nel serbatoio')}</span></div><table class="gwtab"><thead><tr><th>${tr('Obiettivo')}</th><th>${tr('Benzina per giro')}</th><th>${tr('Energia per giro')}</th><th>${tr('Risparmio')}</th></tr></thead><tbody>${rows.join('')}</tbody></table>${end}
+    <p class="muted small" style="margin:6px 0 0">${tr('Consumo per giro da tenere per fare quei giri con quello che c\'è in auto (con il consumo medio degli ultimi giri). Fino al 5–6% si fa con lift & coast, oltre costa tempo.')}</p></div>`;}
+function gwOurs(c,stt,x){if(!c?.w)return `<div class="muted small">${tr('Nessun dato: l\'auto non è in pista.')}</div>`;
   const L=stt.laps.filter(l=>!l.pit&&l.n>1&&l.t>0).slice(-10);const cap=c.fuelCap>0?c.fuelCap:200;
   const fu=L.map(l=>l.fuel).filter(v=>v>0&&v<cap*0.3),vu=L.map(l=>l.ve).filter(v=>v>0&&v<0.3);
   const lapT=avg_(L.slice(-5).map(l=>l.t))||c.estL;const ratio=fu.length&&vu.length?avg_(fu)/(avg_(vu)*100):NaN;
   const hasVe=c.ve>=0&&(c.ve>0||vu.length);
   return `<div class="gw3">${gwTyres(c)}${gwCons(tr('Carburante'),c.fuel,fx(c.fuel,2)+' L',fu,lapT,u=>fx(u,2)+' L')}
-    ${hasVe?gwCons(tr('Energia virtuale'),c.ve,Math.round(c.ve*100)+'%',vu,lapT,u=>fx(u*100,2)+'%',Number.isFinite(ratio)?`<div class="gwrow"><span>${tr('Ratio carburante/EV')}</span><b>${fx(ratio,2)}</b></div>`:''):''}</div>`;}
+    ${hasVe?gwCons(tr('Energia virtuale'),c.ve,Math.round(c.ve*100)+'%',vu,lapT,u=>fx(u*100,2)+'%',Number.isFinite(ratio)?`<div class="gwrow"><span>${tr('Ratio carburante/EV')}</span><b>${fx(ratio,2)}</b></div>`:''):''}${gwSaver(c,fu,hasVe?vu:[],lapT,x)}</div>`;}
 // any other car: only the percentages the game gives for every car (no tyre wear for cars without our bridge)
 function gwOther(veh,r){const s=carStats(veh,r);const L=s.L;const fu=[],vu=[];
   for(let i=1;i<L.length;i++){const a=L[i-1],b=L[i];if(b[0]!==a[0]+1||a[3]||b[3])continue;const f=a[8]-b[8],v=a[9]-b[9];if(f>0&&f<0.3)fu.push(f);if(v>0&&v<0.3)vu.push(v);}
@@ -39,7 +51,7 @@ function gwOther(veh,r){const s=carStats(veh,r);const L=s.L;const fu=[],vu=[];
     const wx=v.querySelector('.lvsub[data-p="wx"]');if(wx)wx.insertAdjacentHTML('afterbegin',`<div class="panel"><div class="panel-h"><h3>${tr('Slick o wet?')}</h3><span class="muted small">${tr('tempi degli ultimi 4 minuti, auto della nostra classe')}</span></div><div id="lvCross"></div></div>`);
     const st=v.querySelector('.lvsub[data-p="str"]');if(st)st.insertAdjacentHTML('afterbegin',`<div class="panel"><div class="panel-h"><h3>${tr('Piloti e stint')}</h3><label class="f" style="min-width:170px">${tr('Stint massimo (min)')}<input type="number" id="lvStMax" min="0" step="5"></label></div><div id="lvStint"></div></div>`);
     const mx=$('#lvStMax');if(mx){mx.value=LS.get('live:stintMax','')||'';mx.onchange=()=>{LS.set('live:stintMax',+mx.value||'');renderLive(true);};}};
-  const gw=(id,x)=>{const el=$(id);if(el)el.innerHTML=gwOurs(x.c,x.stt);};
+  const gw=(id,x)=>{const el=$(id);if(el)el.innerHTML=gwOurs(x.c,x.stt,x);};
   const oc=lvCar;window.lvCar=lvCar=function(x){oc(x);try{gw('#lvGwCar',x);}catch(e){console.error(e);}};
   const oo=lvOverview;window.lvOverview=lvOverview=function(x){oo(x);try{gw('#lvGwOv',x);}catch(e){console.error(e);}};
   const ow=lvWeather;window.lvWeather=lvWeather=function(x){ow(x);try{lvCrossPanel(x);}catch(e){console.error(e);}};
