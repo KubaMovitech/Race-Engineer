@@ -1,17 +1,18 @@
 {
- "version": "2.0.7",
+ "version": "2.0.8",
  "date": "2026-10-11",
  "notes": [
-  "Risparmio: benzina ed energia per giro per fare 1, 2, 3 giri in più o arrivare alla bandiera.",
-  "Dottore setup: bilanciamento separato tra curve lente (meccanico) e veloci (aerodinamico).",
-  "Debrief automatico della sessione: setup, guida, stint e prossima uscita, offline."
+  "Risultati di gara: posizioni giro per giro e strategie a confronto per tutta la classe.",
+  "Pressioni e campanature: di quanti kPa cambiare a freddo per arrivare all'obiettivo a caldo.",
+  "Degrado gomme: tempo perso a giro, usura e ogni quanti giri cambiarle.",
+  "Storico setup: ogni uscita con il suo setup, le modifiche e il loro effetto."
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "a631e662cb5be5e3a7ac2ec39da32a37368f666368e5243ccfbc70647f3e7c02"
+  "sha256": "3f84d7a2954809d49f2157a1287393bd4fff3b26ab2f613ca125b86366d83c44"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "dcda07393e29d74c1f5da0f6fa64fbcf22d090cf52b4b6f78a21fe00e333b40a"
+  "sha256": "c0a74e590768b73ed6a06f553bbeb8aeb8c029f2610145d86144f2ca8a9a405a"
  }
 }
