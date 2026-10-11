@@ -733,3 +733,4 @@ body.dragging .drawer{outline:2px dashed var(--accent);outline-offset:-4px}
 .sushist{width:100%;height:74px;display:block;margin:6px 0}
 .susz{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;font-size:.72rem;color:var(--muted);text-align:center}.susz b{display:block;font:700 .95rem var(--f-mono);color:var(--ink)}
 .sushx{display:flex;justify-content:space-between;font-size:.68rem;color:var(--faint);margin:-2px 0 6px}
+.gwsave{grid-column:1/-1}.gwtab td small{color:var(--muted);font-size:.72rem;margin-left:4px}.gwtab td.warn{color:var(--warn)}

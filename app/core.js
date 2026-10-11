@@ -170,6 +170,8 @@ function balance(S,laps){
   const res={phases:{},counter:[],hasGrip:false,samples:0};
   const ph={entrata:{f:[],r:[],k:[]},centro:{f:[],r:[],k:[]},uscita:{f:[],r:[],k:[]}};
   const spd={lente:{f:[],r:[]},veloci:{f:[],r:[]}};
+  // steering per neutral-steer demand by corner speed: slow corners show the mechanical balance, fast ones the aero balance
+  const kSp={lente:[],medie:[],veloci:[]};
   let sgn=0;
   for(const lap of laps){
     const g=lapGrid(S,lap,2),v=g.get('Ground Speed'),br=g.get('Brake Pos'),th=g.get('Throttle Pos'),st=g.get('Steering'),gl=g.get('G Force Lat'),yaw=g.get('Local Rotation Y');
@@ -182,7 +184,7 @@ function balance(S,laps){
       if(v[i]<45||Math.abs(gl[i])<0.5)continue;
       const phase=br&&br[i]>5?'entrata':(th&&th[i]>=40?'uscita':'centro');
       const vv=v[i]/3.6,ay=Math.abs(gl[i])*9.81,k=Math.abs(st[i])/(ay/(vv*vv)); // steering per neutral-steer demand
-      ph[phase].k.push(k);
+      ph[phase].k.push(k);if(phase!=='entrata')kSp[v[i]<120?'lente':v[i]<180?'medie':'veloci'].push(k);
       if(hasGrip){const f=(gff[0][i]+gff[1][i])/2,r=(gfr[0][i]+gfr[1][i])/2;ph[phase].f.push(f);ph[phase].r.push(r);const b=v[i]<140?'lente':'veloci';spd[b].f.push(f);spd[b].r.push(r);}
       res.samples++;
     }
@@ -199,6 +201,7 @@ function balance(S,laps){
   const allK=[...ph.entrata.k,...ph.centro.k,...ph.uscita.k],kMed=median(allK);
   for(const [p,x] of Object.entries(ph)){res.phases[p]={n:x.k.length,steerIdx:x.k.length?median(x.k)/kMed:NaN,front:mean(x.f),rear:mean(x.r)};}
   res.speed={};for(const [b,x] of Object.entries(spd))res.speed[b]={front:mean(x.f),rear:mean(x.r),n:x.f.length};
+  res.speedIdx={};for(const [b,x] of Object.entries(kSp))res.speedIdx[b]={n:x.length,idx:x.length>=40?median(x)/kMed:NaN};
   return res;
 }
 
