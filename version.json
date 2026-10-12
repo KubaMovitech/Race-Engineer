@@ -2,19 +2,20 @@
  "version": "2.1.2",
  "date": "2026-10-12",
  "notes": [
-  "Generatore di setup tarato sui setup veri (sigle pista, versione più nuova, R prima di Endu)",
+  "Generatore di setup tarato su 3559 setup veri (GO, HYMO, TRT)",
+  "Tutte le piste riconosciute, anche Daytona e Laguna Seca",
   "Pioggia e qualifica imparate dalla libreria",
+  "Stile del setup: veloce, facile o endurance",
   "Scelta del setup di partenza",
-  "Nuove piste: Long Beach, Road Atlanta, Barcellona",
   "MoTeC: angoli in gradi, campanatura coerente",
   "Salva nel gioco: cartelle Lemans e Longbeach"
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "bb972653347f0fa4e52ea20a7b29b53f226cacdb2b8bf43fee4bc9f461a03d81"
+  "sha256": "710ff6f547921674d077d569f0cb59db5122a7a223b32f06e345d3f30e7d98b7"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "3766e11b8fd7b8ce698efb313047db843696d1b4d3b0f25b38cd2bfbe492fc82"
+  "sha256": "fcd5d1dabbe465bc271a7ea411a98083f6726018c27cd94ea97785560edf29af"
  }
 }
