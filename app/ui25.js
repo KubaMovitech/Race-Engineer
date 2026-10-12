@@ -42,7 +42,7 @@ function gwDamage(stt,c){const Dp=(stt.Ds||[]).filter(D=>D.pit).sort((a,b)=>(b.p
   return `<div class="gwbox"><div class="gwh">${tr('Danni e freni')}<span>${rep>0?`${tr('riparazione')} ${fx(rep,1)} s`:''}</span></div>
     ${Number.isFinite(w.aero)?`<div class="gwrow"><span>${tr('Aerodinamica')}</span><b class="${w.aero>0.02?'neg':''}">${w.aero>0.005?tr('danno')+' '+pc(w.aero):tr('integra')}</b></div>`:''}
     ${w.suspension?`<div class="gwrow"><span>${tr('Sospensioni')}</span><b>${w.suspension.map((v,i)=>`<span class="${v>0.02?'neg':''}" title="${esc(tr(WN[i]))}">${pc(v)}</span>`).join(' · ')}</b></div>`:''}
-    ${w.brakes?`<table class="gwtab"><thead><tr><th>${tr('Freni')}</th><th>${tr('Usati')}</th><th>${tr('Per giro')}</th><th>${tr('Giri al 90%')}</th></tr></thead><tbody>${w.brakes.map((b,i)=>`<tr><td>${tr(WN[i])}</td><td class="${col(b)}">${pc(b)}</td><td>${B?fx(B[i].rate*100,2)+'%':'—'}</td><td class="${B&&B[i].laps<20?'neg':''}">${B?(Number.isFinite(B[i].laps)?Math.max(0,Math.floor(B[i].laps)):'∞'):'—'}</td></tr>`).join('')}</tbody></table>`:''}
+    ${w.brakes?`<table class="gwtab"><thead><tr><th>${tr('Freni')}</th><th>${tr('Usati')}</th><th>${tr('Per giro')}</th><th>${tr('Giri al 90%')}</th></tr></thead><tbody>${w.brakes.map((b,i)=>`<tr><td>${tr(WN[i])}</td><td class="${col(b)}">${pc(b)}</td><td>${B&&B[i].rate>0?fx(B[i].rate*100,2)+'%':'—'}</td><td class="${B&&B[i].laps<20?'neg':''}">${B&&B[i].rate>0?Math.max(0,Math.floor(B[i].laps)):'—'}</td></tr>`).join('')}</tbody></table>`:''}
     ${B?'':`<p class="muted small" style="margin:6px 0 0">${tr('I giri che durano i freni compaiono dopo 3 giri.')}</p>`}</div>`;}
 
 // ---------- track clock: in-game time, time scale, sunset / sunrise ----------
