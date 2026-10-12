@@ -1,17 +1,21 @@
 {
- "version": "2.1.1",
+ "version": "2.1.2",
  "date": "2026-10-12",
  "notes": [
-  "Avvisi più tranquilli: a comparsa solo noi e i rivali, il resto nella campanella.",
-  "Panoramica riordinata, pagina iniziale nuova, Setup più pulito senza telemetria.",
-  "Spiegazioni lunghe sotto la «i» di ogni pannello."
+  "Generatore di setup tarato su oltre 4400 setup veri (GO, HYMO, TRT, bA)",
+  "Tutte le piste riconosciute, anche Daytona e Laguna Seca",
+  "Pioggia e qualifica imparate dalla libreria",
+  "Stile del setup: veloce, facile o endurance",
+  "Scelta del setup di partenza",
+  "MoTeC: angoli in gradi, campanatura coerente",
+  "Salva nel gioco: cartelle Lemans e Longbeach"
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "a5be759f57ff7d68218a607977ed19ea582ab791d8f024618a749ac7b19cd4a9"
+  "sha256": "ccb91f063bd215c999340a070c380b37264fbcbd97a9f165f3c08e2bd82c00ee"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "96de87a3fdfecd25e9414c6c4a1e54ffd671f2b44d56d62692d43bb783637b61"
+  "sha256": "8d9aa4ec394da4bb4163536e7ded05a488cf3590069cc065fcfd2b1d066780bf"
  }
 }
