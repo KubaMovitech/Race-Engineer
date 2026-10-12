@@ -83,17 +83,19 @@ function liveNotify(kind,veh,d){const mode=LS.get('live:notif','class');if(mode=
   if(kind==='swap'){k='warn';t=tr('Cambio pilota');s=`${esc(d.from)} → <b>${esc(d.to)}</b> · ${esc(veh)}`;}
   else if(kind==='pit'){k='info';t=tr('Sosta ai box')+(r?` · P${r.pos}`:'');s=`${who}<br>${tr('fermo')} <b>${fx(d.stop,1)} s</b> · ${tr('corsia')} ${fx(d.lane,0)} s${d.fuel>0.01?` · +${Math.round(d.fuel*100)}% ${tr('benzina')}`:''}${d.ve>0.01?` · +${Math.round(d.ve*100)}% VE`:''}${d.tyres?` · ${d.tyres} ${tr('gomme')} ${compHTML(d.c1)}`:''}${d.d0&&d.d1&&d.d0!==d.d1?` · ${tr('cambio pilota')}`:''}`;}
   else if(kind==='pen'){k='bad';t=tr('Penalità');s=esc(d.txt);}
-  NOTIF.unshift({k,t,s,veh,at:Date.now()});if(NOTIF.length>30)NOTIF.pop();
+  NOTIF.unshift({k,t,s,veh,at:Date.now()});if(NOTIF.length>50)NOTIF.pop();if(window.bellUpdate)bellUpdate();
+  // only our car and the rivals pop up; the rest of the class goes to the list under the bell
+  if(mode!=='all'&&veh&&veh!==LIVE.focus&&!riv.includes(veh))return;
   let box=$('#lvToasts');if(!box){box=document.createElement('div');box.id='lvToasts';document.body.appendChild(box);}
   const el=document.createElement('div');el.className='lvtoast '+k;el.innerHTML=`<b>${t}</b><div>${s}</div>`;if(veh)el.onclick=()=>openCarModal(veh);box.prepend(el);
-  while(box.children.length>4)box.lastChild.remove();setTimeout(()=>{el.classList.add('out');setTimeout(()=>el.remove(),400);},9000);}
+  while(box.children.length>3)box.lastChild.remove();setTimeout(()=>{el.classList.add('out');setTimeout(()=>el.remove(),400);},6000);}
 
 // ---------- skeleton ----------
 function liveSkeleton(){const v=$('#v-live');if(v.dataset.ok)return;v.dataset.ok=1;const sub=LS.get('live:sub','ov');
   v.innerHTML=`<div class="panel lvtop"><div class="panel-h lvhdr"><h2>Muretto</h2><span id="lvBadge" class="sesbadge"></span><span id="lvStat" class="lvstat"></span><span class="sp"></span>
       <label class="f lvsel" style="min-width:180px">Sorgente<select id="lvSrc"></select></label><label class="f lvsel" style="min-width:230px">Nostra auto<select id="lvCar"></select></label>
       <div class="lvbtns"><button class="btn" type="button" id="lvDeb">Debrief</button><details class="menu"><summary class="btn">Squadra ▾</summary><div class="menu-list"><button type="button" id="lvNew">Crea squadra</button><button type="button" id="lvJoin">Entra con codice</button><button type="button" id="lvCode">Codice squadra</button><button type="button" id="lvSave">Salva dati</button>
-        <label class="f">Avvisi a comparsa<select id="lvNotif"><option value="class">Mia classe e rivali</option><option value="all">Tutte le auto</option><option value="rivals">Solo rivali</option><option value="off">Spenti</option></select></label><div id="lvTeam" class="lvteam"></div></div></details></div></div>
+        <label class="f">Avvisi a comparsa<select id="lvNotif"><option value="class">Noi e rivali (la classe nella campanella)</option><option value="all">Tutte le auto</option><option value="rivals">Solo rivali</option><option value="off">Spenti</option></select></label><div id="lvTeam" class="lvteam"></div></div></details></div></div>
     <div id="lvHelp"></div><div id="lvSess" class="lvsess"></div>
     <nav class="lvtabs" role="tablist">${LV_SUBS.map(([k,l])=>`<button type="button" role="tab" data-sub="${k}" aria-selected="${k===sub}">${l}</button>`).join('')}</nav></div>
   <div id="lvAlerts"></div>

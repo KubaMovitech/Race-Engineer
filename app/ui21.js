@@ -97,10 +97,10 @@ function lvStintPanel(x){const el=$('#lvStint');if(!el)return;const S=stintData(
 
 // ---------- alerts: weather, slick/wet, driver change (once each, also when another tab of the Muretto is open) ----------
 function lvAlert(key,k,t,s){if(LS.get('live:notif','class')==='off'||LIVE.rec)return;if(NOTIF_SEEN.has(key))return;NOTIF_SEEN.set(key,Date.now());
-  NOTIF.unshift({k,t,s,at:Date.now()});if(NOTIF.length>30)NOTIF.pop();
+  NOTIF.unshift({k,t,s,at:Date.now()});if(NOTIF.length>50)NOTIF.pop();if(window.bellUpdate)bellUpdate();
   let box=$('#lvToasts');if(!box){box=document.createElement('div');box.id='lvToasts';document.body.appendChild(box);}
   const el=document.createElement('div');el.className='lvtoast '+k;el.innerHTML=`<b>${t}</b><div>${s}</div>`;box.prepend(el);
-  while(box.children.length>4)box.lastChild.remove();setTimeout(()=>{el.classList.add('out');setTimeout(()=>el.remove(),400);},12000);}
+  while(box.children.length>3)box.lastChild.remove();setTimeout(()=>{el.classList.add('out');setTimeout(()=>el.remove(),400);},8000);}
 function liveWatch(){const sc=LIVE.sc;if(!sc||LIVE.rec||Date.now()-LIVE.scAt>15000)return;const I=sc.i||{};const ses=liveSes(sc);const A=LIVE.wxA&&LIVE.wxA.ses===ses?LIVE.wxA:(LIVE.wxA={ses,rain:I.rain||0,wet:I.wavg||0});
   const k=s=>ses+'|'+s;
   // rain starts / stops
