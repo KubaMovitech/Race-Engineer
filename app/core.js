@@ -1,5 +1,5 @@
 // ================= CORE: parsing + analysis =================
-const UNIT_GUESS=[[/Speed$|Straight Speed|Corner Speed/,'km/h'],[/Pos(\sFiltered)?$|Bias|Wear|Grip Fract|Charge Level|Brake Pressure/,'%'],[/Temp/,'°C'],[/Pressure|Boost/,'kPa'],[/Height|Susp Pos|3rd Pos|Deflection/,'mm'],[/RPM/,'rpm'],[/G Force/,'G'],[/Fuel Level/,'l'],[/Load|Force|Downforce|Drag/,'N'],[/Distance|Lateral|Edge/,'m'],[/Torque/,'N·m'],[/Time|Laptime|Sector|Delta/,'s']];
+const UNIT_GUESS=[[/3rd Pos$/,'mm'],[/^(Camber|Toe) [FR][LR]$|^Body (Pitch|Roll)$/,'°'],[/Speed$|Straight Speed|Corner Speed/,'km/h'],[/Pos(\sFiltered)?$|Bias|Wear|Grip Fract|Charge Level|Brake Pressure/,'%'],[/Temp/,'°C'],[/Pressure|Boost/,'kPa'],[/Height|Susp Pos|3rd Pos|Deflection/,'mm'],[/RPM/,'rpm'],[/G Force/,'G'],[/Fuel Level/,'l'],[/Load|Force|Downforce|Drag/,'N'],[/Distance|Lateral|Edge/,'m'],[/Torque/,'N·m'],[/Time|Laptime|Sector|Delta/,'s']];
 function guessUnit(n){for(const [re,u] of UNIT_GUESS) if(re.test(n)) return u; return '';}
 function f16(h){const s=(h&0x8000)?-1:1,e=(h>>10)&0x1f,m=h&0x3ff;if(e===0)return s*Math.pow(2,-14)*(m/1024);if(e===31)return m?NaN:s*Infinity;return s*Math.pow(2,e-15)*(1+m/1024);}
 
@@ -21,7 +21,9 @@ function parseLD(buf){
         if(dta!==7&&dp%size===0){const A=size===1?new Int8Array(buf,dp,n):size===2?new Int16Array(buf,dp,n):new Int32Array(buf,dp,n);for(let i=0;i<n;i++)v[i]=A[i]*k+sh;return v;}
         for(let i=0,o=dp;i<n;i++,o+=size){if(dta===7){v[i]=size===4?dv.getFloat32(o,true):f16(dv.getUint16(o,true));}else{const r=size===1?dv.getInt8(o):size===2?dv.getInt16(o,true):dv.getInt32(o,true);v[i]=r*k+sh;}}
         return v;};
-      const c={f:f||1,u:unit||guessUnit(name),n,_v:null};Object.defineProperty(c,'v',{get(){return this._v||(this._v=decode());}});
+      // LMU writes camber, toe, pitch and roll in radians and no unit: shown in degrees
+      const rad=!unit&&/^(Camber|Toe) [FR][LR]$|^Body (Pitch|Roll)$/.test(name);
+      const c={f:f||1,u:unit||guessUnit(name),n,_v:null};Object.defineProperty(c,'v',{get(){if(!this._v){this._v=decode();if(rad)for(let i=0;i<this._v.length;i++)this._v[i]*=180/Math.PI;}return this._v;}});
       ch[name]=c;
     }
     if(next===p)break;p=next;

@@ -6,14 +6,16 @@
 const SETLIB=[];
 const LIB_TRACKS=[['lemans','Le Mans',/sarthe|le ?mans|lemans|\b(lms|lem)\b/i,'veloce'],['monza','Monza',/monza|\b(mon|mnz)\b/i,'veloce'],['spa','Spa',/spa|francorchamps/i,'medio'],['bahrain','Bahrain',/bahrain|sakhir|\b(bah|bhr)\b/i,'medio'],
   ['qatar','Qatar',/qatar|lusail|losail|\bqat\b/i,'medio'],['fuji','Fuji',/fuji|\bfuj\b/i,'medio'],['cota','COTA',/americas|\bcota\b|austin/i,'medio'],['interlagos','Interlagos',/interlagos|paulo/i,'medio'],
-  ['silverstone','Silverstone',/silverstone|\bsil\b/i,'medio'],['ricard','Paul Ricard',/ricard|castellet/i,'medio'],['imola','Imola',/imola|enzo|\bimo\b/i,'lento'],['portimao','Portimão',/portim|algarve|\balg\b/i,'lento'],['sebring','Sebring',/sebring|\bseb\b/i,'lento']];
+  ['silverstone','Silverstone',/silverstone|\bsil\b/i,'medio'],['ricard','Paul Ricard',/ricard|castellet/i,'medio'],['imola','Imola',/imola|enzo|\bimo\b/i,'lento'],['portimao','Portimão',/portim|algarve|\balg\b/i,'lento'],['longbeach','Long Beach',/long ?beach|\blb\b/i,'lento'],['atlanta','Road Atlanta',/atlanta|petit|\bratl\b/i,'medio'],['barcelona','Barcellona',/barcelon|catalunya|\bbcn\b/i,'medio'],['sebring','Sebring',/sebring|\b(seb|sbr)\b/i,'lento']];
+// the same car comes with one class name per livery and season ("... Hypercar WEC2025", "... WEC2026"): one car for the library
+const libCar=c=>String(c||'').trim().replace(/\s*\b(WEC|ELMS|IMSA|LMGT3|GT3)?\s*(19|20)\d\d\s*$/i,'').trim();
 const libTrack=s=>LIB_TRACKS.find(t=>t[2].test(s||''))||null;
 const libType=s=>/wet|rain|pioggia|bagnato/i.test(s)?'wet':/(^|[^a-z])(q|qualy?|quali|qualifying|qualifica)([^a-z]|$)/i.test(s)?'q':'race';
 const LIB_TYPE_N={race:'Gara',q:'Qualifica',wet:'Pioggia'};
 const libNum=d=>{const m=String(d||'').match(/-?\d+(?:[.,]\d+)?/);return m?parseFloat(m[0].replace(',','.')):NaN;};
 
 function libAdd(name,buf){const text=new TextDecoder('latin1').decode(buf);const su=parseSVM(text,name.replace(/^lib\//,''));
-  const path=name.replace(/^lib\//,'');const tk=libTrack(path);const e={id:name,name:path.split('/').pop().replace(/\.svm$/i,''),path,text,su,car:(su.car||'').trim(),track:tk?tk[0]:'',type:libType(path.split('/').pop())};
+  const path=name.replace(/^lib\//,'');const tk=libTrack(path);const e={id:name,name:path.split('/').pop().replace(/\.svm$/i,''),path,text,su,car:libCar(su.car),carFull:(su.car||'').trim(),track:tk?tk[0]:'',type:libType(path.split('/').pop())};
   const i=SETLIB.findIndex(x=>x.id===name);if(i>=0)SETLIB[i]=e;else SETLIB.push(e);LIBLEARN=null;return e;}
 // library files are stored with a "lib/" prefix: they go to the library, not to the File panel
 (function(){const af=addFile;window.addFile=addFile=async function(name,buf,o={}){if(/^lib\//.test(name)){const e=libAdd(name,/\.gz$/i.test(name)?await gunzip(buf):buf);if(o.persist)IDB.put({name,buf,added:Date.now()});return e;}return af(name,buf,o);};})();
@@ -33,19 +35,18 @@ function libLearn(){if(LIBLEARN)return LIBLEARN;const L={};
   return LIBLEARN=L;}
 
 // the base: same car and track and type, else same track, else a track of the same kind
-function libBase(car,track,type){const C=SETLIB.filter(e=>e.car===car);if(!C.length)return null;const g=(LIB_TRACKS.find(t=>t[0]===track)||[])[3];
-  const score=e=>(e.track===track?100:g&&(LIB_TRACKS.find(t=>t[0]===e.track)||[])[3]===g?40:0)+(e.type===type?20:type==='q'&&e.type==='race'?8:0)+(/(^|\s)(go|pro|base)/i.test(e.name)?1:0);
+function libBase(car,track,type){if(!SETLIB.some(e=>e.car===car))return null;
   return libRank(car,track,type)[0];}
 const libVer=n=>{const m=String(n).match(/\bv?(\d+)\.(\d+)(?:\.(\d+))?/i);return m?(+m[1])*1e4+(+m[2])*100+(+m[3]||0):0;};
 function libRank(car,track,type){const C=SETLIB.filter(e=>e.car===car);const g=(LIB_TRACKS.find(t=>t[0]===track)||[])[3];
-  const score=e=>(e.track===track?100:g&&(LIB_TRACKS.find(t=>t[0]===e.track)||[])[3]===g?40:0)+(e.type===type?20:type==='q'&&e.type==='race'?8:0)+(/(^|\s)(go|pro|base)/i.test(e.name)?1:0);
+  const score=e=>(e.track===track?100:g&&(LIB_TRACKS.find(t=>t[0]===e.track)||[])[3]===g?40:0)+(e.type===type?20:type==='q'&&e.type==='race'?8:0)+(/(^|\s)(go|pro|base)/i.test(e.name)?1:0)+(type==='race'&&/(^|\s)(r|race|gara)(\s|$)/i.test(e.name)?0.5:0);
   return [...C].sort((a,b)=>score(b)-score(a)||libVer(b.name)-libVer(a.name)||a.name.localeCompare(b.name));}
 
 // what changes between a race setup and a rain (or qualifying) one, learned from the pairs in the library:
 // each rain setup is paired with the closest race setup of the same car and track, the clicks in between are kept
 function libDelta(car,from,to){const C=SETLIB.filter(e=>e.car===car);const idx=e=>{const m=new Map();Object.entries(e.su.sec).forEach(([sec,it])=>it.forEach(x=>{const i=parseInt(x.raw,10);if(Number.isFinite(i)&&!/N\/A|Non-adjustable/i.test(x.disp))m.set(sec+'|'+x.key,i);}));return m;};
   const per=new Map();let pairs=0;
-  C.filter(e=>e.type===to&&e.track).forEach(w=>{const W=idx(w);let best=null,bd=1e9;C.filter(e=>e.type===from&&e.track===w.track).forEach(d=>{const D=idx(d);let s=0;W.forEach((v,k)=>{if(D.has(k))s+=Math.abs(v-D.get(k));});if(s<bd){bd=s;best=D;}});
+  C.filter(e=>e.type===to&&e.track).forEach(w=>{const W=idx(w);let best=null,bd=1e9;const cand=C.filter(e=>e.type===from&&e.track===w.track),sameV=cand.filter(e=>libVer(e.name)===libVer(w.name));(sameV.length?sameV:cand).forEach(d=>{const D=idx(d);let s=0;W.forEach((v,k)=>{if(D.has(k))s+=Math.abs(v-D.get(k));});if(s<bd){bd=s;best=D;}});
     if(!best)return;pairs++;W.forEach((v,k)=>{if(!best.has(k))return;(per.get(k)||per.set(k,[]).get(k)).push(v-best.get(k));});});
   const out=new Map();per.forEach((a,k)=>{const s=[...a].sort((x,y)=>x-y);const med=s[Math.floor(s.length/2)];if(med&&a.length>=Math.ceil(pairs/2))out.set(k,med);});return {pairs,d:out};}
 
@@ -89,7 +90,7 @@ function genText(G,title){let sec='';const by=new Map(G.changes.map(c=>[c.sec+'|
 
 function renderGen(){const el=$('#genBody');if(!el)return;const L=libLearn();const cars=Object.keys(L).filter(Boolean).sort();
   const S=active()?.S;const curCar=S&&cars.find(c=>{const a=(S.meta.car||'').toLowerCase();return a&&(c.toLowerCase().includes(a)||a.split(/\s+/).some(t=>t.length>3&&c.toLowerCase().includes(t)));});
-  const st=LS.get('gen:ui',{});const car=cars.includes(st.car)?st.car:curCar||cars[0]||'';const track=st.track||(S?libTrack(S.meta.venue)?.[0]:'')||'fuji';const type=st.type||'race';const prefs=st.prefs||{};
+  const st=LS.get('gen:ui',{});const car=cars.includes(st.car)?st.car:curCar||[...cars].sort((a,b)=>L[b].n-L[a].n)[0]||'';const track=st.track||(S?libTrack(S.meta.venue)?.[0]:'')||'fuji';const type=st.type||'race';const prefs=st.prefs||{};
   const counts=cars.map(c=>`${esc(c)} (${L[c].n})`).join(' · ');
   let h=`<div class="row" style="gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:10px"><button class="btn" type="button" id="genDir">${tr('Importa una cartella di setup')}</button><button class="btn" type="button" id="genAdd">${tr('Aggiungi file .svm')}</button>
     <input type="file" id="genFiles" multiple accept=".svm" hidden><span class="muted small">${SETLIB.length} ${tr('setup in libreria')}${counts?': '+counts:''}</span>${SETLIB.length?`<button class="btn" type="button" id="genClear" style="margin-left:auto">${tr('Svuota libreria')}</button>`:''}</div>`;

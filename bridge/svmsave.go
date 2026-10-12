@@ -55,6 +55,9 @@ func trackFolder(base, track string) (string, []string, error) {
 			want[w] = true
 		}
 	}
+	// LMU folders are often written without spaces ("Lemans", "Longbeach"): compare the letters too
+	compact := func(s string) string { return strings.Join(wordRe.FindAllString(strings.ToLower(s), -1), "") }
+	tc := compact(track)
 	best, bestN := "", 0
 	var all []string
 	for _, e := range ents {
@@ -63,6 +66,9 @@ func trackFolder(base, track string) (string, []string, error) {
 		}
 		all = append(all, e.Name())
 		n := 0
+		if ec := compact(e.Name()); tc != "" && ec != "" && (strings.Contains(ec, tc) || strings.Contains(tc, ec)) {
+			n += 10
+		}
 		for _, w := range wordRe.FindAllString(strings.ToLower(e.Name()), -1) {
 			if want[w] {
 				n++

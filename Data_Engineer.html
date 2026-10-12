@@ -1012,7 +1012,7 @@ body:not(.vwide) #lvToasts{display:none}
   <div class="row" style="margin-top:12px"><button class="btn primary" type="button" id="lvMake">Crea codice squadra</button></div></div></div>
 <script>
 // ================= CORE: parsing + analysis =================
-const UNIT_GUESS=[[/Speed$|Straight Speed|Corner Speed/,'km/h'],[/Pos(\sFiltered)?$|Bias|Wear|Grip Fract|Charge Level|Brake Pressure/,'%'],[/Temp/,'°C'],[/Pressure|Boost/,'kPa'],[/Height|Susp Pos|3rd Pos|Deflection/,'mm'],[/RPM/,'rpm'],[/G Force/,'G'],[/Fuel Level/,'l'],[/Load|Force|Downforce|Drag/,'N'],[/Distance|Lateral|Edge/,'m'],[/Torque/,'N·m'],[/Time|Laptime|Sector|Delta/,'s']];
+const UNIT_GUESS=[[/3rd Pos$/,'mm'],[/^(Camber|Toe) [FR][LR]$|^Body (Pitch|Roll)$/,'°'],[/Speed$|Straight Speed|Corner Speed/,'km/h'],[/Pos(\sFiltered)?$|Bias|Wear|Grip Fract|Charge Level|Brake Pressure/,'%'],[/Temp/,'°C'],[/Pressure|Boost/,'kPa'],[/Height|Susp Pos|3rd Pos|Deflection/,'mm'],[/RPM/,'rpm'],[/G Force/,'G'],[/Fuel Level/,'l'],[/Load|Force|Downforce|Drag/,'N'],[/Distance|Lateral|Edge/,'m'],[/Torque/,'N·m'],[/Time|Laptime|Sector|Delta/,'s']];
 function guessUnit(n){for(const [re,u] of UNIT_GUESS) if(re.test(n)) return u; return '';}
 function f16(h){const s=(h&0x8000)?-1:1,e=(h>>10)&0x1f,m=h&0x3ff;if(e===0)return s*Math.pow(2,-14)*(m/1024);if(e===31)return m?NaN:s*Infinity;return s*Math.pow(2,e-15)*(1+m/1024);}
 
@@ -1034,7 +1034,9 @@ function parseLD(buf){
         if(dta!==7&&dp%size===0){const A=size===1?new Int8Array(buf,dp,n):size===2?new Int16Array(buf,dp,n):new Int32Array(buf,dp,n);for(let i=0;i<n;i++)v[i]=A[i]*k+sh;return v;}
         for(let i=0,o=dp;i<n;i++,o+=size){if(dta===7){v[i]=size===4?dv.getFloat32(o,true):f16(dv.getUint16(o,true));}else{const r=size===1?dv.getInt8(o):size===2?dv.getInt16(o,true):dv.getInt32(o,true);v[i]=r*k+sh;}}
         return v;};
-      const c={f:f||1,u:unit||guessUnit(name),n,_v:null};Object.defineProperty(c,'v',{get(){return this._v||(this._v=decode());}});
+      // LMU writes camber, toe, pitch and roll in radians and no unit: shown in degrees
+      const rad=!unit&&/^(Camber|Toe) [FR][LR]$|^Body (Pitch|Roll)$/.test(name);
+      const c={f:f||1,u:unit||guessUnit(name),n,_v:null};Object.defineProperty(c,'v',{get(){if(!this._v){this._v=decode();if(rad)for(let i=0;i<this._v.length;i++)this._v[i]*=180/Math.PI;}return this._v;}});
       ch[name]=c;
     }
     if(next===p)break;p=next;
@@ -4422,7 +4424,7 @@ const AI_LANG=()=>LANG==='en'?'\n\nIMPORTANT: write your whole answer in English
 const APP_VERSION='2.1.2';
 const DEFAULT_UPD='https://raw.githubusercontent.com/KubaMovitech/Race-Engineer/main/';   // update channel (folder with version.json), set when the team repository exists
 const CHANGELOG=[
-{v:'2.1.2',d:'12/10/2026',items:['Generatore di setup tarato sui setup veri: riconosce le sigle delle piste nei nomi (MON, LMS, SEB…) e sceglie la versione più nuova del setup.','Pioggia e qualifica imparate dalla libreria: se hai la coppia gara/pioggia di un setup shop, il generatore applica le stesse differenze (ala, assetto, differenziale, freni, TC).','Puoi scegliere tu il setup di partenza del generatore (es. Esport o Safe).']},
+{v:'2.1.2',d:'12/10/2026',items:['Generatore di setup tarato sui setup veri: riconosce le sigle delle piste nei nomi (MON, LMS, SEB…) e sceglie la versione più nuova del setup.','Pioggia e qualifica imparate dalla libreria: se hai la coppia gara/pioggia di un setup shop, il generatore applica le stesse differenze (ala, assetto, differenziale, freni, TC).','Puoi scegliere tu il setup di partenza del generatore (es. Esport o Safe).','Nuove piste nella libreria: Long Beach, Road Atlanta, Barcellona. La stessa auto con livree diverse (WEC2025/WEC2026) è una sola auto.','MoTeC: campanatura, convergenza, beccheggio e rollio in gradi (LMU li scrive in radianti); posizione del 3° elemento in mm.','Campanatura: la tabella pressioni e il dottore ora danno lo stesso giudizio.','«Salva nel gioco» trova anche le cartelle senza spazi (Lemans, Longbeach).']},
 {v:'2.1.1',d:'12/10/2026',items:['Avvisi più tranquilli: a comparsa solo la nostra auto e i rivali, più piccoli, solo nel Muretto; tutti gli altri nella campanella in alto nel Muretto.','Panoramica in ordine: prima auto, distacchi, passo e mappa, poi traffico, condizioni e i dettagli di gomme e consumi.','Pagina iniziale con le tre cose che puoi fare: analizzare una sessione, aprire il Muretto, lavorare sul setup.','Setup senza telemetria più pulito: restano generatore, libreria e dottore; il resto compare quando apri una telemetria.','Le spiegazioni lunghe stanno sotto la «i» nel titolo di ogni pannello.']},
 {v:'2.1.0',d:'11/10/2026',items:['Setup › Generatore di setup: importa la tua libreria di setup (anche una cartella intera), scegli auto, pista e gara / qualifica / pioggia, dici cosa vuoi (più stabile in frenata, più rotazione, più trazione, più velocità, più morbida sui cordoli, meno consumo gomme) e il generatore crea il nuovo .svm partendo dal setup migliore della libreria, senza mai uscire dai valori visti per quell\'auto.','Con Data Engineer aperto e LMU acceso il nuovo setup viene salvato direttamente nella cartella della pista: lo trovi nel garage.','I setup della libreria restano solo sul tuo PC.']},
 {v:'2.0.9',d:'11/10/2026',items:['Strategia › Arrivo previsto: ordine della nostra classe alla bandiera, giri, soste ancora da fare e chi arriva senza fermarsi.','Panoramica › Traffico: auto delle classi più veloci dietro di noi e più lente davanti, con avviso sotto i 3 secondi.','Danni e freni: integrità di aerodinamica e sospensioni, usura dei freni e quanti giri durano ancora.','Meteo › Luce e orario: ora in pista, velocità del tempo, alba e tramonto stimati con avviso 10 minuti prima, ora in pista alla fine.']},
@@ -5545,12 +5547,12 @@ function tyreFix(D,S){const T=D?.raw?.T;if(!T)return null;const c=cfg();const pm
   return W.map(w=>{const x=T[w];const th=Number.isFinite(x.carc)?x.carc:mean([x.I,x.C,x.O]);const dHot=tgt-x.p;const dCold=dHot*(air+273.15)/(th+273.15);
     const now=setupVal(su,'PressureSetting',SEC_OF[w]);const nowN=now?parseFloat(String(now).replace(',','.')):NaN;
     const io_=x.I-x.O,ioT=Number.isFinite(io)&&Number.isFinite(iomax)?(io+iomax)/2:NaN;
-    return {w,pHot:x.p,th,tgt,dCold,now,nowN,io:io_,ioT,dIO:io_-ioT,cam:setupVal(su,'CamberSetting',SEC_OF[w])};});}
+    return {w,pHot:x.p,th,tgt,dCold,now,nowN,io:io_,ioT,dIO:!Number.isFinite(ioT)?NaN:io_<io-1?io_-io:io_>iomax+1?io_-iomax:0,cam:setupVal(su,'CamberSetting',SEC_OF[w])};});}
 function tyreFixHTML(D,S){const F=tyreFix(D,S);if(!F)return `<div class="empty">${tr('Scegli una telemetria .ld in alto.')}</div>`;const hasT=F.some(f=>Number.isFinite(f.tgt));
-  const rows=F.map(f=>{const ok=Math.abs(f.dCold)<0.5;const camTxt=!Number.isFinite(f.dIO)?'—':Math.abs(f.dIO)<2?`<span class="pos">ok</span>`:f.dIO>0?`${tr('meno negativa')} <small>(${fx(f.dIO,1)} °C ${tr('in più all\'interno')})</small>`:`${tr('più negativa')} <small>(${fx(-f.dIO,1)} °C ${tr('in più all\'esterno')})</small>`;
+  const rows=F.map(f=>{const ok=Math.abs(f.dCold)<0.5;const camTxt=!Number.isFinite(f.dIO)?'—':!f.dIO?`<span class="pos">ok</span>`:f.dIO>0?`${tr('meno negativa')} <small>(${fx(f.dIO,1)} °C ${tr('in più all\'interno')})</small>`:`${tr('più negativa')} <small>(${fx(-f.dIO,1)} °C ${tr('in più all\'esterno')})</small>`;
     return `<tr><td class="l"><b>${tr(WN[W.indexOf(f.w)])}</b></td><td>${fx(f.pHot,1)} kPa</td><td>${Number.isFinite(f.tgt)?fx(f.tgt,1)+' kPa':'—'}</td>
       <td class="${ok?'pos':''}"><b>${!Number.isFinite(f.dCold)?'—':ok?'ok':(f.dCold>0?'+':'')+fx(f.dCold,1)+' kPa'}</b>${f.now&&Number.isFinite(f.nowN)&&Number.isFinite(f.dCold)&&!ok?` <small class="muted">(${esc(f.now)} → ≈ ${fx(f.nowN+f.dCold,1)})</small>`:f.now?` <small class="muted">(${tr('ora')} ${esc(f.now)})</small>`:''}</td>
-      <td>${fx(f.io,1)} °C</td><td class="l">${camTxt}${f.cam&&Number.isFinite(f.dIO)&&Math.abs(f.dIO)>=2?` <small class="muted">(${tr('ora')} ${esc(f.cam)})</small>`:''}</td></tr>`;}).join('');
+      <td>${fx(f.io,1)} °C</td><td class="l">${camTxt}${f.cam&&Number.isFinite(f.dIO)&&f.dIO?` <small class="muted">(${tr('ora')} ${esc(f.cam)})</small>`:''}</td></tr>`;}).join('');
   return `${hasT?'':`<div class="warnbar" style="margin-bottom:8px">${tr('Imposta la pressione a caldo obiettivo (min e max) qui sopra in «Obiettivi di riferimento»: senza obiettivo non posso dire di quanti kPa cambiare.')}</div>`}
     <div class="tw"><table class="lbt"><thead><tr><th class="l">${tr('Gomma')}</th><th>${tr('A caldo')}</th><th>${tr('Obiettivo')}</th><th>${tr('Cambia a freddo')}</th><th>${tr('Int − est')}</th><th class="l">${tr('Campanatura')}</th></tr></thead><tbody>${rows}</tbody></table></div>
     <p class="muted small" style="margin:8px 0 0">${tr('A freddo serve meno della differenza a caldo: la gomma calda (carcassa) gonfia l\'aria. Il calcolo usa la temperatura dell\'aria della sessione come temperatura a freddo. Per la campanatura l\'obiettivo è la differenza interno − esterno impostata negli obiettivi.')}</p>`;}
@@ -5683,14 +5685,16 @@ setInterval(()=>{try{const sc=LIVE.sc;if(!sc||LIVE.rec||Date.now()-LIVE.scAt>150
 const SETLIB=[];
 const LIB_TRACKS=[['lemans','Le Mans',/sarthe|le ?mans|lemans|\b(lms|lem)\b/i,'veloce'],['monza','Monza',/monza|\b(mon|mnz)\b/i,'veloce'],['spa','Spa',/spa|francorchamps/i,'medio'],['bahrain','Bahrain',/bahrain|sakhir|\b(bah|bhr)\b/i,'medio'],
   ['qatar','Qatar',/qatar|lusail|losail|\bqat\b/i,'medio'],['fuji','Fuji',/fuji|\bfuj\b/i,'medio'],['cota','COTA',/americas|\bcota\b|austin/i,'medio'],['interlagos','Interlagos',/interlagos|paulo/i,'medio'],
-  ['silverstone','Silverstone',/silverstone|\bsil\b/i,'medio'],['ricard','Paul Ricard',/ricard|castellet/i,'medio'],['imola','Imola',/imola|enzo|\bimo\b/i,'lento'],['portimao','Portimão',/portim|algarve|\balg\b/i,'lento'],['sebring','Sebring',/sebring|\bseb\b/i,'lento']];
+  ['silverstone','Silverstone',/silverstone|\bsil\b/i,'medio'],['ricard','Paul Ricard',/ricard|castellet/i,'medio'],['imola','Imola',/imola|enzo|\bimo\b/i,'lento'],['portimao','Portimão',/portim|algarve|\balg\b/i,'lento'],['longbeach','Long Beach',/long ?beach|\blb\b/i,'lento'],['atlanta','Road Atlanta',/atlanta|petit|\bratl\b/i,'medio'],['barcelona','Barcellona',/barcelon|catalunya|\bbcn\b/i,'medio'],['sebring','Sebring',/sebring|\b(seb|sbr)\b/i,'lento']];
+// the same car comes with one class name per livery and season ("... Hypercar WEC2025", "... WEC2026"): one car for the library
+const libCar=c=>String(c||'').trim().replace(/\s*\b(WEC|ELMS|IMSA|LMGT3|GT3)?\s*(19|20)\d\d\s*$/i,'').trim();
 const libTrack=s=>LIB_TRACKS.find(t=>t[2].test(s||''))||null;
 const libType=s=>/wet|rain|pioggia|bagnato/i.test(s)?'wet':/(^|[^a-z])(q|qualy?|quali|qualifying|qualifica)([^a-z]|$)/i.test(s)?'q':'race';
 const LIB_TYPE_N={race:'Gara',q:'Qualifica',wet:'Pioggia'};
 const libNum=d=>{const m=String(d||'').match(/-?\d+(?:[.,]\d+)?/);return m?parseFloat(m[0].replace(',','.')):NaN;};
 
 function libAdd(name,buf){const text=new TextDecoder('latin1').decode(buf);const su=parseSVM(text,name.replace(/^lib\//,''));
-  const path=name.replace(/^lib\//,'');const tk=libTrack(path);const e={id:name,name:path.split('/').pop().replace(/\.svm$/i,''),path,text,su,car:(su.car||'').trim(),track:tk?tk[0]:'',type:libType(path.split('/').pop())};
+  const path=name.replace(/^lib\//,'');const tk=libTrack(path);const e={id:name,name:path.split('/').pop().replace(/\.svm$/i,''),path,text,su,car:libCar(su.car),carFull:(su.car||'').trim(),track:tk?tk[0]:'',type:libType(path.split('/').pop())};
   const i=SETLIB.findIndex(x=>x.id===name);if(i>=0)SETLIB[i]=e;else SETLIB.push(e);LIBLEARN=null;return e;}
 // library files are stored with a "lib/" prefix: they go to the library, not to the File panel
 (function(){const af=addFile;window.addFile=addFile=async function(name,buf,o={}){if(/^lib\//.test(name)){const e=libAdd(name,/\.gz$/i.test(name)?await gunzip(buf):buf);if(o.persist)IDB.put({name,buf,added:Date.now()});return e;}return af(name,buf,o);};})();
@@ -5710,19 +5714,18 @@ function libLearn(){if(LIBLEARN)return LIBLEARN;const L={};
   return LIBLEARN=L;}
 
 // the base: same car and track and type, else same track, else a track of the same kind
-function libBase(car,track,type){const C=SETLIB.filter(e=>e.car===car);if(!C.length)return null;const g=(LIB_TRACKS.find(t=>t[0]===track)||[])[3];
-  const score=e=>(e.track===track?100:g&&(LIB_TRACKS.find(t=>t[0]===e.track)||[])[3]===g?40:0)+(e.type===type?20:type==='q'&&e.type==='race'?8:0)+(/(^|\s)(go|pro|base)/i.test(e.name)?1:0);
+function libBase(car,track,type){if(!SETLIB.some(e=>e.car===car))return null;
   return libRank(car,track,type)[0];}
 const libVer=n=>{const m=String(n).match(/\bv?(\d+)\.(\d+)(?:\.(\d+))?/i);return m?(+m[1])*1e4+(+m[2])*100+(+m[3]||0):0;};
 function libRank(car,track,type){const C=SETLIB.filter(e=>e.car===car);const g=(LIB_TRACKS.find(t=>t[0]===track)||[])[3];
-  const score=e=>(e.track===track?100:g&&(LIB_TRACKS.find(t=>t[0]===e.track)||[])[3]===g?40:0)+(e.type===type?20:type==='q'&&e.type==='race'?8:0)+(/(^|\s)(go|pro|base)/i.test(e.name)?1:0);
+  const score=e=>(e.track===track?100:g&&(LIB_TRACKS.find(t=>t[0]===e.track)||[])[3]===g?40:0)+(e.type===type?20:type==='q'&&e.type==='race'?8:0)+(/(^|\s)(go|pro|base)/i.test(e.name)?1:0)+(type==='race'&&/(^|\s)(r|race|gara)(\s|$)/i.test(e.name)?0.5:0);
   return [...C].sort((a,b)=>score(b)-score(a)||libVer(b.name)-libVer(a.name)||a.name.localeCompare(b.name));}
 
 // what changes between a race setup and a rain (or qualifying) one, learned from the pairs in the library:
 // each rain setup is paired with the closest race setup of the same car and track, the clicks in between are kept
 function libDelta(car,from,to){const C=SETLIB.filter(e=>e.car===car);const idx=e=>{const m=new Map();Object.entries(e.su.sec).forEach(([sec,it])=>it.forEach(x=>{const i=parseInt(x.raw,10);if(Number.isFinite(i)&&!/N\/A|Non-adjustable/i.test(x.disp))m.set(sec+'|'+x.key,i);}));return m;};
   const per=new Map();let pairs=0;
-  C.filter(e=>e.type===to&&e.track).forEach(w=>{const W=idx(w);let best=null,bd=1e9;C.filter(e=>e.type===from&&e.track===w.track).forEach(d=>{const D=idx(d);let s=0;W.forEach((v,k)=>{if(D.has(k))s+=Math.abs(v-D.get(k));});if(s<bd){bd=s;best=D;}});
+  C.filter(e=>e.type===to&&e.track).forEach(w=>{const W=idx(w);let best=null,bd=1e9;const cand=C.filter(e=>e.type===from&&e.track===w.track),sameV=cand.filter(e=>libVer(e.name)===libVer(w.name));(sameV.length?sameV:cand).forEach(d=>{const D=idx(d);let s=0;W.forEach((v,k)=>{if(D.has(k))s+=Math.abs(v-D.get(k));});if(s<bd){bd=s;best=D;}});
     if(!best)return;pairs++;W.forEach((v,k)=>{if(!best.has(k))return;(per.get(k)||per.set(k,[]).get(k)).push(v-best.get(k));});});
   const out=new Map();per.forEach((a,k)=>{const s=[...a].sort((x,y)=>x-y);const med=s[Math.floor(s.length/2)];if(med&&a.length>=Math.ceil(pairs/2))out.set(k,med);});return {pairs,d:out};}
 
@@ -5766,7 +5769,7 @@ function genText(G,title){let sec='';const by=new Map(G.changes.map(c=>[c.sec+'|
 
 function renderGen(){const el=$('#genBody');if(!el)return;const L=libLearn();const cars=Object.keys(L).filter(Boolean).sort();
   const S=active()?.S;const curCar=S&&cars.find(c=>{const a=(S.meta.car||'').toLowerCase();return a&&(c.toLowerCase().includes(a)||a.split(/\s+/).some(t=>t.length>3&&c.toLowerCase().includes(t)));});
-  const st=LS.get('gen:ui',{});const car=cars.includes(st.car)?st.car:curCar||cars[0]||'';const track=st.track||(S?libTrack(S.meta.venue)?.[0]:'')||'fuji';const type=st.type||'race';const prefs=st.prefs||{};
+  const st=LS.get('gen:ui',{});const car=cars.includes(st.car)?st.car:curCar||[...cars].sort((a,b)=>L[b].n-L[a].n)[0]||'';const track=st.track||(S?libTrack(S.meta.venue)?.[0]:'')||'fuji';const type=st.type||'race';const prefs=st.prefs||{};
   const counts=cars.map(c=>`${esc(c)} (${L[c].n})`).join(' · ');
   let h=`<div class="row" style="gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:10px"><button class="btn" type="button" id="genDir">${tr('Importa una cartella di setup')}</button><button class="btn" type="button" id="genAdd">${tr('Aggiungi file .svm')}</button>
     <input type="file" id="genFiles" multiple accept=".svm" hidden><span class="muted small">${SETLIB.length} ${tr('setup in libreria')}${counts?': '+counts:''}</span>${SETLIB.length?`<button class="btn" type="button" id="genClear" style="margin-left:auto">${tr('Svuota libreria')}</button>`:''}</div>`;

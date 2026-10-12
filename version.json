@@ -2,16 +2,19 @@
  "version": "2.1.2",
  "date": "2026-10-12",
  "notes": [
-  "Generatore di setup tarato sui setup veri (sigle pista, versione più nuova)",
+  "Generatore di setup tarato sui setup veri (sigle pista, versione più nuova, R prima di Endu)",
   "Pioggia e qualifica imparate dalla libreria",
-  "Scelta del setup di partenza"
+  "Scelta del setup di partenza",
+  "Nuove piste: Long Beach, Road Atlanta, Barcellona",
+  "MoTeC: angoli in gradi, campanatura coerente",
+  "Salva nel gioco: cartelle Lemans e Longbeach"
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "31ef19d080534c531453d734be817421f6d4510bc1894485cff996658abee4d2"
+  "sha256": "bb972653347f0fa4e52ea20a7b29b53f226cacdb2b8bf43fee4bc9f461a03d81"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "8b663dc3918e7471ebc70a6385ea8d38ff458ac5fd9a04d260f2261ec961e3aa"
+  "sha256": "3766e11b8fd7b8ce698efb313047db843696d1b4d3b0f25b38cd2bfbe492fc82"
  }
 }

@@ -11,7 +11,7 @@ import (
 
 func TestSvmSave(t *testing.T) {
 	ud := t.TempDir()
-	for _, d := range []string{"Fuji", "Sebring", "Le Mans"} {
+	for _, d := range []string{"Fuji", "Sebring", "Lemans", "Longbeach", "Road Atlanta"} {
 		os.MkdirAll(filepath.Join(ud, "player", "Settings", d), 0755)
 	}
 	userData.Store(ud)
@@ -37,5 +37,18 @@ func TestSvmSave(t *testing.T) {
 	}
 	if m4 := post(`{"track":"Monza","name":"a","text":"` + text + `"}`); m4["ok"] == true {
 		t.Fatalf("no Monza folder: must fail")
+	}
+}
+
+func TestTrackFolderCompact(t *testing.T) {
+	base := t.TempDir()
+	for _, d := range []string{"Lemans", "Longbeach", "Road Atlanta", "Sebring", "Monza"} {
+		os.MkdirAll(filepath.Join(base, d), 0755)
+	}
+	for track, want := range map[string]string{"Le Mans": "Lemans", "Long Beach": "Longbeach", "Road Atlanta": "Road Atlanta", "Sebring": "Sebring", "Monza": "Monza"} {
+		got, _, err := trackFolder(base, track)
+		if err != nil || filepath.Base(got) != want {
+			t.Errorf("%s -> %q %v, want %s", track, got, err, want)
+		}
 	}
 }
