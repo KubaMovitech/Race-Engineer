@@ -52,3 +52,46 @@ func TestTrackFolderCompact(t *testing.T) {
 		}
 	}
 }
+
+func TestSvmLib(t *testing.T) {
+	ud := t.TempDir()
+	os.MkdirAll(filepath.Join(ud, "player", "Settings", "Monza"), 0755)
+	os.WriteFile(filepath.Join(ud, "player", "Settings", "Monza", "GO R.svm"), []byte("[GENERAL]\nNotes=\"x\"\n"), 0644)
+	os.WriteFile(filepath.Join(ud, "player", "Settings", "Monza", "note.txt"), []byte("no"), 0644)
+	os.WriteFile(filepath.Join(ud, "player", "secret.svm"), []byte("no"), 0644)
+	userData.Store(ud)
+	get := func(url, remote, host string) *httptest.ResponseRecorder {
+		r := httptest.NewRequest("GET", url, nil)
+		r.RemoteAddr, r.Host = remote, host
+		w := httptest.NewRecorder()
+		if strings.HasPrefix(url, "/svmlib/file") {
+			handleSvmFile(w, r)
+		} else {
+			handleSvmLib(w, r)
+		}
+		return w
+	}
+	w := get("/svmlib", "127.0.0.1:5000", "localhost:8790")
+	var m struct {
+		Ok    bool
+		Files []svmEntry
+	}
+	json.Unmarshal(w.Body.Bytes(), &m)
+	if !m.Ok || len(m.Files) != 1 || m.Files[0].P != "Monza/GO R.svm" {
+		t.Fatalf("list: %s", w.Body.String())
+	}
+	if w := get("/svmlib/file?p=Monza/GO%20R.svm", "127.0.0.1:5000", "127.0.0.1:8790"); w.Code != 200 || !strings.Contains(w.Body.String(), "GENERAL") {
+		t.Fatalf("file: %d %s", w.Code, w.Body.String())
+	}
+	for _, bad := range []string{"../secret.svm", "Monza/note.txt", "Monza/../../secret.svm"} {
+		if w := get("/svmlib/file?p="+bad, "127.0.0.1:5000", "localhost:8790"); w.Code == 200 {
+			t.Errorf("%s served", bad)
+		}
+	}
+	if w := get("/svmlib", "192.168.1.20:5000", "192.168.1.5:8790"); w.Code != 403 {
+		t.Errorf("LAN allowed: %d", w.Code)
+	}
+	if w := get("/svmlib", "127.0.0.1:5000", "evil.example:8790"); w.Code != 403 {
+		t.Errorf("rebinding allowed: %d", w.Code)
+	}
+}
