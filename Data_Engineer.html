@@ -4419,9 +4419,10 @@ const tr=I18N.tr;
 })();
 const AI_LANG=()=>LANG==='en'?'\n\nIMPORTANT: write your whole answer in English (the instructions above are in Italian, but the driver reads English).':'';
 // ================= VERSIONE, NOVITÀ E AGGIORNAMENTI =================
-const APP_VERSION='2.1.1';
+const APP_VERSION='2.1.2';
 const DEFAULT_UPD='https://raw.githubusercontent.com/KubaMovitech/Race-Engineer/main/';   // update channel (folder with version.json), set when the team repository exists
 const CHANGELOG=[
+{v:'2.1.2',d:'12/10/2026',items:['Generatore di setup tarato sui setup veri: riconosce le sigle delle piste nei nomi (MON, LMS, SEB…) e sceglie la versione più nuova del setup.','Pioggia e qualifica imparate dalla libreria: se hai la coppia gara/pioggia di un setup shop, il generatore applica le stesse differenze (ala, assetto, differenziale, freni, TC).','Puoi scegliere tu il setup di partenza del generatore (es. Esport o Safe).']},
 {v:'2.1.1',d:'12/10/2026',items:['Avvisi più tranquilli: a comparsa solo la nostra auto e i rivali, più piccoli, solo nel Muretto; tutti gli altri nella campanella in alto nel Muretto.','Panoramica in ordine: prima auto, distacchi, passo e mappa, poi traffico, condizioni e i dettagli di gomme e consumi.','Pagina iniziale con le tre cose che puoi fare: analizzare una sessione, aprire il Muretto, lavorare sul setup.','Setup senza telemetria più pulito: restano generatore, libreria e dottore; il resto compare quando apri una telemetria.','Le spiegazioni lunghe stanno sotto la «i» nel titolo di ogni pannello.']},
 {v:'2.1.0',d:'11/10/2026',items:['Setup › Generatore di setup: importa la tua libreria di setup (anche una cartella intera), scegli auto, pista e gara / qualifica / pioggia, dici cosa vuoi (più stabile in frenata, più rotazione, più trazione, più velocità, più morbida sui cordoli, meno consumo gomme) e il generatore crea il nuovo .svm partendo dal setup migliore della libreria, senza mai uscire dai valori visti per quell\'auto.','Con Data Engineer aperto e LMU acceso il nuovo setup viene salvato direttamente nella cartella della pista: lo trovi nel garage.','I setup della libreria restano solo sul tuo PC.']},
 {v:'2.0.9',d:'11/10/2026',items:['Strategia › Arrivo previsto: ordine della nostra classe alla bandiera, giri, soste ancora da fare e chi arriva senza fermarsi.','Panoramica › Traffico: auto delle classi più veloci dietro di noi e più lente davanti, con avviso sotto i 3 secondi.','Danni e freni: integrità di aerodinamica e sospensioni, usura dei freni e quanti giri durano ancora.','Meteo › Luce e orario: ora in pista, velocità del tempo, alba e tramonto stimati con avviso 10 minuti prima, ora in pista alla fine.']},
@@ -5680,9 +5681,9 @@ setInterval(()=>{try{const sc=LIVE.sc;if(!sc||LIVE.rec||Date.now()-LIVE.scAt>150
 // picks the base for a track. The generator starts from that base and applies what you ask for, a click
 // at a time and never outside the values seen in the library, then writes a new .svm.
 const SETLIB=[];
-const LIB_TRACKS=[['lemans','Le Mans',/sarthe|le ?mans|lemans/i,'veloce'],['monza','Monza',/monza/i,'veloce'],['spa','Spa',/spa|francorchamps/i,'medio'],['bahrain','Bahrain',/bahrain|sakhir/i,'medio'],
-  ['qatar','Qatar',/qatar|lusail|losail/i,'medio'],['fuji','Fuji',/fuji/i,'medio'],['cota','COTA',/americas|\bcota\b|austin/i,'medio'],['interlagos','Interlagos',/interlagos|paulo/i,'medio'],
-  ['silverstone','Silverstone',/silverstone/i,'medio'],['ricard','Paul Ricard',/ricard|castellet/i,'medio'],['imola','Imola',/imola|enzo/i,'lento'],['portimao','Portimão',/portim|algarve/i,'lento'],['sebring','Sebring',/sebring/i,'lento']];
+const LIB_TRACKS=[['lemans','Le Mans',/sarthe|le ?mans|lemans|\b(lms|lem)\b/i,'veloce'],['monza','Monza',/monza|\b(mon|mnz)\b/i,'veloce'],['spa','Spa',/spa|francorchamps/i,'medio'],['bahrain','Bahrain',/bahrain|sakhir|\b(bah|bhr)\b/i,'medio'],
+  ['qatar','Qatar',/qatar|lusail|losail|\bqat\b/i,'medio'],['fuji','Fuji',/fuji|\bfuj\b/i,'medio'],['cota','COTA',/americas|\bcota\b|austin/i,'medio'],['interlagos','Interlagos',/interlagos|paulo/i,'medio'],
+  ['silverstone','Silverstone',/silverstone|\bsil\b/i,'medio'],['ricard','Paul Ricard',/ricard|castellet/i,'medio'],['imola','Imola',/imola|enzo|\bimo\b/i,'lento'],['portimao','Portimão',/portim|algarve|\balg\b/i,'lento'],['sebring','Sebring',/sebring|\bseb\b/i,'lento']];
 const libTrack=s=>LIB_TRACKS.find(t=>t[2].test(s||''))||null;
 const libType=s=>/wet|rain|pioggia|bagnato/i.test(s)?'wet':/(^|[^a-z])(q|qualy?|quali|qualifying|qualifica)([^a-z]|$)/i.test(s)?'q':'race';
 const LIB_TYPE_N={race:'Gara',q:'Qualifica',wet:'Pioggia'};
@@ -5711,7 +5712,19 @@ function libLearn(){if(LIBLEARN)return LIBLEARN;const L={};
 // the base: same car and track and type, else same track, else a track of the same kind
 function libBase(car,track,type){const C=SETLIB.filter(e=>e.car===car);if(!C.length)return null;const g=(LIB_TRACKS.find(t=>t[0]===track)||[])[3];
   const score=e=>(e.track===track?100:g&&(LIB_TRACKS.find(t=>t[0]===e.track)||[])[3]===g?40:0)+(e.type===type?20:type==='q'&&e.type==='race'?8:0)+(/(^|\s)(go|pro|base)/i.test(e.name)?1:0);
-  return [...C].sort((a,b)=>score(b)-score(a))[0];}
+  return libRank(car,track,type)[0];}
+const libVer=n=>{const m=String(n).match(/\bv?(\d+)\.(\d+)(?:\.(\d+))?/i);return m?(+m[1])*1e4+(+m[2])*100+(+m[3]||0):0;};
+function libRank(car,track,type){const C=SETLIB.filter(e=>e.car===car);const g=(LIB_TRACKS.find(t=>t[0]===track)||[])[3];
+  const score=e=>(e.track===track?100:g&&(LIB_TRACKS.find(t=>t[0]===e.track)||[])[3]===g?40:0)+(e.type===type?20:type==='q'&&e.type==='race'?8:0)+(/(^|\s)(go|pro|base)/i.test(e.name)?1:0);
+  return [...C].sort((a,b)=>score(b)-score(a)||libVer(b.name)-libVer(a.name)||a.name.localeCompare(b.name));}
+
+// what changes between a race setup and a rain (or qualifying) one, learned from the pairs in the library:
+// each rain setup is paired with the closest race setup of the same car and track, the clicks in between are kept
+function libDelta(car,from,to){const C=SETLIB.filter(e=>e.car===car);const idx=e=>{const m=new Map();Object.entries(e.su.sec).forEach(([sec,it])=>it.forEach(x=>{const i=parseInt(x.raw,10);if(Number.isFinite(i)&&!/N\/A|Non-adjustable/i.test(x.disp))m.set(sec+'|'+x.key,i);}));return m;};
+  const per=new Map();let pairs=0;
+  C.filter(e=>e.type===to&&e.track).forEach(w=>{const W=idx(w);let best=null,bd=1e9;C.filter(e=>e.type===from&&e.track===w.track).forEach(d=>{const D=idx(d);let s=0;W.forEach((v,k)=>{if(D.has(k))s+=Math.abs(v-D.get(k));});if(s<bd){bd=s;best=D;}});
+    if(!best)return;pairs++;W.forEach((v,k)=>{if(!best.has(k))return;(per.get(k)||per.set(k,[]).get(k)).push(v-best.get(k));});});
+  const out=new Map();per.forEach((a,k)=>{const s=[...a].sort((x,y)=>x-y);const med=s[Math.floor(s.length/2)];if(med&&a.length>=Math.ceil(pairs/2))out.set(k,med);});return {pairs,d:out};}
 
 // requests: each slider click goes, in turn, to the settings of its list (display direction: +1 = the number shown goes up)
 const GEN_PREF=[
@@ -5722,16 +5735,22 @@ const GEN_PREF=[
   {id:'kerb',l:'Cordoli e sconnessioni',lo:'più rigida',hi:'più morbida sui cordoli',r:[['FastBumpSetting','*',-1,'bump veloce più morbido','bump veloce più rigido'],['FastReboundSetting','*',-1,'rebound veloce più morbido','rebound veloce più rigido']]},
   {id:'tyre',l:'Gomme',lo:'più prestazione',hi:'consuma meno le gomme',r:[['TractionControlMapSetting',null,1,'TC più alto','TC più basso'],['DiffPowerSetting',null,-1,'differenziale in trazione più aperto','differenziale in trazione più chiuso'],['CamberSetting','*',1,'campanatura un po\' meno negativa','campanatura un po\' più negativa']]}];
 // rain without a wet base: higher, softer, more wing and TC
-const GEN_WET=[['RideHeightSetting','*',1,'più alta per l\'acqua'],['RideHeightSetting','*',1,'più alta per l\'acqua'],['FrontAntiSwaySetting',null,-1,'barra anteriore più morbida'],['RearAntiSwaySetting',null,-1,'barra posteriore più morbida'],['RWSetting',null,1,'più ala'],['RWSetting',null,1,'più ala'],['TractionControlMapSetting',null,1,'TC più alto'],['TractionControlMapSetting',null,1,'TC più alto']];
+const GEN_WET=[['RWSetting',null,1,'più ala'],['RWSetting',null,1,'più ala'],['RWSetting',null,1,'più ala'],['RideHeightSetting','FRONTLEFT',1,'anteriore più alta per l\'acqua'],['RideHeightSetting','FRONTRIGHT',1,'anteriore più alta per l\'acqua'],
+  ['TractionControlMapSetting',null,1,'TC più alto'],['DiffCoastSetting',null,1,'differenziale in rilascio più chiuso'],['DiffPowerSetting',null,1,'differenziale in trazione più chiuso'],['BrakePressureSetting',null,-1,'pressione freni più bassa'],['RearBrakeSetting',null,-1,'ripartizione un po\' più al posteriore']];
 const GEN_SECS=['FRONTLEFT','FRONTRIGHT','REARLEFT','REARRIGHT'];
 
-function genBuild(car,track,type,prefs){const B=libBase(car,track,type);if(!B)return null;const K=(libLearn()[car]||{}).keys||{};const ch=new Map();const notes=[];
+function genBuild(car,track,type,prefs,baseId){const B=(baseId&&SETLIB.find(e=>e.id===baseId&&e.car===car))||libBase(car,track,type);if(!B)return null;const K=(libLearn()[car]||{}).keys||{};const ch=new Map();const notes=[];
   const cur=(sec,key)=>{const k=sec+'|'+key;if(ch.has(k))return ch.get(k).ix;const it=(B.su.sec[sec]||[]).find(x=>x.key===key);const ix=it?parseInt(it.raw,10):NaN;return Number.isFinite(ix)&&!/N\/A|Non-adjustable/i.test(it.disp)?ix:NaN;};
   const secsOf=(key,s)=>Object.keys(B.su.sec).filter(sec=>(B.su.sec[sec]||[]).some(x=>x.key===key)&&(s==='*'?GEN_SECS.includes(sec):s?sec===s:true));
   const click=([key,s,dir,why],n)=>{let any=false;secsOf(key,s).forEach(sec=>{const k=sec+'|'+key;const ix=cur(sec,key);if(!Number.isFinite(ix))return;const L=K[k];const step=dir*(L?.sign||1)*n;let to=ix+step;
       if(L&&L.vals.size>=2)to=Math.max(L.min,Math.min(L.max,to));if(to===ix)return;const base=ch.get(k)?.from??ix;ch.set(k,{sec,key,from:base,ix:to,why,seen:!!L?.disp.has(to)});any=true;});return any;};
-  if(type==='wet'&&B.type!=='wet'){GEN_WET.forEach(r=>click(r,1));notes.push(tr('Nessun setup da pioggia per questa auto: parto da quello asciutto e lo adatto.'));}
-  if(type==='q'&&B.type!=='q')notes.push(tr('Nessun setup da qualifica: parto da quello da gara (carica meno benzina in garage).'));
+  const D=type!==B.type&&B.type==='race'?libDelta(car,'race',type):{pairs:0,d:new Map()};
+  const fuelK=/^(Fuel|FuelCapacity|VirtualEnergy|NumPitstops|Pitstop\d)Setting$/;const other=B.track!==track;
+  if(D.d.size){D.d.forEach((n,k)=>{const [sec,key]=k.split('|');if(other&&fuelK.test(key))return;const ix=cur(sec,key);if(!Number.isFinite(ix))return;const L=K[k];let to=ix+n;if(L&&L.vals.size>=2)to=Math.max(L.min,Math.min(L.max,to));if(to===ix)return;
+      ch.set(k,{sec,key,from:ix,ix:to,why:type==='wet'?'come nei setup da pioggia della libreria':'come nei setup da qualifica della libreria',seen:!!L?.disp.has(to)});});
+    notes.push(type==='wet'?tr('Parto dal setup da gara e applico le differenze gara → pioggia imparate dai setup della libreria')+` (${D.pairs}).`:tr('Parto dal setup da gara e applico le differenze gara → qualifica imparate dai setup della libreria')+` (${D.pairs}).`);if(other&&type==='q')notes.push(tr('Benzina ed energia per la qualifica dipendono dalla pista: regolale in garage.'));}
+  else if(type==='wet'&&B.type!=='wet'){GEN_WET.forEach(r=>click(r,1));notes.push(tr('Nessun setup da pioggia per questa auto: parto da quello asciutto e lo adatto.'));}
+  else if(type==='q'&&B.type!=='q')notes.push(tr('Nessun setup da qualifica: parto da quello da gara (carica meno benzina in garage).'));
   // a click that this car cannot take (setting missing or at its limit) moves on to the next setting of the list
   GEN_PREF.forEach(P=>{const k=+prefs[P.id]||0;for(let i=0;i<Math.abs(k);i++){for(let j=0;j<P.r.length;j++){const r=P.r[(i+j)%P.r.length];if(click([r[0],r[1],Math.sign(k)*r[2],k>0?r[3]:(r[4]||r[3])],1))break;}}});
   return {B,changes:[...ch.values()],notes,K};}
@@ -5751,12 +5770,13 @@ function renderGen(){const el=$('#genBody');if(!el)return;const L=libLearn();con
   const counts=cars.map(c=>`${esc(c)} (${L[c].n})`).join(' · ');
   let h=`<div class="row" style="gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:10px"><button class="btn" type="button" id="genDir">${tr('Importa una cartella di setup')}</button><button class="btn" type="button" id="genAdd">${tr('Aggiungi file .svm')}</button>
     <input type="file" id="genFiles" multiple accept=".svm" hidden><span class="muted small">${SETLIB.length} ${tr('setup in libreria')}${counts?': '+counts:''}</span>${SETLIB.length?`<button class="btn" type="button" id="genClear" style="margin-left:auto">${tr('Svuota libreria')}</button>`:''}</div>`;
+  const rank=libRank(car,track,type);const baseId=rank.some(e=>e.id===st.base)?st.base:'';
   if(!cars.length){el.innerHTML=h+`<p class="muted small">${tr('Importa la cartella con i setup che hai (setup shop, compagni, i tuoi): la libreria impara i valori di ogni auto e da quale setup partire su ogni pista. Restano solo in questo browser: non finiscono su GitHub né altrove.')}</p>`;genWire();return;}
   h+=`<div class="setgrid"><label class="f">${tr('Auto')}<select id="genCar">${cars.map(c=>`<option${c===car?' selected':''}>${esc(c)}</option>`).join('')}</select></label>
     <label class="f">${tr('Pista')}<select id="genTrack">${LIB_TRACKS.map(t=>`<option value="${t[0]}"${t[0]===track?' selected':''}>${t[1]}</option>`).join('')}</select></label>
-    <label class="f">${tr('Per')}<select id="genType">${Object.entries(LIB_TYPE_N).map(([k,v])=>`<option value="${k}"${k===type?' selected':''}>${tr(v)}</option>`).join('')}</select></label></div>
+    <label class="f">${tr('Per')}<select id="genType">${Object.entries(LIB_TYPE_N).map(([k,v])=>`<option value="${k}"${k===type?' selected':''}>${tr(v)}</option>`).join('')}</select></label><label class="f">${tr('Setup di partenza')}<select id="genBase"><option value="">${tr('Automatico')}: ${esc(rank[0]?.name||'')}</option>${rank.map(e=>`<option value="${esc(e.id)}"${e.id===baseId?' selected':''}>${esc(e.name)}</option>`).join('')}</select></label></div>
     <div class="genprefs">${GEN_PREF.map(P=>`<div class="genp"><b>${tr(P.l)}</b><div class="genr"><span>${tr(P.lo)}</span><input type="range" min="-2" max="2" step="1" data-p="${P.id}" value="${+prefs[P.id]||0}"><span>${tr(P.hi)}</span></div></div>`).join('')}</div>`;
-  const G=genBuild(car,track,type,prefs);
+  const G=genBuild(car,track,type,prefs,baseId);
   if(G){const B=G.B;const tk=LIB_TRACKS.find(t=>t[0]===B.track);
     h+=`<p class="small" style="margin:10px 0 6px"><b>${tr('Base')}</b>: ${esc(B.name)} <span class="muted">(${tk?tk[1]:tr('pista sconosciuta')} · ${tr(LIB_TYPE_N[B.type])}${B.track!==track?' · '+tr('pista diversa: la più simile in libreria'):''})</span></p>${G.notes.map(n=>`<p class="small warn" style="margin:0 0 6px">${esc(n)}</p>`).join('')}`;
     h+=G.changes.length?`<div class="tw"><table class="lbt"><thead><tr><th class="l">${tr('Regolazione')}</th><th class="l">${tr('Base')}</th><th class="l">${tr('Nuovo')}</th><th class="l">${tr('Perché')}</th></tr></thead><tbody>${G.changes.map(c=>{const L=G.K[c.sec+'|'+c.key];const d=i=>genDisp(L,i)||('#'+i);
@@ -5768,7 +5788,7 @@ function renderGen(){const el=$('#genBody');if(!el)return;const L=libLearn();con
 function genWire(G,ui){const save=o=>{LS.set('gen:ui',{...LS.get('gen:ui',{}),...o});renderGen();};
   const d=$('#genDir');if(d)d.onclick=libImportDir;const a=$('#genAdd');if(a)a.onclick=()=>$('#genFiles').click();const f=$('#genFiles');if(f)f.onchange=e=>{libImportFiles([...e.target.files]);e.target.value='';};
   const cl=$('#genClear');if(cl)cl.onclick=()=>{if(!confirm(tr('Togliere tutti i setup dalla libreria?')))return;SETLIB.splice(0).forEach(e=>IDB.del(e.id));LIBLEARN=null;renderGen();};
-  if(!G&&!ui)return;[['#genCar','car'],['#genTrack','track'],['#genType','type']].forEach(([id,k])=>{const s=$(id);if(s)s.onchange=()=>save({[k]:s.value});});
+  if(!G&&!ui)return;[['#genCar','car'],['#genTrack','track'],['#genType','type'],['#genBase','base']].forEach(([id,k])=>{const s=$(id);if(s)s.onchange=()=>save(k==='base'?{base:s.value}:{[k]:s.value,base:''});});
   $$('#genBody input[type=range]').forEach(r=>r.onchange=()=>save({prefs:{...ui.prefs,[r.dataset.p]:+r.value}}));
   const nm=$('#genName');if(nm)nm.onchange=()=>LS.set('gen:ui',{...LS.get('gen:ui',{}),name:nm.value});if(!G)return;
   const name=()=>(nm?.value||'Data Engineer').trim();const title=()=>`${name()} - Data Engineer da ${G.B.name}`;
