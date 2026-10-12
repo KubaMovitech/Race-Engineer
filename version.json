@@ -2,7 +2,7 @@
  "version": "2.1.2",
  "date": "2026-10-12",
  "notes": [
-  "Generatore di setup tarato su 3559 setup veri (GO, HYMO, TRT)",
+  "Generatore di setup tarato su oltre 4400 setup veri (GO, HYMO, TRT, bA)",
   "Tutte le piste riconosciute, anche Daytona e Laguna Seca",
   "Pioggia e qualifica imparate dalla libreria",
   "Stile del setup: veloce, facile o endurance",
@@ -12,10 +12,10 @@
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "710ff6f547921674d077d569f0cb59db5122a7a223b32f06e345d3f30e7d98b7"
+  "sha256": "ccb91f063bd215c999340a070c380b37264fbcbd97a9f165f3c08e2bd82c00ee"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "fcd5d1dabbe465bc271a7ea411a98083f6726018c27cd94ea97785560edf29af"
+  "sha256": "8d9aa4ec394da4bb4163536e7ded05a488cf3590069cc065fcfd2b1d066780bf"
  }
 }

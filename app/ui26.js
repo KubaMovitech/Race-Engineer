@@ -5,20 +5,20 @@
 // at a time and never outside the values seen in the library, then writes a new .svm.
 const SETLIB=[];
 const LIB_TRACKS=[['lemans','Le Mans',/sarthe|le ?mans|lemans|\b(lms|lem|lm)\b/i,'veloce'],['monza','Monza',/monza|\b(mon|mnz)\b/i,'veloce'],['spa','Spa',/spa|francorchamps/i,'medio'],['bahrain','Bahrain',/bahrain|sakhir|\b(bah|bhr|brn)\b/i,'medio'],
-  ['qatar','Qatar',/qatar|lusail|losail|\b(qat|qtr)\b/i,'medio'],['fuji','Fuji',/fuji|\bfuj\b/i,'medio'],['cota','COTA',/americas|\bcota\b|austin/i,'medio'],['interlagos','Interlagos',/interlagos|paulo|\b(int|itl)\b/i,'medio'],
-  ['silverstone','Silverstone',/silverstone|\bsil\b/i,'medio'],['ricard','Paul Ricard',/ricard|castellet|\b(pr|par|pr1av2|par1av2)\b/i,'medio'],['imola','Imola',/imola|enzo|\bimo\b/i,'lento'],['portimao','Portimão',/portim|algarve|\b(alg|por)\b/i,'lento'],['longbeach','Long Beach',/long ?beach|\blb\b/i,'lento'],['atlanta','Road Atlanta',/atlanta|petit|\bratl\b/i,'medio'],['barcelona','Barcellona',/barcelon|catalunya|\b(bcn|bar)\b/i,'medio'],['daytona','Daytona',/daytona|\b(day|dtn)\b/i,'veloce'],['laguna','Laguna Seca',/laguna|\b(lag|lgs)\b/i,'lento'],['sebring','Sebring',/sebring|\b(seb|sbr)\b/i,'lento']];
+  ['qatar','Qatar',/qatar|lusail|losail|\b(qat|qtr)\b/i,'medio'],['fuji','Fuji',/fuji|\bfuj\b/i,'medio'],['cota','COTA',/americas|\bcota\b|austin/i,'medio'],['interlagos','Interlagos',/interlagos|paulo|brazil|brasil|\b(int|itl|itlg|itlgs)\b/i,'medio'],
+  ['silverstone','Silverstone',/silverstone|\bsil\b/i,'medio'],['ricard','Paul Ricard',/ricard|castellet|\b(pr|prc|par|pr1av2|par1av2)\b/i,'medio'],['imola','Imola',/imola|enzo|\bimo\b/i,'lento'],['portimao','Portimão',/portim|algarve|\b(alg|por|ptm)\b/i,'lento'],['longbeach','Long Beach',/long ?beach|\blb\b/i,'lento'],['atlanta','Road Atlanta',/atlanta|petit|\b(ratl|roat)\b/i,'medio'],['barcelona','Barcellona',/barcel|catalunya|\b(bcn|bar|brc)\b/i,'medio'],['daytona','Daytona',/daytona|\b(day|dtn)\b/i,'veloce'],['laguna','Laguna Seca',/laguna|\b(lag|lags|lgs)\b/i,'lento'],['sebring','Sebring',/sebring|\b(seb|sbr|srg)\b/i,'lento']];
 // the same car comes with one class name per livery and season ("... Hypercar WEC2025", "... WEC2026"): one car for the library
 const libCar=c=>String(c||'').trim().replace(/\s*\b(WEC|ELMS|IMSA|LMGT3|GT3)?\s*(19|20)\d\d\s*$/i,'').trim();
 const libTrack=s=>LIB_TRACKS.find(t=>t[2].test(s||''))||null;
-const libType=s=>/wet|rain|pioggia|bagnato|(^|[^a-z])w[qr]\d*([^a-z]|$)/i.test(s)?'wet':/(^|[^a-z])([ce]?q\d*|qualy?|quali|qualifying|qualifica)([^a-z]|$)/i.test(s)?'q':'race';
+const libType=s=>/wet|rain|pioggia|bagnato|(^|[^a-z])w(\s*[qr])?\d*([^a-z]|$)/i.test(s)?'wet':/(^|[^a-z])([ce]?q\d*|qualy?|quali|qualifying|qualifica)([^a-z]|$)/i.test(s)?'q':'race';
 // the shops sell two styles: fast and edgy (GO "Esport", HYMO/TRT "E") or easy to drive (GO "Safe", HYMO/TRT "C"); GO "Endu" for long races
-const libStyle=s=>/endu/i.test(s)?'endu':/esport|(^|[^a-z])e[qr]?\d*(\s|$)|(^|\s)e\s+[qr]\d*/i.test(s)?'esport':/safe|(^|[^a-z])c[qr]\d*(\s|$)|(^|\s)c\s+[qr]\d*/i.test(s)?'safe':'';
+const libStyle=s=>/endu/i.test(s)?'endu':/esport|(^|[^a-z])e[qr]?\d*(\s|$)|(^|\s)e\s+[qr]\d*/i.test(s)?'esport':/safe|(^|[^a-z])c[qr]\d*(\s|$)|(^|\s)c\s+[qr]\d*|(^|[^a-z])s\d+([^a-z]|$)/i.test(s)?'safe':'';
 const LIB_STYLE_N={'':'Automatico',esport:'Veloce (Esport / E)',safe:'Facile da guidare (Safe / C)',endu:'Endurance (Endu)'};
 const LIB_TYPE_N={race:'Gara',q:'Qualifica',wet:'Pioggia'};
 const libNum=d=>{const m=String(d||'').match(/-?\d+(?:[.,]\d+)?/);return m?parseFloat(m[0].replace(',','.')):NaN;};
 
 function libAdd(name,buf){const text=new TextDecoder('latin1').decode(buf);const su=parseSVM(text,name.replace(/^lib\//,''));
-  const path=name.replace(/^lib\//,'');const tk=libTrack(path);const e={id:name,name:path.split('/').pop().replace(/\.svm$/i,''),path,text,su,car:libCar(su.car),carFull:(su.car||'').trim(),track:tk?tk[0]:'',type:libType(path.split('/').pop()),style:libStyle(path.split('/').pop().replace(/\.svm$/i,'')),wq:/(^|[^a-z])([ce]?q\d*|wq\d*|qualy?|quali|qualifying|qualifica)([^a-z]|$)/i.test(path.split('/').pop())};
+  const path=name.replace(/^lib\//,'');const tk=libTrack(path);const e={id:name,name:path.split('/').pop().replace(/\.svm$/i,''),path,text,su,car:libCar(su.car),carFull:(su.car||'').trim(),track:tk?tk[0]:'',type:libType(path.split('/').pop()),style:libStyle(path.split('/').pop().replace(/\.svm$/i,'')),wq:/(^|[^a-z])([ce]?q\d*|w\s*q\d*|qualy?|quali|qualifying|qualifica)([^a-z]|$)/i.test(path.split('/').pop())};
   const i=SETLIB.findIndex(x=>x.id===name);if(i>=0)SETLIB[i]=e;else SETLIB.push(e);LIBLEARN=null;return e;}
 // library files are stored with a "lib/" prefix: they go to the library, not to the File panel
 (function(){const af=addFile;window.addFile=addFile=async function(name,buf,o={}){if(/^lib\//.test(name)){const e=libAdd(name,/\.gz$/i.test(name)?await gunzip(buf):buf);if(o.persist)IDB.put({name,buf,added:Date.now()});return e;}return af(name,buf,o);};})();
