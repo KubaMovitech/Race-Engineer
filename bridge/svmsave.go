@@ -22,8 +22,12 @@ func setUserData(shm []byte) {
 		return
 	}
 	if ud := cstr(shm, OFF_PATHS_USERDATA, 260); ud != "" {
+		if cur, _ := userData.Load().(string); cur == ud {
+			return
+		}
 		if st, err := os.Stat(ud); err == nil && st.IsDir() {
 			userData.Store(ud)
+			rememberUserData(ud)
 		}
 	}
 }

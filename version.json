@@ -1,21 +1,17 @@
 {
- "version": "2.1.2",
+ "version": "2.1.3",
  "date": "2026-10-12",
  "notes": [
-  "Generatore di setup tarato su oltre 4400 setup veri (GO, HYMO, TRT, bA)",
-  "Tutte le piste riconosciute, anche Daytona e Laguna Seca",
-  "Pioggia e qualifica imparate dalla libreria",
-  "Stile del setup: veloce, facile o endurance",
-  "Scelta del setup di partenza",
-  "MoTeC: angoli in gradi, campanatura coerente",
-  "Salva nel gioco: cartelle Lemans e Longbeach"
+  "La libreria dei setup segue da sola la cartella del gioco",
+  "Consenso dei setup shop nel generatore",
+  "Cosa dicono i setup shop: dove sono d'accordo e dove no"
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "ccb91f063bd215c999340a070c380b37264fbcbd97a9f165f3c08e2bd82c00ee"
+  "sha256": "b15aa20ec5e70b6e26ece8cdaf8906e09d5ad3385176526e9bc35d243ed7992a"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "8d9aa4ec394da4bb4163536e7ded05a488cf3590069cc065fcfd2b1d066780bf"
+  "sha256": "8409394ff671245ddf18ce6d579dec2e45ab5d2edb7120d49705fee28de2408e"
  }
 }
