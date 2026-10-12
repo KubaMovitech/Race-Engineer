@@ -1,18 +1,16 @@
 {
- "version": "2.0.9",
+ "version": "2.1.0",
  "date": "2026-10-11",
  "notes": [
-  "Arrivo previsto della nostra classe con le soste ancora da fare.",
-  "Traffico: classi più veloci dietro e più lente davanti, con avviso.",
-  "Danni e freni: integrità e giri che durano i freni.",
-  "Luce e orario: alba e tramonto stimati con avviso."
+  "Generatore di setup: dalla tua libreria di setup e da quello che chiedi crea il nuovo .svm.",
+  "Con LMU acceso il nuovo setup viene salvato direttamente nella cartella della pista."
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "58d83893526c1084c93474cc3737607f87fc1b606598ed0dda4a71c1a86278e4"
+  "sha256": "563b5a956830ae0af09ca502a474d7658f439f8af2026210952101b6b70694de"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "d913e047da42abeae773ec98086df6a0ac184d1fb44773246f48df843edcc4af"
+  "sha256": "0f67bb85e49380bf090ae43c2705c910464c88e52542974b11cce6fc5f0452ae"
  }
 }

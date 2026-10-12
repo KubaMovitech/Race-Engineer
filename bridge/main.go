@@ -19,7 +19,7 @@ import (
 	"time"
 )
 
-const VERSION = "2.0.9"
+const VERSION = "2.1.0"
 
 //go:embed app.html
 var appHTML []byte
@@ -112,6 +112,7 @@ func (h *Hub) send(kind string, js []byte, retain bool) {
 
 func (h *Hub) serve(port int, id string) error {
 	mux := http.NewServeMux()
+	mux.HandleFunc("/svm", handleSvm)
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/" {
 			http.NotFound(w, r)
@@ -656,6 +657,7 @@ func main() {
 				tr.car = fd.keyOf(pr)
 			}
 			rec.sample(f, tr.sesKey, shm)
+			setUserData(shm)
 			rs.mu.Lock()
 			rs.on, rs.ses = tr.driving, i32(f.Info, I_mSession)
 			rs.mu.Unlock()
