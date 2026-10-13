@@ -1,17 +1,17 @@
 {
- "version": "2.1.3",
+ "version": "2.1.4",
  "date": "2026-10-12",
  "notes": [
-  "La libreria dei setup segue da sola la cartella del gioco",
-  "Consenso dei setup shop nel generatore",
-  "Cosa dicono i setup shop: dove sono d'accordo e dove no"
+  "Guida setup: clicca una regolazione per sapere cosa fa e cosa succede se la cambi",
+  "Schede con i tuoi numeri: setup, libreria e telemetria",
+  "Pannello con parametri, sintomi, piste, auto e metodo"
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "b15aa20ec5e70b6e26ece8cdaf8906e09d5ad3385176526e9bc35d243ed7992a"
+  "sha256": "2b7c4fe0f73508c54c731acfa9e06d5e5e09efba86ff0aaec09c670e09f0abe0"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "8409394ff671245ddf18ce6d579dec2e45ab5d2edb7120d49705fee28de2408e"
+  "sha256": "9f221161bfdcda5a0ef90ff72fbc26de4fe09727605c6e90aea723b8bacddba0"
  }
 }
