@@ -1,0 +1,161 @@
+/* ================= THEME "PIT WALL" =================
+   Engineering software of a top team: carbon black, a faint measuring grid, HUD panels with corner marks,
+   chamfered controls, red for us and cyan for live data, every number in mono with a soft glow.
+   It sits on top of style.css: tokens first, then the components. */
+:root{
+  --bg:#040507; --panel:#0A0D12; --panel2:#10151C; --band:#07090D; --ink:#EEF2F6; --muted:#8792A0; --faint:#4E5866;
+  --line:#1A212B; --grid:#121821; --trackbed:#1A212A;
+  --hdr:#030405; --hdr-ink:#F4F6F8; --hdr-muted:#6F7A88; --hdr-line:#161C24;
+  --accent:#FF1E1E; --accent2:#8A0000; --accent-ink:#FFFFFF; --accent-soft:rgba(255,30,30,.10);
+  --lapA:#20F0D0; --cyan:#20F0D0; --glow:rgba(255,30,30,.35); --glowc:rgba(32,240,208,.28);
+  --edge:rgba(255,255,255,.07); --edge2:rgba(255,255,255,.14);
+  --r:3px; --cut:9px;
+  --f-display:"Barlow Condensed","Titillium Web","Arial Narrow",system-ui,sans-serif;
+}
+html{background:var(--bg)}
+body{
+  background:
+    radial-gradient(1200px 600px at 85% -10%,rgba(255,30,30,.07),transparent 60%),
+    radial-gradient(900px 500px at -10% 110%,rgba(32,240,208,.05),transparent 60%),
+    linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px) 0 0/100% 32px,
+    linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px) 0 0/32px 100%,
+    var(--bg);
+  background-attachment:fixed;letter-spacing:.005em;
+}
+::selection{background:var(--accent);color:#fff}
+*{scrollbar-width:thin;scrollbar-color:#2A323D transparent}
+::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-thumb{background:#232B35;border-radius:0}::-webkit-scrollbar-track{background:transparent}
+
+/* ---------- header: a slim timing strip ---------- */
+.top{background:linear-gradient(180deg,rgba(6,8,11,.96),rgba(4,5,7,.92));backdrop-filter:blur(10px) saturate(1.2);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--hdr-line);box-shadow:0 1px 0 rgba(255,30,30,.25),0 10px 30px rgba(0,0,0,.45)}
+.top::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;background:linear-gradient(90deg,transparent,var(--accent) 20%,var(--accent) 35%,transparent 60%);opacity:.9;pointer-events:none}
+.top-in{min-height:52px}
+.brand .logo{width:30px;height:30px;filter:drop-shadow(0 0 10px var(--glow))}
+.brand b{font-family:var(--f-display);font-size:1.45rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.brand small{letter-spacing:.38em!important;color:var(--hdr-muted)!important;font-family:var(--f-mono);font-size:.56rem!important}
+.mtabs{border-bottom:0;gap:0}
+.mtab{font-family:var(--f-display);font-size:1rem;letter-spacing:.14em;min-height:40px;padding:0 18px;position:relative;color:var(--hdr-muted);border-bottom:0;transition:color .15s}
+.mtab:hover{color:var(--hdr-ink)}
+.mtab[aria-selected="true"]{color:#fff;background:linear-gradient(180deg,transparent 30%,rgba(255,30,30,.14));border-bottom:0}
+.mtab[aria-selected="true"]::after{content:"";position:absolute;left:10px;right:10px;bottom:0;height:2px;background:var(--accent);box-shadow:0 0 12px var(--accent),0 0 2px var(--accent)}
+.top>.tabs.subtabs{padding-top:4px;padding-bottom:8px}
+.top>.tabs.subtabs .tab{border-radius:0;clip-path:polygon(7px 0,100% 0,calc(100% - 7px) 100%,0 100%);border:0;background:rgba(255,255,255,.04);padding:0 18px;min-height:28px;font-family:var(--f-display);letter-spacing:.12em;color:var(--hdr-muted)}
+.top>.tabs.subtabs .tab:hover{background:rgba(255,255,255,.08);color:var(--hdr-ink)}
+.top>.tabs.subtabs .tab[aria-selected="true"]{background:linear-gradient(90deg,var(--accent),#C80000);color:#fff;box-shadow:0 0 18px var(--glow)}
+.livedot{box-shadow:0 0 8px var(--accent)}
+
+/* ---------- controls: chamfered ---------- */
+.btn{border-radius:0;clip-path:polygon(var(--cut) 0,100% 0,100% calc(100% - var(--cut)),calc(100% - var(--cut)) 100%,0 100%,0 var(--cut));background:linear-gradient(180deg,#141A22,#0D1117);border:1px solid var(--edge2);font-family:var(--f-display);font-size:.92rem;letter-spacing:.08em;text-transform:uppercase;padding:6px 14px;transition:background .15s,box-shadow .15s,color .15s}
+.btn:hover{background:linear-gradient(180deg,#1B232D,#121820);border-color:rgba(255,255,255,.25)}
+.btn.primary{background:linear-gradient(180deg,#FF2A2A,#C40000);border-color:#FF4D4D;box-shadow:0 0 0 1px rgba(255,30,30,.3),0 6px 22px rgba(255,30,30,.25);color:#fff}
+.btn.primary:hover{background:linear-gradient(180deg,#FF4040,#D60000)}
+.btn.dark{background:linear-gradient(180deg,#0F141A,#0A0D12)}
+.btn.icon{padding:6px 9px}
+.seg.lang{clip-path:polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%)}
+select,input[type=number],input[type=text],input[type=password],input:not([type]),textarea{background:#080B0F!important;border:1px solid var(--edge2)!important;border-radius:0!important}
+select:focus,input:focus,textarea:focus{border-color:var(--cyan)!important;box-shadow:0 0 0 1px var(--glowc),0 0 14px var(--glowc);outline:0}
+input[type=range]{accent-color:var(--accent)}
+.verchip{border-radius:0!important;font-family:var(--f-mono)}
+
+/* ---------- panels: HUD frames with corner marks ---------- */
+.panel,.wcard,.lbcard,.suscard{position:relative;background:linear-gradient(180deg,rgba(16,21,28,.92),rgba(8,10,14,.94));border:1px solid var(--edge);border-radius:var(--r);box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 12px 40px rgba(0,0,0,.35)}
+.panel::before,.wcard::before{content:"";position:absolute;inset:-1px;pointer-events:none;
+  background:
+    linear-gradient(var(--accent),var(--accent)) 0 0/14px 1px no-repeat,linear-gradient(var(--accent),var(--accent)) 0 0/1px 14px no-repeat,
+    linear-gradient(var(--edge2),var(--edge2)) 100% 100%/14px 1px no-repeat,linear-gradient(var(--edge2),var(--edge2)) 100% 100%/1px 14px no-repeat}
+.panel:hover{border-color:rgba(255,255,255,.12)}
+.panel-h h2,.panel-h h3{font-family:var(--f-display);font-weight:600;letter-spacing:.18em;text-transform:uppercase;font-size:.9rem;color:#C9D1DA;display:flex;align-items:center;gap:10px}
+.panel-h h3::before,.panel-h h2::before{content:"";width:3px;height:14px;background:var(--accent);box-shadow:0 0 8px var(--accent);flex:none}
+.panel-h{border-bottom:1px solid var(--edge);padding-bottom:10px;margin-bottom:14px}
+.badge{border-radius:0!important;font-family:var(--f-mono);letter-spacing:.06em;font-size:.68rem!important;text-transform:uppercase}
+
+/* ---------- hero: session title like a timing-screen header ---------- */
+.hero .ey{font-family:var(--f-mono);letter-spacing:.24em;font-size:.72rem;color:var(--accent);text-shadow:0 0 12px var(--glow)}
+.hero h1{font-family:var(--f-display);font-weight:700;letter-spacing:.03em;font-size:clamp(1.7rem,3.4vw,2.9rem);line-height:.98;background:linear-gradient(180deg,#fff,#AEB8C4);-webkit-background-clip:text;background-clip:text;color:transparent}
+.cchip{border-radius:0;background:linear-gradient(180deg,#0E1319,#090C10);border:1px solid var(--edge);border-left:2px solid var(--cyan);padding:5px 12px}
+.cchip span{font-family:var(--f-mono);letter-spacing:.14em;font-size:.6rem}
+.cchip b{font-family:var(--f-mono);font-weight:600}
+
+/* ---------- KPI tiles: same height, one-line label, big glowing number ---------- */
+.kpis{gap:10px;background:transparent;border:0;border-radius:0;overflow:visible;grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+.kpi{position:relative;background:linear-gradient(180deg,#0E1319,#080B0F);border:1px solid var(--edge);padding:12px 14px 12px 16px;min-height:104px;display:flex;flex-direction:column;justify-content:flex-start;overflow:hidden}
+.kpi::after{content:"";position:absolute;right:0;top:0;width:22px;height:22px;background:linear-gradient(225deg,rgba(255,255,255,.07) 50%,transparent 50%)}
+.kpi .l{font-family:var(--f-display);font-size:.74rem;letter-spacing:.16em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#7F8B99}
+.kpi .v{font-size:1.65rem;font-weight:600;letter-spacing:-.01em;margin-top:6px;text-shadow:0 0 18px rgba(255,255,255,.12)}
+.kpi .s{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.02em;margin-top:auto;padding-top:4px;color:#6F7B89;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.kpi .dl{display:inline-block;margin-left:8px;font-size:.72rem;font-family:var(--f-mono);padding:1px 6px;vertical-align:middle;letter-spacing:0;text-shadow:none}
+.kpi .dl.up{color:#19D26B;background:rgba(25,210,107,.12)}.kpi .dl.dn{color:#FF4D4D;background:rgba(255,77,77,.12)}
+
+/* ---------- tables: timing-screen rows ---------- */
+th{background:#0B0F14!important;font-family:var(--f-display);letter-spacing:.14em;font-size:.72rem;color:#7C8896;border-bottom:1px solid var(--edge2)!important}
+td{border-bottom:1px solid rgba(255,255,255,.04)}
+tbody tr:hover td{background:rgba(32,240,208,.04)}
+table.lbt tbody tr:nth-child(even) td{background:rgba(255,255,255,.015)}
+
+/* ---------- toasts: stacked, never on top of each other ---------- */
+#toastStack{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;z-index:90;pointer-events:none;max-width:calc(100% - 32px)}
+#toastStack .toast{position:static;transform:none;left:auto;bottom:auto;background:linear-gradient(180deg,#141B23,#0C1116);color:var(--ink);border:1px solid var(--edge2);border-left:3px solid var(--cyan);border-radius:0;padding:9px 16px;font-family:var(--f-mono);font-size:.8rem;box-shadow:0 10px 30px rgba(0,0,0,.5);animation:tin .22s ease-out}
+@keyframes tin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* ---------- modals ---------- */
+.modal{background:rgba(2,3,5,.72)!important;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.mbox{border-radius:0!important;border:1px solid var(--edge2)!important;background:linear-gradient(180deg,#10161D,#090C10)!important;box-shadow:0 30px 90px rgba(0,0,0,.6),0 0 0 1px rgba(255,30,30,.15)!important;position:relative}
+.mbox::before{content:"";position:absolute;left:0;top:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent 70%)}
+
+/* ---------- welcome / home ---------- */
+.wtop h1{font-family:var(--f-display);font-size:clamp(2rem,4.5vw,3.6rem);letter-spacing:.04em;background:linear-gradient(180deg,#fff,#9AA5B2);-webkit-background-clip:text;background-clip:text;color:transparent}
+.wcard{border-top:1px solid var(--edge)!important}
+.wcard h3{font-family:var(--f-display);letter-spacing:.18em;color:#fff}
+
+/* ---------- Muretto bits ---------- */
+.lvtabs button[aria-selected="true"]{color:#fff;box-shadow:inset 0 -2px 0 var(--accent),0 8px 18px -10px var(--accent)}
+.sesbadge .sb{border-radius:0!important;clip-path:polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%)}
+.bigst.on{box-shadow:0 0 18px rgba(25,210,107,.35)}
+
+/* numbers that matter glow in their own colour */
+.kpi.hl .v,b.bestv,.best{text-shadow:0 0 16px rgba(177,56,221,.45)}
+
+/* ---------- motion: values that change flash once ---------- */
+.flash{animation:flash .9s ease-out}
+@keyframes flash{0%{background-color:rgba(32,240,208,.22)}100%{background-color:transparent}}
+@media (prefers-reduced-motion:reduce){.flash,#toastStack .toast{animation:none}}
+
+/* ---------- phone: compact header, sections at the bottom ---------- */
+#botnav{display:none}
+@media (max-width:760px){
+  .top-in{flex-wrap:nowrap;gap:8px;padding:0 10px;min-height:48px}
+  .brand small{display:none}.brand b{font-size:1.15rem}.brand .logo{width:26px;height:26px}
+  .hdr-tools{flex-wrap:nowrap;gap:6px;margin-left:auto;overflow-x:auto;scrollbar-width:none}
+  .hdr-tools::-webkit-scrollbar{display:none}
+  .hdr-tools .seg.lang,.hdr-tools #btnSync,.hdr-tools #gSess{display:none}
+  .hdr-tools .btn{padding:6px 10px;font-size:.8rem}
+  .mtabs{display:none!important}
+  .top>.tabs.subtabs{padding:4px 10px 8px;overflow-x:auto;flex-wrap:nowrap}
+  #botnav{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:0;right:0;bottom:0;z-index:40;background:rgba(5,7,10,.95);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--hdr-line);padding-bottom:env(safe-area-inset-bottom,0px)}
+  #botnav::before{content:"";position:absolute;left:0;right:0;top:-1px;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent)}
+  #botnav button{background:none;border:0;color:var(--hdr-muted);display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 0 7px;font-family:var(--f-display);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;position:relative}
+  #botnav button svg{width:20px;height:20px}
+  #botnav button[aria-selected="true"]{color:#fff}
+  #botnav button[aria-selected="true"]::before{content:"";position:absolute;top:0;left:25%;right:25%;height:2px;background:var(--accent);box-shadow:0 0 10px var(--accent)}
+  #botnav button[aria-selected="true"] svg{filter:drop-shadow(0 0 6px var(--glow));color:var(--accent)}
+  main{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))!important}
+  #toastStack{bottom:calc(80px + env(safe-area-inset-bottom,0px))}
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .kpi{min-height:92px;padding:10px 12px}.kpi .v{font-size:1.3rem}
+  .hero h1{font-size:1.7rem}
+}
+
+/* ---------- fixes after the first look ---------- */
+.kpis{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
+.strip .lp{max-width:46px;border-radius:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 0 10px -2px currentColor;clip-path:polygon(0 0,100% 0,100% calc(100% - 5px),calc(100% - 5px) 100%,0 100%)}
+.brand b{white-space:nowrap}
+@media (max-width:760px){.brand b{font-size:1.05rem}.brand .bt{line-height:1}.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* numbers scale with their tile, never cut */
+.kpi{container-type:inline-size}
+.kpi .v{font-size:min(1.65rem,12.5cqi);overflow:hidden;text-overflow:clip}
+#raceMode .kpi .v{font-size:min(4.2rem,15cqi)}
+@media (max-width:760px){.kpi .v{font-size:min(1.3rem,13cqi)}}
+#raceMode .rmgrid{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+#raceMode .kpi .v{font-size:min(4.6rem,18cqi)}
+@media (max-width:760px){#raceMode .rmgrid{grid-template-columns:1fr 1fr}#raceMode .kpi .v{font-size:min(2.2rem,17cqi)}}
+@media (max-width:760px){#raceMode{padding:12px}#raceMode .rmtop{flex-wrap:wrap;gap:10px}#raceMode #rmHead{flex-basis:100%}#raceMode #rmHead .lvhead{flex-wrap:wrap;gap:8px}#raceMode #rmHead h2{font-size:1.5rem}#raceMode .rmclock{flex:1}}
