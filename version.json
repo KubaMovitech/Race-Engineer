@@ -1,17 +1,18 @@
 {
- "version": "2.1.4",
- "date": "2026-10-12",
+ "version": "2.1.5",
+ "date": "2026-10-19",
  "notes": [
-  "Guida setup: clicca una regolazione per sapere cosa fa e cosa succede se la cambi",
-  "Schede con i tuoi numeri: setup, libreria e telemetria",
-  "Pannello con parametri, sintomi, piste, auto e metodo"
+  "Nuova grafica pit wall",
+  "Modalità gara a schermo intero nel Muretto",
+  "Telefono: barra delle sezioni in basso",
+  "Home a plancia e confronto con il record sulla pista"
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "2b7c4fe0f73508c54c731acfa9e06d5e5e09efba86ff0aaec09c670e09f0abe0"
+  "sha256": "9ac0fc1d26cbf4010e392ac1ef4286e4fb7e157408feebb3cb489a9a387f6bbf"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "9f221161bfdcda5a0ef90ff72fbc26de4fe09727605c6e90aea723b8bacddba0"
+  "sha256": "c8e3ecba39e95074877438036873c17a502359c811ae55b50d877299acadf106"
  }
 }
