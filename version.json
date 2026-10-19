@@ -1,18 +1,16 @@
 {
- "version": "2.1.6",
+ "version": "2.1.7",
  "date": "2026-10-19",
  "notes": [
-  "Confronto delle traiettorie sulla mappa",
-  "Mappa con zoom, trascinamento e schermo intero",
-  "Mappa in proporzioni reali con griglia e scala",
-  "Grafici delle tracce restilizzati"
+  "Classifica: consumo di VE e benzina a giro e giri che restano per ogni auto",
+  "Risultati: VE e benzina a giro e a fine sessione per tutti i piloti"
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "07c621d808646b48336861d90b1184551728bba7623c278bd3b617e8df44d42e"
+  "sha256": "3b134fa43adc9b394d85121d1bbc2a59e7f5f5585dfd74edbbab6a2dec9210f8"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "027441069c3795ce215f4546628d6f7f7b05dbc2068736c68051c3b2c3de875a"
+  "sha256": "13a4dfc0d4557df2a6a3faeeb5a2a3fb82a15a5087a400a65407a21bb1b9983d"
  }
 }
