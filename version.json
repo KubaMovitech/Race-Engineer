@@ -1,18 +1,18 @@
 {
- "version": "2.1.5",
+ "version": "2.1.6",
  "date": "2026-10-19",
  "notes": [
-  "Nuova grafica pit wall",
-  "Modalità gara a schermo intero nel Muretto",
-  "Telefono: barra delle sezioni in basso",
-  "Home a plancia e confronto con il record sulla pista"
+  "Confronto delle traiettorie sulla mappa",
+  "Mappa con zoom, trascinamento e schermo intero",
+  "Mappa in proporzioni reali con griglia e scala",
+  "Grafici delle tracce restilizzati"
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "9ac0fc1d26cbf4010e392ac1ef4286e4fb7e157408feebb3cb489a9a387f6bbf"
+  "sha256": "07c621d808646b48336861d90b1184551728bba7623c278bd3b617e8df44d42e"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "c8e3ecba39e95074877438036873c17a502359c811ae55b50d877299acadf106"
+  "sha256": "027441069c3795ce215f4546628d6f7f7b05dbc2068736c68051c3b2c3de875a"
  }
 }

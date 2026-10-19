@@ -159,3 +159,16 @@ table.lbt tbody tr:nth-child(even) td{background:rgba(255,255,255,.015)}
 #raceMode .kpi .v{font-size:min(4.6rem,18cqi)}
 @media (max-width:760px){#raceMode .rmgrid{grid-template-columns:1fr 1fr}#raceMode .kpi .v{font-size:min(2.2rem,17cqi)}}
 @media (max-width:760px){#raceMode{padding:12px}#raceMode .rmtop{flex-wrap:wrap;gap:10px}#raceMode #rmHead{flex-basis:100%}#raceMode #rmHead .lvhead{flex-wrap:wrap;gap:8px}#raceMode #rmHead h2{font-size:1.5rem}#raceMode .rmclock{flex:1}}
+
+/* ---------- maps ---------- */
+.mapzoom{position:absolute;display:flex;flex-direction:column;gap:4px;z-index:2}
+.mapzoom button{width:28px;height:28px;background:rgba(8,11,15,.9);border:1px solid var(--edge2);color:var(--ink);font:600 15px var(--f-mono);cursor:pointer;clip-path:polygon(5px 0,100% 0,100% calc(100% - 5px),calc(100% - 5px) 100%,0 100%,0 5px)}
+.mapzoom button:hover{border-color:var(--cyan);color:var(--cyan)}
+#lapRef{max-width:260px}
+canvas.chart,canvas{image-rendering:auto}
+
+.panel.mapfull{position:fixed!important;inset:16px;z-index:300;background:#07090D!important;overflow:auto;box-shadow:0 0 0 100vmax rgba(2,3,5,.78),0 30px 90px rgba(0,0,0,.6)}
+.panel.mapfull canvas{width:100%!important;height:calc(100vh - 220px)!important;aspect-ratio:auto!important}
+body.hasmapfull{overflow:hidden}
+body.hasmapfull .top,body.hasmapfull #botnav{z-index:1}
+body.hasmapfull main{position:relative;z-index:400}
