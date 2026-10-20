@@ -1,16 +1,18 @@
 {
- "version": "2.1.8",
+ "version": "2.1.9",
  "date": "2026-10-20",
  "notes": [
-  "Tolta la sezione Strategia offline; la strategia del Muretto resta",
-  "Pulizia del codice"
+  "Nuovo aspetto per Analisi, Setup e Progressi, come le postazioni di analisi dei team",
+  "Muretto in stile grafica TV della F1, con classifica a torre",
+  "Muretto: barra Direzione gara con gli ultimi eventi",
+  "Cambia solo l'aspetto: tutti i dati restano"
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "860f5038d801837bdac47c275eec2b075290a485e4f97dfcbbc67d5012502eef"
+  "sha256": "97cf98be0e3a566eacb4e26455b87ddffca5b55089893410ff29e0d5ef01995e"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "a92c6d1b4b7ba3a84c96cec5297455b322f8979122c1c16d68d876c7d0190a67"
+  "sha256": "69f554feca1a322579714b4f266a19f4c014e778c6b216ff9b5ffeabadfc5fed"
  }
 }
