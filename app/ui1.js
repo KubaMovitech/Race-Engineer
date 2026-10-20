@@ -6,7 +6,11 @@ const fx=(v,d=1,u='')=>Number.isFinite(v)?v.toFixed(d)+(u?' '+u:''):'—';
 const fsign=(v,d=3)=>Number.isFinite(v)?(v>0?'+':'')+v.toFixed(d):'—';
 const WL={FL:'Ant. sx',FR:'Ant. dx',RL:'Post. sx',RR:'Post. dx'};
 const COLS4=()=>[tok('lapA'),tok('lapB'),tok('good'),tok('warn')];
-function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),3200);}
+// toasts stack one above the other; the same text twice in a row shows once
+let toastLast='',toastAt=0;
+function toast(m){const now=Date.now();if(m===toastLast&&now-toastAt<1500)return;toastLast=m;toastAt=now;
+  let s=$('#toastStack');if(!s){s=document.createElement('div');s.id='toastStack';s.setAttribute('role','status');s.setAttribute('aria-live','polite');document.body.appendChild(s);}
+  const t=document.createElement('div');t.className='toast';t.textContent=m;s.appendChild(t);while(s.children.length>3)s.firstChild.remove();setTimeout(()=>t.remove(),3400);}
 const LS={get(k,d){try{const v=localStorage.getItem('pitwall:'+k);return v==null?d:JSON.parse(v);}catch(e){return d;}},set(k,v){try{localStorage.setItem('pitwall:'+k,JSON.stringify(v));}catch(e){}}};
 
 const store={items:[]};
@@ -78,7 +82,7 @@ function renderLib(){
 }
 async function handleFiles(files){
   for(const f of files){try{const it=await addFile(f.name,await f.arrayBuffer(),{persist:true});toast('Caricato: '+it.label);if(it.kind==='ld')$('#gSess').dataset.want=it.id;if(it.kind==='xml'){relink();if(!lds().some(S=>S.merged?.R===it))$('#gSess').dataset.want=it.id+'|0';}}catch(e){console.error(e);toast(`${f.name}: ${e.message}`);}}
-  relink();learnPitLoss();learnWet();lds().forEach(S=>{try{recordHistory(S);}catch(e){}});refreshAll();
+  relink();learnPitLoss();lds().forEach(S=>{try{recordHistory(S);}catch(e){}});refreshAll();
 }
 
 // ---------- tabs + selects
@@ -137,7 +141,6 @@ RENDER.stint=()=>{
   if(!a){body.innerHTML='<div class="panel empty">Carica una telemetria .ld (e se vuoi il .xml dei risultati della stessa sessione).</div>';return;}
   if(a.xml)stintXML(a.xml,a.xml.sessions[a.si],body);else stintLD(a.S,body);
 };
-function lapTimeCell(l,t){return `<td class="lt">${fmtLap(t)}</td>`;}
 function stintXML(R,sess,body){
   const di=myDriverIdx(R,sess);const D=sess.drivers[di],laps=D.laps;
   if(!laps.length){body.innerHTML=(sess.drivers.length>1?driverPicker(R,sess,di):'')+'<div class="panel empty">Questo pilota non ha giri registrati in questa sessione.</div>';if(sess.drivers.length>1){body.insertAdjacentHTML('beforeend',paceHTML(sess,D));wirePace(sess,D);$('#xDrv').onchange=e=>{LS.set('xmldrv:'+R.id+'|'+sess.name,e.target.value);RENDER.stint();};}return;}
@@ -227,7 +230,6 @@ function lapReadout(i){
   const r=(n,d=0,u='')=>{const a=g.get(n);return a?fx(a[i],d,u):'—';};
   el.innerHTML=`<span>Dist <b>${fx(g.d[i],0)} m</b></span><span>Tempo <b>${fx(g.t[i],2)} s</b></span><span>Vel <b>${r('Ground Speed',0,'km/h')}</b></span><span>Marcia <b>${r('Gear')}</b></span><span>Gas <b>${r('Throttle Pos',0,'%')}</b></span><span>Freno <b>${r('Brake Pos',0,'%')}</b></span><span>RPM <b>${r('Engine RPM')}</b></span><span>G lat <b>${r('G Force Lat',2)}</b></span>`;
 }
-function tcol(t,lo=60,hi=110){return ramp((t-lo)/(hi-lo));}
 function tyreBlock(s){
   const all=W.flatMap(w=>[s.w[w].I,s.w[w].C,s.w[w].O]).filter(Number.isFinite);const lo=Math.min(...all)-5,hi=Math.max(...all)+5;
   const box=w=>{const x=s.w[w];const left=w.endsWith('L');const cells=left?[['E',x.O],['C',x.C],['I',x.I]]:[['I',x.I],['C',x.C],['E',x.O]];

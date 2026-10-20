@@ -70,83 +70,8 @@ RENDER.prog=()=>{
 };
 
 // ================= RAIN: WHEN TO FIT WETS =================
-function learnWet(){xmls().forEach(R=>R.sessions.forEach(sess=>{if(!/race/i.test(sess.name))return;
-  const classes=[...new Set(sess.drivers.map(d=>d.cls))];classes.forEach(cls=>{const g={};
-  sess.drivers.filter(d=>d.cls===cls).forEach(d=>{const s=driverStats(d);if(!s.c2||!Number.isFinite(s.pace2))return;(g[s.c2]??=[]).push({p:s.pace2,box:s.box[0]});});
-  const wet=Object.entries(g).filter(([k])=>/wet|inter/i.test(k)).flatMap(([,v])=>v),dry=Object.entries(g).filter(([k])=>!/wet|inter/i.test(k)).flatMap(([,v])=>v);
-  if(wet.length>=2&&dry.length>=2){let cost=median(wet.map(x=>x.box).filter(Number.isFinite))-median(dry.map(x=>x.box).filter(Number.isFinite));if(!(cost>0))cost=NaN;
-    LS.set('wet:'+R.venue+'|'+cls,{delta:median(dry.map(x=>x.p))-median(wet.map(x=>x.p)),cost,nw:wet.length,nd:dry.length,cls,date:Date.now()});}});}));}
-function wetData(venue){const a=active();const cls=a?.S?.merged?.d.cls||(a?.xml?(a.xml.sessions[a.si].drivers[myDriverIdx(a.xml,a.xml.sessions[a.si])]?.cls):null);
-  let w=cls?LS.get('wet:'+venue+'|'+cls,null):null;if(!w){try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.startsWith('pitwall:wet:'+venue+'|')){w=JSON.parse(localStorage.getItem(k));break;}}}catch(e){}}return w;}
-function rainPanelHTML(){const a=active();const venue=a?.S?.meta.venue||a?.xml?.venue;const w=venue?wetData(venue):null;const v=LS.get('rainCalc',{});
-  return `<div class="panel" id="rainP"><div class="panel-h"><h3>Pioggia: conviene montare le Wet?</h3>${w?`<span class="badge">dati imparati a ${esc(venue)} (${esc(w.cls||'')}): ${w.nw} auto con Wet, ${w.nd} senza</span>`:'<span class="hint">carica una gara con pioggia (.xml) per avere valori misurati</span>'}</div>
-   <div class="setgrid"><label class="f">Giri ancora da fare<input type="number" id="rcLaps" step="1" value="${v.laps??10}"></label><label class="f">Wet più veloci di (s/giro)<input type="number" id="rcDelta" step="0.1" value="${v.delta??(w?w.delta.toFixed(1):2.5)}"></label>
-   <label class="f">Costo del cambio gomme (s)<input type="number" id="rcCost" step="0.5" value="${v.cost??(w&&Number.isFinite(w.cost)?w.cost.toFixed(1):12)}"></label><label class="f">Devi già fermarti?<select id="rcStop"><option value="1"${v.stop!=='0'?' selected':''}>Sì, cambio durante la sosta</option><option value="0"${v.stop==='0'?' selected':''}>No, sosta solo per le gomme</option></select></label></div>
-   <div id="rcOut" style="margin-top:12px"></div></div>`;}
-function calcRain(){const g=id=>+$(id).value;const laps=g('#rcLaps'),d=g('#rcDelta'),c=g('#rcCost'),stop=$('#rcStop').value==='1';
-  const a=active();const venue=a?.S?.meta.venue||a?.xml?.venue;const pl=venue&&LS.get('pitloss:'+venue,null);const extra=stop?c:c+(pl?pl.loss:25);
-  const gain=laps*d-extra,be=d>0?Math.max(0,extra/d):Infinity;LS.set('rainCalc',{laps,delta:d,cost:c,stop:stop?'1':'0'});
-  $('#rcOut').innerHTML=`<div class="kpis"><div class="kpi" style="--kc:${gain>0?tok('good'):tok('bad')}"><div class="l">Verdetto</div><div class="v txt" style="color:${gain>0?'var(--good)':'var(--bad)'}">${gain>0?'Monta le Wet':'Resta con le slick'}</div><div class="s">${gain>0?'guadagni':'perdi'} circa ${fx(Math.abs(gain),0)} s</div></div>
-    <div class="kpi" style="--kc:${tok('warn')}"><div class="l">Pareggio</div><div class="v">${fx(be,1)} giri</div><div class="s">sotto questi giri non conviene</div></div>
-    <div class="kpi" style="--kc:${tok('lapA')}"><div class="l">Costo totale</div><div class="v">${fx(extra,0)} s</div><div class="s">${stop?'solo il cambio gomme':'sosta completa'+(pl?' (misurata)':' (stimata)')}</div></div></div>
-    <p class="muted small" style="margin:8px 0 0">La differenza di passo misurata vale per quella pioggia: se aumenta, le Wet guadagnano di più; se la pista si asciuga, conviene restare con le slick.</p>`;}
-
-// ================= ENDURANCE TEAM PLANNER =================
-const TM_RACE=[['name','Nome piano','Endurance','t'],['hours','Durata (ore)',6,0.25],['start','Ora del via (hh:mm)','13:00','t'],['veCap','Limite NRG per stint (%)',100,1],['ve','NRG per giro (%)',2.6,0.01],['fuel','Carburante per giro (L)',2.1,0.01],['res','Margine (giri)',0.5,0.1],['pit','Tempo perso per sosta (s)',50,0.5],['swap','Cambio pilota (s)',10,0.5],['tyre','Cambio 4 gomme (s)',12,0.5],['tyreEvery','Gomme ogni N stint',2,1],['maxStint','Max minuti per stint (0 = libero)',0,1],['minDrive','Min minuti per pilota (0 = libero)',0,1],['maxDrive','Max minuti per pilota (0 = libero)',0,1]];
 const DRV_COL=['#27F4D2','#FF8000','#B138DD','#19D26B','#F5C518','#3A8DFF'];
-function tmPlans(){return LS.get('team',{plans:[],cur:null});}
-function tmSave(T){LS.set('team',T);}
-function tmNewPlan(){const a=active()?.S;const p={id:'p'+Date.now(),race:Object.fromEntries(TM_RACE.map(([k,,d])=>[k,d])),drivers:[{name:(a?.meta.driver||tr('Pilota')+' 1').replace(/#\d+$/,''),lap:'1:30.000',stints:''},{name:tr('Pilota')+' 2',lap:'1:30.500',stints:''}]};
-  if(a){const b=bestValid(a);const fl=a.laps.filter(l=>l.complete&&l.type==='lanciato'&&!l.invalid);const pace=median(fl.filter(l=>b&&l.time<=b.time*1.05).map(l=>l.time));if(Number.isFinite(pace))p.drivers[0].lap=fmtLap(pace);
-    const st=fl.map(l=>lapStats(a,l));const fu=median(st.map(s=>s.fuel).filter(v=>v>0));if(Number.isFinite(fu))p.race.fuel=+fu.toFixed(2);const pl=LS.get('pitloss:'+a.meta.venue,null);if(pl)p.race.pit=+pl.loss.toFixed(1);}
-  const sv=LS.get('strategy',null);if(sv&&+sv.ve>0)p.race.ve=+sv.ve;if(sv&&+sv.veMax>0)p.race.veCap=+sv.veMax;return p;}
-RENDER.team=()=>{let T=tmPlans();if(!T.plans.length){T.plans.push(tmNewPlan());T.cur=T.plans[0].id;tmSave(T);}
-  if(!T.plans.find(p=>p.id===T.cur))T.cur=T.plans[0].id;const P=T.plans.find(p=>p.id===T.cur);
-  opt($('#tmPlan'),T.plans.map(p=>[p.id,p.race.name||'Piano']),false);$('#tmPlan').value=T.cur;
-  $('#tmRace').innerHTML=TM_RACE.map(([k,l,d,st])=>`<label class="f">${l}<input ${st==='t'?'type="text"':`type="number" step="${st}"`} data-r="${k}" value="${esc(P.race[k]??d)}"></label>`).join('');
-  $('#tmDrivers').innerHTML=P.drivers.map((d,i)=>`<div class="drv"><label class="f">Pilota <span style="color:${DRV_COL[i%6]}">●</span><input type="text" data-d="${i}" data-k="name" value="${esc(d.name)}"></label><label class="f">Passo (m:ss)<input type="text" data-d="${i}" data-k="lap" value="${esc(d.lap)}"></label><label class="f">NRG ×<input type="number" step="0.01" data-d="${i}" data-k="veMul" value="${esc(d.veMul??1)}"></label><label class="f">Stint fissi (n)<input type="number" step="1" data-d="${i}" data-k="stints" value="${esc(d.stints??'')}" placeholder="—"></label><label class="f">Ordine<input type="number" step="1" data-d="${i}" data-k="order" value="${esc(d.order??i+1)}"></label><button class="btn icon" type="button" data-rm="${i}" title="Togli pilota" aria-label="Togli pilota">×</button></div>`).join('')+`<p class="muted small">NRG × = consumo del pilota rispetto al valore di gara (1,05 = consuma il 5% in più). «Stint fissi» forza il numero di stint di quel pilota; vuoto = turni a rotazione.</p>`;
-  const save=()=>{tmSave(T);tmCalc(P);};
-  $$('#tmRace [data-r]').forEach(i=>i.oninput=()=>{P.race[i.dataset.r]=i.type==='number'?+i.value:i.value;if(i.dataset.r==='name')opt($('#tmPlan'),T.plans.map(p=>[p.id,p.race.name||'Piano']),true);save();});
-  $$('#tmDrivers [data-d]').forEach(i=>i.oninput=()=>{const d=P.drivers[+i.dataset.d];d[i.dataset.k]=i.type==='number'?(i.value===''?'':+i.value):i.value;save();});
-  $$('#tmDrivers [data-rm]').forEach(b=>b.onclick=()=>{if(P.drivers.length<=1)return;P.drivers.splice(+b.dataset.rm,1);tmSave(T);RENDER.team();});
-  $('#tmAddDrv').onclick=()=>{if(P.drivers.length>=6)return;P.drivers.push({name:tr('Pilota')+' '+(P.drivers.length+1),lap:P.drivers[0].lap});tmSave(T);RENDER.team();};
-  $('#tmPlan').onchange=e=>{T.cur=e.target.value;tmSave(T);RENDER.team();};
-  $('#tmNew').onclick=()=>{const p=tmNewPlan();p.race.name='Piano '+(T.plans.length+1);T.plans.push(p);T.cur=p.id;tmSave(T);RENDER.team();};
-  $('#tmDup').onclick=()=>{const p=JSON.parse(JSON.stringify(P));p.id='p'+Date.now();p.race.name=(P.race.name||'Piano')+' (copia)';T.plans.push(p);T.cur=p.id;tmSave(T);RENDER.team();};
-  $('#tmDel').onclick=()=>{if(T.plans.length<=1){toast('Deve restare almeno un piano');return;}T.plans=T.plans.filter(p=>p!==P);T.cur=T.plans[0].id;tmSave(T);RENDER.team();};
-  $('#tmExport').onclick=()=>openCode({title:'Esporta piano',help:'Manda questo codice (o il file) ai compagni: con «Importa» lo caricano nella loro app.',text:JSON.stringify({app:'data-engineer',plan:P}),file:`piano-${(P.race.name||'endurance').replace(/\W+/g,'-')}.json`});
-  $('#tmImport').onclick=()=>openCode({title:'Importa piano',help:'Incolla il codice ricevuto (o apri il file .json) e premi OK.',text:'',onOk:t=>{const j=JSON.parse(t);if(!j.plan||!j.plan.race)throw new Error('non è un piano');const p=j.plan;p.id='p'+Date.now();T.plans.push(p);T.cur=p.id;tmSave(T);RENDER.team();toast('Piano importato');}});
-  tmCalc(P);};
 function hhmm(min){const m=((Math.round(min)%1440)+1440)%1440;return String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0');}
-function tmCalc(P){
-  const R=P.race,out=$('#tmOut');const T=R.hours*3600;const ds=P.drivers.map((d,i)=>({...d,i,col:DRV_COL[i%6],lapS:parseLapT(d.lap),mul:+d.veMul||1})).filter(d=>d.lapS>0);
-  if(!ds.length||!(R.ve>0)||!(T>0)){out.innerHTML='<div class="panel empty">Inserisci durata, NRG per giro e almeno un pilota con il passo.</div>';return;}
-  const order=[...ds].sort((a,b)=>(+a.order||a.i+1)-(+b.order||b.i+1));
-  const fixed=order.some(d=>+d.stints>0);const queue=[];if(fixed){order.forEach(d=>{for(let k=0;k<(+d.stints||0);k++)queue.push(d);});}
-  const startMin=(()=>{const m=String(R.start||'0:0').match(/(\d+):(\d+)/);return m?+m[1]*60+ +m[2]:0;})();
-  const ratio=Math.ceil(R.fuel/R.ve*1.03*100)/100;
-  let t=0,k=0,stints=[],tyreCount=0,prev=null;
-  while(t<T&&k<200){const d=fixed?(queue[k]||order[k%order.length]):order[k%order.length];
-    const veLap=R.ve*d.mul;let maxL=Math.floor(R.veCap/veLap-(R.res||0));if(R.maxStint>0)maxL=Math.min(maxL,Math.floor(R.maxStint*60/d.lapS));if(maxL<1)maxL=1;
-    let stop=0,tyres=false,swap=false;if(k>0){stop=R.pit;swap=prev&&prev!==d;if(swap)stop+=R.swap;tyreCount++;tyres=R.tyreEvery>0&&tyreCount%R.tyreEvery===0;if(tyres)stop+=R.tyre;}
-    t+=stop;const remain=T-t;let laps=Math.min(maxL,Math.max(1,Math.ceil(remain/d.lapS)));const last=laps*d.lapS>=remain;if(last)laps=Math.ceil(remain/d.lapS)+0;
-    const ve=Math.min(R.veCap,Math.ceil((laps+(R.res||0))*veLap));
-    stints.push({d,start:t,laps,dur:laps*d.lapS,ve,fuel:ve*ratio,stop,tyres,swap,last});t+=laps*d.lapS;prev=d;k++;if(last)break;}
-  const tot=stints.reduce((a,s)=>a+s.laps,0),pitTot=stints.reduce((a,s)=>a+s.stop,0);
-  const per=ds.map(d=>({d,min:stints.filter(s=>s.d===d).reduce((a,s)=>a+s.dur,0)/60,n:stints.filter(s=>s.d===d).length}));
-  const warn=[];per.forEach(p=>{if(R.minDrive>0&&p.min<R.minDrive)warn.push(`${p.d.name} guida ${fx(p.min,0)} min, sotto il minimo di ${R.minDrive}.`);if(R.maxDrive>0&&p.min>R.maxDrive)warn.push(`${p.d.name} guida ${fx(p.min,0)} min, sopra il massimo di ${R.maxDrive}.`);});
-  out.innerHTML=`<div class="panel"><div class="kpis">
-    <div class="kpi hl" style="--kc:${tok('best')}"><div class="l">Giri stimati</div><div class="v">${tot}</div><div class="s">${fx(R.hours,2)} ore di gara</div></div>
-    <div class="kpi" style="--kc:${tok('accent')}"><div class="l">Soste</div><div class="v">${stints.length-1}</div><div class="s">${fx(pitTot/60,1)} min ai box</div></div>
-    <div class="kpi" style="--kc:${tok('lapA')}"><div class="l">Rapporto carburante</div><div class="v">${fx(ratio,2)}</div><div class="s">${fx(R.fuel,2)} L ÷ ${fx(R.ve,2)} % +3%</div></div>
-    <div class="kpi" style="--kc:${tok('warn')}"><div class="l">Gomme</div><div class="v">${stints.filter(s=>s.tyres).length+1} treni</div><div class="s">cambio ogni ${R.tyreEvery} stint</div></div></div>
-   ${warn.map(w=>`<div class="warnbar" style="margin-top:10px">${esc(w)}</div>`).join('')}
-   <div class="gantt">${stints.map(s=>`<span style="flex:${s.dur+s.stop};background:${s.d.col}" title="${esc(s.d.name)} · ${s.laps} giri">${s.dur>T*0.05?esc(s.d.name.split(' ')[0]):''}</span>`).join('')}</div>
-   <div class="legend">${per.map(p=>`<span><i style="background:${p.d.col}"></i>${esc(p.d.name)} · ${p.n} stint · ${fx(p.min,0)} min (${fx(p.min/(T/60)*100,0)}%)</span>`).join('')}</div></div>
-   <div class="panel"><div class="panel-h"><h3>Piano stint</h3></div><div class="tw"><table><thead><tr><th>Stint</th><th class="l">Pilota</th><th>Inizio</th><th>Fine</th><th>Giri</th><th>Durata</th><th>NRG da impostare</th><th>Carburante</th><th class="l">Sosta prima</th><th>Sosta s</th></tr></thead><tbody>
-   ${stints.map((s,i)=>`<tr><td>${i+1}</td><td class="l" style="font-family:var(--f-body);color:${s.d.col}">${esc(s.d.name)}</td><td>${hhmm(startMin+s.start/60)}</td><td>${hhmm(startMin+(s.start+s.dur)/60)}</td><td>${s.laps}</td><td>${fx(s.dur/60,0)} min</td><td>${fx(s.ve,0)} %</td><td>${fx(s.fuel,1)} L</td><td class="l">${i?[s.swap?'<span class="tag warn">cambio pilota</span>':'<span class="tag info">stesso pilota</span>',s.tyres?'<span class="tag good">4 gomme</span>':''].join(' '):'<span class="tag good">partenza</span>'}</td><td>${i?fx(s.stop,0):'—'}</td></tr>`).join('')}
-   </tbody></table></div><p class="muted small">Ogni stint usa il passo e il consumo del suo pilota e si ferma prima di superare il limite di NRG (margine incluso). L'ultimo stint carica solo l'energia che serve per arrivare. Il tempo di rifornimento è dentro il «tempo perso per sosta».</p></div>`;
-}
 
 // ================= REPORT =================
 function coachTips(S,lap,R){const g0=lapGrid(R.S,R.lap,2),segs=refSegments(g0).filter(s=>s.c),gm=lapGrid(S,lap,2,g0.len);const tips=[];
