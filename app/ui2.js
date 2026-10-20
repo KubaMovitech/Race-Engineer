@@ -125,7 +125,6 @@ async function runAI(turns,outEl,tier='complex'){
   try{const r=await SAMPLE(turns.map((t,i)=>i===0&&t.role==="user"?{...t,content:t.content+AI_LANG()}:t),{modelTier:tier,cache:false,onText:({text})=>{box.innerHTML=md(text);}});box.innerHTML=md(r.text);return r.text;}
   catch(e){if(e?.code==='not_granted')box.innerHTML='<div class="note">Serve il tuo consenso per usare l’assistente: riprova e accetta la richiesta.</div>';else if(e?.code==='rate_limited')box.innerHTML='<div class="note">Troppe richieste ravvicinate: aspetta un minuto e riprova.</div>';else{box.innerHTML=`<div class="note">Nessuna risposta (${esc(e?.message||e?.code||'errore')}). Riprova tra poco.</div>`;if(e?.text)box.innerHTML+=md(e.text);}return null;}
 }
-const PROBLEMS=['Sottosterzo in ingresso','Sottosterzo a centro curva','Sottosterzo in uscita','Sovrasterzo in ingresso','Sovrasterzo in uscita','Instabile in frenata','Bloccaggio ruote','Pattina in uscita','Poca velocità di punta','Tocca il fondo / saltella','Posteriori si surriscaldano','Anteriori si surriscaldano','Gomme fredde','Consumo gomme alto','Nervosa sui cordoli'];
 let suTurns=[];
 function setupPrompt(){
   const su=byId($('#suFile').value),S=active()?.S;
@@ -191,7 +190,6 @@ async function boot(){
   $$('[data-rot],[data-flip]').forEach(b=>b.onclick=()=>{const map=(b.dataset.rot||b.dataset.flip)==='lap'?lapMap:cmpMap;if(!map.venue)return;const v=getMapView(map.venue);if(b.dataset.rot)v.rot=(v.rot+1)%4;else v.flip=!v.flip;saveMapView(map.venue);lapMap.draw();cmpMap.draw();});
   $('#suChips').innerHTML=KB.map(p=>`<button type="button" class="pchip" data-k="${p.id}" aria-pressed="false">${esc(p.label)}</button>`).join('');
   $$('#suChips .pchip').forEach(b=>b.onclick=()=>{b.setAttribute('aria-pressed',b.getAttribute('aria-pressed')!=='true');renderDoctor();});
-  initStrategy();
   $('#suAsk').onclick=async()=>{suTurns=[{role:'user',content:setupPrompt()}];$('#suAnswer').innerHTML='';$('#suAsk').disabled=true;const t=await runAI(suTurns,$('#suAnswer'));$('#suAsk').disabled=false;if(t){suTurns.push({role:'assistant',content:t});$('#suFollowWrap').hidden=false;}};
   const follow=async()=>{const q=$('#suFollow').value.trim();if(!q||!suTurns.length)return;$('#suFollow').value='';const p=document.createElement('p');p.className='q';p.textContent=q;$('#suAnswer').appendChild(p);suTurns.push({role:'user',content:q});const t=await runAI(suTurns,$('#suAnswer'),'default');if(t)suTurns.push({role:'assistant',content:t});else suTurns.pop();};
   $('#suFollowBtn').onclick=follow;$('#suFollow').onkeydown=e=>{if(e.key==='Enter')follow();};
@@ -206,7 +204,7 @@ async function boot(){
   await Promise.all(SAMPLES.map(async([u,n])=>{try{const r=await fetch(u);if(!r.ok)throw 0;let buf;if(u.endsWith('.b64.txt')){const s=atob((await r.text()).trim());const a=new Uint8Array(s.length);for(let i=0;i<s.length;i++)a[i]=s.charCodeAt(i);buf=a.buffer;}else buf=await r.arrayBuffer();await addFile(n,buf,{sample:true});}catch(e){console.warn('sample',u,e);}}));
   for(const s of saved){try{await addFile(s.name,s.buf);}catch(e){console.warn(e);}}
   store.items.sort((a,b)=>(a.sample?1:0)-(b.sample?1:0));
-  relink();learnPitLoss();learnWet();renderLib();fillSelects();
+  relink();learnPitLoss();renderLib();fillSelects();
   const want=LS.get('sess',null);if(want&&[...$('#gSess').options].some(o=>o.value===want))$('#gSess').value=want;
   let tab=LS.get('tab','stint');if(location.hash&&RENDER[location.hash.slice(1)])tab=location.hash.slice(1);
   showView(tab);

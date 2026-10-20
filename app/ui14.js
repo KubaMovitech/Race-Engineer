@@ -14,7 +14,6 @@ function liveRows(sc){const rows=(sc?.v||[]).map(R);const rst=LIVE.rst;
   const cp={};[...rows].sort((a,b)=>a.pos-b.pos).forEach(r=>{cp[r.cls]=(cp[r.cls]||0)+1;r.pic=cp[r.cls];});return rows;}
 function compHTML(comp,cf,cr){if(!comp)return cf||cr?`<span class="muted small">${esc([cf,cr].filter(Boolean).join('/'))}</span>`:'—';
   const mixed=new Set(comp).size>1;return `<span class="tyq${mixed?' mixed':''}" title="${esc([...comp].map((c,i)=>['AS','AD','PS','PD'][i]+' '+(COMP_N[c]||c)).join(' · '))}">${[...comp].map(c=>`<i style="background:${COMP_COL[c]||COMP_COL['?']};color:${COMP_INK(c)}">${c}</i>`).join('')}</span>`;}
-function barHTML(v,warn){if(!(v>=0))return '<span class="muted">—</span>';const p=Math.max(0,Math.min(1,v));return `<span class="lvbar${p<(warn||0.12)?' low':''}"><i style="width:${p*100}%"></i><b>${Math.round(p*100)}</b></span>`;}
 // ---------- live sectors (F1 / WEC style) ----------
 // personal bests from valid lap history + the game's figures; class bests from those
 function secPB(r){const mk='spb|'+r.veh+'|'+r.laps;if(LIVE.memo&&LIVE.memo.has(mk))return LIVE.memo.get(mk);const pb=[Infinity,Infinity,Infinity];const put=(k,v)=>{if(v>1&&v<pb[k])pb[k]=v;};
@@ -52,10 +51,6 @@ function carStats_(veh,r){const c=fCar(veh);const L=fLaps(veh);const cl=cleanLap
   return {c,L,cl,pace5:avg_(r5.filter(x=>x<=m5*1.1)),pace10:avg_(t.slice(-10)),paceAll:avg_(t),sd:sd_(t.slice(-10)),best:t.length?Math.min(...t):NaN,ideal,
     pits,lastPit,stintLaps,fpl,vpl,lf,lv,left:Number.isFinite(left)?left:NaN,nextPit:Number.isFinite(left)&&r?r.laps+1+Math.floor(left):NaN,limit:Number.isFinite(lv)&&(!Number.isFinite(lf)||lv<lf)?'ve':'fuel',
     lastInv:lastL?!!lastL[7]:false,lastT:lastL?lastL[1]:NaN,swaps:c?.swaps||[],drivers:c?.drivers||[]};}
-function soloPlan(){const v=LS.get('strategy',null);if(!v)return null;const lap=parseLapT(v.lap),fuel=+v.fuel,tank=+v.tank,ve=+v.ve||0,veMax=+v.veMax||100,res=+v.res||0;
-  if(!(lap>0)||!(fuel>0)||!(tank>0))return null;const stintMax=Math.max(1,Math.floor(Math.min(ve>0?Infinity:tank/fuel-res,ve>0?veMax/ve-res:Infinity)));
-  const total=+v.laps>0?Math.round(+v.laps):Math.floor((+v.race||60)*60/lap)+1;const n=Math.ceil(total/stintMax);const L=[];if(v.mode==='first'){let rem=total;while(rem>0){const k=Math.min(stintMax,rem);L.push(k);rem-=k;}}else{const b=Math.floor(total/n),x=total%n;for(let i=0;i<n;i++)L.push(b+(i<x?1:0));}
-  let c=0;return {lap,total,stintMax,stints:L.map(k=>{const s={from:c+1,to:c+k,n:k};c+=k;return s;})};}
 // finishing laps in a timed race: the leader finishes on the first crossing after time runs out, everyone else on their next crossing
 function finishLaps(rows,me,sc){const I=sc?.i||{};if(!me)return NaN;if(I.maxLaps>0&&I.maxLaps<99999)return I.maxLaps-me.laps;if(!(I.rem>0))return NaN;
   const lead=rows.find(r=>r.pos===1);if(!lead)return NaN;const lp=carStats(lead.veh,lead).pace5||lead.estL,mp=carStats(me.veh,me).pace5||me.estL;if(!(lp>0)||!(mp>0))return NaN;
@@ -121,12 +116,11 @@ function liveSkeleton(){const v=$('#v-live');if(v.dataset.ok)return;v.dataset.ok
     <div class="panel"><div class="panel-h"><h3>Prossima sosta</h3><span class="muted small">dal menu box selezionato in gioco</span></div><div id="lvPit"></div></div>
     <div class="panel"><div class="panel-h"><h3>Giri della nostra auto</h3></div><div id="lvLaps" class="tw" style="max-height:460px;overflow:auto"></div></div></div>
   <div class="lvsub" data-p="str"${sub!=='str'?' hidden':''}>
-    <div class="panel"><div class="panel-h"><h3>Stint in tempo reale</h3><span class="seg" id="lvStrMode"><button type="button" data-m="solo">Solo</button><button type="button" data-m="end">Endurance</button></span></div><div id="lvStr"></div></div>
+    <div class="panel"><div class="panel-h"><h3>Stint in tempo reale</h3></div><div id="lvStr"></div></div>
     <div class="grid2"><div class="panel"><div class="panel-h"><h3>Fino alla bandiera</h3><label class="f" style="min-width:190px">Consumi di<select id="lvFinD"></select></label></div><div id="lvFin"></div></div>
       <div class="panel"><div class="panel-h"><h3>Piloti: giri con l'energia attuale</h3><span class="muted small">consumi di ogni pilota della nostra auto</span></div><div id="lvDrv" class="tw"></div></div></div>
     <div class="grid2"><div class="panel"><div class="panel-h"><h3>Finestra di sosta</h3><span class="muted small" id="lvPwT"></span></div><div id="lvPitOut"></div></div>
       <div class="panel"><div class="panel-h"><h3>Undercut e overcut</h3><span class="muted small">auto vicine in classe, in diretta</span></div><div id="lvUnd"></div></div></div>
-    <div id="lvPlanP"></div>
     <div class="grid2"><div class="panel"><div class="panel-h"><h3>Risparmio carburante ed energia</h3></div><div id="lvSave2"></div></div>
       <div class="panel"><div class="panel-h"><h3>Dati di strategia del gioco</h3><span class="muted small">dal menu box di LMU</span></div><div id="lvGame"></div></div></div>
     <div class="panel"><div class="panel-h"><h3>Stint della nostra auto</h3></div><div id="lvStints" class="tw"></div></div></div>
@@ -145,7 +139,7 @@ function liveSkeleton(){const v=$('#v-live');if(v.dataset.ok)return;v.dataset.ok
   $('#lvCar').onchange=e=>{LIVE.focus=e.target.value;LS.set('live:focus',LIVE.focus);renderLive(true);};
   $('#lvCls').onchange=e=>{LIVE.cls=e.target.value;LS.set('live:cls',LIVE.cls);renderLive(true);};
   const seg=(id,key,def,attr)=>{const cur=LS.get(key,def);$$('#'+id+' button').forEach(b=>{b.setAttribute('aria-pressed',b.dataset[attr]===cur);b.onclick=()=>{LS.set(key,b.dataset[attr]);$$('#'+id+' button').forEach(x=>x.setAttribute('aria-pressed',x===b));renderLive(true);};});};
-  seg('lvGapMode','live:gapMode','all','g');seg('lvStrMode','live:stratMode',tmPlans().plans.length?'end':'solo','m');seg('lvEvF','live:evF','cls','f');
+  seg('lvGapMode','live:gapMode','all','g');seg('lvEvF','live:evF','cls','f');
   $('#lvNotif').value=LS.get('live:notif','class');$('#lvNotif').onchange=e=>LS.set('live:notif',e.target.value);
   $('#lvNew').onclick=liveNewTeam;$('#lvDeb').onclick=()=>openDebrief();
   $('#lvJoin').onclick=()=>openCode({title:tr('Entra con codice'),help:tr('Incolla il codice squadra che ti ha mandato l\'ingegnere (inizia con DE1-).'),text:'',onOk:txt=>{if(!teamParse(txt))throw new Error(tr('codice squadra non valido'));LS.set('live:team',txt.trim());liveStart();toast(tr('Collegato alla squadra'));}});
@@ -320,36 +314,13 @@ function lvCar(x){const {c,stt}=x;
     <td>${l.n}</td><td class="l">${esc(l.drv||'')}</td><td class="lt">${fmtLap(l.t)}</td><td>${l.fuel>0?fx(l.fuel,2):'—'}</td><td>${l.ve>0?fx(l.ve*100,2):'—'}</td><td>${fx((l.wear||[]).reduce((a,b)=>a+b,0)/4,2)}</td><td>${fx((l.carc||[]).reduce((a,b)=>a+b,0)/4,0)}</td><td>${fx(l.trk,1)}</td><td>${l.pit?'<span class="tag info">box</span>':''}${l.inv?' <span class="tag bad">inv.</span>':''}</td></tr>`).join('')}</tbody></table>`:`<div class="muted small">${tr('I giri compaiono qui man mano che vengono completati.')}</div>`;}
 
 // ---------- Strategia ----------
-function lvStrategy(x){const {sc,I,kind,stt,c,S2,rows,me}=x;const mode=LS.get('live:stratMode',tmPlans().plans.length?'end':'solo');
+function lvStrategy(x){const {sc,I,kind,stt,c,S2,rows,me}=x;
   if(S2){const fl=finishLaps(rows,me,sc);$('#lvStr').innerHTML=`<div class="kpis">${[liveTile('Giri possibili',fx(S2.left,1),S2.lim==='ve'?'limita l\'energia virtuale':'limita il carburante'),
       liveTile('Ultimo giro utile per la sosta',Number.isFinite(S2.lastLap)?'giro '+S2.lastLap:'—',''),liveTile('Giri alla bandiera',Number.isFinite(fl)?'≈ '+fl:Number.isFinite(S2.toGo)?'≈ '+S2.toGo:'—',I.maxLaps>0&&I.maxLaps<99999?'gara a giri':'il leader chiude il giro dopo lo scadere del tempo'),
       liveTile('Soste ancora necessarie',Number.isFinite(S2.stops)?S2.stops:'—',Number.isFinite(S2.stint)&&S2.stint<999?'stint pieno ≈ '+fx(S2.stint,0)+' giri':''),
       liveTile('Carburante per finire',Number.isFinite(S2.need)?fx(S2.need,1)+' L':'—','oltre a quello a bordo'),liveTile('Consumo',`${fx(S2.fpl,2)} L · ${Number.isFinite(S2.vpl)?fx(S2.vpl*100,2)+' %':'—'}`,'per giro (benzina · energia)')].join('')}</div>
       <p class="muted small" style="margin:8px 0 0">${S2.n?`Medie sugli ultimi ${S2.n} giri senza soste.`:'Le medie compaiono dopo il primo giro completo senza soste.'}${kind!=='race'?' '+tr('In prova e qualifica i numeri servono a preparare la gara.'):''}</p>`;}
   else $('#lvStr').innerHTML=`<div class="muted small">${tr('Serve la nostra auto in pista con il bridge acceso.')}</div>`;
-  // plan
-  let h='';if(mode==='end'){const T=tmPlans();const pid=LS.get('live:plan','');const P=T.plans.find(p=>p.id===pid)||T.plans.find(p=>p.id===T.cur)||T.plans[0];
-    h=`<div class="panel"><div class="panel-h"><h3>Piano endurance</h3><label class="f" style="min-width:220px">Piano<select id="lvPlan">${T.plans.map(p=>`<option value="${p.id}"${P&&p.id===P.id?' selected':''}>${esc(p.race.name||'Piano')}</option>`).join('')}</select></label></div>`;
-    const PS=P&&tmStints(P);if(!PS)h+=`<div class="muted small">Crea un piano in Strategia › Endurance: qui vedrai la gara reale confrontata con il piano.</div>`;
-    else{const L=stt.laps;const raceT=I.et||0;const lastLap=L[L.length-1];const pits=c?.pits??me?.pits??0;const k=Math.min(pits,PS.stints.length-1),ps=PS.stints[k],nx=PS.stints[k+1];const cum=ps.lap0+ps.laps;
-      const lastPitN=Math.max(0,...L.filter(l=>l.pit).map(l=>l.n));const inStint=c?Math.max(0,(c.lap-1)-lastPitN):NaN;const delta=lastLap&&Number.isFinite(lastLap.et)?lastLap.et-planTimeAt(PS,lastLap.n):NaN;
-      const lastOut=stt.evs.filter(e=>e.k==='pit_out').sort((a,b)=>b.et-a.et)[0];const stintT=raceT-(lastOut?lastOut.et:0);const drv=(c?.drv||'').toLowerCase(),pdr=(ps.d.name||'').toLowerCase();const mism=drv&&pdr&&!drv.includes(pdr.split(' ')[0])&&!pdr.includes(drv.split(' ')[0]);
-      const liveEnd=S2&&Number.isFinite(S2.lastLap)?S2.lastLap:NaN;const toChange=nx&&Number.isFinite(liveEnd)&&c?Math.max(0,liveEnd-(c.lap-1)):NaN;
-      h+=`<div class="kpis">${[liveTile('Stint',`${k+1} di ${PS.stints.length}`,`piano: ${esc(ps.d.name)} · ${ps.laps} giri`),liveTile('Giri nello stint',Number.isFinite(inStint)?`${inStint} / ${ps.laps}`:'—',`tempo di guida ${hms(stintT)}`),
-        liveTile('Fine stint',Number.isFinite(liveEnd)?'giro '+liveEnd:'—',`piano: giro ${cum}`+(Number.isFinite(liveEnd)?` (${liveEnd-cum>=0?'+':''}${liveEnd-cum})`:'')),
-        liveTile('Rispetto al piano',Number.isFinite(delta)?`<span class="${delta>0?'neg':'pos'}">${delta>0?'+':''}${fx(delta,0)} s</span>`:'—',Number.isFinite(delta)?(delta>0?'in ritardo':'in anticipo'):'serve un giro completo'),
-        liveTile('Prossimo pilota',nx?esc(nx.d.name):'—',nx?`piano ${hhmm(PS.startMin+nx.start/60)}${Number.isFinite(toChange)?` · tra ${toChange} giri`:''}`:'ultimo stint')].join('')}</div>
-        ${mism?`<div class="warnbar" style="margin-top:10px">In auto c'è ${esc(c.drv)}, il piano prevede ${esc(ps.d.name)}.</div>`:''}
-        <div class="gantt lvg">${PS.stints.map((s,i)=>`<span style="flex:${s.dur+s.stop};background:${s.d.col};opacity:${i<k?.45:1}" title="${esc(s.d.name)} · ${s.laps} giri">${s.dur>PS.T*0.05?esc(s.d.name.split(' ')[0]):''}</span>`).join('')}<i class="now" style="left:${Math.min(100,raceT/PS.T*100)}%"></i></div>`;}
-    h+='</div>';}
-  else{const sp=soloPlan();h=`<div class="panel"><div class="panel-h"><h3>Piano da solo</h3><span class="muted small">da Strategia › Solo</span></div>`;
-    if(!sp)h+=`<div class="muted small">Imposta la gara in Strategia › Solo: qui vedrai lo stint attuale confrontato con il piano.</div>`;
-    else{const lap=c?.lap??(me?me.laps+1:1);const k=sp.stints.findIndex(s=>lap<=s.to);const ps=sp.stints[k<0?sp.stints.length-1:k];const liveEnd=S2&&Number.isFinite(S2.lastLap)?S2.lastLap:NaN;
-      h+=`<div class="kpis">${[liveTile('Stint',`${(k<0?sp.stints.length-1:k)+1} di ${sp.stints.length}`,`giri ${ps.from}–${ps.to}`),liveTile('Sosta prevista',k<sp.stints.length-1?'giro '+ps.to:'nessuna',Number.isFinite(liveEnd)?`dai consumi: giro ${liveEnd}${liveEnd<ps.to?' <span class="neg">(prima del piano)</span>':''}`:''),
-        liveTile('Giri totali previsti',sp.total,`passo ${fmtLap(sp.lap)}`),liveTile('Stint massimo',sp.stintMax+' giri','')].join('')}</div>
-        <div class="gantt lvg">${sp.stints.map((s,i)=>`<span style="flex:${s.n};background:${i%2?'var(--lapB)':'var(--lapA)'};opacity:${i<k?.45:1}">${s.from}–${s.to}</span>`).join('')}<i class="now" style="left:${Math.min(100,(lap-1)/sp.total*100)}%"></i></div>`;}
-    h+='</div>';}
-  $('#lvPlanP').innerHTML=h;const ps=$('#lvPlan');if(ps)ps.onchange=e=>{LS.set('live:plan',e.target.value);renderLive(true);};
   // saver
   if(S2&&c&&Number.isFinite(S2.left)){const lim=S2.lim,cur=lim==='ve'?S2.vpl:S2.fpl,amount=lim==='ve'?c.ve:c.fuel;const n=Math.floor(S2.left);const needOne=amount/(n+1);const pct=(needOne/cur-1)*100;
     const rowsS=[[`Fare ${n+1} giri invece di ${n}`,`${lim==='ve'?fx(needOne*100,2)+' %':fx(needOne,2)+' L'} ${tr('per giro')}`,`${fx(pct,1)}%`]];
@@ -471,7 +442,7 @@ function openCarModal(veh){let m=$('#mCar');if(!m){m=document.createElement('div
   const c=cv.getContext('2d');c.save();c.setLineDash([3,3]);c.strokeStyle=tok('warn');c.lineWidth=2;c.beginPath();c.arc(a,b,12,0,7);c.stroke();c.restore();};})();
 
 // ---------- two-level main navigation ----------
-(function(){const GROUPS=[['ana','Analisi',['stint','lap','cmp','coach']],['set','Setup',['setup','diary']],['str','Strategia',['str','team']],['prog','Progressi',['prog']],['live','Muretto',['live']]];
+(function(){const GROUPS=[['ana','Analisi',['stint','lap','cmp','coach']],['set','Setup',['setup','diary']],['prog','Progressi',['prog']],['live','Muretto',['live']]];
   const SUBL={str:'Solo',team:'Endurance'};const nav=$('.tabs');if(!nav||$('.mtabs'))return;
   const main=document.createElement('nav');main.className='mtabs';main.setAttribute('role','tablist');main.innerHTML=GROUPS.map(([g,l])=>`<button type="button" class="mtab" data-group="${g}">${g==='live'?'<span class="livedot"></span>':''}${l}</button>`).join('');
   nav.before(main);nav.classList.add('subtabs');

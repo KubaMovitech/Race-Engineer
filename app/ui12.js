@@ -220,7 +220,7 @@ function drawLiveInputs(B){const cv=$('#lvIn');if(!cv)return;const r=cv.getBound
 // ---- wiring ----
 (function(){
   const tabs=$('.tabs');if(tabs&&!$('#t-live')){const b=document.createElement('button');b.className='tab';b.setAttribute('role','tab');b.id='t-live';b.dataset.view='live';b.setAttribute('aria-selected','false');b.innerHTML='<span class="livedot"></span>Muretto';tabs.appendChild(b);b.onclick=()=>showView('live');}
-  if(!$('#v-live')){const s=document.createElement('section');s.className='view';s.id='v-live';s.hidden=true;$('#v-team').after(s);}
+  if(!$('#v-live')){const s=document.createElement('section');s.className='view';s.id='v-live';s.hidden=true;$('#v-prog').after(s);}
   RENDER.live=()=>renderLive(true);
   const os=showView;window.showView=showView=function(v){$('#hero').hidden=v==='live';os(v);};
   setInterval(()=>{renderLive(false);const on=LIVE.status.local==='on'||LIVE.status.team==='on';document.body.classList.toggle('live-on',on&&Object.values(LIVE.drivers).some(D=>Date.now()-D.carAt<8000));},400);

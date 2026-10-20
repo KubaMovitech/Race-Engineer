@@ -151,7 +151,6 @@ function ovCtx(o){const sc=LIVE.sc,I=sc?.i||{};LIVE.memo=new Map();const names=O
   if(o.car&&names.includes(o.car))LIVE.focus=o.car;else if(!names.includes(LIVE.focus)){const now=Date.now();LIVE.focus=names.find(n=>liveCars()[n].some(D=>D.car&&now-D.carAt<8000))||names[0]||'';}
   const rows=liveRows(sc);const me=rows.find(r=>r.veh===LIVE.focus);const stt=liveCarState(LIVE.focus);const c=stt.c;const S2=c&&liveStrat(stt,sc);return {sc,I,kind:sesKind(I),rows,me,stt,c,S2,names};}
 const ovName=n=>{const p=String(n||'').trim().split(/\s+/);return p.length>1?(p[0][0]+'. '+p.slice(1).join(' ')):p[0]||'';};
-const ovGapTxt=v=>Number.isFinite(v)?(v<0?'−':'+')+fx(Math.abs(v),1):'—';
 function ovBox(t,body,cls=''){return `<div class="ovb ${cls}">${t?`<div class="ovh">${t}</div>`:''}${body}</div>`;}
 
 function ovTower(x,o){const {rows,me,kind,I}=x;if(!rows.length)return ovBox(tr('Classifica'),`<div class="ovm">${tr('In attesa dei dati…')}</div>`);

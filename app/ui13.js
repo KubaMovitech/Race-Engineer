@@ -7,20 +7,6 @@ const med_=a=>{const s=a.filter(Number.isFinite).sort((x,y)=>x-y);return s.lengt
 const avg_=a=>{a=a.filter(Number.isFinite);return a.length?a.reduce((x,y)=>x+y,0)/a.length:NaN;};
 const sd_=a=>{a=a.filter(Number.isFinite);if(a.length<2)return NaN;const m=avg_(a);return Math.sqrt(a.reduce((s,x)=>s+(x-m)**2,0)/(a.length-1));};
 
-// plan stints (same rules as the Team tab)
-function tmStints(P){const R=P.race;const T=R.hours*3600;const ds=P.drivers.map((d,i)=>({...d,i,col:DRV_COL[i%6],lapS:parseLapT(d.lap),mul:+d.veMul||1})).filter(d=>d.lapS>0);
-  if(!ds.length||!(R.ve>0)||!(T>0))return null;const order=[...ds].sort((a,b)=>(+a.order||a.i+1)-(+b.order||b.i+1));
-  const fixed=order.some(d=>+d.stints>0);const queue=[];if(fixed)order.forEach(d=>{for(let k=0;k<(+d.stints||0);k++)queue.push(d);});
-  const startMin=(()=>{const m=String(R.start||'0:0').match(/(\d+):(\d+)/);return m?+m[1]*60+ +m[2]:0;})();
-  let t=0,k=0,stints=[],tyreCount=0,prev=null,cum=0;
-  while(t<T&&k<200){const d=fixed?(queue[k]||order[k%order.length]):order[k%order.length];
-    const veLap=R.ve*d.mul;let maxL=Math.floor(R.veCap/veLap-(R.res||0));if(R.maxStint>0)maxL=Math.min(maxL,Math.floor(R.maxStint*60/d.lapS));if(maxL<1)maxL=1;
-    let stop=0,tyres=false,swap=false;if(k>0){stop=R.pit;swap=prev&&prev!==d;if(swap)stop+=R.swap;tyreCount++;tyres=R.tyreEvery>0&&tyreCount%R.tyreEvery===0;if(tyres)stop+=R.tyre;}
-    t+=stop;const remain=T-t;let laps=Math.min(maxL,Math.max(1,Math.ceil(remain/d.lapS)));const last=laps*d.lapS>=remain;if(last)laps=Math.ceil(remain/d.lapS);
-    stints.push({d,start:t,laps,dur:laps*d.lapS,stop,tyres,swap,last,lap0:cum});cum+=laps;t+=laps*d.lapS;prev=d;k++;if(last)break;}
-  return {stints,startMin,T,R};}
-function planTimeAt(PS,n){for(const s of PS.stints){if(n<=s.lap0+s.laps)return s.start+(n-s.lap0)*s.d.lapS;}const s=PS.stints[PS.stints.length-1];return s?s.start+s.dur:NaN;}
-
 // field helpers
 function fCar(veh){return LIVE.field?.cars?.[veh];}
 function fLaps(veh){const mk='fl|'+veh;if(LIVE.memo&&LIVE.memo.has(mk))return LIVE.memo.get(mk);const c=fCar(veh);let L=c?[...c.laps.values()].sort((a,b)=>a[0]-b[0]):[];
@@ -28,8 +14,6 @@ function fLaps(veh){const mk='fl|'+veh;if(LIVE.memo&&LIVE.memo.has(mk))return LI
   const row=(LIVE.sc?.v||[]).find(r=>r[2]===veh);const maxN=row?row[5]+1:(LIVE.sc?.i?.et>0?LIVE.sc.i.et/10+5:Infinity);L=L.filter(l=>l[0]>=1&&l[0]<=maxN&&!(l[1]>3600));
   if(LIVE.memo)LIVE.memo.set(mk,L);return L;}
 function cleanLaps(L){const v=L.filter(l=>l[0]>1&&!l[3]&&!l[7]&&l[1]>0);const b=Math.min(...v.map(l=>l[1]));return v.filter(l=>l[1]<=b*1.07);}
-function stintInfo(L){const pitL=L.filter(l=>l[3]).map(l=>l[0]);const runs=[];let prev=0;pitL.forEach(n=>{if(n-prev>2)runs.push(n-prev);prev=n;});
-  const last=L.length?L[L.length-1][0]:0;return {pits:pitL,since:last-(pitL.length?pitL[pitL.length-1]:0),avgStint:med_(runs),lastPit:pitL.length?pitL[pitL.length-1]:null};}
 function gapSeries(us,rv){const A=new Map(fLaps(us).map(l=>[l[0],l[2]]));return fLaps(rv).filter(l=>A.has(l[0])).map(l=>[l[0],A.get(l[0])-l[2]]);} // + = rival ahead
 
 function liveLapsLoss(stt){ // measured pit losses for our car: pit laps − pace, and time stationary

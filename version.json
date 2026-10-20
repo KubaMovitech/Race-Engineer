@@ -1,16 +1,16 @@
 {
- "version": "2.1.7",
- "date": "2026-10-19",
+ "version": "2.1.8",
+ "date": "2026-10-20",
  "notes": [
-  "Classifica: consumo di VE e benzina a giro e giri che restano per ogni auto",
-  "Risultati: VE e benzina a giro e a fine sessione per tutti i piloti"
+  "Tolta la sezione Strategia offline; la strategia del Muretto resta",
+  "Pulizia del codice"
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "3b134fa43adc9b394d85121d1bbc2a59e7f5f5585dfd74edbbab6a2dec9210f8"
+  "sha256": "860f5038d801837bdac47c275eec2b075290a485e4f97dfcbbc67d5012502eef"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "13a4dfc0d4557df2a6a3faeeb5a2a3fb82a15a5087a400a65407a21bb1b9983d"
+  "sha256": "a92c6d1b4b7ba3a84c96cec5297455b322f8979122c1c16d68d876c7d0190a67"
  }
 }

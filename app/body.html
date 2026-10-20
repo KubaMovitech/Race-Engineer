@@ -25,8 +25,6 @@
     <button class="tab" role="tab" id="t-setup" data-view="setup" aria-selected="false">Setup</button>
     <button class="tab" role="tab" id="t-diary" data-view="diary" aria-selected="false">Diario</button>
     <button class="tab" role="tab" id="t-prog" data-view="prog" aria-selected="false">Progressi</button>
-    <button class="tab" role="tab" id="t-str" data-view="str" aria-selected="false">Strategia</button>
-    <button class="tab" role="tab" id="t-team" data-view="team" aria-selected="false">Squadra</button>
   </nav>
 </header>
 <div class="drawer" id="drawer" hidden><div class="drawer-in" id="lib"></div></div>
@@ -184,16 +182,6 @@
   </div>
 </section>
 
-<!-- STRATEGY -->
-<section class="view" id="v-str" hidden>
-  <div class="panel">
-    <div class="panel-h"><h2>Strategia gara</h2><button class="btn" type="button" id="stFromTele">Prendi i dati dalla telemetria</button></div>
-    <p class="muted small" style="margin:0 0 12px">Funziona offline. I consumi si compilano dalla sessione selezionata in alto (e dal .xml per l'energia virtuale); puoi correggere ogni valore a mano.</p>
-    <div class="setgrid" id="stForm"></div>
-  </div>
-  <div id="stOut"></div>
-  <div id="rainWrap"></div>
-</section>
 <!-- PROGRESS -->
 <section class="view" id="v-prog" hidden>
   <div class="panel"><div class="panel-h"><h2>Progressi</h2><label class="f" style="min-width:280px">Pista e auto<select id="pgKey"></select></label></div>
@@ -201,19 +189,7 @@
   <div id="pgBody"></div>
 </section>
 
-<!-- TEAM / ENDURANCE -->
-<section class="view" id="v-team" hidden>
-  <div class="panel"><div class="panel-h"><h2>Squadra · strategia endurance</h2>
-    <label class="f" style="min-width:220px">Piano<select id="tmPlan"></select></label>
-    <button class="btn" type="button" id="tmNew">Nuovo piano</button><button class="btn" type="button" id="tmDup">Duplica</button><button class="btn" type="button" id="tmDel">Elimina</button>
-    <button class="btn" type="button" id="tmExport">Esporta</button><button class="btn" type="button" id="tmImport">Importa</button></div>
-    <p class="muted small" style="margin:0">I piani restano salvati in questo browser. Con «Esporta» ottieni un codice (o un file .json) da mandare ai compagni; con «Importa» lo carichi.</p></div>
-  <div class="grid2">
-    <div class="panel"><div class="panel-h"><h3>Gara</h3></div><div class="setgrid" id="tmRace"></div></div>
-    <div class="panel"><div class="panel-h"><h3>Piloti</h3><button class="btn" type="button" id="tmAddDrv">+ Pilota</button></div><div id="tmDrivers"></div></div>
-  </div>
-  <div id="tmOut"></div>
-</section>
+
 </main>
 <div class="modal" id="mSettings" hidden><div class="mbox"><div class="panel-h"><h2>Personalizza</h2><button class="btn" type="button" data-close>Chiudi</button></div>
   <h3>Colore principale</h3><div class="swatches" id="swAccent"></div>

@@ -79,12 +79,12 @@ function lvCrossPanel(x){const el=$('#lvCross');if(!el)return;const W=wetCross(x
 function stintData(x){const {rows,me,I}=x;if(!me||!Number.isFinite(I?.et))return null;const c=fCar(me.veh);const sw=[...(c?.swaps||[])].filter(w=>w.et<=I.et).sort((a,b)=>a.et-b.et);
   const seg=[];let t0=0,d=sw[0]?.from||me.drv;sw.forEach(w=>{seg.push({d,t0,t1:w.et});t0=w.et;d=w.to;});seg.push({d:me.drv||d,t0,t1:I.et,cur:true});
   const tot={};seg.forEach(s=>{const k=s.d||'?';(tot[k]=tot[k]||{t:0,n:0}).t+=Math.max(0,s.t1-s.t0);tot[k].n++;});
-  const T=tmPlans();const P=T.plans?.find(p=>p.id===T.cur)||T.plans?.[0];const maxMin=+LS.get('live:stintMax','')||+P?.race?.maxStint||0;
+  const maxMin=+LS.get('live:stintMax','')||0;
   const cur=seg[seg.length-1];const inCar=I.et-cur.t0;const left=maxMin>0?maxMin*60-inCar:NaN;
   // next driver: the one after ours in the team plan, else the team-mate with the least time at the wheel
   const same=(a,b)=>String(a||'').toLowerCase().trim()===String(b||'').toLowerCase().trim()||String(a||'').toLowerCase().includes(String(b||'').toLowerCase().split(' ')[0]);
-  let next='';const order=P?[...P.drivers].sort((a,b)=>(+a.order||0)-(+b.order||0)).map(d=>d.name).filter(Boolean):[];
-  const i=order.findIndex(n=>same(cur.d,n)||same(n,cur.d));if(order.length>1&&i>=0)next=order[(i+1)%order.length];
+  // next driver: the one who has driven least so far
+  let next='';
   if(!next){const others=Object.entries(tot).filter(([k])=>k!==cur.d).sort((a,b)=>a[1].t-b[1].t);next=others[0]?.[0]||(c?.drivers||[]).find(n=>n!==cur.d)||'';}
   return {cur:cur.d,inCar,left,maxMin,next,tot,swaps:sw.length};}
 function lvStintPanel(x){const el=$('#lvStint');if(!el)return;const S=stintData(x);if(!S){el.innerHTML=`<div class="muted small">${tr('In attesa dei dati…')}</div>`;return;}
