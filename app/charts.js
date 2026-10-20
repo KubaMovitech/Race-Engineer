@@ -1,4 +1,6 @@
 // ================= CHARTS =================
+// the workstation skin draws clean lines, the Muretto keeps the glow
+function GL(){return document.documentElement.dataset.skin==='ws'?0:1;}
 function tok(n){return getComputedStyle(document.documentElement).getPropertyValue('--'+n).trim()||'#888';}
 function fitCanvas(cv,h){const dpr=window.devicePixelRatio||1,w=cv.clientWidth||cv.parentElement.clientWidth;if(h)cv.style.height=h+'px';const hh=cv.clientHeight||h;cv.width=Math.round(w*dpr);cv.height=Math.round(hh*dpr);const c=cv.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);return {c,w,h:hh};}
 function niceTicks(lo,hi,n=4){const r=hi-lo||1,raw=r/n,p=Math.pow(10,Math.floor(Math.log10(raw))),m=raw/p,st=(m<1.5?1:m<3?2:m<7?5:10)*p;const out=[];for(let v=Math.ceil(lo/st)*st;v<=hi+1e-9;v+=st)out.push(+v.toFixed(6));return out;}
@@ -63,7 +65,7 @@ class Stack{
       if(p.zero){c.strokeStyle=faint;c.beginPath();c.moveTo(this.padL,Math.round(Y(0))+.5);c.lineTo(w-this.padR,Math.round(Y(0))+.5);c.stroke();}
       c.save();c.beginPath();c.rect(this.padL,top-4,w-this.padL-this.padR,bot-top+6);c.clip();
       this.marks.forEach(m=>{if(m.x<this.lo||m.x>this.hi)return;const xx=Math.round(this.xToPx(m.x))+.5;c.strokeStyle=line;c.setLineDash([2,4]);c.beginPath();c.moveTo(xx,top);c.lineTo(xx,bot);c.stroke();c.setLineDash([]);});
-      p.series.forEach(s=>{if(!s.data)return;c.strokeStyle=s.color;c.lineWidth=s.w||1.6;c.globalAlpha=s.alpha||1;c.shadowColor=s.color;c.shadowBlur=(s.alpha||1)>=.9?6:0;c.beginPath();let started=false,prevY=null;
+      p.series.forEach(s=>{if(!s.data)return;c.strokeStyle=s.color;c.lineWidth=s.w||1.6;c.globalAlpha=s.alpha||1;c.shadowColor=s.color;c.shadowBlur=(s.alpha||1)>=.9?6*GL():0;c.beginPath();let started=false,prevY=null;
         const stepN=Math.max(1,Math.floor((i1-i0)/(w*1.5)));
         for(let i=i0;i<=i1;i+=stepN){const v=s.data[i];if(!Number.isFinite(v)){started=false;continue;}const xx=this.xToPx(this.x[i]),yy=Y(v);
           if(!started){c.moveTo(xx,yy);started=true;}else{if(s.step&&prevY!=null)c.lineTo(xx,prevY);c.lineTo(xx,yy);}prevY=yy;}
@@ -165,7 +167,7 @@ class TrackMap{
     const bed=Math.max(zoom?26:12,13*scale);path(P,bed+4,'rgba(255,255,255,.06)');path(P,bed,tok('trackbed'));
     const lines=P2&&(zoom||v.k>=2.5||scale>1.5);
     if(lines){const lw=Math.max(2.5,Math.min(5,scale*1.2));
-      c.save();c.shadowBlur=10;c.shadowColor=tok('lapB');path(P2,lw,tok('lapB'));c.shadowColor=tok('lapA');path(P,lw,tok('lapA'));c.restore();
+      c.save();c.shadowBlur=10*GL();c.shadowColor=tok('lapB');path(P2,lw,tok('lapB'));c.shadowColor=tok('lapA');path(P,lw,tok('lapA'));c.restore();
       c.fillStyle=tok('muted');c.font='11px "JetBrains Mono",monospace';c.textAlign='left';c.textBaseline='top';}
     else{const W0=this.win?this.win[0]:-1,W1=this.win?this.win[1]:n;const lw=Math.max(4,Math.min(8,scale*1.4));c.lineWidth=lw;
       for(let i=1;i<n;i++){const p0=P[i-1],p1=P[i];if(!p0||!p1)continue;c.globalAlpha=(i<W0||i>W1)?0.18:1;c.strokeStyle=this.colors[i]||tok('muted');c.beginPath();c.moveTo(p0[0],p0[1]);c.lineTo(p1[0],p1[1]);c.stroke();}c.globalAlpha=1;
@@ -200,7 +202,7 @@ function lineChart(cv,{x,series,yfmt=v=>v,h=200,xlabel='giro',min,max,band}){
   c.font='11px "JetBrains Mono",monospace';c.strokeStyle=tok('line');c.fillStyle=tok('faint');c.textAlign='right';c.textBaseline='middle';
   niceTicks(lo,hi,4).forEach(t=>{const y=Math.round(Y(t))+.5;c.beginPath();c.moveTo(L,y);c.lineTo(w-R,y);c.stroke();c.fillText(yfmt(t),L-5,y);});
   c.textAlign='center';c.textBaseline='top';x.forEach((v,i)=>{if(x.length<=30||i%Math.ceil(x.length/20)===0)c.fillText(v,X(v),h-B+6);});
-  series.forEach(s=>{c.strokeStyle=s.color;c.fillStyle=s.color;c.lineWidth=s.nolines?0:1.8;c.shadowColor=s.color;c.shadowBlur=5;c.beginPath();let st=false;s.data.forEach((v,i)=>{if(!Number.isFinite(v)){st=false;return;}const px=X(x[i]),py=Y(v);st?c.lineTo(px,py):c.moveTo(px,py);st=true;});if(!s.nolines)c.stroke();
+  series.forEach(s=>{c.strokeStyle=s.color;c.fillStyle=s.color;c.lineWidth=s.nolines?0:1.8;c.shadowColor=s.color;c.shadowBlur=5*GL();c.beginPath();let st=false;s.data.forEach((v,i)=>{if(!Number.isFinite(v)){st=false;return;}const px=X(x[i]),py=Y(v);st?c.lineTo(px,py):c.moveTo(px,py);st=true;});if(!s.nolines)c.stroke();
     s.data.forEach((v,i)=>{if(!Number.isFinite(v))return;c.beginPath();c.arc(X(x[i]),Y(v),s.dot?.(i)?4.5:(s.nolines?3.5:2.4),0,7);c.fillStyle=s.dot?.(i)?tok('best'):s.color;c.fill();});});
   c.shadowBlur=0;
 }

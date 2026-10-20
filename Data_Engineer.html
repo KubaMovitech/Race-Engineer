@@ -944,6 +944,143 @@ canvas.chart,canvas{image-rendering:auto}
 body.hasmapfull{overflow:hidden}
 body.hasmapfull .top,body.hasmapfull #botnav{z-index:1}
 body.hasmapfull main{position:relative;z-index:400}
+/* ================= SKINS =================
+   Two looks on top of theme.css, switched by html[data-skin] (set in ui33.js):
+   "ws"   – Analisi, Setup, Progressi: an engineering workstation like ATLAS / MoTeC. Flat grey panels with a title bar,
+            no glow, thin lines, cyan for lap A and orange for lap B.
+   "wall" – Muretto: a TV-style timing wall. Black, F1 sector colours, a timing tower and a race-control ticker.
+   Only looks change here: every panel, table and number of the app stays where it is. */
+
+/* ---------- WORKSTATION ---------- */
+html[data-skin="ws"]{
+  --bg:#121417; --panel:#181B1F; --panel2:#1E2227; --band:#15181C; --line:#2A2F36; --grid:#1F2329; --trackbed:#262B31;
+  --ink:#E6E9ED; --muted:#7D8590; --faint:#59616B;
+  --hdr:#0D0F11; --hdr-line:#2A2F36; --hdr-muted:#7D8590;
+  --lapA:#00C8FF; --lapB:#FF8C1A; --cyan:#00C8FF; --glowc:transparent; --glow:transparent;
+  --edge:#2A2F36; --edge2:#353B44; --r:2px; --shadow:none;
+}
+html[data-skin="ws"] body{background:var(--bg)}
+html[data-skin="ws"] .top{background:var(--hdr);backdrop-filter:none;box-shadow:none;border-bottom:1px solid var(--line)}
+html[data-skin="ws"] .top::after{display:none}
+html[data-skin="ws"] .brand .logo{filter:none}
+html[data-skin="ws"] .mtab[aria-selected="true"]{background:var(--bg)}
+html[data-skin="ws"] .mtab[aria-selected="true"]::after{left:0;right:0;top:0;bottom:auto;background:var(--lapA);box-shadow:none}
+html[data-skin="ws"] .top>.tabs.subtabs{gap:1px;padding:0;background:var(--line);border-top:1px solid var(--line)}
+html[data-skin="ws"] .top>.tabs.subtabs .tab{clip-path:none;background:var(--panel);min-height:30px;color:var(--muted)}
+html[data-skin="ws"] .top>.tabs.subtabs .tab:hover{background:var(--panel2)}
+html[data-skin="ws"] .top>.tabs.subtabs .tab[aria-selected="true"]{background:var(--bg);color:#fff;box-shadow:inset 0 2px var(--lapA)}
+
+/* flat controls */
+html[data-skin="ws"] .btn{clip-path:none;border-radius:2px;background:var(--panel2);border:1px solid var(--line);font-size:.86rem}
+html[data-skin="ws"] .btn:hover{background:#262B31;border-color:#3A414A}
+html[data-skin="ws"] .btn.primary{background:#C8102E;border-color:#E0243F;box-shadow:none}
+html[data-skin="ws"] .btn.primary:hover{background:#DA1A38}
+html[data-skin="ws"] select,html[data-skin="ws"] input[type=number],html[data-skin="ws"] input[type=text],html[data-skin="ws"] input:not([type]),html[data-skin="ws"] textarea{background:#0F1113!important;border-color:var(--line)!important;border-radius:2px!important}
+html[data-skin="ws"] select:focus,html[data-skin="ws"] input:focus,html[data-skin="ws"] textarea:focus{border-color:var(--lapA)!important;box-shadow:0 0 0 1px rgba(0,200,255,.35)}
+
+/* panels: a window with a title bar */
+html[data-skin="ws"] .panel,html[data-skin="ws"] .wcard,html[data-skin="ws"] .lbcard,html[data-skin="ws"] .suscard{background:var(--panel);border:1px solid var(--line);border-radius:2px;box-shadow:none}
+html[data-skin="ws"] .panel::before,html[data-skin="ws"] .wcard::before{display:none}
+html[data-skin="ws"] .panel:hover{border-color:var(--line)}
+html[data-skin="ws"] .panel{--pp:16px;padding:var(--pp)}
+@media (max-width:760px){html[data-skin="ws"] .panel{--pp:12px}}
+html[data-skin="ws"] .panel>.panel-h:first-child{margin:calc(-1*var(--pp)) calc(-1*var(--pp)) 14px;padding:7px 14px;background:var(--panel2);border-bottom:1px solid var(--line);min-height:36px}
+html[data-skin="ws"] .panel>h3:first-child{margin:calc(-1*var(--pp)) calc(-1*var(--pp)) 12px;padding:9px 14px;background:var(--panel2);border-bottom:1px solid var(--line)}
+html[data-skin="ws"] .panel-h h2,html[data-skin="ws"] .panel-h h3,html[data-skin="ws"] .panel>h3{font-family:var(--f-display);font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;color:#AEB6C0;font-weight:600}
+html[data-skin="ws"] .panel-h h3::before,html[data-skin="ws"] .panel-h h2::before{width:2px;height:12px;background:var(--lapA);box-shadow:none}
+
+/* title of the session: plain, no gradient text */
+html[data-skin="ws"] .hero .ey{color:var(--lapA);text-shadow:none}
+html[data-skin="ws"] .hero h1{background:none;-webkit-background-clip:initial;background-clip:initial;color:var(--ink)}
+html[data-skin="ws"] .cchip{background:var(--panel);border:1px solid var(--line);border-left:2px solid var(--lapA)}
+
+/* KPI tiles: instrument read-outs */
+html[data-skin="ws"] .kpi{background:var(--panel);border:1px solid var(--line);min-height:92px}
+html[data-skin="ws"] .kpi::after{display:none}
+html[data-skin="ws"] .kpi .v{text-shadow:none;font-weight:500}
+html[data-skin="ws"] .kpi.hl .v,html[data-skin="ws"] b.bestv,html[data-skin="ws"] .best{text-shadow:none}
+
+/* tables: dense, zebra, like a lap list */
+html[data-skin="ws"] th{background:var(--panel2)!important;color:var(--muted);border-bottom:1px solid var(--line)!important}
+html[data-skin="ws"] td{border-bottom:1px solid #20242A}
+html[data-skin="ws"] tbody tr:nth-child(even) td{background:rgba(255,255,255,.012)}
+html[data-skin="ws"] tbody tr:hover td{background:#22303F}
+html[data-skin="ws"] .badge{border-radius:2px!important}
+html[data-skin="ws"] .mbox{background:var(--panel)!important;border-color:var(--line)!important;box-shadow:0 20px 60px rgba(0,0,0,.6)!important}
+html[data-skin="ws"] .mbox::before{background:var(--lapA)}
+html[data-skin="ws"] #toastStack .toast{background:var(--panel2);border-left-color:var(--lapA)}
+html[data-skin="ws"] .wtop h1{background:none;-webkit-background-clip:initial;background-clip:initial;color:var(--ink)}
+
+/* ---------- TIMING WALL ---------- */
+html[data-skin="wall"]{
+  --bg:#000; --panel:#0B0C0E; --panel2:#15171A; --band:#08090A; --line:#1E2024; --grid:#141619;
+  --ink:#F5F6F7; --muted:#8A9099; --hdr:#000; --hdr-line:#1E2024;
+  --accent:#E10600; --accent2:#9A0400; --best:#A42BFF; --good:#00D26A; --warn:#FFD400;
+  --edge:#1E2024; --edge2:#2A2D32; --r:0px; --glow:rgba(225,6,0,.35);
+}
+html[data-skin="wall"] body{background:#000;padding-bottom:40px}
+html[data-skin="wall"] .top{background:#000;box-shadow:none}
+html[data-skin="wall"] .top::after{background:var(--accent);opacity:1;left:0;right:0}
+html[data-skin="wall"] .panel,html[data-skin="wall"] .lbcard{background:var(--panel);border:1px solid var(--line);box-shadow:none}
+html[data-skin="wall"] .panel::before{display:none}
+html[data-skin="wall"] .panel:hover{border-color:var(--line)}
+html[data-skin="wall"] .panel-h{border-bottom:1px solid var(--line)}
+html[data-skin="wall"] .panel-h h2,html[data-skin="wall"] .panel-h h3{font-weight:700;letter-spacing:.24em;font-size:.82rem;color:#fff}
+html[data-skin="wall"] .panel-h h3::before,html[data-skin="wall"] .panel-h h2::before{width:4px;height:16px;background:var(--accent);box-shadow:none}
+html[data-skin="wall"] .btn{clip-path:none;border-radius:0;background:#111316;border:1px solid var(--edge2)}
+html[data-skin="wall"] .btn.primary{background:var(--accent);border-color:var(--accent);box-shadow:none}
+
+/* session data: one timing strip, no boxes */
+html[data-skin="wall"] .lvsess{gap:0;margin:12px 0 4px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+html[data-skin="wall"] .lvsess .cchip{background:transparent;border:0;border-right:1px solid var(--line);padding:8px 18px 8px 14px;min-width:0}
+html[data-skin="wall"] .lvsess .cchip span{color:#6C727B;letter-spacing:.2em}
+html[data-skin="wall"] .lvsess .cchip b{font-size:1.15rem;color:#fff}
+
+/* sub tabs: TV graphics menu */
+html[data-skin="wall"] .lvtabs{border-top:0}
+html[data-skin="wall"] .lvtabs button{font-size:.9rem;letter-spacing:.14em;padding:12px 16px}
+html[data-skin="wall"] .lvtabs button[aria-selected="true"]{color:#fff;box-shadow:none;border-bottom-color:var(--accent);background:linear-gradient(0deg,rgba(225,6,0,.16),transparent 70%)}
+
+/* timing tower */
+html[data-skin="wall"] table.lbt th{background:#000!important;color:#6C727B;border-bottom:1px solid var(--edge2)!important}
+html[data-skin="wall"] table.lbt tbody tr:nth-child(even) td{background:#07080A}
+html[data-skin="wall"] table.lbt tbody tr:hover td{background:#16181C}
+html[data-skin="wall"] table.lbt td{border-bottom:1px solid #121417}
+html[data-skin="wall"] .lvlb table.lbt td:nth-child(2){font:700 1.2rem var(--f-display);text-align:center;width:46px}
+html[data-skin="wall"] .lvlb table.lbt td.l{font-family:var(--f-display);font-weight:700;font-size:1.04rem;letter-spacing:.04em;text-transform:uppercase}
+html[data-skin="wall"] .lvlb table.lbt td.l .muted,html[data-skin="wall"] .lvlb table.lbt td.l .tag{font-family:var(--f-mono);font-weight:400;font-size:.7rem;letter-spacing:0;text-transform:none}
+html[data-skin="wall"] table.lbt tr.ours td{background:linear-gradient(90deg,rgba(225,6,0,.28),rgba(225,6,0,.06))!important}
+html[data-skin="wall"] table.lbt tr.ours td:first-child{box-shadow:inset 4px 0 var(--accent)}
+html[data-skin="wall"] .clsdot{border-radius:0}
+html[data-skin="wall"] .sx{border-radius:0;font-weight:700}
+html[data-skin="wall"] .sx.sp{background:var(--best)}
+html[data-skin="wall"] .sx.sg{background:var(--good)}
+html[data-skin="wall"] .sx.sy{background:var(--warn)}
+
+/* KPI tiles: big white numbers with a coloured top edge */
+html[data-skin="wall"] .kpi{background:#0E1013;border:1px solid var(--line);border-top:2px solid #2A2D32}
+html[data-skin="wall"] .kpi::after{display:none}
+html[data-skin="wall"] .kpi .v{text-shadow:none;font-weight:700;color:#fff}
+html[data-skin="wall"] .kpi.hl{border-top-color:var(--best)}
+
+/* race control: the last events scroll along the bottom */
+#rcBar{position:fixed;left:0;right:0;bottom:0;z-index:35;height:34px;display:flex;align-items:stretch;background:#000;border-top:1px solid #1E2024;font:600 .8rem var(--f-mono);overflow:hidden}
+#rcBar[hidden]{display:none}
+#rcBar .rcl{flex:none;display:flex;align-items:center;padding:0 14px;background:var(--accent);color:#fff;font:700 .85rem var(--f-display);letter-spacing:.18em;text-transform:uppercase;cursor:pointer}
+#rcBar .rct{flex:1;min-width:0;position:relative;overflow:hidden}
+#rcBar .rcs{position:absolute;left:0;top:0;bottom:0;display:flex;align-items:center;gap:42px;white-space:nowrap;padding-left:100%;animation:rcs var(--rcdur,40s) linear infinite;color:#D6DAE0}
+#rcBar .rcs span i{font-style:normal;color:#6C727B;margin-right:8px}
+#rcBar .rcs span.bad b{color:#FF4D4D}#rcBar .rcs span.warn b{color:var(--warn)}#rcBar .rcs span.good b{color:var(--good)}#rcBar .rcs span.info b{color:#4FC3F7}
+#rcBar:hover .rcs{animation-play-state:paused}
+@keyframes rcs{to{transform:translateX(-100%)}}
+@media (prefers-reduced-motion:reduce){#rcBar .rcs{animation:none;padding-left:12px}}
+@media (max-width:760px){#rcBar{display:none}html[data-skin="wall"] body{padding-bottom:0}}
+html[data-skin="ws"] .panel>h3::before{background:var(--lapA);box-shadow:none}
+@media (max-width:760px){
+  html[data-skin="wall"] .lvsess{display:grid;grid-template-columns:1fr 1fr}
+  html[data-skin="wall"] .lvsess .cchip{border-right:0;border-bottom:1px solid var(--line);padding:7px 10px}
+  html[data-skin="wall"] .lvsess .cchip:nth-child(odd){border-right:1px solid var(--line)}
+}
 </style>
 <header class="top">
   <div class="top-in">
@@ -1586,6 +1723,8 @@ function refineCuts(ch,cuts){
     if(found!=null)cuts[k]=found;}
 }
 // ================= CHARTS =================
+// the workstation skin draws clean lines, the Muretto keeps the glow
+function GL(){return document.documentElement.dataset.skin==='ws'?0:1;}
 function tok(n){return getComputedStyle(document.documentElement).getPropertyValue('--'+n).trim()||'#888';}
 function fitCanvas(cv,h){const dpr=window.devicePixelRatio||1,w=cv.clientWidth||cv.parentElement.clientWidth;if(h)cv.style.height=h+'px';const hh=cv.clientHeight||h;cv.width=Math.round(w*dpr);cv.height=Math.round(hh*dpr);const c=cv.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);return {c,w,h:hh};}
 function niceTicks(lo,hi,n=4){const r=hi-lo||1,raw=r/n,p=Math.pow(10,Math.floor(Math.log10(raw))),m=raw/p,st=(m<1.5?1:m<3?2:m<7?5:10)*p;const out=[];for(let v=Math.ceil(lo/st)*st;v<=hi+1e-9;v+=st)out.push(+v.toFixed(6));return out;}
@@ -1650,7 +1789,7 @@ class Stack{
       if(p.zero){c.strokeStyle=faint;c.beginPath();c.moveTo(this.padL,Math.round(Y(0))+.5);c.lineTo(w-this.padR,Math.round(Y(0))+.5);c.stroke();}
       c.save();c.beginPath();c.rect(this.padL,top-4,w-this.padL-this.padR,bot-top+6);c.clip();
       this.marks.forEach(m=>{if(m.x<this.lo||m.x>this.hi)return;const xx=Math.round(this.xToPx(m.x))+.5;c.strokeStyle=line;c.setLineDash([2,4]);c.beginPath();c.moveTo(xx,top);c.lineTo(xx,bot);c.stroke();c.setLineDash([]);});
-      p.series.forEach(s=>{if(!s.data)return;c.strokeStyle=s.color;c.lineWidth=s.w||1.6;c.globalAlpha=s.alpha||1;c.shadowColor=s.color;c.shadowBlur=(s.alpha||1)>=.9?6:0;c.beginPath();let started=false,prevY=null;
+      p.series.forEach(s=>{if(!s.data)return;c.strokeStyle=s.color;c.lineWidth=s.w||1.6;c.globalAlpha=s.alpha||1;c.shadowColor=s.color;c.shadowBlur=(s.alpha||1)>=.9?6*GL():0;c.beginPath();let started=false,prevY=null;
         const stepN=Math.max(1,Math.floor((i1-i0)/(w*1.5)));
         for(let i=i0;i<=i1;i+=stepN){const v=s.data[i];if(!Number.isFinite(v)){started=false;continue;}const xx=this.xToPx(this.x[i]),yy=Y(v);
           if(!started){c.moveTo(xx,yy);started=true;}else{if(s.step&&prevY!=null)c.lineTo(xx,prevY);c.lineTo(xx,yy);}prevY=yy;}
@@ -1752,7 +1891,7 @@ class TrackMap{
     const bed=Math.max(zoom?26:12,13*scale);path(P,bed+4,'rgba(255,255,255,.06)');path(P,bed,tok('trackbed'));
     const lines=P2&&(zoom||v.k>=2.5||scale>1.5);
     if(lines){const lw=Math.max(2.5,Math.min(5,scale*1.2));
-      c.save();c.shadowBlur=10;c.shadowColor=tok('lapB');path(P2,lw,tok('lapB'));c.shadowColor=tok('lapA');path(P,lw,tok('lapA'));c.restore();
+      c.save();c.shadowBlur=10*GL();c.shadowColor=tok('lapB');path(P2,lw,tok('lapB'));c.shadowColor=tok('lapA');path(P,lw,tok('lapA'));c.restore();
       c.fillStyle=tok('muted');c.font='11px "JetBrains Mono",monospace';c.textAlign='left';c.textBaseline='top';}
     else{const W0=this.win?this.win[0]:-1,W1=this.win?this.win[1]:n;const lw=Math.max(4,Math.min(8,scale*1.4));c.lineWidth=lw;
       for(let i=1;i<n;i++){const p0=P[i-1],p1=P[i];if(!p0||!p1)continue;c.globalAlpha=(i<W0||i>W1)?0.18:1;c.strokeStyle=this.colors[i]||tok('muted');c.beginPath();c.moveTo(p0[0],p0[1]);c.lineTo(p1[0],p1[1]);c.stroke();}c.globalAlpha=1;
@@ -1787,7 +1926,7 @@ function lineChart(cv,{x,series,yfmt=v=>v,h=200,xlabel='giro',min,max,band}){
   c.font='11px "JetBrains Mono",monospace';c.strokeStyle=tok('line');c.fillStyle=tok('faint');c.textAlign='right';c.textBaseline='middle';
   niceTicks(lo,hi,4).forEach(t=>{const y=Math.round(Y(t))+.5;c.beginPath();c.moveTo(L,y);c.lineTo(w-R,y);c.stroke();c.fillText(yfmt(t),L-5,y);});
   c.textAlign='center';c.textBaseline='top';x.forEach((v,i)=>{if(x.length<=30||i%Math.ceil(x.length/20)===0)c.fillText(v,X(v),h-B+6);});
-  series.forEach(s=>{c.strokeStyle=s.color;c.fillStyle=s.color;c.lineWidth=s.nolines?0:1.8;c.shadowColor=s.color;c.shadowBlur=5;c.beginPath();let st=false;s.data.forEach((v,i)=>{if(!Number.isFinite(v)){st=false;return;}const px=X(x[i]),py=Y(v);st?c.lineTo(px,py):c.moveTo(px,py);st=true;});if(!s.nolines)c.stroke();
+  series.forEach(s=>{c.strokeStyle=s.color;c.fillStyle=s.color;c.lineWidth=s.nolines?0:1.8;c.shadowColor=s.color;c.shadowBlur=5*GL();c.beginPath();let st=false;s.data.forEach((v,i)=>{if(!Number.isFinite(v)){st=false;return;}const px=X(x[i]),py=Y(v);st?c.lineTo(px,py):c.moveTo(px,py);st=true;});if(!s.nolines)c.stroke();
     s.data.forEach((v,i)=>{if(!Number.isFinite(v))return;c.beginPath();c.arc(X(x[i]),Y(v),s.dot?.(i)?4.5:(s.nolines?3.5:2.4),0,7);c.fillStyle=s.dot?.(i)?tok('best'):s.color;c.fill();});});
   c.shadowBlur=0;
 }
@@ -3727,6 +3866,7 @@ function openDebrief(){let m=$('#mDeb');if(!m){m=document.createElement('div');m
   openModal('#mDeb');}
 // Italian → English phrases. '#' stands for any number (kept as-is). Longest entries are applied first.
 const I18N_EN=[
+["Direzione gara","Race control"],
 ["Novità e aggiornamenti","What's new & updates"],["Aggiornamenti","Updates"],["Cosa è cambiato","What changed"],["installata","installed"],["Aggiornato alla versione","Updated to version"],["Versione dell'app","App version"],["Canale degli aggiornamenti","Update channel"],["Controlla aggiornamenti","Check for updates"],["Aggiorna alla","Update to"],["Controllo…","Checking…"],["Aggiornamento in corso…","Updating…"],["Hai già l'ultima versione.","You already have the latest version."],["Aggiornato.","Updated."],["Non riesco ad aggiornare","Can't update"],["Novità della","What's new in"],
 ["Il bridge scarica la nuova versione sua e dell'app e si riavvia da solo. Controlla gli aggiornamenti anche a ogni avvio.","The bridge downloads the new version of itself and of the app, then restarts. It also checks for updates every time it starts."],["Il file si sostituisce con un clic (Chrome o Edge); la prima volta scegli il file Data_Engineer.html che usi.","The file is replaced with one click (Chrome or Edge); the first time, pick the Data_Engineer.html file you use."],
 ["Scarica il nuovo bridge","Download the new bridge"],["Noi e rivali (la classe nella campanella)","Us and rivals (the class in the bell)"],["Avvisi della sessione","Session alerts"],["Nessun avviso per ora.","No alerts yet."],["Cosa vuoi fare?","What do you want to do?"],["Analizza una sessione","Analyse a session"],["Trascina qui la telemetria .ld e i risultati .xml della stessa uscita in pista. Il setup .svm è facoltativo.","Drop here the .ld telemetry and the .xml results of the same run. The .svm setup is optional."],["Carica file","Load files"],["Muretto live","Live pit wall"],["Bridge di questo PC collegato","This PC's bridge connected"],["Apri il programma Data Engineer per la telemetria di questo PC","Open the Data Engineer program for this PC's telemetry"],["Nessuna squadra: creala o entra con il codice","No team: create one or join with the code"],["Apri il Muretto","Open the pit wall"],["Generatore di setup, dottore, confronto tra setup e analisi delle sospensioni.","Setup generator, doctor, setup comparison and suspension analysis."],["Apri Setup","Open Setup"],["Nessuna telemetria aperta.","No telemetry open."],["Apri una telemetria .ld (con il .svm della stessa auto) per i controlli automatici, le pressioni da cambiare, sospensioni e ammortizzatori e lo storico dei setup.","Open a .ld telemetry (with the .svm of the same car) for the automatic checks, pressure changes, suspension and dampers and the setup history."],["Come si legge","How to read it"],["Generatore di setup","Setup generator"],["dalla tua libreria di setup · niente AI","from your setup library · no AI"],["Importa una cartella di setup","Import a setup folder"],["Aggiungi file .svm","Add .svm files"],["setup in libreria","setups in the library"],["Svuota libreria","Empty library"],["setup aggiunti alla libreria","setups added to the library"],["Frenata e ingresso","Braking and entry"],["più rotazione in ingresso","more rotation on entry"],["più stabile in frenata","more stable under braking"],["Centro curva","Mid-corner"],["più stabile","more stable"],["più rotazione (meno sottosterzo)","more rotation (less understeer)"],["Uscita di curva","Corner exit"],["più rotazione con il gas","more rotation on throttle"],["più trazione","more traction"],["Carico o velocità","Downforce or speed"],["più carico (curve veloci)","more downforce (fast corners)"],["più velocità di punta","more top speed"],["Cordoli e sconnessioni","Kerbs and bumps"],["più rigida","stiffer"],["più morbida sui cordoli","softer over kerbs"],["più prestazione","more performance"],["consuma meno le gomme","easier on the tyres"],["Regolazione","Setting"],["Nuovo","New"],["Perché","Why"],["valore mai visto in libreria","value never seen in the library"],["Salva nel gioco","Save to the game"],["Scarica il .svm","Download the .svm"],["lo trovi nel garage di LMU","you find it in the LMU garage"],["Salvato in","Saved in"],["Pioggia","Rain"],["Arrivo previsto","Predicted finish"],["nostra classe, alla bandiera","our class, at the flag"],["Previsto","Predicted"],["Giri alla bandiera","Laps at the flag"],["Tempo alla fine","Time to the end"],["Soste ancora","Stops left"],["Benzina / energia","Fuel / energy"],["arriva","makes it"],["Traffico","Traffic"],["classi diverse dalla nostra entro 15 s","other classes within 15 s"],["Più veloci dietro di noi","Faster cars behind us"],["Più lenti davanti a noi","Slower cars ahead of us"],["Nessuno entro 15 s.","Nobody within 15 s."],["in arrivo","closing in"],["davanti","ahead"],["dietro","behind"],["Danni e freni","Damage and brakes"],["riparazione","repair"],["Aerodinamica","Aero"],["integra","intact"],["danno","damage"],["Sospensioni","Suspension"],["Freni","Brakes"],["Usati","Used"],["Per giro","Per lap"],["Giri al 90%","Laps to 90%"],["I giri che durano i freni compaiono dopo 3 giri.","Brake life appears after 3 laps."],["Luce e orario","Light and time"],["Ora in pista","Track time"],["tempo reale","real time"],["Tramonto","Sunset"],["Alba","Sunrise"],["reali","real"],["di gioco","in game"],["Ora in pista alla fine","Track time at the end"],["Tramonto tra poco","Sunset soon"],["Alba tra poco","Sunrise soon"],["luci accese","lights on"],["Posizioni giro per giro","Positions lap by lap"],["in alto il primo","first at the top"],["Strategie a confronto","Strategies compared"],["Giri per stint","Laps per stint"],["Passo per stint","Pace per stint"],["Perso ai box","Lost in the pits"],["Soste","Stops"],["Degrado gomme","Tyre degradation"],["Calo del tempo","Lap time drop"],["Calo dovuto alle gomme","Drop due to the tyres"],["Usura per giro","Wear per lap"],["Cambio gomme conveniente","Worth changing tyres"],["la più consumata","the most worn"],["Pressioni e campanature: quanto cambiare","Pressures and camber: how much to change"],["A caldo","Hot"],["Cambia a freddo","Change cold"],["Int − est","In − out"],["Campanatura","Camber"],["meno negativa","less negative"],["più negativa","more negative"],["Storico setup e risultati","Setup history and results"],["stessa pista e stessa auto","same track and same car"],["Uscita","Run"],["Migliore","Best"],["Sterzo lente","Steer slow"],["Sterzo veloci","Steer fast"],["Modifiche rispetto alla precedente","Changes from the previous one"],["prima uscita","first run"],["stesso setup","same setup"],["Ultima modifica","Last change"],["Risparmio","Saving"],["giri nel serbatoio","laps in the tank"],["Obiettivo","Target"],["Benzina per giro","Fuel per lap"],["Energia per giro","Energy per lap"],["Alla bandiera","To the flag"],["Arriviamo alla bandiera senza fermarci","We reach the flag without stopping"],["Sottosterzo nelle curve lente (meccanico)","Understeer in slow corners (mechanical)"],["Sottosterzo nelle curve veloci (aerodinamico)","Understeer in fast corners (aero)"],["Sovrasterzo nelle curve lente (meccanico)","Oversteer in slow corners (mechanical)"],["Sovrasterzo nelle curve veloci (aerodinamico)","Oversteer in fast corners (aero)"],["Debrief","Debrief"],["Setup: le modifiche che contano","Setup: the changes that matter"],["Guida: dove perdi tempo","Driving: where you lose time"],["Prossima uscita","Next run"],["Costanza","Consistency"],["Calo a giro","Drop per lap"],["Benzina/giro","Fuel/lap"],["Usura/giro","Wear/lap"],["Tempo recuperabile in queste curve","Time to gain in these corners"],["Ammortizzatori","Dampers"],["Sospensioni e ammortizzatori","Suspension and dampers"],["dalla telemetria MoTeC · regole fisse, niente AI","from MoTeC telemetry · fixed rules, no AI"],["Soglia lento / veloce (mm/s)","Slow / fast threshold (mm/s)"],["giri lanciati","flying laps"],["canali","channels"],["nessun canale sospensioni trovato","no suspension channel found"],["Ritorno veloce","Fast rebound"],["Ritorno lento","Slow rebound"],["Compressione lenta","Slow bump"],["Compressione veloce","Fast bump"],["corsa usata","travel used"],["estensione","rebound"],["compressione","bump"],["Altezza ant. in velocità","Front ride height at speed"],["Altezza post. in velocità","Rear ride height at speed"],["Rake in velocità","Rake at speed"],["Beccheggio in frenata","Pitch under braking"],["Rollio","Roll"],["quanto scende l'anteriore","how much the front drops"],["mm per g, anteriore / posteriore","mm per g, front / rear"],["1 click più morbido","1 click softer"],["1 click più rigido","1 click stiffer"],["oppure 1 click più rigido","or 1 click stiffer"],["oppure 1 click più morbido","or 1 click softer"],["anteriori","fronts"],["posteriori","rears"],["Telemetria MoTeC","MoTeC telemetry"],["Risultati","Results"],["Setup","Setup"],["Giri, tracce, mappa, Coach e Confronto. Un file per sessione.","Laps, traces, map, Coach and Compare. One file per session."],["Giri non validi ufficiali, energia virtuale e tempi di tutti i piloti. Si unisce da solo alla telemetria della stessa sessione.","Official invalid laps, virtual energy and every driver's times. It joins the telemetry of the same session by itself."],["Per la scheda Setup: leggerlo, confrontarlo, chiedere consigli.","For the Setup tab: read it, compare it, ask for advice."],["con risultati","with results"],["unito alla telemetria","joined to the telemetry"],["solo risultati","results only"],["esempio","sample"],["Apri","Open"],["Giro di riferimento nel Coach","Reference lap in the Coach"],["Rimuovi","Remove"],["Nessun file.","No files."],["In LMU di solito in","In LMU usually in"],["Aggiungi file","Add files"],["oppure trascinali qui (.ld · .xml · .svm, anche più insieme)","or drag them here (.ld · .xml · .svm, several at once)"],["Togli gli esempi","Remove the samples"],["Togli tutti i miei file","Remove all my files"],["telemetrie caricate: l'app si apre più lentamente. Puoi toglierle: Progressi, tempo di sosta e passo sul bagnato restano salvati.","telemetry files loaded: the app opens more slowly. You can remove them: Progress, pit time and wet pace stay saved."],["I file restano solo in questo browser. Progressi, tempo di sosta per pista e passo sul bagnato si salvano a parte: restano anche se togli i file.","Files stay only in this browser. Progress, pit time per track and wet pace are saved separately: they stay even if you remove the files."],["Togliere tutti i file caricati? Progressi e dati imparati restano.","Remove all loaded files? Progress and learned data stay."],["Gomme, carburante ed energia","Tyres, fuel and energy"],["come nel gioco","as in the game"],["Consumo massimo","Max usage"],["Consumo medio","Average usage"],["Consumo","Usage"],["Ratio carburante/EV","Fuel/VE ratio"],["Servono un paio di giri completi.","A couple of complete laps are needed."],["Carburante ed energia","Fuel and energy"],["Energia virtuale","Virtual energy"],["FORATA","PUNCTURE"],["Slick o wet?","Slicks or wets?"],["tempi degli ultimi 4 minuti, auto della nostra classe","lap times of the last 4 minutes, cars of our class"],["Con le slick","On slicks"],["Con le wet","On wets"],["Per il confronto servono almeno 2 giri recenti con le slick e 2 con le wet nella nostra classe.","The comparison needs at least 2 recent laps on slicks and 2 on wets in our class."],["Slick e wet vanno quasi uguali: è il momento del cambio.","Slicks and wets are about equal: it's time to change."],["Le wet sono più veloci di","Wets are faster by"],["Le slick sono più veloci di","Slicks are faster by"],["Conviene montare le wet.","Better fit wets."],["Conviene montare le slick.","Better fit slicks."],["Conviene montare le wet","Better fit wets"],["Conviene montare le slick","Better fit slicks"],["Abbiamo le gomme giuste.","We are on the right tyres."],["Piloti e stint","Drivers and stints"],["Stint massimo (min)","Max stint (min)"],["Alla guida","Driving"],["Cambio tra","Change in"],["stint massimo","max stint"],["imposta lo stint massimo","set the max stint"],["Prossimo pilota","Next driver"],["Tempo alla guida","Time at the wheel"],["Cambio pilota tra","Driver change in"],["Inizia a piovere","Rain is starting"],["Ha smesso di piovere","Rain has stopped"],["Pista sempre più bagnata","Track getting wetter"],["Pista quasi asciutta","Track almost dry"],["Pioggia in arrivo","Rain coming"],["intensità","intensity"],["pista bagnata","wet track"],["Squadra creata. Manda questo codice ai compagni: in Data Engineer vanno in Muretto › Squadra › Entra con codice e lo incollano. Chi ha il codice vede i dati: non pubblicarlo.","Team created. Send this code to your teammates: in Data Engineer they go to Pit wall › Team › Join with code and paste it. Anyone with the code sees the data: do not publish it."],["nessuna","none"],["pioviggine","drizzle"],["leggera","light"],["moderata","moderate"],["molto forte","very heavy"],["forte","heavy"],["si asciuga","drying"],["asciutta tra","dry in"],["si bagna","getting wetter"],["Umidità","Humidity"],["umidità","humidity"],["dalle previsioni","from the forecast"],["Data Engineer è aperto in un'altra finestra","Data Engineer is open in another window"],["Questa finestra non si aggiorna più: chiudila e usa quella nuova.","This window no longer updates: close it and use the new one."],["Nuovo bridge scaricato: chiudi il bridge, sostituisci DataEngineerBridge.exe e riaprilo.","New bridge downloaded: close the bridge, replace DataEngineerBridge.exe and open it again."],["Questo bridge è di una versione vecchia e non sa aggiornarsi da solo: scarica il nuovo DataEngineerBridge.exe e sostituisci quello vecchio (basta una volta).","This bridge is an old version and can't update itself: download the new DataEngineerBridge.exe and replace the old one (only once)."],
@@ -4434,9 +4574,10 @@ const tr=I18N.tr;
 })();
 const AI_LANG=()=>LANG==='en'?'\n\nIMPORTANT: write your whole answer in English (the instructions above are in Italian, but the driver reads English).':'';
 // ================= VERSIONE, NOVITÀ E AGGIORNAMENTI =================
-const APP_VERSION='2.1.8';
+const APP_VERSION='2.1.9';
 const DEFAULT_UPD='https://raw.githubusercontent.com/KubaMovitech/Race-Engineer/main/';   // update channel (folder with version.json), set when the team repository exists
 const CHANGELOG=[
+{v:'2.1.9',d:'20/10/2026',items:['Nuovo aspetto per Analisi, Setup e Progressi, come le postazioni di analisi dei team: pannelli piatti con barra del titolo, giro A ciano e giro B arancione, grafici puliti senza alone.','Muretto in stile grafica TV della F1: sfondo nero, colori dei settori viola/verde/giallo, classifica a torre con la nostra auto evidenziata in rosso, dati della sessione in un\'unica striscia.','Muretto: in basso la barra «Direzione gara» con gli ultimi eventi che scorrono; clic per aprire Eventi.','Cambia solo l\'aspetto: tutti i pannelli, le tabelle e i numeri restano dove erano.']},
 {v:'2.1.8',d:'20/10/2026',items:['Tolta la sezione Strategia offline (Solo ed Endurance). La strategia in diretta del Muretto resta tutta: giri possibili, soste, fino alla bandiera, finestra di sosta, undercut, risparmio, stint.','Nel Muretto, «prossimo pilota» è quello che ha guidato meno finora (prima veniva dal piano offline).','Pulizia del codice: tolte le parti non più usate; nessun cambiamento nelle altre funzioni.']},
 {v:'2.1.7',d:'20/10/2026',items:['Classifica del Muretto: accanto a energia virtuale e benzina rimaste, quanto consuma ogni auto a giro (mediana degli ultimi giri puliti dello stint) e quanti giri restano. Ora anche in qualifica e prove.','Risultati (.xml) › Passo medio e confronto piloti: nuove colonne VE / giro, benzina / giro e VE · benzina a fine sessione per tutti i piloti, ordinabili.']},
 {v:'2.1.6',d:'19/10/2026',items:['Confronto delle traiettorie sulla mappa: nella vista Giro scegli «Confronta con» (miglior giro o un altro giro), nel Confronto c\'è già il giro B. Zooma su una curva e vedi le due linee e di quanti metri sono distanti (più all\'interno / all\'esterno).','Mappa con zoom e trascinamento come una mappa vera: rotellina, pulsanti + −, clic sul numero di una curva per andarci, doppio clic per la pista intera, «⛶» per la mappa a tutto schermo.','Mappa in proporzioni reali (prima era schiacciata a seconda della latitudine), con griglia in metri, scala, larghezza vera della pista da vicino e bandiera a scacchi sul traguardo.','Grafici delle tracce con linee luminose e i punti dei valori sul cursore.']},
@@ -6253,6 +6394,26 @@ function lapRefApply(){const sel=$('#lapRef');const C=lapCur;if(!sel||!C?.S||!la
   const per=(v,left)=>Number.isFinite(v)&&v>0?`<small class="egpl" title="${esc(tr('consumo per giro · giri che restano'))}">−${(v*100).toFixed(1)}${Number.isFinite(left)?` · ${left<10?left.toFixed(1):Math.floor(left)}${tr('g')}`:''}</small>`:'';
   return base.replace(/(<span class="eg ve[^]*?<\/b>)(<\/span>)/,`$1${per(s.vpl,s.lv)}$2`).replace(/(<span class="eg fu[^]*?<\/b>)(<\/span>)/,`$1${per(s.fpl,s.lf)}$2`);};})();
 (function(){const st=document.createElement('style');st.textContent=`td.egc{width:210px;min-width:210px}.egc .eg{grid-template-columns:20px minmax(44px,1fr) 26px 76px}.egc .eg .t{min-width:44px}.egc .egpl{font-family:var(--f-mono);font-size:.7rem;color:var(--muted);white-space:nowrap;text-align:left;padding-left:4px}.egc .eg.ve .egpl{color:color-mix(in srgb,var(--cyan) 75%,var(--muted))}`;document.head.appendChild(st);})();
+// ================= SKINS: workstation for the analysis, timing wall for the Muretto =================
+// The look follows the section (see skin.css); nothing is moved or hidden, so every number stays where it was.
+function applySkin(){const v=curView();document.documentElement.dataset.skin=v==='live'?'wall':'ws';rcBar();}
+(function(){const sv=showView;window.showView=showView=function(v){document.documentElement.dataset.skin=v==='live'?'wall':'ws';sv(v);rcBar();};})();
+setTimeout(applySkin,0);
+
+// ---------- race control: the last events of the Muretto run along the bottom ----------
+const strip=h=>{const d=document.createElement('div');d.innerHTML=String(h).replace(/<(div|br)\b[^>]*>/gi,' · ');return d.textContent.replace(/\s+/g,' ').replace(/^( · )+|( · )+$/g,'').replace(/( · )+/g,' · ').trim();};
+function rcBar(){let b=$('#rcBar');const on=curView()==='live';
+  if(!on){if(b)b.hidden=true;return;}
+  if(!b){b=document.createElement('div');b.id='rcBar';b.innerHTML=`<div class="rcl" title="${esc(tr('Eventi'))}">${tr('Direzione gara')}</div><div class="rct"><div class="rcs"></div></div>`;document.body.appendChild(b);
+    b.querySelector('.rcl').onclick=()=>$('#v-live .lvtabs button[data-sub="ev"]')?.click();}
+  b.hidden=false;const N=typeof NOTIF!=='undefined'?NOTIF.slice(0,10):[];
+  // the pop-up notices first; before any arrives, the event list the Muretto already shows
+  const L=N.length?[]:[...$$('#lvEvShort .lve, #lvEv .lve')].slice(0,10);
+  const html=N.length?N.map(n=>`<span class="${esc(n.k||'info')}"><i>${new Date(n.at).toTimeString().slice(0,5)}</i><b>${esc(strip(n.t))}</b> · ${esc(strip(n.s||''))}</span>`).join('')
+    :L.length?L.map(e=>`<span class="${esc([...e.classList].find(c=>c!=='lve')||'info')}"><i>${esc(strip(e.querySelector('.t')?.innerHTML||''))}</i>${esc(strip(e.lastElementChild?.innerHTML||''))}</span>`).join('')
+    :`<span><i>—</i>${tr('Nessun evento per ora.')}</span>`;
+  const s=b.querySelector('.rcs');if(s.dataset.h!==html){s.dataset.h=html;s.innerHTML=html;s.style.setProperty('--rcdur',Math.max(25,strip(html).length/7)+'s');}}
+setInterval(()=>{if(curView()==='live')rcBar();},3000);
 // ================= SETUP =================
 let DIAG=null;
 RENDER.setup=()=>{
