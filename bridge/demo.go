@@ -381,7 +381,9 @@ func startDemo() []byte {
 				pf64(m, o+T_mLocalVel+16, -spd)
 				g := int(math.Min(7, 1+spd/14))
 				pi32(m, o+T_mGear, g)
-				pf64(m, o+T_mEngineRPM, 4000+math.Mod(spd*120, 4500))
+				rpm := 4000 + math.Mod(spd*120, 4500)
+				pf64(m, o+T_mEngineRPM, rpm)
+				pf64(m, o+T_mEngineTorque, 495e3*thr/(rpm*math.Pi/30)) // ≈ 495 kW at full throttle
 				pf64(m, o+T_mEngineMaxRPM, 9000)
 				pf64(m, o+T_mEngineWaterTemp, 88)
 				pf64(m, o+T_mEngineOilTemp, 104)

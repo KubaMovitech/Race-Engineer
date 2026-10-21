@@ -1,18 +1,17 @@
 {
- "version": "2.1.9",
- "date": "2026-10-20",
+ "version": "2.2.0",
+ "date": "2026-10-21",
  "notes": [
-  "Nuovo aspetto per Analisi, Setup e Progressi, come le postazioni di analisi dei team",
-  "Muretto in stile grafica TV della F1, con classifica a torre",
-  "Muretto: barra Direzione gara con gli ultimi eventi",
-  "Cambia solo l'aspetto: tutti i dati restano"
+  "Nuova sezione Setup › BOP con il BOP ufficiale LMU 1.4.3 di tutte le piste e le classi, con i cambi segnati",
+  "Controllo cambi nascosti: la potenza misurata della tua auto confrontata sessione per sessione",
+  "Muretto › Auto: riquadro BOP con la potenza misurata in diretta"
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "97cf98be0e3a566eacb4e26455b87ddffca5b55089893410ff29e0d5ef01995e"
+  "sha256": "b610c8f2f7153651dad54e4d4bc48dbec09978eafcfc2bbfe800c95eff3c35b2"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "69f554feca1a322579714b4f266a19f4c014e778c6b216ff9b5ffeabadfc5fed"
+  "sha256": "f0f474972396cc5a3d9d99e03ded6e9a7ca784af3b300cb3823b7ac4c5f633f2"
  }
 }
