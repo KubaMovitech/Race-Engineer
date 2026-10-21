@@ -333,6 +333,8 @@ func (t *Tracker) carMsg(f *Frame) M {
 	m["gear"] = i32(tl, T_mGear)
 	m["rpm"] = math.Round(f64(tl, T_mEngineRPM))
 	m["rpmMax"] = math.Round(f64(tl, T_mEngineMaxRPM))
+	// engine + electric motor power at the wheels' input, kW: the app compares it session by session (BOP check)
+	m["kw"] = r1((f64(tl, T_mEngineTorque)*f64(tl, T_mEngineRPM) + f64(tl, T_mElectricBoostMotorTorque)*f64(tl, T_mElectricBoostMotorRPM)) * math.Pi / 30 / 1000)
 	m["spd"] = r1(vlen(tl, T_mLocalVel) * 3.6)
 	m["thr"] = r2(f64(tl, T_mUnfilteredThrottle))
 	m["brk"] = r2(f64(tl, T_mUnfilteredBrake))
