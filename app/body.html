@@ -19,6 +19,7 @@
   </div>
   <nav class="tabs" role="tablist" aria-label="Sezioni">
     <button class="tab" role="tab" id="t-stint" data-view="stint" aria-selected="true">Sessione</button>
+    <button class="tab" role="tab" id="t-tele" data-view="tele" aria-selected="false">Telemetria</button>
     <button class="tab" role="tab" id="t-lap" data-view="lap" aria-selected="false">Giro</button>
     <button class="tab" role="tab" id="t-cmp" data-view="cmp" aria-selected="false">Confronto</button>
     <button class="tab" role="tab" id="t-coach" data-view="coach" aria-selected="false">Coach</button>
@@ -184,6 +185,7 @@
 </section>
 
 <!-- PROGRESS -->
+<section class="view" id="v-tele" hidden><div id="twBody"></div></section>
 <section class="view" id="v-bop" hidden><div id="bopBody"></div></section>
 <section class="view" id="v-prog" hidden>
   <div class="panel"><div class="panel-h"><h2>Progressi</h2><label class="f" style="min-width:280px">Pista e auto<select id="pgKey"></select></label></div>
