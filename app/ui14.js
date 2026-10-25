@@ -442,7 +442,7 @@ function openCarModal(veh){let m=$('#mCar');if(!m){m=document.createElement('div
   const c=cv.getContext('2d');c.save();c.setLineDash([3,3]);c.strokeStyle=tok('warn');c.lineWidth=2;c.beginPath();c.arc(a,b,12,0,7);c.stroke();c.restore();};})();
 
 // ---------- two-level main navigation ----------
-(function(){const GROUPS=[['ana','Analisi',['stint','lap','cmp','coach']],['set','Setup',['setup','diary','bop']],['prog','Progressi',['prog']],['live','Muretto',['live']]];
+(function(){const GROUPS=[['ana','Analisi',['stint','tele','lap','cmp','coach']],['set','Setup',['setup','diary','bop']],['prog','Progressi',['prog']],['live','Muretto',['live']]];
   const SUBL={str:'Solo',team:'Endurance'};const nav=$('.tabs');if(!nav||$('.mtabs'))return;
   const main=document.createElement('nav');main.className='mtabs';main.setAttribute('role','tablist');main.innerHTML=GROUPS.map(([g,l])=>`<button type="button" class="mtab" data-group="${g}">${g==='live'?'<span class="livedot"></span>':''}${l}</button>`).join('');
   nav.before(main);nav.classList.add('subtabs');

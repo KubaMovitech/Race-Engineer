@@ -1,17 +1,17 @@
 {
- "version": "2.2.0",
- "date": "2026-10-21",
+ "version": "2.3.0",
+ "date": "2026-10-25",
  "notes": [
-  "Nuova sezione Setup › BOP con il BOP ufficiale LMU 1.4.3 di tutte le piste e le classi, con i cambi segnati",
-  "Controllo cambi nascosti: la potenza misurata della tua auto confrontata sessione per sessione",
-  "Muretto › Auto: riquadro BOP con la potenza misurata in diretta"
+  "Nuova schermata Analisi › Telemetria: confronto di due giri con mappa grande, bordi veri della pista, traiettorie, comandi e delta",
+  "Replay con il fantasma del giro B, grafici di tutti i 245 canali, valori al cursore con le 4 gomme",
+  "Curva per curva con cosa cambia, giro ideale, diagramma G-G"
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "b610c8f2f7153651dad54e4d4bc48dbec09978eafcfc2bbfe800c95eff3c35b2"
+  "sha256": "deb43a3092f92e551ae74e5d88adde76d5080f3e59d0eca063998fc67175e65f"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "f0f474972396cc5a3d9d99e03ded6e9a7ca784af3b300cb3823b7ac4c5f633f2"
+  "sha256": "23be92ab9c0a5584dc3b623ce15a85d0cfe6455eb024d36689aeec30aa02554e"
  }
 }
