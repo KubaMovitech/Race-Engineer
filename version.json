@@ -1,17 +1,16 @@
 {
- "version": "2.3.0",
- "date": "2026-10-25",
+ "version": "2.4.0",
+ "date": "2026-10-26",
  "notes": [
-  "Nuova schermata Analisi › Telemetria: confronto di due giri con mappa grande, bordi veri della pista, traiettorie, comandi e delta",
-  "Replay con il fantasma del giro B, grafici di tutti i 245 canali, valori al cursore con le 4 gomme",
-  "Curva per curva con cosa cambia, giro ideale, diagramma G-G"
+  "Nuovo stile Carbon tech in tutta l'app",
+  "Sessione: plancia con miglior giro, settori a LED, circuito tecnico con le curve, gomme attorno all'auto, telemetria ed energia"
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "deb43a3092f92e551ae74e5d88adde76d5080f3e59d0eca063998fc67175e65f"
+  "sha256": "99fcd5558bacaac282bf25499180ff060bee10408076ba520c1ecc7e593a36e6"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "23be92ab9c0a5584dc3b623ce15a85d0cfe6455eb024d36689aeec30aa02554e"
+  "sha256": "1f8cc64d6a25a7e2ed8095f42b4c5fe4cb77e34dc60423d04afa4d7b72512784"
  }
 }

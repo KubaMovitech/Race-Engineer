@@ -1,7 +1,7 @@
 <!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body>
 <title>Data Engineer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&family=Barlow+Condensed:wght@500;600;700&family=Chakra+Petch:wght@400;600;700&display=swap">
 <style>
 /* Layout: F1 pit-wall software — single dark world (timing-screen colours), dense panels, data in mono */
 :root{
@@ -1011,6 +1011,61 @@ html[data-skin="ws"] .mbox::before{background:var(--lapA)}
 html[data-skin="ws"] #toastStack .toast{background:var(--panel2);border-left-color:var(--lapA)}
 html[data-skin="ws"] .wtop h1{background:none;-webkit-background-clip:initial;background-clip:initial;color:var(--ink)}
 
+/* ---------- FUTURISTIC LAYER (same skin "ws"): the look of Analisi › Telemetria everywhere ----------
+   Deep navy glass panels with a thin cyan edge, a faint measuring grid, bright mono numbers. Clear first: no heavy glow. */
+html[data-skin="ws"]{
+  --bg:#06080C; --panel:#0E131A; --panel2:#141B24; --band:#0B1016; --line:#1C2532; --grid:#151C26; --trackbed:#1A222D;
+  --ink:#E8EEF5; --muted:#7F8B9A; --faint:#55606E; --edge:rgba(120,170,220,.13); --edge2:rgba(120,170,220,.22); --r:6px;
+  --hdr:#05070A; --hdr-line:#16202B;
+}
+html[data-skin="ws"] body{background:
+  radial-gradient(1100px 520px at 88% -8%,rgba(0,200,255,.10),transparent 62%),
+  radial-gradient(900px 500px at -8% 108%,rgba(255,140,26,.05),transparent 60%),
+  linear-gradient(rgba(120,170,220,.035) 1px,transparent 1px) 0 0/100% 40px,
+  linear-gradient(90deg,rgba(120,170,220,.035) 1px,transparent 1px) 0 0/40px 100%,var(--bg);background-attachment:fixed}
+html[data-skin="ws"] .top{background:linear-gradient(180deg,rgba(5,7,10,.97),rgba(6,9,13,.92));backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--hdr-line)}
+html[data-skin="ws"] .top::after{display:block;background:linear-gradient(90deg,transparent,var(--lapA) 18%,rgba(0,200,255,.15) 55%,transparent);opacity:.8}
+html[data-skin="ws"] .mtab[aria-selected="true"]{background:linear-gradient(180deg,transparent 30%,rgba(0,200,255,.10))}
+html[data-skin="ws"] .mtab[aria-selected="true"]::after{top:auto;bottom:0;left:12px;right:12px;height:2px;background:var(--lapA);box-shadow:0 0 12px var(--lapA)}
+html[data-skin="ws"] .top>.tabs.subtabs{background:transparent;gap:4px;padding:6px 16px 8px;border-top:0}
+html[data-skin="ws"] .top>.tabs.subtabs .tab{background:rgba(255,255,255,.035);border:1px solid transparent;border-radius:4px;min-height:28px}
+html[data-skin="ws"] .top>.tabs.subtabs .tab:hover{background:rgba(255,255,255,.07)}
+html[data-skin="ws"] .top>.tabs.subtabs .tab[aria-selected="true"]{background:rgba(0,200,255,.12);border-color:rgba(0,200,255,.5);color:#fff;box-shadow:0 0 16px -6px var(--lapA)}
+
+html[data-skin="ws"] .panel,html[data-skin="ws"] .wcard,html[data-skin="ws"] .lbcard,html[data-skin="ws"] .suscard{
+  background:linear-gradient(180deg,rgba(17,23,31,.94),rgba(10,14,19,.96));border:1px solid var(--edge);border-radius:var(--r);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 14px 40px rgba(0,0,0,.35)}
+html[data-skin="ws"] .panel::before{display:block;content:"";position:absolute;inset:-1px;pointer-events:none;border-radius:var(--r);
+  background:linear-gradient(var(--lapA),var(--lapA)) 0 0/18px 1px no-repeat,linear-gradient(var(--lapA),var(--lapA)) 0 0/1px 18px no-repeat;opacity:.7}
+html[data-skin="ws"] .panel:hover{border-color:var(--edge2)}
+html[data-skin="ws"] .panel>.panel-h:first-child,html[data-skin="ws"] .panel>h3:first-child{background:linear-gradient(90deg,rgba(0,200,255,.07),transparent 60%);border-bottom:1px solid var(--edge);border-radius:var(--r) var(--r) 0 0}
+html[data-skin="ws"] .panel-h h2,html[data-skin="ws"] .panel-h h3,html[data-skin="ws"] .panel>h3{color:#E8EEF5}
+html[data-skin="ws"] .panel-h h3::before,html[data-skin="ws"] .panel-h h2::before,html[data-skin="ws"] .panel>h3::before{width:3px;height:13px;background:var(--lapA);box-shadow:0 0 8px var(--lapA)}
+
+html[data-skin="ws"] .btn{border-radius:4px;background:linear-gradient(180deg,#151C26,#0E131A);border:1px solid var(--edge2)}
+html[data-skin="ws"] .btn:hover{border-color:rgba(0,200,255,.55);background:linear-gradient(180deg,#1A2330,#111821)}
+html[data-skin="ws"] .btn.primary{background:linear-gradient(180deg,#F0243F,#B5001E);border-color:#FF4D64;box-shadow:0 6px 18px -8px rgba(240,36,63,.6)}
+html[data-skin="ws"] select,html[data-skin="ws"] input[type=number],html[data-skin="ws"] input[type=text],html[data-skin="ws"] input:not([type]),html[data-skin="ws"] textarea{background:#080B10!important;border-color:var(--edge2)!important;border-radius:4px!important}
+html[data-skin="ws"] .seg{border-radius:4px;overflow:hidden}
+html[data-skin="ws"] .seg button[aria-pressed="true"]{background:rgba(0,200,255,.16);color:#fff;box-shadow:inset 0 0 0 1px rgba(0,200,255,.6)}
+
+html[data-skin="ws"] .hero .ey{color:var(--lapA);letter-spacing:.24em}
+html[data-skin="ws"] .hero h1{background:linear-gradient(180deg,#FFFFFF 20%,#9FDFFF);-webkit-background-clip:text;background-clip:text;color:transparent}
+html[data-skin="ws"] .cchip{background:linear-gradient(180deg,rgba(17,23,31,.9),rgba(10,14,19,.9));border:1px solid var(--edge);border-left:2px solid var(--lapA);border-radius:4px}
+
+html[data-skin="ws"] .kpi{background:linear-gradient(180deg,rgba(20,27,36,.92),rgba(11,15,20,.94));border:1px solid var(--edge);border-radius:6px;position:relative;overflow:hidden}
+html[data-skin="ws"] .kpi::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,var(--lapA),transparent 75%);opacity:.8}
+html[data-skin="ws"] .kpi .v{color:#fff;font-weight:600;text-shadow:0 0 18px rgba(0,200,255,.18)}
+html[data-skin="ws"] .kpi.hl .v{color:var(--best);text-shadow:0 0 16px rgba(177,56,221,.4)}
+
+html[data-skin="ws"] th{background:#0A0E14!important;color:#8C99A8;border-bottom:1px solid var(--edge2)!important}
+html[data-skin="ws"] td{border-bottom:1px solid rgba(120,170,220,.06)}
+html[data-skin="ws"] tbody tr:nth-child(even) td{background:rgba(120,170,220,.018)}
+html[data-skin="ws"] tbody tr:hover td{background:rgba(0,200,255,.07)}
+html[data-skin="ws"] .mbox{background:linear-gradient(180deg,#111821,#0A0E14)!important;border-color:var(--edge2)!important;border-radius:8px!important}
+html[data-skin="ws"] .wtop h1{background:linear-gradient(180deg,#FFFFFF 20%,#9FDFFF);-webkit-background-clip:text;background-clip:text;color:transparent}
+html[data-skin="ws"] #botnav{background:rgba(5,7,10,.94)}
+
 /* ---------- TIMING WALL ---------- */
 html[data-skin="wall"]{
   --bg:#000; --panel:#0B0C0E; --panel2:#15171A; --band:#08090A; --line:#1E2024; --grid:#141619;
@@ -1081,6 +1136,87 @@ html[data-skin="ws"] .panel>h3::before{background:var(--lapA);box-shadow:none}
   html[data-skin="wall"] .lvsess .cchip{border-right:0;border-bottom:1px solid var(--line);padding:7px 10px}
   html[data-skin="wall"] .lvsess .cchip:nth-child(odd){border-right:1px solid var(--line)}
 }
+
+/* ================= CARBON TECH (html[data-look="carbon"], on top of both skins) =================
+   A constructor's engineering look: carbon weave, red and white, panels with cut corners and a short red bar,
+   Chakra Petch for titles and the numbers that matter. It overrides the colours of "ws" and "wall"; layouts stay. */
+html[data-look="carbon"]{
+  --bg:#0B0C0F; --panel:#16181D; --panel2:#1D2026; --band:#111316; --line:rgba(255,255,255,.10); --grid:#1A1C21; --trackbed:#24272D;
+  --ink:#F3F4F6; --muted:#8B9098; --faint:#5C6068; --accent:#FF1A2D; --accent2:#B3000F; --accent-soft:rgba(255,26,45,.12);
+  --lapA:#F3F4F6; --lapB:#FFB020; --cyan:#F3F4F6; --best:#B46BFF; --good:#2BE38A; --warn:#FFD23F; --bad:#FF3B4E;
+  --hdr:#08090B; --hdr-ink:#F3F4F6; --hdr-muted:#8B9098; --hdr-line:rgba(255,255,255,.10); --edge:rgba(255,255,255,.10); --edge2:rgba(255,255,255,.2);
+  --r:0px; --glow:rgba(255,26,45,.35); --glowc:rgba(255,255,255,.15);
+  --f-display:"Chakra Petch","Barlow Condensed","Titillium Web",sans-serif; --cut:14px;
+}
+html[data-look="carbon"] body{background:
+  radial-gradient(1100px 700px at 82% -6%,rgba(255,26,45,.13),transparent 60%),
+  repeating-linear-gradient(45deg,rgba(255,255,255,.022) 0 2px,transparent 2px 4px),
+  repeating-linear-gradient(-45deg,rgba(0,0,0,.35) 0 2px,transparent 2px 4px),#0B0C0F;background-attachment:fixed}
+/* header: brand slab, skewed tabs, the active one white */
+html[data-look="carbon"] .top{background:linear-gradient(180deg,rgba(0,0,0,.82),rgba(8,9,11,.9));backdrop-filter:blur(10px);border-bottom:1px solid var(--line);box-shadow:none}
+html[data-look="carbon"] .top::after{display:block;left:0;right:auto;width:180px;height:2px;background:var(--accent);opacity:1;box-shadow:none}
+html[data-look="carbon"] .brand .logo{filter:none}html[data-look="carbon"] .brand b{font-family:"Chakra Petch",var(--f-display);letter-spacing:.12em}
+html[data-look="carbon"] .mtabs{gap:2px;padding-left:8px}
+html[data-look="carbon"] .mtab{font-family:"Chakra Petch",var(--f-display);font-weight:600;font-size:.86rem;letter-spacing:.24em;color:var(--muted);clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);padding:0 22px;background:transparent}
+html[data-look="carbon"] .mtab:hover{color:#fff;background:rgba(255,255,255,.05)}
+html[data-look="carbon"] .mtab[aria-selected="true"]{background:#F3F4F6;color:#0B0C0F}
+html[data-look="carbon"] .mtab[aria-selected="true"]::after{display:none}
+html[data-look="carbon"] .mtab .livedot{background:var(--accent)}
+html[data-look="carbon"] .top>.tabs.subtabs{background:transparent;gap:2px;padding:6px 16px 8px;border-top:1px solid rgba(255,255,255,.05)}
+html[data-look="carbon"] .top>.tabs.subtabs .tab{clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);border:0;border-radius:0;background:rgba(255,255,255,.04);font-family:"Chakra Petch",var(--f-display);font-weight:600;letter-spacing:.2em;color:var(--muted);min-height:28px;padding:0 18px;box-shadow:none}
+html[data-look="carbon"] .top>.tabs.subtabs .tab:hover{background:rgba(255,255,255,.08);color:#fff}
+html[data-look="carbon"] .top>.tabs.subtabs .tab[aria-selected="true"]{background:var(--accent);color:#fff;box-shadow:none}
+/* panels with cut corners and a red bar on the top-left */
+html[data-look="carbon"] .panel,html[data-look="carbon"] .wcard,html[data-look="carbon"] .lbcard,html[data-look="carbon"] .suscard{
+  background:linear-gradient(180deg,rgba(24,26,31,.94),rgba(14,15,18,.96));border:1px solid var(--line);border-radius:0;box-shadow:0 18px 40px -18px rgba(0,0,0,.8);
+  clip-path:polygon(var(--cut) 0,100% 0,100% calc(100% - var(--cut)),calc(100% - var(--cut)) 100%,0 100%,0 var(--cut))}
+html[data-look="carbon"] .panel::before,html[data-look="carbon"] .wcard::before{display:block;content:"";position:absolute;left:var(--cut);top:0;width:60px;height:3px;inset:auto;left:14px;top:0;background:var(--accent);border-radius:0;opacity:1;box-shadow:none}
+html[data-look="carbon"] .panel:hover{border-color:var(--edge2)}
+html[data-look="carbon"] .panel>.panel-h:first-child,html[data-look="carbon"] .panel>h3:first-child{background:none;border-radius:0;border-bottom:1px solid var(--line)}
+html[data-look="carbon"] .panel-h h2,html[data-look="carbon"] .panel-h h3,html[data-look="carbon"] .panel>h3{font-family:"Chakra Petch",var(--f-display);font-weight:600;font-size:.78rem;letter-spacing:.32em;color:#C7CBD1}
+html[data-look="carbon"] .panel-h h3::before,html[data-look="carbon"] .panel-h h2::before,html[data-look="carbon"] .panel>h3::before{width:6px;height:6px;background:var(--accent);box-shadow:none;transform:skewX(-12deg)}
+/* controls */
+html[data-look="carbon"] .btn{clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);border-radius:0;background:rgba(255,255,255,.06);border:0;font-family:"Chakra Petch",var(--f-display);font-weight:600;letter-spacing:.14em;padding:7px 18px;box-shadow:none}
+html[data-look="carbon"] .btn:hover{background:rgba(255,255,255,.12)}
+html[data-look="carbon"] .btn.primary{background:var(--accent);color:#fff;box-shadow:none}html[data-look="carbon"] .btn.primary:hover{background:#FF3A4A}
+html[data-look="carbon"] .btn.icon{clip-path:none;padding:6px 10px}
+html[data-look="carbon"] select,html[data-look="carbon"] input[type=number],html[data-look="carbon"] input[type=text],html[data-look="carbon"] input[type=password],html[data-look="carbon"] input:not([type]),html[data-look="carbon"] textarea{background:#0D0E11!important;border:1px solid var(--edge2)!important;border-radius:0!important}
+html[data-look="carbon"] select:focus,html[data-look="carbon"] input:focus,html[data-look="carbon"] textarea:focus{border-color:#fff!important;box-shadow:0 0 0 1px rgba(255,255,255,.4)}
+html[data-look="carbon"] .seg{border-radius:0;overflow:hidden}html[data-look="carbon"] .seg button[aria-pressed="true"]{background:#F3F4F6;color:#0B0C0F;box-shadow:none}
+html[data-look="carbon"] input[type=range]{accent-color:var(--accent)}
+/* session title and condition chips */
+html[data-look="carbon"] .hero .ey{color:var(--accent);text-shadow:none;letter-spacing:.3em;font-family:"Chakra Petch",var(--f-mono)}
+html[data-look="carbon"] .hero h1,html[data-look="carbon"] .wtop h1{background:none;-webkit-background-clip:initial;background-clip:initial;color:#fff;font-family:"Chakra Petch",var(--f-display);font-weight:700;letter-spacing:.02em}
+html[data-look="carbon"] .cchip{background:rgba(22,24,29,.9);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:0;clip-path:polygon(0 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%)}
+html[data-look="carbon"] .cchip b{font-family:"Chakra Petch",var(--f-mono);font-size:1.05rem}
+/* KPI tiles: cut corner, red tick, technical numbers */
+html[data-look="carbon"] .kpi{background:linear-gradient(180deg,rgba(29,32,38,.92),rgba(17,19,22,.95));border:1px solid var(--line);border-radius:0;clip-path:polygon(0 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%)}
+html[data-look="carbon"] .kpi::before{content:"";position:absolute;left:0;top:0;width:28px;height:3px;right:auto;background:var(--accent);opacity:1}
+html[data-look="carbon"] .kpi::after{display:none}
+html[data-look="carbon"] .kpi .l{font-family:"Chakra Petch",var(--f-display);letter-spacing:.24em}
+html[data-look="carbon"] .kpi .v{font-family:"Chakra Petch",var(--f-mono);font-weight:600;color:#fff;text-shadow:none;letter-spacing:0}
+html[data-look="carbon"] .kpi.hl .v{color:var(--best);text-shadow:none}
+/* tables */
+html[data-look="carbon"] th{background:#101114!important;color:#8B9098;font-family:"Chakra Petch",var(--f-display);letter-spacing:.2em;border-bottom:1px solid var(--edge2)!important}
+html[data-look="carbon"] td{border-bottom:1px solid rgba(255,255,255,.05)}
+html[data-look="carbon"] tbody tr:nth-child(even) td{background:rgba(255,255,255,.015)}
+html[data-look="carbon"] tbody tr:hover td{background:rgba(255,26,45,.08)}
+html[data-look="carbon"] .badge,html[data-look="carbon"] .tag{border-radius:0!important}
+html[data-look="carbon"] .mbox{background:linear-gradient(180deg,#191B20,#101114)!important;border-color:var(--edge2)!important;border-radius:0!important;clip-path:polygon(16px 0,100% 0,100% calc(100% - 16px),calc(100% - 16px) 100%,0 100%,0 16px)}
+html[data-look="carbon"] .mbox::before{background:var(--accent);width:80px;right:auto}
+html[data-look="carbon"] #toastStack .toast{background:#16181D;border-left-color:var(--accent);border-radius:0}
+html[data-look="carbon"] #botnav{background:rgba(8,9,11,.96)}html[data-look="carbon"] #botnav button[aria-selected="true"]{color:#fff;box-shadow:inset 0 2px var(--accent)}
+/* Muretto keeps its timing tower and ticker, in the same materials */
+html[data-look="carbon"][data-skin="wall"] body{background:
+  radial-gradient(1100px 700px at 82% -6%,rgba(255,26,45,.10),transparent 60%),repeating-linear-gradient(45deg,rgba(255,255,255,.02) 0 2px,transparent 2px 4px),#08090B}
+html[data-look="carbon"] .lvtabs button{font-family:"Chakra Petch",var(--f-display);letter-spacing:.2em}
+html[data-look="carbon"] .lvtabs button[aria-selected="true"]{background:#F3F4F6;color:#0B0C0F;border-bottom-color:var(--accent)}
+html[data-look="carbon"] .lvsess .cchip{clip-path:none;border-left:0}
+html[data-look="carbon"] #rcBar .rcl{font-family:"Chakra Petch",var(--f-display);clip-path:polygon(0 0,100% 0,calc(100% - 12px) 100%,0 100%);padding-right:24px}
+/* LED bars used by the dashboard */
+.leds{display:flex;gap:3px}.leds i{flex:1;max-width:10px;height:20px;background:rgba(255,255,255,.08);transform:skewX(-12deg)}
+/* a panel with a drop-down menu must not clip it */
+html[data-look="carbon"] .panel:has(details.menu),html[data-look="carbon"] .panel:has(.menu-list){clip-path:none}
 </style>
 <header class="top">
   <div class="top-in">
@@ -3870,6 +4006,7 @@ function openDebrief(){let m=$('#mDeb');if(!m){m=document.createElement('div');m
   openModal('#mDeb');}
 // Italian → English phrases. '#' stands for any number (kept as-is). Longest entries are applied first.
 const I18N_EN=[
+["pressione","pressure"],["Circuito","Circuit"],["Ideale","Ideal"],["Potenziale","Potential"],["interno / centro / esterno","inner / centre / outer"],["velocità / gas / freno","speed / throttle / brake"],["Energia","Energy"],["Carburante / giro","Fuel / lap"],["Batteria fine giro","Battery at lap end"],["parziale","partial"],["senza frenata","no braking"],["carcassa","carcass"],["usura","wear"],["freno max","max brake"],["Settore","Sector"],
 ["Telaio","Chassis"],["frenata","braking"],["Uscita","Exit"],["Carico","Load"],["Motore e ibrido","Engine & hybrid"],["Gomme","Tyres"],["Freni","Brakes"],["Pilota","Driver"],
 ["A guadagna","A gains"],["A perde","A loses"],["Aderenza usata","Grip used"],["Aderenza","Grip"],["Al cursore","At the cursor"],["B frena","B brakes"],["Canali","Channels"],["Carica una telemetria MoTeC (.ld) con almeno un giro completo.","Load a MoTeC telemetry (.ld) with at least one complete lap."],["Cerca tra i canali…","Search channels…"],["Confronta con","Compare with"],["Cosa cambia","What changes"],["Delta B − A","Delta B − A"],["Diagramma G-G","G-G diagram"],["Distanza giro","Lap distance"],["Distanza","Distance"],["FRENATA","BRAKING"],["TRAZIONE","TRACTION"],["Linea B","B line"],["linea B","B line"],["Passa sopra la mappa o i grafici.","Hover the map or the traces."],["Questa telemetria non ha la posizione GPS: la mappa non è disponibile.","This telemetry has no GPS position: the map is not available."],["Replay: A e il fantasma di B nello stesso istante","Replay: A and B's ghost at the same moment"],["Riepilogo giro","Lap summary"],["Scegli un giro B per il delta.","Pick a lap B for the delta."],["Scivol.","Slip"],["Tutta la pista","Whole track"],["Velocità del replay","Replay speed"],["a destra","to the right"],["a sinistra","to the left"],["calcolato","computed"],["clic su una curva per zoomare mappa e grafici","click a corner to zoom map and traces"],["gas parziale","part throttle"],["in centro curva","mid-corner"],["lento → veloce","slow → fast"],["segui lo zoom","follow the zoom"],["somma dei migliori settori","sum of the best sectors"],["trascina = zoom · rotellina · doppio clic = tutto il giro","drag = zoom · wheel · double click = whole lap"],["tutto il giro","whole lap"],["— nessun confronto —","— no comparison —"],["G longitudinale","Long. G"],["G verticale","Vertical G"],["Posizione dal centro","Offset from centre"],["Bordo pista","Track edge"],["Coppia piantone","Steering torque"],["Ripartizione post.","Rear brake bias"],["Coppia motore","Engine torque"],["Coppia elettrico","Motor torque"],["Giri elettrico","Motor rpm"],["Stato elettrico","Motor state"],["Beccheggio","Pitch"],["Imbardata","Yaw rate"],["Delta best (gioco)","Delta best (game)"],["Potenza totale","Total power"],["G combinato","Combined G"],["Velocità B − A","Speed B − A"],["Gomma interno","Tyre inner"],["Gomma centro","Tyre centre"],["Gomma esterno","Tyre outer"],["Pressione freno","Brake pressure"],["Sospensione","Suspension"],["Forza sosp.","Susp. force"],["Giri ruota","Wheel speed"],["Scivolamento lat.","Lat. slip"],["Scivolamento long.","Long. slip"],["Convergenza","Toe"],["Forza lat.","Lat. force"],["Forza long.","Long. force"],["Schiacciamento","Tyre deflection"],["Velocità max","Top speed"],["Velocità media","Average speed"],["Velocità min","Minimum speed"],["Senza pedali","Coasting"],["senza pedali","coasting"],["Cambiate","Gear shifts"],["G laterale max","Max lateral G"],["G frenata max","Max braking G"],["Potenza max","Max power"],["Comandi","Inputs"],["Marce","Gears"],["guadagna","gains"],["perde","loses"],["dopo","later"],["prima","earlier"],["Telemetria","Telemetry"],["Gas pieno","Full throttle"],["gas pieno","full throttle"],
 ["potenza","power"],
@@ -4582,9 +4719,11 @@ const tr=I18N.tr;
 })();
 const AI_LANG=()=>LANG==='en'?'\n\nIMPORTANT: write your whole answer in English (the instructions above are in Italian, but the driver reads English).':'';
 // ================= VERSIONE, NOVITÀ E AGGIORNAMENTI =================
-const APP_VERSION='2.3.0';
+const APP_VERSION='2.4.0';
 const DEFAULT_UPD='https://raw.githubusercontent.com/KubaMovitech/Race-Engineer/main/';   // update channel (folder with version.json), set when the team repository exists
 const CHANGELOG=[
+{v:'2.4.0',d:'26/10/2026',items:['Nuovo stile «Carbon tech» in tutta l\'app: fibra di carbonio, rosso e bianco, pannelli con angoli tagliati, schede inclinate, caratteri tecnici. Il Muretto mantiene classifica a torre e barra Direzione gara con gli stessi materiali.','Sessione: nuova plancia in cima con il miglior giro grande, i settori a LED e il giro ideale, il circuito disegnato come un progetto tecnico con velocità minima, punto di frenata e marcia di ogni curva, le quattro gomme attorno all\'auto, la telemetria del giro, la lista giri e l\'energia. Tutti i pannelli di prima restano sotto.']},
+{v:'2.3.1',d:'26/10/2026',items:['Nuovo aspetto futuristico per Analisi, Setup e Progressi, uguale alla Telemetria: sfondo blu notte con griglia, pannelli in vetro scuro con bordo azzurro, numeri luminosi, schede e pulsanti attivi in azzurro. Il Muretto resta in stile TV F1. Cambia solo l\'aspetto: tutti i dati restano dove erano.']},
 {v:'2.3.0',d:'25/10/2026',items:['Nuova schermata Analisi › Telemetria: una postazione da ingegnere per confrontare due giri (A ciano, B arancione), anche di sessioni diverse sulla stessa pista.','Mappa grande con i bordi veri della pista, le due traiettorie colorate per traiettoria, comandi (freno / gas / senza pedali), delta, velocità o marce, i punti di frenata e di gas pieno di ogni curva e di quanti metri è distante la linea di B. Zoom, rotazione, clic su una curva per ingrandirla.','Replay: A e il fantasma di B che corrono insieme sulla mappa, nello stesso istante.','Grafici sincronizzati con la mappa: preset Pilota, Gomme, Telaio, Freni, Motore e ibrido, più qualsiasi dei 245 canali (anche le 4 ruote insieme). Trascina per zoomare, la mappa segue.','Al cursore: tutti i valori di A e B e la differenza, con le 4 gomme (temperature interno/centro/esterno, pressione, carico, aderenza usata, freno, altezza, scivolamento).','Curva per curva: punto di frenata, velocità, gas pieno, uscita, tempo e cosa fa di diverso B; riepilogo del giro, giro ideale dai migliori settori e diagramma G-G della zona zoomata.']},
 {v:'2.2.0',d:'21/10/2026',items:['Nuova sezione Setup › BOP con il BOP ufficiale LMU 1.4.3 (06/10/2026): tutte le 21 piste e le 5 classi, peso, potenza, stadi di potenza, energia per stint, ala e altezze. ▲▼ mostra cosa è cambiato rispetto al BOP precedente; la tua auto è evidenziata.','«Per auto»: la stessa auto su tutte le piste, per capire dove il BOP la aiuta o la penalizza.','«Controllo cambi nascosti»: misura la potenza della tua auto (motore + elettrico a gas pieno) dalle telemetrie MoTeC e, in diretta, dal bridge. Se per la stessa auto sulla stessa pista cambia di più del 2% senza un nuovo BOP ufficiale, te lo segnala.','Muretto › Auto: riquadro BOP con i valori ufficiali della tua auto su questa pista e la potenza misurata in diretta.']},
 {v:'2.1.9',d:'20/10/2026',items:['Nuovo aspetto per Analisi, Setup e Progressi, come le postazioni di analisi dei team: pannelli piatti con barra del titolo, giro A ciano e giro B arancione, grafici puliti senza alone.','Muretto in stile grafica TV della F1: sfondo nero, colori dei settori viola/verde/giallo, classifica a torre con la nostra auto evidenziata in rosso, dati della sessione in un\'unica striscia.','Muretto: in basso la barra «Direzione gara» con gli ultimi eventi che scorrono; clic per aprire Eventi.','Cambia solo l\'aspetto: tutti i pannelli, le tabelle e i numeri restano dove erano.']},
@@ -6406,6 +6545,7 @@ function lapRefApply(){const sel=$('#lapRef');const C=lapCur;if(!sel||!C?.S||!la
 (function(){const st=document.createElement('style');st.textContent=`td.egc{width:210px;min-width:210px}.egc .eg{grid-template-columns:20px minmax(44px,1fr) 26px 76px}.egc .eg .t{min-width:44px}.egc .egpl{font-family:var(--f-mono);font-size:.7rem;color:var(--muted);white-space:nowrap;text-align:left;padding-left:4px}.egc .eg.ve .egpl{color:color-mix(in srgb,var(--cyan) 75%,var(--muted))}`;document.head.appendChild(st);})();
 // ================= SKINS: workstation for the analysis, timing wall for the Muretto =================
 // The look follows the section (see skin.css); nothing is moved or hidden, so every number stays where it was.
+document.documentElement.dataset.look='carbon';
 function applySkin(){const v=curView();document.documentElement.dataset.skin=v==='live'?'wall':'ws';rcBar();}
 (function(){const sv=showView;window.showView=showView=function(v){document.documentElement.dataset.skin=v==='live'?'wall':'ws';sv(v);rcBar();};})();
 setTimeout(applySkin,0);
@@ -6638,9 +6778,9 @@ class TWMap{
     const s=this.s();let gs=100;while(gs*s<60)gs*=2;while(gs*s>220&&gs>10)gs/=2;c.strokeStyle='rgba(255,255,255,.035)';c.lineWidth=1;const [ox,oy]=this.unP(0,0);
     if(this.rot===0){for(let x=Math.floor(ox/gs)*gs;;x+=gs){const [px]=this.P(x,0);if(px>w)break;c.beginPath();c.moveTo(px,0);c.lineTo(px,h);c.stroke();}for(let y=Math.ceil(oy/gs)*gs;;y-=gs){const [,py]=this.P(0,y);if(py>h)break;c.beginPath();c.moveTo(0,py);c.lineTo(w,py);c.stroke();}}
     // the track: surface between the edges, then the edges
-    const twPx=14*s;this.line(c,D.A,0,n-1,'#19202A',Math.max(9,twPx+4));
-    if(D.L&&D.R&&twPx>10){c.beginPath();for(let i=0;i<n;i+=2){const [x,y]=this.P(D.L.x[i],D.L.y[i]);i?c.lineTo(x,y):c.moveTo(x,y);}for(let i=n-1;i>=0;i-=2){const [x,y]=this.P(D.R.x[i],D.R.y[i]);c.lineTo(x,y);}c.closePath();c.fillStyle='#141922';c.fill('evenodd');
-      this.line(c,D.L,0,n-1,'rgba(200,210,225,.35)',1);this.line(c,D.R,0,n-1,'rgba(200,210,225,.35)',1);
+    const twPx=14*s;this.line(c,D.A,0,n-1,tok('trackbed'),Math.max(9,twPx+4));
+    if(D.L&&D.R&&twPx>10){c.beginPath();for(let i=0;i<n;i+=2){const [x,y]=this.P(D.L.x[i],D.L.y[i]);i?c.lineTo(x,y):c.moveTo(x,y);}for(let i=n-1;i>=0;i-=2){const [x,y]=this.P(D.R.x[i],D.R.y[i]);c.lineTo(x,y);}c.closePath();c.fillStyle=tok('band');c.fill('evenodd');
+      const ec=document.documentElement.dataset.look==='carbon'?'rgba(255,255,255,.75)':'rgba(200,210,225,.35)';this.line(c,D.L,0,n-1,ec,1.2);this.line(c,D.R,0,n-1,ec,1.2);
 }
     // start / finish and sector lines across the track
     if(D.L&&D.R){const across=(i,col,lab)=>{const [a,b]=this.P(D.L.x[i],D.L.y[i]),[e,f]=this.P(D.R.x[i],D.R.y[i]);const mx=(a+e)/2,my=(b+f)/2,dx=(e-a),dy=(f-b),l=Math.hypot(dx,dy)||1,hl=Math.max(l/2,9);
@@ -6898,6 +7038,105 @@ table.twct small{margin-left:4px;font-size:.7rem}table.twct small.up,table.twct 
 .twsum b.a{color:var(--lapA);font-weight:600}.twsum b.b{color:var(--lapB);font-weight:600}.twsum small{color:var(--muted);margin-left:3px;font-size:.66rem}.twsum em{font-style:normal;text-align:right}
 @media (max-width:1100px){.twmain,.twlow{grid-template-columns:1fr}.twins{max-height:none}}
 @media (max-width:760px){.twmapp{min-height:420px}.twmapw{min-height:380px}.twhud{font-size:11px}.twlaps .f{min-width:0;max-width:none;width:100%}.twtitle h2{font-size:1.3rem}.twbest{margin-left:0;text-align:left}}`;document.head.appendChild(st);})();
+// ================= SESSIONE: the carbon dashboard on top of the session =================
+// Best lap with LED sectors and the ideal lap, the circuit drawn like a blueprint with a callout per corner,
+// the four tyres around the car, the telemetry of the best lap, the laps and the energy. Everything else of the
+// session view stays below it.
+function dashData(S){const k='dash';if(S.cache.has(k))return S.cache.get(k);const B=S.best;if(!B)return null;
+  const L=S.laps.filter(l=>l.complete);const g=lapGrid(S,B,5);const la=g.get('GPS Latitude'),lo=g.get('GPS Longitude');
+  let xy=null;if(la&&lo){const c=Math.cos(la[0]*Math.PI/180);xy=Array.from(la,(v,i)=>[(lo[i]-lo[0])*c*111320,(v-la[0])*110574]);}
+  const sec=L.map(l=>typeof twLapSectors==='function'?twLapSectors(S,l):null);const okSec=sec.filter(Boolean);
+  const best3=okSec.length?[0,1,2].map(k=>Math.min(...okSec.map(s=>s[k]))):null;
+  const st=lapStats(S,B);const cor=detectCorners(g);
+  const d={B,L,g,xy,sec,best3,st,cor,bsec:typeof twLapSectors==='function'?twLapSectors(S,B):null,speed:g.get('Ground Speed'),thr:g.get('Throttle Pos'),brk:g.get('Brake Pos')};S.cache.set(k,d);return d;}
+function dashFit(xy,w,h,pad){const xs=xy.map(p=>p[0]),ys=xy.map(p=>p[1]);let x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys);
+  const rot=(x1-x0)<(y1-y0)*0.8&&w>h;const P=rot?xy.map(([x,y])=>[y,x]):xy.map(([x,y])=>[x,-y]);
+  const X=P.map(p=>p[0]),Y=P.map(p=>p[1]);x0=Math.min(...X);x1=Math.max(...X);y0=Math.min(...Y);y1=Math.max(...Y);const k=Math.min((w-2*pad)/(x1-x0),(h-2*pad)/(y1-y0));const ox=(w-(x1-x0)*k)/2,oy=(h-(y1-y0)*k)/2;
+  return P.map(([x,y])=>[ox+(x-x0)*k,oy+(y-y0)*k]);}
+const dPath=(P,a=0,b=P.length-1)=>'M'+P.slice(a,b+1).map(p=>p[0].toFixed(1)+' '+p[1].toFixed(1)).join('L');
+const dTc=t=>!Number.isFinite(t)?'#333':t<70?'#3B82F6':t<78?'#22D3EE':t<92?'#2BE38A':t<102?'#FFD23F':'#FF1A2D';
+function dashMap(d,W,H){if(!d.xy)return `<text x="20" y="40" fill="#8B9098">${tr('Questa telemetria non ha la posizione GPS: la mappa non è disponibile.')}</text>`;
+  const P=dashFit(d.xy,W,H,Math.min(110,W*0.12));let m=`<defs><pattern id="dgr" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M30 0H0V30" fill="none" stroke="rgba(255,255,255,.05)"/></pattern>
+    <pattern id="dck" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="2" height="2" fill="#fff"/><rect x="2" y="2" width="2" height="2" fill="#fff"/></pattern></defs><rect width="${W}" height="${H}" fill="url(#dgr)"/>
+    <path d="${dPath(P)}Z" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="16" stroke-linejoin="round"/><path d="${dPath(P)}Z" fill="none" stroke="#0E0F12" stroke-width="13" stroke-linejoin="round"/>`;
+  // racing line by inputs, grouped in runs of the same colour
+  const cs=P.map((_,i)=>d.brk[i]>5?'#FF1A2D':d.thr[i]>95?'#F3F4F6':'#8B9098');let i=0;while(i<P.length-1){let j=i+1;while(j<P.length-1&&cs[j]===cs[i])j++;m+=`<path d="${dPath(P,i,j)}" stroke="${cs[i]}" stroke-width="3" fill="none"/>`;i=j;}
+  const cx=P.reduce((s,q)=>s+q[0],0)/P.length,cy=P.reduce((s,q)=>s+q[1],0)/P.length;const placed=[];const bw=150,bh=52;
+  const hit=(x,y)=>placed.some(([u,v])=>Math.abs(u-x)<bw+8&&Math.abs(v-y)<bh+6);
+  if(W<600){d.cor.forEach(c=>{const p=P[c.apex];if(!p)return;let dx=p[0]-cx,dy=p[1]-cy;const L=Math.hypot(dx,dy)||1;const x=p[0]+dx/L*26,y=p[1]+dy/L*20;
+      m+=`<circle cx="${p[0]}" cy="${p[1]}" r="4" fill="#FF1A2D"/><text x="${x}" y="${y+4}" text-anchor="middle" font-size="12" font-weight="700" fill="#FF1A2D">T${c.k}<tspan fill="#fff" font-weight="600"> ${Math.round(c.vMin)}</tspan></text>`;});}
+  else d.cor.forEach(c=>{const p=P[c.apex];if(!p)return;let dx=p[0]-cx,dy=p[1]-cy;const L=Math.hypot(dx,dy)||1;dx/=L;dy/=L;
+    let bx=Math.max(10,Math.min(W-bw-10,p[0]+dx*110-bw/2)),by=Math.max(36,Math.min(H-bh-40,p[1]+dy*80-bh/2));
+    if(hit(bx,by)){const b0=[bx,by];out:for(const ox of [0,-170,170,-340,340])for(const oy of [0,-62,62,-124,124]){const x=Math.max(10,Math.min(W-bw-10,b0[0]+ox)),y=Math.max(36,Math.min(H-bh-40,b0[1]+oy));if(!hit(x,y)){bx=x;by=y;break out;}}}
+    placed.push([bx,by]);
+    m+=`<line x1="${p[0]}" y1="${p[1]}" x2="${bx+bw/2}" y2="${by+bh/2}" stroke="rgba(255,255,255,.45)"/><circle cx="${p[0]}" cy="${p[1]}" r="5" fill="#FF1A2D"/>
+     <polygon points="${bx+8},${by} ${bx+bw},${by} ${bx+bw},${by+bh-8} ${bx+bw-8},${by+bh} ${bx},${by+bh} ${bx},${by+8}" fill="rgba(11,12,15,.92)" stroke="rgba(255,255,255,.35)"/>
+     <text x="${bx+10}" y="${by+20}" fill="#FF1A2D" font-weight="700" font-size="14">T${c.k}</text><text x="${bx+42}" y="${by+20}" fill="#fff" font-weight="600" font-size="15">${Math.round(c.vMin)} km/h</text>
+     <text x="${bx+10}" y="${by+40}" fill="#8B9098" font-size="12">${c.brake!=null?tr('frenata')+' '+Math.round(c.brake)+' m':tr('senza frenata')}${c.gear>0?' · '+Math.round(c.gear)+'ª':''}</text>`;});
+  const s0=P[0];m+=`<rect x="${s0[0]-11}" y="${s0[1]-4}" width="22" height="8" fill="url(#dck)"/>
+    <g transform="translate(20,${H-18})" font-size="12" fill="#8B9098"><rect width="14" height="3" y="-4" fill="#F3F4F6"/><text x="20">${tr('gas pieno')}</text><rect x="110" width="14" height="3" y="-4" fill="#FF1A2D"/><text x="130">${tr('freno')}</text><rect x="190" width="14" height="3" y="-4" fill="#8B9098"/><text x="210">${tr('parziale')}</text></g>`;
+  return m;}
+function dashCar(d){const w=d.st.w;const tyr={FL:[345,64],FR:[345,188],RL:[205,64],RR:[205,188]};
+  let c=`<g transform="translate(275 126) rotate(90) scale(.95)" fill="none" stroke="rgba(255,255,255,.8)" stroke-width="1.3">
+    <path d="M0 -220 C22 -220 30 -170 33 -120 L58 -104 L58 -70 L38 -60 L44 60 L62 74 L62 120 C62 136 46 146 0 146 C-46 146 -62 136 -62 120 L-62 74 L-44 60 L-38 -60 L-58 -70 L-58 -104 L-33 -120 C-30 -170 -22 -220 0 -220Z"/>
+    <path d="M0 -100 L18 -70 L16 10 L0 26 L-16 10 L-18 -70Z" stroke="rgba(255,255,255,.4)"/></g>`;
+  W.forEach(k=>{const [x,y]=tyr[k];c+=`<rect x="${x-26}" y="${y-13}" width="52" height="26" rx="4" fill="${dTc(w[k].C)}" opacity=".85"/>`;});
+  [['RL',10,6],['RR',10,134],['FL',408,6],['FR',408,134]].forEach(([k,x,y])=>{const t=w[k];const order=k.endsWith('L')?[t.O,t.C,t.I]:[t.I,t.C,t.O];
+    c+=`<g transform="translate(${x},${y})"><polygon points="8,0 130,0 130,108 122,116 0,116 0,8" fill="rgba(11,12,15,.92)" stroke="rgba(255,255,255,.3)"/>
+     <text x="10" y="20" fill="#fff" font-weight="700" font-size="15">${k}</text><text x="122" y="20" text-anchor="end" fill="#8B9098" font-size="12">${tr('usura')} ${fx(t.wear,2)}%</text>
+     ${order.map((v,j)=>`<rect x="${10+j*38}" y="30" width="34" height="22" fill="${dTc(v)}"/><text x="${27+j*38}" y="46" text-anchor="middle" fill="#0B0C0F" font-weight="700" font-size="13">${fx(v,0)}</text>`).join('')}
+     <text x="10" y="72" fill="#8B9098" font-size="12">${tr('carcassa')}</text><text x="122" y="72" text-anchor="end" fill="#fff" font-weight="600" font-size="13">${fx(t.carc,0)}°</text>
+     <text x="10" y="89" fill="#8B9098" font-size="12">${tr('pressione')}</text><text x="122" y="89" text-anchor="end" fill="#fff" font-weight="600" font-size="13">${fx(t.p,0)} kPa</text>
+     <text x="10" y="106" fill="#8B9098" font-size="12">${tr('freno max')}</text><text x="122" y="106" text-anchor="end" fill="${t.bMax>600?'#FF1A2D':'#FFD23F'}" font-weight="600" font-size="13">${fx(t.bMax,0)}°</text></g>`;});
+  return c;}
+function dashStrip(d,Wt){const n=d.speed.length;const tr_=(a,h,lo,hi,dy)=>Array.from(a,(v,i)=>`${(i/(n-1)*Wt).toFixed(1)},${(dy+h-(v-lo)/(hi-lo)*h).toFixed(1)}`).join(' ');
+  let lo=Infinity,hi=-Infinity;for(const v of d.speed){lo=Math.min(lo,v);hi=Math.max(hi,v);}
+  let t=`<g stroke="rgba(255,255,255,.06)">${[0,1,2,3].map(i=>`<line x1="0" x2="${Wt}" y1="${i*36+2}" y2="${i*36+2}"/>`).join('')}</g><polyline points="${tr_(d.speed,110,lo-10,hi+5,0)}" fill="none" stroke="#fff" stroke-width="1.8"/>
+    <polyline points="${tr_(d.thr,34,0,100,124)}" fill="none" stroke="#2BE38A" stroke-width="1.4"/><polyline points="${tr_(d.brk,34,0,100,164)}" fill="none" stroke="#FF1A2D" stroke-width="1.4"/>`;
+  d.cor.forEach(c=>{const x=c.apex/(n-1)*Wt;t+=`<line x1="${x}" x2="${x}" y1="0" y2="200" stroke="rgba(255,26,45,.35)" stroke-dasharray="3 4"/><text x="${x+4}" y="210" fill="#8B9098" font-size="11">T${c.k}</text>`;});
+  return t;}
+const dLeds=(f,c,n=22)=>`<div class="leds">${Array.from({length:n},(_,i)=>`<i style="${i<Math.round(Math.max(0,Math.min(1,f))*n)?`background:${c};box-shadow:0 0 6px ${c}`:''}"></i>`).join('')}</div>`;
+function dashHTML(S){const d=dashData(S);if(!d)return '';const B=d.B,st=d.st;const col={p:'var(--best)',g:'var(--good)',y:'var(--warn)'};
+  const cls=k=>{if(!d.best3||!d.bsec)return 'y';const v=d.bsec[k],b=d.best3[k];return Math.abs(v-b)<1e-4?'p':v-b<0.15?'g':'y';};
+  const ideal=d.best3?d.best3.reduce((a,b)=>a+b,0):null;
+  const secs=d.bsec?d.bsec.map((s,k)=>{const c=cls(k);return `<div><div class="dl">${tr('Settore')} ${k+1}</div><div class="dv" style="color:${col[c]}">${s.toFixed(3)}</div>${dLeds(1-(s-d.best3[k])*4,col[c],12)}</div>`;}).join(''):'';
+  const fuel=st.fuel,bat=st.batEnd;const vmax=st.vmax;
+  return `<div class="dash">
+   <div class="panel dmap"><div class="dt">${tr('Circuito')} · <b>${esc(S.meta?.venue||'')}</b> · ${Math.round(S.trackLen||0)} m</div><svg id="dashMap" preserveAspectRatio="xMidYMid meet"></svg></div>
+   <div class="dside"><div class="panel dbest"><div class="dt">${tr('Miglior giro')} · <b>${tr('G')}${B.num}</b> · ${esc(S.meta?.driver||'')}</div><div class="dbig">${fmtLap(B.time)}</div><div class="dred"></div>
+      <div class="dsecs">${secs}</div>${ideal?`<div class="dideal"><span>${tr('Ideale')} <b style="color:var(--best)">${fmtLap(ideal)}</b></span><span>${tr('Potenziale')} <b style="color:var(--good)">−${(B.time-ideal).toFixed(3)}</b></span><span>${tr('Giri')} <b>${d.L.length}</b></span></div>`:''}</div>
+     <div class="panel dcar"><div class="dt">${tr('Gomme')} · <b>${tr('interno / centro / esterno')}</b></div><svg viewBox="0 0 550 252">${dashCar(d)}</svg></div></div>
+   <div class="panel dtel"><div class="dt">${tr('Telemetria')} · <b>${tr('G')}${B.num}</b> · ${tr('velocità / gas / freno')}</div><svg id="dashTel" viewBox="0 0 900 214" preserveAspectRatio="none"></svg></div>
+   <div class="panel dlaps"><div class="dt">${tr('Giri')}</div><div class="dll">${d.L.map(l=>`<div class="kvr"><span>${tr('Giro')} ${l.num}</span><b style="color:${l===B?'var(--best)':l.invalid?'var(--bad)':'#fff'}">${fmtLap(l.time)}</b></div>`).join('')}</div></div>
+   <div class="panel den"><div class="dt">${tr('Energia')}</div>
+     ${Number.isFinite(fuel)?`<div class="kvr"><span>${tr('Carburante / giro')}</span><b>${fx(fuel,2)}<small> L</small></b></div>${dLeds(fuel/4,'#FFD23F')}`:''}
+     ${Number.isFinite(bat)?`<div class="kvr"><span>${tr('Batteria fine giro')}</span><b>${fx(bat,0)}<small> %</small></b></div>${dLeds(bat/100,'#2BE38A')}`:''}
+     <div class="kvr"><span>${tr('Velocità max')}</span><b>${fx(vmax,0)}<small> km/h</small></b></div>${dLeds(vmax/340,'#F3F4F6')}</div></div>`;}
+function dashDraw(S){const d=dashData(S);const m=$('#dashMap');if(m){const r=m.getBoundingClientRect();const W=Math.max(300,Math.round(r.width)),H=Math.max(260,Math.round(r.height));m.setAttribute('viewBox',`0 0 ${W} ${H}`);m.innerHTML=dashMap(d,W,H);}
+  const t=$('#dashTel');if(t)t.innerHTML=dashStrip(d,900);}
+(function(){const rs=RENDER.stint;RENDER.stint=()=>{rs();const S=active()?.S;const body=$('#stBody');if(!S||!body||!S.best||S.sample&&!S.best)return;
+  try{body.insertAdjacentHTML('afterbegin',dashHTML(S));dashDraw(S);}catch(e){console.error(e);}};})();
+window.addEventListener('resize',()=>{if(curView()==='stint'&&$('#dashMap')){const S=active()?.S;if(S)dashDraw(S);}});
+
+(function(){const st=document.createElement('style');st.textContent=`
+.dash{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);grid-template-rows:auto auto;gap:16px;margin-bottom:16px;font-family:"Chakra Petch",var(--f-display)}
+.dash .panel{position:relative;padding:50px 22px 18px!important}
+.dash .dt{position:absolute;left:22px;top:14px;font:600 12px "Chakra Petch",var(--f-display);letter-spacing:.3em;color:var(--muted);text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;right:16px}.dash .dt b{color:#fff}
+.dmap{padding:40px 6px 6px!important;min-height:600px}.dmap svg{width:100%;height:560px;display:block;font-family:"Chakra Petch",sans-serif}
+.dside{display:flex;flex-direction:column;gap:16px}
+.dbig{font:700 clamp(3.2rem,6.4vw,6.4rem)/0.9 "Chakra Petch",var(--f-display);color:#fff;letter-spacing:-.01em}
+.dred{height:4px;width:220px;background:var(--accent);margin:12px 0 18px}
+.dsecs{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.dl{font:600 12px "Chakra Petch",var(--f-display);letter-spacing:.3em;color:var(--muted);text-transform:uppercase}.dv{font:600 28px "Chakra Petch",var(--f-display);margin:2px 0 4px}
+.dideal{display:flex;gap:24px;flex-wrap:wrap;margin-top:14px;font:500 14px "Chakra Petch",var(--f-display);color:var(--muted);letter-spacing:.06em}.dideal b{font-size:20px;margin-left:4px}
+.dcar svg{width:100%;height:auto;display:block;font-family:"Chakra Petch",sans-serif}
+.dtel{grid-column:1/2}.dtel svg{width:100%;height:214px;display:block;font-family:"Chakra Petch",sans-serif}
+.dash .dlaps,.dash .den{grid-column:2/3}
+.dash .bottom{display:contents}
+.kvr{display:flex;justify-content:space-between;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--line);font-size:15px;color:#C7CBD1}.kvr b{font:600 20px "Chakra Petch",var(--f-display);color:#fff}.kvr small{font-size:13px;color:var(--muted)}
+.den .leds{margin:4px 0 10px}
+@media (min-width:1101px){.dash{grid-template-columns:minmax(0,1.55fr) minmax(0,.5fr) minmax(0,.5fr)}.dmap{grid-column:1}.dside{grid-column:2/4}.dtel{grid-column:1}.dash .dlaps{grid-column:2}.dash .den{grid-column:3}}
+@media (max-width:1100px){.dash{grid-template-columns:1fr}.dash .dlaps,.dash .den,.dtel,.dside{grid-column:1}.dmap{min-height:420px}.dmap svg{height:400px}}
+@media (max-width:760px){.dmap svg{height:320px}.dmap{min-height:340px}.dsecs{gap:8px}.dv{font-size:20px}}`;document.head.appendChild(st);})();
 // ================= SETUP =================
 let DIAG=null;
 RENDER.setup=()=>{
