@@ -1,16 +1,17 @@
 {
- "version": "2.4.0",
+ "version": "2.5.0",
  "date": "2026-10-26",
  "notes": [
-  "Nuovo stile Carbon tech in tutta l'app",
-  "Sessione: plancia con miglior giro, settori a LED, circuito tecnico con le curve, gomme attorno all'auto, telemetria ed energia"
+  "Squadra senza codici: invito con un link, il compagno entra da solo",
+  "Muretto: striscia con tutte le auto sul giro",
+  "Classifica: consumo degli ultimi 3 giri, tendenza e contatti"
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "99fcd5558bacaac282bf25499180ff060bee10408076ba520c1ecc7e593a36e6"
+  "sha256": "42ec60c684ca240a36497a3a0e03b80db2efe60288fffe9823cee099bb9b4b2c"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "1f8cc64d6a25a7e2ed8095f42b4c5fe4cb77e34dc60423d04afa4d7b72512784"
+  "sha256": "886cf9b5bcc3719435815a0de09f33ce6ba6ef82d98a3c1e372e202bbecc486b"
  }
 }
