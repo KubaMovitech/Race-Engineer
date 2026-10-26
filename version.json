@@ -1,17 +1,15 @@
 {
- "version": "2.3.0",
- "date": "2026-10-25",
+ "version": "2.3.1",
+ "date": "2026-10-26",
  "notes": [
-  "Nuova schermata Analisi › Telemetria: confronto di due giri con mappa grande, bordi veri della pista, traiettorie, comandi e delta",
-  "Replay con il fantasma del giro B, grafici di tutti i 245 canali, valori al cursore con le 4 gomme",
-  "Curva per curva con cosa cambia, giro ideale, diagramma G-G"
+  "Nuovo aspetto futuristico per Analisi, Setup e Progressi, uguale alla Telemetria"
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "deb43a3092f92e551ae74e5d88adde76d5080f3e59d0eca063998fc67175e65f"
+  "sha256": "fb7efa366381ac1ad8b307c11ec15ec104887322115bdb71117fd9c32eeb23e2"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "23be92ab9c0a5584dc3b623ce15a85d0cfe6455eb024d36689aeec30aa02554e"
+  "sha256": "7a43173fb0b1d1049c82cfdd7a4db7cc27b07782bd488d6758972ec4207736cb"
  }
 }

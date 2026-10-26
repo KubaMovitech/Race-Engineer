@@ -65,6 +65,61 @@ html[data-skin="ws"] .mbox::before{background:var(--lapA)}
 html[data-skin="ws"] #toastStack .toast{background:var(--panel2);border-left-color:var(--lapA)}
 html[data-skin="ws"] .wtop h1{background:none;-webkit-background-clip:initial;background-clip:initial;color:var(--ink)}
 
+/* ---------- FUTURISTIC LAYER (same skin "ws"): the look of Analisi › Telemetria everywhere ----------
+   Deep navy glass panels with a thin cyan edge, a faint measuring grid, bright mono numbers. Clear first: no heavy glow. */
+html[data-skin="ws"]{
+  --bg:#06080C; --panel:#0E131A; --panel2:#141B24; --band:#0B1016; --line:#1C2532; --grid:#151C26; --trackbed:#1A222D;
+  --ink:#E8EEF5; --muted:#7F8B9A; --faint:#55606E; --edge:rgba(120,170,220,.13); --edge2:rgba(120,170,220,.22); --r:6px;
+  --hdr:#05070A; --hdr-line:#16202B;
+}
+html[data-skin="ws"] body{background:
+  radial-gradient(1100px 520px at 88% -8%,rgba(0,200,255,.10),transparent 62%),
+  radial-gradient(900px 500px at -8% 108%,rgba(255,140,26,.05),transparent 60%),
+  linear-gradient(rgba(120,170,220,.035) 1px,transparent 1px) 0 0/100% 40px,
+  linear-gradient(90deg,rgba(120,170,220,.035) 1px,transparent 1px) 0 0/40px 100%,var(--bg);background-attachment:fixed}
+html[data-skin="ws"] .top{background:linear-gradient(180deg,rgba(5,7,10,.97),rgba(6,9,13,.92));backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--hdr-line)}
+html[data-skin="ws"] .top::after{display:block;background:linear-gradient(90deg,transparent,var(--lapA) 18%,rgba(0,200,255,.15) 55%,transparent);opacity:.8}
+html[data-skin="ws"] .mtab[aria-selected="true"]{background:linear-gradient(180deg,transparent 30%,rgba(0,200,255,.10))}
+html[data-skin="ws"] .mtab[aria-selected="true"]::after{top:auto;bottom:0;left:12px;right:12px;height:2px;background:var(--lapA);box-shadow:0 0 12px var(--lapA)}
+html[data-skin="ws"] .top>.tabs.subtabs{background:transparent;gap:4px;padding:6px 16px 8px;border-top:0}
+html[data-skin="ws"] .top>.tabs.subtabs .tab{background:rgba(255,255,255,.035);border:1px solid transparent;border-radius:4px;min-height:28px}
+html[data-skin="ws"] .top>.tabs.subtabs .tab:hover{background:rgba(255,255,255,.07)}
+html[data-skin="ws"] .top>.tabs.subtabs .tab[aria-selected="true"]{background:rgba(0,200,255,.12);border-color:rgba(0,200,255,.5);color:#fff;box-shadow:0 0 16px -6px var(--lapA)}
+
+html[data-skin="ws"] .panel,html[data-skin="ws"] .wcard,html[data-skin="ws"] .lbcard,html[data-skin="ws"] .suscard{
+  background:linear-gradient(180deg,rgba(17,23,31,.94),rgba(10,14,19,.96));border:1px solid var(--edge);border-radius:var(--r);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 14px 40px rgba(0,0,0,.35)}
+html[data-skin="ws"] .panel::before{display:block;content:"";position:absolute;inset:-1px;pointer-events:none;border-radius:var(--r);
+  background:linear-gradient(var(--lapA),var(--lapA)) 0 0/18px 1px no-repeat,linear-gradient(var(--lapA),var(--lapA)) 0 0/1px 18px no-repeat;opacity:.7}
+html[data-skin="ws"] .panel:hover{border-color:var(--edge2)}
+html[data-skin="ws"] .panel>.panel-h:first-child,html[data-skin="ws"] .panel>h3:first-child{background:linear-gradient(90deg,rgba(0,200,255,.07),transparent 60%);border-bottom:1px solid var(--edge);border-radius:var(--r) var(--r) 0 0}
+html[data-skin="ws"] .panel-h h2,html[data-skin="ws"] .panel-h h3,html[data-skin="ws"] .panel>h3{color:#E8EEF5}
+html[data-skin="ws"] .panel-h h3::before,html[data-skin="ws"] .panel-h h2::before,html[data-skin="ws"] .panel>h3::before{width:3px;height:13px;background:var(--lapA);box-shadow:0 0 8px var(--lapA)}
+
+html[data-skin="ws"] .btn{border-radius:4px;background:linear-gradient(180deg,#151C26,#0E131A);border:1px solid var(--edge2)}
+html[data-skin="ws"] .btn:hover{border-color:rgba(0,200,255,.55);background:linear-gradient(180deg,#1A2330,#111821)}
+html[data-skin="ws"] .btn.primary{background:linear-gradient(180deg,#F0243F,#B5001E);border-color:#FF4D64;box-shadow:0 6px 18px -8px rgba(240,36,63,.6)}
+html[data-skin="ws"] select,html[data-skin="ws"] input[type=number],html[data-skin="ws"] input[type=text],html[data-skin="ws"] input:not([type]),html[data-skin="ws"] textarea{background:#080B10!important;border-color:var(--edge2)!important;border-radius:4px!important}
+html[data-skin="ws"] .seg{border-radius:4px;overflow:hidden}
+html[data-skin="ws"] .seg button[aria-pressed="true"]{background:rgba(0,200,255,.16);color:#fff;box-shadow:inset 0 0 0 1px rgba(0,200,255,.6)}
+
+html[data-skin="ws"] .hero .ey{color:var(--lapA);letter-spacing:.24em}
+html[data-skin="ws"] .hero h1{background:linear-gradient(180deg,#FFFFFF 20%,#9FDFFF);-webkit-background-clip:text;background-clip:text;color:transparent}
+html[data-skin="ws"] .cchip{background:linear-gradient(180deg,rgba(17,23,31,.9),rgba(10,14,19,.9));border:1px solid var(--edge);border-left:2px solid var(--lapA);border-radius:4px}
+
+html[data-skin="ws"] .kpi{background:linear-gradient(180deg,rgba(20,27,36,.92),rgba(11,15,20,.94));border:1px solid var(--edge);border-radius:6px;position:relative;overflow:hidden}
+html[data-skin="ws"] .kpi::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,var(--lapA),transparent 75%);opacity:.8}
+html[data-skin="ws"] .kpi .v{color:#fff;font-weight:600;text-shadow:0 0 18px rgba(0,200,255,.18)}
+html[data-skin="ws"] .kpi.hl .v{color:var(--best);text-shadow:0 0 16px rgba(177,56,221,.4)}
+
+html[data-skin="ws"] th{background:#0A0E14!important;color:#8C99A8;border-bottom:1px solid var(--edge2)!important}
+html[data-skin="ws"] td{border-bottom:1px solid rgba(120,170,220,.06)}
+html[data-skin="ws"] tbody tr:nth-child(even) td{background:rgba(120,170,220,.018)}
+html[data-skin="ws"] tbody tr:hover td{background:rgba(0,200,255,.07)}
+html[data-skin="ws"] .mbox{background:linear-gradient(180deg,#111821,#0A0E14)!important;border-color:var(--edge2)!important;border-radius:8px!important}
+html[data-skin="ws"] .wtop h1{background:linear-gradient(180deg,#FFFFFF 20%,#9FDFFF);-webkit-background-clip:text;background-clip:text;color:transparent}
+html[data-skin="ws"] #botnav{background:rgba(5,7,10,.94)}
+
 /* ---------- TIMING WALL ---------- */
 html[data-skin="wall"]{
   --bg:#000; --panel:#0B0C0E; --panel2:#15171A; --band:#08090A; --line:#1E2024; --grid:#141619;
