@@ -190,3 +190,84 @@ html[data-skin="ws"] .panel>h3::before{background:var(--lapA);box-shadow:none}
   html[data-skin="wall"] .lvsess .cchip{border-right:0;border-bottom:1px solid var(--line);padding:7px 10px}
   html[data-skin="wall"] .lvsess .cchip:nth-child(odd){border-right:1px solid var(--line)}
 }
+
+/* ================= CARBON TECH (html[data-look="carbon"], on top of both skins) =================
+   A constructor's engineering look: carbon weave, red and white, panels with cut corners and a short red bar,
+   Chakra Petch for titles and the numbers that matter. It overrides the colours of "ws" and "wall"; layouts stay. */
+html[data-look="carbon"]{
+  --bg:#0B0C0F; --panel:#16181D; --panel2:#1D2026; --band:#111316; --line:rgba(255,255,255,.10); --grid:#1A1C21; --trackbed:#24272D;
+  --ink:#F3F4F6; --muted:#8B9098; --faint:#5C6068; --accent:#FF1A2D; --accent2:#B3000F; --accent-soft:rgba(255,26,45,.12);
+  --lapA:#F3F4F6; --lapB:#FFB020; --cyan:#F3F4F6; --best:#B46BFF; --good:#2BE38A; --warn:#FFD23F; --bad:#FF3B4E;
+  --hdr:#08090B; --hdr-ink:#F3F4F6; --hdr-muted:#8B9098; --hdr-line:rgba(255,255,255,.10); --edge:rgba(255,255,255,.10); --edge2:rgba(255,255,255,.2);
+  --r:0px; --glow:rgba(255,26,45,.35); --glowc:rgba(255,255,255,.15);
+  --f-display:"Chakra Petch","Barlow Condensed","Titillium Web",sans-serif; --cut:14px;
+}
+html[data-look="carbon"] body{background:
+  radial-gradient(1100px 700px at 82% -6%,rgba(255,26,45,.13),transparent 60%),
+  repeating-linear-gradient(45deg,rgba(255,255,255,.022) 0 2px,transparent 2px 4px),
+  repeating-linear-gradient(-45deg,rgba(0,0,0,.35) 0 2px,transparent 2px 4px),#0B0C0F;background-attachment:fixed}
+/* header: brand slab, skewed tabs, the active one white */
+html[data-look="carbon"] .top{background:linear-gradient(180deg,rgba(0,0,0,.82),rgba(8,9,11,.9));backdrop-filter:blur(10px);border-bottom:1px solid var(--line);box-shadow:none}
+html[data-look="carbon"] .top::after{display:block;left:0;right:auto;width:180px;height:2px;background:var(--accent);opacity:1;box-shadow:none}
+html[data-look="carbon"] .brand .logo{filter:none}html[data-look="carbon"] .brand b{font-family:"Chakra Petch",var(--f-display);letter-spacing:.12em}
+html[data-look="carbon"] .mtabs{gap:2px;padding-left:8px}
+html[data-look="carbon"] .mtab{font-family:"Chakra Petch",var(--f-display);font-weight:600;font-size:.86rem;letter-spacing:.24em;color:var(--muted);clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);padding:0 22px;background:transparent}
+html[data-look="carbon"] .mtab:hover{color:#fff;background:rgba(255,255,255,.05)}
+html[data-look="carbon"] .mtab[aria-selected="true"]{background:#F3F4F6;color:#0B0C0F}
+html[data-look="carbon"] .mtab[aria-selected="true"]::after{display:none}
+html[data-look="carbon"] .mtab .livedot{background:var(--accent)}
+html[data-look="carbon"] .top>.tabs.subtabs{background:transparent;gap:2px;padding:6px 16px 8px;border-top:1px solid rgba(255,255,255,.05)}
+html[data-look="carbon"] .top>.tabs.subtabs .tab{clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);border:0;border-radius:0;background:rgba(255,255,255,.04);font-family:"Chakra Petch",var(--f-display);font-weight:600;letter-spacing:.2em;color:var(--muted);min-height:28px;padding:0 18px;box-shadow:none}
+html[data-look="carbon"] .top>.tabs.subtabs .tab:hover{background:rgba(255,255,255,.08);color:#fff}
+html[data-look="carbon"] .top>.tabs.subtabs .tab[aria-selected="true"]{background:var(--accent);color:#fff;box-shadow:none}
+/* panels with cut corners and a red bar on the top-left */
+html[data-look="carbon"] .panel,html[data-look="carbon"] .wcard,html[data-look="carbon"] .lbcard,html[data-look="carbon"] .suscard{
+  background:linear-gradient(180deg,rgba(24,26,31,.94),rgba(14,15,18,.96));border:1px solid var(--line);border-radius:0;box-shadow:0 18px 40px -18px rgba(0,0,0,.8);
+  clip-path:polygon(var(--cut) 0,100% 0,100% calc(100% - var(--cut)),calc(100% - var(--cut)) 100%,0 100%,0 var(--cut))}
+html[data-look="carbon"] .panel::before,html[data-look="carbon"] .wcard::before{display:block;content:"";position:absolute;left:var(--cut);top:0;width:60px;height:3px;inset:auto;left:14px;top:0;background:var(--accent);border-radius:0;opacity:1;box-shadow:none}
+html[data-look="carbon"] .panel:hover{border-color:var(--edge2)}
+html[data-look="carbon"] .panel>.panel-h:first-child,html[data-look="carbon"] .panel>h3:first-child{background:none;border-radius:0;border-bottom:1px solid var(--line)}
+html[data-look="carbon"] .panel-h h2,html[data-look="carbon"] .panel-h h3,html[data-look="carbon"] .panel>h3{font-family:"Chakra Petch",var(--f-display);font-weight:600;font-size:.78rem;letter-spacing:.32em;color:#C7CBD1}
+html[data-look="carbon"] .panel-h h3::before,html[data-look="carbon"] .panel-h h2::before,html[data-look="carbon"] .panel>h3::before{width:6px;height:6px;background:var(--accent);box-shadow:none;transform:skewX(-12deg)}
+/* controls */
+html[data-look="carbon"] .btn{clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);border-radius:0;background:rgba(255,255,255,.06);border:0;font-family:"Chakra Petch",var(--f-display);font-weight:600;letter-spacing:.14em;padding:7px 18px;box-shadow:none}
+html[data-look="carbon"] .btn:hover{background:rgba(255,255,255,.12)}
+html[data-look="carbon"] .btn.primary{background:var(--accent);color:#fff;box-shadow:none}html[data-look="carbon"] .btn.primary:hover{background:#FF3A4A}
+html[data-look="carbon"] .btn.icon{clip-path:none;padding:6px 10px}
+html[data-look="carbon"] select,html[data-look="carbon"] input[type=number],html[data-look="carbon"] input[type=text],html[data-look="carbon"] input[type=password],html[data-look="carbon"] input:not([type]),html[data-look="carbon"] textarea{background:#0D0E11!important;border:1px solid var(--edge2)!important;border-radius:0!important}
+html[data-look="carbon"] select:focus,html[data-look="carbon"] input:focus,html[data-look="carbon"] textarea:focus{border-color:#fff!important;box-shadow:0 0 0 1px rgba(255,255,255,.4)}
+html[data-look="carbon"] .seg{border-radius:0;overflow:hidden}html[data-look="carbon"] .seg button[aria-pressed="true"]{background:#F3F4F6;color:#0B0C0F;box-shadow:none}
+html[data-look="carbon"] input[type=range]{accent-color:var(--accent)}
+/* session title and condition chips */
+html[data-look="carbon"] .hero .ey{color:var(--accent);text-shadow:none;letter-spacing:.3em;font-family:"Chakra Petch",var(--f-mono)}
+html[data-look="carbon"] .hero h1,html[data-look="carbon"] .wtop h1{background:none;-webkit-background-clip:initial;background-clip:initial;color:#fff;font-family:"Chakra Petch",var(--f-display);font-weight:700;letter-spacing:.02em}
+html[data-look="carbon"] .cchip{background:rgba(22,24,29,.9);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:0;clip-path:polygon(0 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%)}
+html[data-look="carbon"] .cchip b{font-family:"Chakra Petch",var(--f-mono);font-size:1.05rem}
+/* KPI tiles: cut corner, red tick, technical numbers */
+html[data-look="carbon"] .kpi{background:linear-gradient(180deg,rgba(29,32,38,.92),rgba(17,19,22,.95));border:1px solid var(--line);border-radius:0;clip-path:polygon(0 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%)}
+html[data-look="carbon"] .kpi::before{content:"";position:absolute;left:0;top:0;width:28px;height:3px;right:auto;background:var(--accent);opacity:1}
+html[data-look="carbon"] .kpi::after{display:none}
+html[data-look="carbon"] .kpi .l{font-family:"Chakra Petch",var(--f-display);letter-spacing:.24em}
+html[data-look="carbon"] .kpi .v{font-family:"Chakra Petch",var(--f-mono);font-weight:600;color:#fff;text-shadow:none;letter-spacing:0}
+html[data-look="carbon"] .kpi.hl .v{color:var(--best);text-shadow:none}
+/* tables */
+html[data-look="carbon"] th{background:#101114!important;color:#8B9098;font-family:"Chakra Petch",var(--f-display);letter-spacing:.2em;border-bottom:1px solid var(--edge2)!important}
+html[data-look="carbon"] td{border-bottom:1px solid rgba(255,255,255,.05)}
+html[data-look="carbon"] tbody tr:nth-child(even) td{background:rgba(255,255,255,.015)}
+html[data-look="carbon"] tbody tr:hover td{background:rgba(255,26,45,.08)}
+html[data-look="carbon"] .badge,html[data-look="carbon"] .tag{border-radius:0!important}
+html[data-look="carbon"] .mbox{background:linear-gradient(180deg,#191B20,#101114)!important;border-color:var(--edge2)!important;border-radius:0!important;clip-path:polygon(16px 0,100% 0,100% calc(100% - 16px),calc(100% - 16px) 100%,0 100%,0 16px)}
+html[data-look="carbon"] .mbox::before{background:var(--accent);width:80px;right:auto}
+html[data-look="carbon"] #toastStack .toast{background:#16181D;border-left-color:var(--accent);border-radius:0}
+html[data-look="carbon"] #botnav{background:rgba(8,9,11,.96)}html[data-look="carbon"] #botnav button[aria-selected="true"]{color:#fff;box-shadow:inset 0 2px var(--accent)}
+/* Muretto keeps its timing tower and ticker, in the same materials */
+html[data-look="carbon"][data-skin="wall"] body{background:
+  radial-gradient(1100px 700px at 82% -6%,rgba(255,26,45,.10),transparent 60%),repeating-linear-gradient(45deg,rgba(255,255,255,.02) 0 2px,transparent 2px 4px),#08090B}
+html[data-look="carbon"] .lvtabs button{font-family:"Chakra Petch",var(--f-display);letter-spacing:.2em}
+html[data-look="carbon"] .lvtabs button[aria-selected="true"]{background:#F3F4F6;color:#0B0C0F;border-bottom-color:var(--accent)}
+html[data-look="carbon"] .lvsess .cchip{clip-path:none;border-left:0}
+html[data-look="carbon"] #rcBar .rcl{font-family:"Chakra Petch",var(--f-display);clip-path:polygon(0 0,100% 0,calc(100% - 12px) 100%,0 100%);padding-right:24px}
+/* LED bars used by the dashboard */
+.leds{display:flex;gap:3px}.leds i{flex:1;max-width:10px;height:20px;background:rgba(255,255,255,.08);transform:skewX(-12deg)}
+/* a panel with a drop-down menu must not clip it */
+html[data-look="carbon"] .panel:has(details.menu),html[data-look="carbon"] .panel:has(.menu-list){clip-path:none}

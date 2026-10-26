@@ -1,15 +1,16 @@
 {
- "version": "2.3.1",
+ "version": "2.4.0",
  "date": "2026-10-26",
  "notes": [
-  "Nuovo aspetto futuristico per Analisi, Setup e Progressi, uguale alla Telemetria"
+  "Nuovo stile Carbon tech in tutta l'app",
+  "Sessione: plancia con miglior giro, settori a LED, circuito tecnico con le curve, gomme attorno all'auto, telemetria ed energia"
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "fb7efa366381ac1ad8b307c11ec15ec104887322115bdb71117fd9c32eeb23e2"
+  "sha256": "99fcd5558bacaac282bf25499180ff060bee10408076ba520c1ecc7e593a36e6"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "7a43173fb0b1d1049c82cfdd7a4db7cc27b07782bd488d6758972ec4207736cb"
+  "sha256": "1f8cc64d6a25a7e2ed8095f42b4c5fe4cb77e34dc60423d04afa4d7b72512784"
  }
 }
