@@ -19,7 +19,7 @@ import (
 	"time"
 )
 
-const VERSION = "2.6.0"
+const VERSION = "2.7.0"
 
 //go:embed app.html
 var appHTML []byte
@@ -115,6 +115,8 @@ func (h *Hub) serve(port int, id string) error {
 	mux.HandleFunc("/svm", handleSvm)
 	mux.HandleFunc("/svmlib", handleSvmLib)
 	mux.HandleFunc("/svmlib/file", handleSvmFile)
+	mux.HandleFunc("/ldlib", handleLdLib)
+	mux.HandleFunc("/ldlib/file", handleLdFile)
 	loadUserData()
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/" {

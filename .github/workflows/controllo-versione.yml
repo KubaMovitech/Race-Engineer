@@ -21,3 +21,15 @@ jobs:
           go vet ./...
           GOOS=windows GOARCH=amd64 go vet ./...
           go test ./...
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Test di tutte le schermate (bridge demo + telemetria finta)
+        run: |
+          (cd bridge && go build -o /tmp/de-bridge .)
+          python3 tools/make_fixture_ld.py /tmp/fixture.ld
+          (/tmp/de-bridge -demo -nowindow -speed 8 > /tmp/de-bridge.log 2>&1 &)
+          npm install --no-save --no-package-lock playwright@1.47.2
+          npx playwright install --with-deps chromium
+          sleep 3
+          node tools/smoke.js http://localhost:8790/ /tmp/fixture.ld

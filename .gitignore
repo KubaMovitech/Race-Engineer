@@ -9,3 +9,4 @@ app/pitwall.html
 app/test.html
 bridge/app.html
 release/
+node_modules/

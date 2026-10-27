@@ -1,17 +1,19 @@
 {
- "version": "2.6.0",
+ "version": "2.7.0",
  "date": "2026-10-27",
  "notes": [
-  "Setup diviso in schede e nuovo Ingegnere di pista che legge telemetria e setup insieme",
-  "Analisi nuove: campanatura in appoggio, packer e terzi elementi, ruote che si alzano, beccheggio, bilanciamento per fase e per velocità",
-  "Guida più dettagliata con interazioni, passi e cosa dice l'ingegnere"
+  "Telemetria automatica dalla cartella di LMU",
+  "Riferimenti (telemetrie dei piloti veloci) come giro B",
+  "Il cambio ha funzionato? nel Setup",
+  "Font inclusi nell'app",
+  "Test automatico di tutte le schermate"
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "ff4996ce12280619b91ab44d3bf9ba9fb7862a2f27d454165f15f3c9723e58fc"
+  "sha256": "c6cbe2b9bb06f4a36b57b5834b737eaea9fde5ec6a15700f777c0efbb5521a2e"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "1f3a0904ee443489e07e9cba66bdfe93c37cc2e91ea8ef9f562ba09833c5d9ae"
+  "sha256": "97ae45258528424edb32a5e8247bbb9758aa95ce8f07172ae257df011d9927bb"
  }
 }
