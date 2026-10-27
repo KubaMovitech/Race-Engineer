@@ -187,3 +187,15 @@ html[data-look="pro"] #rcBar{left:var(--pnw)}
 html:not([data-look="pro"]) .psel{display:contents}
 html:not([data-look="pro"]) .psel .pf:not(.pfs),html:not([data-look="pro"]) .psel svg,html:not([data-look="pro"]) #proSync,html:not([data-look="pro"]) #btnLoad svg{display:none}
 html:not([data-look="pro"]) .psel .pfs{display:contents}
+/* team logo: big at the bottom of the side menu; in the header only on the phone */
+#proLogo{display:none}
+html[data-look="pro"] #proLogo{display:flex;justify-content:center;margin-top:auto;padding:18px 8px 0;position:relative;z-index:1}
+html[data-look="pro"] #proLogo img{max-width:150px;max-height:110px;object-fit:contain;filter:drop-shadow(0 6px 18px rgba(0,0,0,.6))}
+html[data-look="pro"] #proLogo+.pfoot{margin-top:0}
+html[data-look="pro"] .brand .teamlogo{display:none}
+@media (max-width:1100px){html[data-look="pro"] #proLogo img{max-width:52px;max-height:52px}}
+@media (max-width:760px){html[data-look="pro"] #proLogo{display:none}html[data-look="pro"] .brand .teamlogo{display:block}}
+/* page title (welcome page and the titles of the old pages): silver, with the eyebrow in the accent colour */
+html[data-look="pro"] .hero h1{background:linear-gradient(180deg,#F4F5F7,var(--psil3));-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none}
+html[data-look="pro"] .hero .ey{color:var(--pacc);text-shadow:none}
+html[data-look="pro"] .hero.welcome::after,html[data-look="pro"] .hero::after{background:var(--pacc)!important;box-shadow:none!important}
