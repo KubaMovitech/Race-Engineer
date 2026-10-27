@@ -3,7 +3,7 @@
 // Setup Builder: the car seen from above with the values of the .svm on each corner, and the other versions of the setup.
 
 // ---------- quick actions: what you want from the car → the guide's answer for that symptom ----------
-const PRO_ACT=[['rot','Più rotazione in ingresso','Sottosterzo in ingresso','#5AA2FF'],['stab','Più stabilità in frenata','Frena forte, poi si gira in trail braking','#FF5A6A'],
+const PRO_ACT=[['rot','Più rotazione in ingresso','Sottosterzo in ingresso','var(--pacc2)'],['stab','Più stabilità in frenata','Frena forte, poi si gira in trail braking','#FF5A6A'],
   ['tra','Migliora trazione','Perde trazione in uscita','#2BE38A'],['wear','Riduci usura gomme','Le gomme calano nello stint','#FFC53D'],
   ['vmax','Più velocità sul dritto','Lenta sul dritto','#22D3EE'],['aero','Bilanciamento nel veloce','Sottosterzo nelle curve veloci','#B57BFF']];
 const PRO_ACT_IC={rot:'<path d="M12 4a8 8 0 1 1-7.4 5"/><path d="M4 4v5h5"/>',stab:'<circle cx="12" cy="12" r="8"/><path d="M12 8v4"/><circle cx="12" cy="16" r=".6"/>',tra:'<circle cx="12" cy="12" r="8"/><path d="M8 12l3 3 5-6"/>',
@@ -68,12 +68,12 @@ function proCarHTML(su){const C={FL:'FRONTLEFT',FR:'FRONTRIGHT',RL:'REARLEFT',RR
     box('Terzo elemento','⌇',[['Molla ant.',suFind(su,'SUSPENSION',/^Front3rdSpring/)],['Packer ant.',suFind(su,'SUSPENSION',/^Front3rdPacker/)],['Molla post.',suFind(su,'SUSPENSION',/^Rear3rdSpring/)],['Packer post.',suFind(su,'SUSPENSION',/^Rear3rdPacker/)]]),
     box('Differenziale','⚙',[['Precarico',suFind(su,'DRIVELINE',/^DiffPreload/)],['Trazione',suFind(su,'DRIVELINE',/^DiffPower/)],['Rilascio',suFind(su,'DRIVELINE',/^DiffCoast/)]]),
     box('Elettronica e ibrido','ϟ',[['TC mappa',suFind(su,'CONTROLS',/^TractionControlMap/)],['TC taglio',suFind(su,'CONTROLS',/^TCPowerCut/)],['Rigenerazione',suFind(su,'ENGINE',/^RegenerationMap/)],['Motore elettrico',suFind(su,'ENGINE',/^ElectricMotorMap/)]])].join('');
-  const car=`<svg viewBox="0 0 160 300" class="pcarv" aria-hidden="true"><defs><linearGradient id="pcb" x1="0" x2="1"><stop offset="0" stop-color="#0E2240"/><stop offset=".5" stop-color="#1B3E6E"/><stop offset="1" stop-color="#0E2240"/></linearGradient></defs>
-    <path d="M60 18h40l8 30 14 6v40l-8 10 4 60 12 10v60l-10 30H54l-10-30v-60l12-10 4-60-8-10V54l14-6z" fill="url(#pcb)" stroke="#3B82F6" stroke-width="1.2" opacity=".95"/>
-    <path d="M30 16h100v10H30z" fill="#16335C" stroke="#3B82F6"/><path d="M26 276h108v12H26z" fill="#16335C" stroke="#3B82F6"/>
-    <rect x="14" y="58" width="22" height="46" rx="5" fill="#0B1526" stroke="#2BE38A" stroke-width="2"/><rect x="124" y="58" width="22" height="46" rx="5" fill="#0B1526" stroke="#2BE38A" stroke-width="2"/>
-    <rect x="12" y="196" width="26" height="52" rx="5" fill="#0B1526" stroke="#FFC53D" stroke-width="2"/><rect x="122" y="196" width="26" height="52" rx="5" fill="#0B1526" stroke="#FFC53D" stroke-width="2"/>
-    <ellipse cx="80" cy="132" rx="14" ry="22" fill="#08111F" stroke="#5AA2FF"/><path d="M80 40v230" stroke="rgba(90,162,255,.25)" stroke-dasharray="3 5"/></svg>`;
+  const car=`<svg viewBox="0 0 160 300" class="pcarv" aria-hidden="true"><defs><linearGradient id="pcb" x1="0" x2="1"><stop offset="0" style="stop-color:var(--pcar1)"/><stop offset=".5" style="stop-color:var(--pcar2)"/><stop offset="1" style="stop-color:var(--pcar1)"/></linearGradient></defs>
+    <path d="M60 18h40l8 30 14 6v40l-8 10 4 60 12 10v60l-10 30H54l-10-30v-60l12-10 4-60-8-10V54l14-6z" fill="url(#pcb)" style="stroke:var(--pacc)" stroke-width="1.2" opacity=".95"/>
+    <path d="M30 16h100v10H30z" style="fill:var(--pcar3);stroke:var(--pacc)"/><path d="M26 276h108v12H26z" style="fill:var(--pcar3);stroke:var(--pacc)"/>
+    <rect x="14" y="58" width="22" height="46" rx="5" style="fill:var(--panel)" stroke="#2BE38A" stroke-width="2"/><rect x="124" y="58" width="22" height="46" rx="5" style="fill:var(--panel)" stroke="#2BE38A" stroke-width="2"/>
+    <rect x="12" y="196" width="26" height="52" rx="5" style="fill:var(--panel)" stroke="#FFC53D" stroke-width="2"/><rect x="122" y="196" width="26" height="52" rx="5" style="fill:var(--panel)" stroke="#FFC53D" stroke-width="2"/>
+    <ellipse cx="80" cy="132" rx="14" ry="22" style="fill:var(--bg);stroke:var(--pacc2)"/><path d="M80 40v230" style="stroke:var(--pline2)" stroke-dasharray="3 5"/></svg>`;
   return `<div class="pcar2">${corner('FL')}${corner('FR')}<div class="pcc2">${car}</div>${corner('RL')}${corner('RR')}</div><div class="pcmid">${mid}</div>`;}
 function proVersions(su){const car=(su?.car||'').toLowerCase();const L=svms().filter(x=>!car||(x.car||'').toLowerCase()===car);
   const nd=(a,b)=>{let n=0;for(const [sec,it] of Object.entries(a.sec||{}))for(const i of it){const o=b.sec?.[sec]?.find(x=>x.key===i.key);if(o&&o.raw!==i.raw)n++;}return n;};
@@ -92,26 +92,26 @@ setTimeout(()=>{const base=RENDER.setup;RENDER.setup=()=>{base();try{proSetupPan
 
 (function(){const st=document.createElement('style');st.textContent=`
 html[data-look="pro"] .pehead .eplan{display:none}
-html[data-look="pro"] .ehead .ey{color:#7FB2FF;font:600 .72rem "Titillium Web",sans-serif;letter-spacing:.14em}html[data-look="pro"] .ehead h2{font:700 1.4rem "Titillium Web",sans-serif;color:#fff;text-transform:none}
+html[data-look="pro"] .ehead .ey{color:var(--pacc2);font:600 .72rem "Titillium Web",sans-serif;letter-spacing:.14em}html[data-look="pro"] .ehead h2{font:700 1.4rem "Titillium Web",sans-serif;color:#fff;text-transform:none}
 html[data-look="pro"] .ecount span{border-radius:10px;background:var(--panel2);border:1px solid var(--line)}
 .pre1,.pre2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:16px;margin-bottom:16px}
 .pactg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.pab{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.02);color:#DCE4F0;padding:12px;cursor:pointer;font:600 .85rem "Titillium Web",sans-serif;text-align:left}
+.pab{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.02);color:var(--psil2);padding:12px;cursor:pointer;font:600 .85rem "Titillium Web",sans-serif;text-align:left}
 .pab svg{width:26px;height:26px;flex:none;fill:none;stroke:var(--c);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .pab:hover{border-color:var(--c)}.pab[aria-pressed="true"]{border-color:var(--c);background:color-mix(in srgb,var(--c) 12%,transparent)}
 .pactb{margin-top:12px;border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:rgba(255,255,255,.02)}.pactb ol{margin:8px 0;padding-left:20px}.pactb li{margin:3px 0}
 .pdt{table-layout:fixed;width:100%}.pdt th:nth-child(1){width:34%}.pdt th:nth-child(2){width:18%}.pdt th:nth-child(3){width:12%}.pdt td{vertical-align:top;white-space:normal!important;overflow-wrap:anywhere}.pdt td b{color:#fff}.pdt .pdi{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:6px;margin-right:8px;font-weight:700;font-size:.8rem}
-.pdt tr.s2 .pdi{background:rgba(255,59,78,.15);color:#FF3B4E}.pdt tr.s1 .pdi{background:rgba(255,197,61,.15);color:#FFC53D}.pdt tr.s0 .pdi{background:rgba(43,227,138,.12);color:#2BE38A}
-.pdt em{font-style:normal;font:600 .72rem "Titillium Web",sans-serif;padding:4px 10px;border-radius:6px;white-space:nowrap}.pdt em.hi{background:rgba(255,59,78,.15);color:#FF5A6A}.pdt em.mid{background:rgba(255,197,61,.14);color:#FFC53D}.pdt em.ok{background:rgba(43,227,138,.12);color:#2BE38A}
+.pdt tr.s2 .pdi{background:rgba(255,59,78,.15);color:#FF3B4E}.pdt tr.s1 .pdi{background:var(--pwarnbg);color:var(--pwarn)}.pdt tr.s0 .pdi{background:rgba(43,227,138,.12);color:#2BE38A}
+.pdt em{font-style:normal;font:600 .72rem "Titillium Web",sans-serif;padding:4px 10px;border-radius:6px;white-space:nowrap}.pdt em.hi{background:rgba(255,59,78,.15);color:#FF5A6A}.pdt em.mid{background:var(--pwarnbg);color:var(--pwarn)}.pdt em.ok{background:rgba(43,227,138,.12);color:#2BE38A}
 .ppl{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
-.ppn{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#13284A;color:#fff;font-weight:700}
+.ppn{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--psel);color:#fff;font-weight:700}
 .ppl b{color:#fff}.ppl small{display:block;color:var(--muted);margin-top:2px}.ppl.done{opacity:.6}.ppl.done .ppn{background:#14532D}
 .ppd[aria-pressed="true"]{color:#2BE38A;border-color:#2BE38A}
 .ppb{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-.ptc svg{width:100%;height:auto;display:block}.ptc .pg line{stroke:rgba(255,255,255,.07)}.ptc .pg text{fill:#7F8EA8;font:10px "JetBrains Mono",monospace}
-.ptl{display:flex;gap:16px;flex-wrap:wrap;font-size:.8rem;color:#C9D3E3}.ptl i{display:inline-block;width:14px;height:3px;margin-right:6px;vertical-align:middle}
+.ptc svg{width:100%;height:auto;display:block}.ptc .pg line{stroke:rgba(255,255,255,.07)}.ptc .pg text{fill:var(--muted);font:10px "JetBrains Mono",monospace}
+.ptl{display:flex;gap:16px;flex-wrap:wrap;font-size:.8rem;color:var(--psil)}.ptl i{display:inline-block;width:14px;height:3px;margin-right:6px;vertical-align:middle}
 .ptsec{display:flex;gap:18px;margin:6px 0;font-size:.8rem;color:var(--muted)}.ptsec b{font-family:"JetBrains Mono",monospace;margin-left:4px}
-.ptcm .ecg{margin-top:10px;grid-template-columns:1fr!important}.ptfirst{color:#C9D3E3;font-size:.9rem}.ptfirst b{color:#fff}.ptfirst ol{margin:10px 0;padding-left:20px}.ptfirst li{margin:4px 0}.ptfirst span{color:var(--muted);font-size:.82rem}
+.ptcm .ecg{margin-top:10px;grid-template-columns:1fr!important}.ptfirst{color:var(--psil);font-size:.9rem}.ptfirst b{color:#fff}.ptfirst ol{margin:10px 0;padding-left:20px}.ptfirst li{margin:4px 0}.ptfirst span{color:var(--muted);font-size:.82rem}
 .pset{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:16px;margin-bottom:16px}.pset>.panel:only-child{grid-column:1/-1}
 .pset-r{display:flex;flex-direction:column;gap:16px}
 .pcar2{display:grid;grid-template-columns:1fr 170px 1fr;grid-template-rows:auto auto;gap:12px;align-items:center}
@@ -124,7 +124,7 @@ html[data-look="pro"] .ecount span{border-radius:10px;background:var(--panel2);b
 .pcmid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px}
 .pvl{display:flex;flex-direction:column;gap:6px}
 .pvr{display:flex;gap:10px;align-items:center;text-align:left;border:1px solid var(--line);border-radius:8px;background:transparent;color:inherit;padding:8px 10px;cursor:pointer;font:inherit}
-.pvr i{width:10px;height:10px;border-radius:50%;border:2px solid #5A6A85;flex:none}.pvr.cur{border-color:var(--pacc,#2F7CF6);background:#13284A}.pvr.cur i{border-color:#FFC53D;background:#FFC53D}
+.pvr i{width:10px;height:10px;border-radius:50%;border:2px solid var(--faint);flex:none}.pvr.cur{border-color:var(--pacc,var(--pacc));background:var(--psel)}.pvr.cur i{border-color:#FFC53D;background:#FFC53D}
 .pvr b{display:block;font-size:.85rem;color:#fff}.pvr small{color:var(--muted);font-size:.74rem}
 @media (max-width:1200px){.pre1,.pre2,.pset{grid-template-columns:1fr}}
 @media (max-width:760px){.pactg{grid-template-columns:1fr 1fr}.pcar2{grid-template-columns:1fr 1fr}.pcc2{display:none}.pcFL,.pcFR,.pcRL,.pcRR{grid-column:auto;grid-row:auto}.pcmid{grid-template-columns:1fr 1fr}.ppl{grid-template-columns:30px 1fr}.ppl .ppd{grid-column:2}}

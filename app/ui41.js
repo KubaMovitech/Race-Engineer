@@ -20,7 +20,7 @@ const PRO_NAV=[['dash','Dashboard','Analisi e panoramica',['stint']],
   ['bop','BOP','Bilanciamento prestazioni',['bop']],
   ['prog','Progressi','Stagione e statistiche',['prog']],
   ['live','Muretto','Live con la squadra',['live']]];
-const proLook=()=>LS.get('look','pro')==='pro';
+const proLook=()=>/^pro/.test(LS.get('look','pro'));
 function proNavOf(v){if(v==='setup')return LS.get('su:tab','eng')==='eng'?'eng':'setb';return (PRO_NAV.find(n=>n[3].includes(v))||PRO_NAV[0])[0];}
 function proSync(){if(!proLook())return;const v=curView(),id=proNavOf(v);const g=PRO_NAV.find(n=>n[0]===id);
   $$('#proNav .pn').forEach(b=>b.setAttribute('aria-current',b.dataset.n===id?'page':'false'));
@@ -62,7 +62,7 @@ function proSyncChip(){const el=$('#proSync');if(!el)return;const br=isBridgeHos
   el.innerHTML=`<b><i></i>${tr(on?'Bridge collegato':br?'Bridge in attesa del gioco':'Solo file')}</b><small>${last?tr('Ultimo controllo')+' '+last.toTimeString().slice(0,5):tr(br?'Telemetria dalla cartella di LMU':'Carica i file a mano')}</small>`;}
 
 // ---------- session strip: the same facts as before, in one row like a timing screen ----------
-function proCarSvg(){return `<svg viewBox="0 0 120 40" class="pcar" aria-hidden="true"><path d="M4 30c2-6 8-8 16-9l18-7c8-3 20-4 30-3l14 4c8 1 16 3 24 6 6 2 9 5 10 9z" fill="url(#pcg)" stroke="rgba(255,255,255,.35)" stroke-width=".8"/><path d="M44 15l10-4h12l6 5z" fill="#0B1320" stroke="rgba(255,255,255,.4)" stroke-width=".6"/><path d="M98 19l14-6v9" fill="none" stroke="#E5354B" stroke-width="2"/><circle cx="26" cy="31" r="6" fill="#0B0F16" stroke="#3A4558"/><circle cx="92" cy="31" r="6" fill="#0B0F16" stroke="#3A4558"/><defs><linearGradient id="pcg" x1="0" x2="1"><stop offset="0" stop-color="#2A3446"/><stop offset=".6" stop-color="#5B6578"/><stop offset="1" stop-color="#C8102E"/></linearGradient></defs></svg>`;}
+function proCarSvg(){return `<svg viewBox="0 0 120 40" class="pcar" aria-hidden="true"><path d="M4 30c2-6 8-8 16-9l18-7c8-3 20-4 30-3l14 4c8 1 16 3 24 6 6 2 9 5 10 9z" fill="url(#pcg)" stroke="rgba(255,255,255,.35)" stroke-width=".8"/><path d="M44 15l10-4h12l6 5z" fill="#0B1320" stroke="rgba(255,255,255,.4)" stroke-width=".6"/><path d="M98 19l14-6v9" fill="none" style="stroke:var(--pacc,#E5354B)" stroke-width="2"/><circle cx="26" cy="31" r="6" fill="#0B0F16" stroke="#3A4558"/><circle cx="92" cy="31" r="6" fill="#0B0F16" stroke="#3A4558"/><defs><linearGradient id="pcg" x1="0" x2="1"><stop offset="0" style="stop-color:var(--pcar1,#2A3446)"/><stop offset=".6" style="stop-color:var(--psil3,#5B6578)"/><stop offset="1" style="stop-color:var(--pacc,#C8102E)"/></linearGradient></defs></svg>`;}
 function proTrackSvg(S){try{const d=typeof dashData==='function'?dashData(S):null;if(!d?.xy)return '';const P=dashFit(d.xy,52,34,3);return `<svg viewBox="0 0 52 34" class="ptrk" aria-hidden="true"><path d="${dPath(P)}Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>`;}catch(e){return '';}}
 function proStrip(){const h=$('#hero'),a=active();if(!proLook()||!h||!a?.S)return;const S=a.S,m=S.meta||{},c=S.cond||{};
   const B=S.best,L=S.laps.filter(l=>l.complete);let ideal=null;
@@ -88,11 +88,11 @@ function proStrip(){const h=$('#hero'),a=active();if(!proLook()||!h||!a?.S)retur
 // the store sets addedAt only on new files: mark the session that arrives while the app is open
 (function(){const af=window.addFile;if(typeof af==='function')window.addFile=addFile=async function(...a){const it=await af(...a);try{if(it&&it.kind==='ld'&&!it.addedAt)it.addedAt=Date.now();}catch(e){}return it;};})();
 
-function proApply(){const on=proLook();document.documentElement.dataset.look=on?'pro':'carbon';if(on){proBuild();proSync();proSyncChip();proFilter(false);}
+function proApply(){const on=proLook();document.documentElement.dataset.look=on?'pro':'carbon';document.documentElement.dataset.pal=LS.get('look','pro')==='problu'?'blu':'oro';if(on){proBuild();proSync();proSyncChip();proFilter(false);}
   const n=$('#proNav');if(n)n.hidden=!on;const sub=$('.tabs.subtabs');if(sub&&!on&&!$('.top').contains(sub))$('.top').append(sub);if(sub&&on&&!$('main').contains(sub))$('main').prepend(sub);}
 setTimeout(()=>{proApply();renderHero();setInterval(proSyncChip,5000);},0);
 
 // ---------- Personalizza: choose the look ----------
 setTimeout(()=>{const h=$('#mSettings .mbox>.panel-h');if(!h||$('#lookSel'))return;
-  h.insertAdjacentHTML('afterend',`<div class="lookrow"><label class="f">${tr('Stile dell\'app')}<select id="lookSel"><option value="pro">${tr('Pro · blu notte con menu laterale')}</option><option value="carbon">${tr('Carbon · rosso e nero')}</option></select></label></div>`);
+  h.insertAdjacentHTML('afterend',`<div class="lookrow"><label class="f">${tr('Stile dell\'app')}<select id="lookSel"><option value="pro">${tr('Pro · nero, argento e oro')}</option><option value="problu">${tr('Pro · blu notte')}</option><option value="carbon">${tr('Carbon · rosso e nero')}</option></select></label></div>`);
   const s=$('#lookSel');s.value=LS.get('look','pro');s.onchange=()=>{LS.set('look',s.value);proApply();showView(curView());};},0);
