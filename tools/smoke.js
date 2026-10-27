@@ -15,6 +15,7 @@ const [url,ld]=process.argv.slice(2);
     for(const v of ['stint','tele','lap','cmp','coach','setup','diary','bop','prog']){await p.evaluate(v=>showView(v),v);await p.waitForTimeout(700);}
     for(const t of ['eng','det','set','gen','gui']){await p.evaluate(t=>{LS.set('su:tab',t);showView('setup');},t);await p.waitForTimeout(400);}
     for(const s of ['ov','lb','car','str','riv','wx','ev']){await p.evaluate(s=>{LS.set('live:sub',s);showView('live');document.querySelector(`#v-live .lvtabs [data-sub="${s}"]`)?.click();},s);await p.waitForTimeout(1500);}
+    for(const n of await p.evaluate(()=>[...document.querySelectorAll('#proNav .pn')].map(b=>b.dataset.n))){await p.evaluate(n=>document.querySelector(`#proNav .pn[data-n="${n}"]`).click(),n);await p.waitForTimeout(600);}
     const checks=await p.evaluate(()=>{showView('tele');return {tele:!!document.querySelector('#twMap'),lap:lds().some(S=>S.laps.some(l=>l.complete)),overflow:document.documentElement.scrollWidth>innerWidth+1};});
     if(!checks.tele||!checks.lap){ok=false;console.log(`${tag}: screen missing`,checks);}
     if(checks.overflow&&w<500){ok=false;console.log(`${tag}: horizontal scroll on the phone`);}

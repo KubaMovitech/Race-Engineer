@@ -1228,6 +1228,171 @@ html[data-look="carbon"] #rcBar .rcl{font-family:"Chakra Petch",var(--f-display)
 .leds{display:flex;gap:3px}.leds i{flex:1;max-width:10px;height:20px;background:rgba(255,255,255,.08);transform:skewX(-12deg)}
 /* a panel with a drop-down menu must not clip it */
 html[data-look="carbon"] .panel:has(details.menu),html[data-look="carbon"] .panel:has(.menu-list){clip-path:none}
+/* ================= PRO (html[data-look="pro"], ui41.js) =================
+   Night blue engineering screen: side menu with icons, a top bar with car / track / session, rounded panels,
+   blue for what is selected, red only for the brand and for problems. Only looks change here. */
+html[data-look="pro"],html[data-look="pro"][data-skin]{
+  --bg:#060C17; --panel:#0B1526; --panel2:#0F1C31; --band:#0A1322; --line:#1A2942; --grid:#13213A; --trackbed:#1A2740;
+  --ink:#E8EEF7; --muted:#8495AF; --faint:#55657F; --hdr:#060B15; --hdr-line:#16243A; --hdr-ink:#E8EEF7; --hdr-muted:#8495AF;
+  --pacc:#2F7CF6; --accent2:#22D3EE; --lapA:#38BDF8; --lapB:#F59E0B; --cyan:#22D3EE;
+  --edge:#1A2942; --edge2:#26395A; --r:10px; --shadow:0 10px 30px rgba(0,0,0,.35);
+  --pnw:236px; --ptop:64px; --f-display:"Titillium Web","Barlow Condensed",sans-serif;
+}
+html[data-look="pro"] body{background:radial-gradient(1200px 600px at 70% -10%,rgba(47,124,246,.10),transparent 60%),linear-gradient(180deg,#07101F,#050A13 60%) fixed;}
+
+/* ---------- top bar ---------- */
+html[data-look="pro"] .top{position:sticky;top:0;background:rgba(6,11,21,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--hdr-line);box-shadow:none}
+html[data-look="pro"] .top::after{display:none}
+html[data-look="pro"] .top-in{max-width:none;min-height:var(--ptop);padding:0 18px 0 0;gap:10px 14px;flex-wrap:nowrap}
+html[data-look="pro"] .brand{width:var(--pnw);flex:0 0 var(--pnw);padding-left:20px;box-sizing:border-box;align-self:stretch;display:flex;align-items:center;border-right:1px solid var(--hdr-line)}
+html[data-look="pro"] .brand .logo{filter:none}
+html[data-look="pro"] .brand b{font-family:"Titillium Web",var(--f-display);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:1.3rem;color:#fff}
+html[data-look="pro"] .brand b span{color:#E5354B}
+html[data-look="pro"] .brand small{letter-spacing:.32em;color:var(--muted)}
+html[data-look="pro"] .mtabs{display:none!important}
+html[data-look="pro"] .psel{display:flex;gap:10px;min-width:0;flex:1 1 auto}
+html[data-look="pro"] .pf{display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:0 6px 0 12px;height:40px;min-width:0;flex:0 1 220px}
+html[data-look="pro"] .pf.pfs{flex:1 1 300px;max-width:420px}
+html[data-look="pro"] .pf svg{width:18px;height:18px;flex:none;fill:none;stroke:#C9D3E3;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+html[data-look="pro"] .pf select{flex:1;min-width:0;border:0!important;background:transparent!important;color:#fff;height:38px;font:600 .9rem var(--f-body);box-shadow:none!important;padding-left:2px}
+html[data-look="pro"] .pf select option{background:#0B1526;color:#fff}
+html[data-look="pro"] .pf:focus-within{border-color:var(--pacc)}
+html[data-look="pro"] .hdr-tools{flex-wrap:nowrap;gap:8px}
+html[data-look="pro"] .hdr-tools .btn{border-radius:8px;height:38px;clip-path:none;background:var(--panel);border:1px solid var(--line);color:#DCE4F0;font:600 .8rem var(--f-body);letter-spacing:.06em;text-transform:uppercase;box-shadow:none}
+html[data-look="pro"] .hdr-tools .btn:hover{border-color:var(--edge2);background:var(--panel2)}
+html[data-look="pro"] #btnLoad{background:linear-gradient(180deg,#1D5FD6,#1749A8);border-color:#3B82F6;color:#fff;display:inline-flex;gap:8px;align-items:center;padding:0 16px}
+html[data-look="pro"] #btnLoad svg{width:17px;height:17px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+html[data-look="pro"] .seg.lang{border-radius:8px;overflow:hidden;border:1px solid var(--line)}
+html[data-look="pro"] .seg.lang button{background:var(--panel);color:var(--muted);height:36px;min-width:36px;border:0;clip-path:none}
+html[data-look="pro"] .seg.lang button[aria-pressed="true"]{background:#E8EEF7;color:#0B1526}
+html[data-look="pro"] .verchip{background:transparent;border:0;color:#C9D3E3;font:600 .85rem var(--f-mono)}
+html[data-look="pro"] .psync{display:flex;flex-direction:column;line-height:1.15;padding-left:10px;min-width:150px}
+html[data-look="pro"] .psync b{font:600 .78rem var(--f-body);display:flex;align-items:center;gap:6px;color:#C9D3E3;white-space:nowrap}
+html[data-look="pro"] .psync b i{width:8px;height:8px;border-radius:50%;background:#5A6A85}
+html[data-look="pro"] .psync.on b{color:#2BE38A}html[data-look="pro"] .psync.on b i{background:#2BE38A;box-shadow:0 0 8px #2BE38A}
+html[data-look="pro"] .psync.off b i{background:#F5B83D}
+@media (max-width:1500px){html[data-look="pro"] .psync small{display:none}html[data-look="pro"] .psync{min-width:0}}
+html[data-look="pro"] .psync small{font-size:.7rem;color:var(--muted);white-space:nowrap}
+
+/* ---------- side menu ---------- */
+#proNav{display:none}
+html[data-look="pro"] #proNav{display:flex;flex-direction:column;position:fixed;left:0;top:var(--ptop);bottom:0;width:var(--pnw);z-index:25;padding:14px 12px;box-sizing:border-box;
+  background:linear-gradient(180deg,#07101D,#050A13);border-right:1px solid var(--hdr-line);overflow:auto}
+html[data-look="pro"] #proNav::after{content:"";position:absolute;left:-40px;bottom:120px;width:260px;height:140px;background:radial-gradient(closest-side,rgba(229,53,75,.22),transparent);pointer-events:none}
+html[data-look="pro"] #proNav nav{display:flex;flex-direction:column;gap:4px}
+html[data-look="pro"] .pn{display:flex;gap:14px;align-items:center;text-align:left;border:0;background:transparent;color:#C9D3E3;border-radius:10px;padding:11px 12px;cursor:pointer;border-left:3px solid transparent}
+html[data-look="pro"] .pn svg{width:26px;height:26px;flex:none;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;opacity:.85}
+html[data-look="pro"] .pn b{display:flex;align-items:center;gap:6px;font:600 .98rem var(--f-body);color:#fff}
+html[data-look="pro"] .pn small{display:block;font-size:.76rem;color:var(--muted);margin-top:1px}
+html[data-look="pro"] .pn:hover{background:rgba(255,255,255,.04)}
+html[data-look="pro"] .pn[aria-current="page"]{background:linear-gradient(90deg,#13284A,#0E1D35);border-left-color:var(--pacc);color:#fff}
+html[data-look="pro"] .pn[aria-current="page"] svg{opacity:1;stroke:#fff}
+html[data-look="pro"] .pn .livedot{width:7px;height:7px;border-radius:50%;background:#E5354B;display:inline-block}
+html[data-look="pro"] .pfoot{margin-top:auto;padding:24px 10px 6px;font:600 .9rem var(--f-display);letter-spacing:.42em;color:#AEB9CB;line-height:1.7;position:relative;z-index:1}
+html[data-look="pro"] main{max-width:none;margin:0 0 0 var(--pnw);padding:18px 22px 64px}
+html[data-look="pro"] .drawer{margin-left:var(--pnw)}
+
+/* second row of tabs (Telemetria · Giro · Confronto) on top of the page */
+html[data-look="pro"] main>.tabs.subtabs{display:flex;gap:6px;margin:0 0 14px;padding:0;background:none;border:0;min-height:0}
+html[data-look="pro"] main>.tabs.subtabs[hidden]{display:none}
+html[data-look="pro"] main>.tabs.subtabs .tab{min-height:36px;padding:0 18px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--muted);font:600 .82rem var(--f-body);letter-spacing:.06em;clip-path:none;box-shadow:none}
+html[data-look="pro"] main>.tabs.subtabs .tab[aria-selected="true"]{background:#13284A;border-color:var(--pacc);color:#fff}
+
+/* ---------- session strip ---------- */
+html[data-look="pro"] .hero.pstrip{display:flex;align-items:stretch;gap:0;padding:0;margin:0 0 16px;background:linear-gradient(180deg,#0D1A2E,#0A1424);border:1px solid var(--line);border-left:3px solid var(--pacc);border-radius:10px;overflow:hidden;min-height:96px}
+html[data-look="pro"] .pstrip .ps{padding:14px 18px;border-right:1px solid var(--line);display:flex;flex-direction:column;justify-content:center;min-width:0}
+html[data-look="pro"] .pstrip .ps:last-child{border-right:0}
+html[data-look="pro"] .pstrip .ps1{flex:1.5 1 260px}
+html[data-look="pro"] .pstrip .pl{font:600 .7rem var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+html[data-look="pro"] .pstrip .pn1{font:700 1.45rem "Titillium Web",sans-serif;color:#fff;display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:2px}
+html[data-look="pro"] .pstrip .pm{font-size:.8rem;color:var(--muted)}
+html[data-look="pro"] .plive{display:inline-flex;align-items:center;gap:6px;font:600 .78rem var(--f-body);color:#2BE38A}
+html[data-look="pro"] .plive i{width:8px;height:8px;border-radius:50%;background:#2BE38A;box-shadow:0 0 8px #2BE38A}
+html[data-look="pro"] .pstrip .ps2{flex-direction:row;align-items:center;gap:12px;flex:1 1 200px}
+html[data-look="pro"] .pstrip .ps2 b{display:block;font:700 .95rem "Titillium Web",sans-serif;color:#fff;line-height:1.2}
+html[data-look="pro"] .pstrip .ps2>div{min-width:0}
+html[data-look="pro"] .pstrip .ps2 small{color:var(--muted);font-size:.78rem}
+html[data-look="pro"] .pcar{width:92px;height:32px;flex:none}
+html[data-look="pro"] .ptrk{width:46px;height:32px;flex:none;color:#C9D3E3}
+html[data-look="pro"] .pstrip .pv{font:600 1.55rem var(--f-mono);color:#fff;line-height:1.2;white-space:nowrap}
+html[data-look="pro"] .pstrip .pv small{font-size:.9rem;color:#C9D3E3}
+html[data-look="pro"] .pstrip .pv.best{color:#B57BFF}html[data-look="pro"] .pstrip .pv.good{color:#2BE38A}
+html[data-look="pro"] .pstrip .pwx small{white-space:nowrap}
+html[data-look="pro"] .pstrip .ps>small{font-size:.76rem;color:var(--muted);white-space:nowrap}
+html[data-look="pro"] .pbar{height:5px;background:#1A2942;border-radius:3px;margin:5px 0 4px;min-width:110px}
+html[data-look="pro"] .pbar i{display:block;height:100%;border-radius:3px;background:linear-gradient(90deg,#20C673,#2BE38A)}
+html[data-look="pro"] .pstrip .pwx{flex-direction:row;align-items:center;gap:12px}
+html[data-look="pro"] .pstrip .pwx svg{width:34px;height:34px;fill:none;stroke:#FFC53D;stroke-width:1.7;stroke-linecap:round}
+html[data-look="pro"] .pstrip .pbtn{flex-direction:column;gap:6px;justify-content:center}
+html[data-look="pro"] .pstrip .pbtn .btn{height:32px;border-radius:8px;clip-path:none;font:600 .74rem var(--f-body);letter-spacing:.08em;text-transform:uppercase;background:var(--panel2);border:1px solid var(--line);color:#DCE4F0;box-shadow:none}
+html[data-look="pro"] .pstrip .pbtn .btn:hover{border-color:var(--pacc)}
+html[data-look="pro"] .hero:not(.pstrip){border-radius:10px}
+
+/* ---------- panels and controls ---------- */
+html[data-look="pro"] .panel,html[data-look="pro"] .wcard,html[data-look="pro"] .lbcard,html[data-look="pro"] .suscard{background:linear-gradient(180deg,#0D1829,#0A1322);border:1px solid var(--line);border-radius:10px;box-shadow:none;clip-path:none}
+html[data-look="pro"] .panel::before,html[data-look="pro"] .wcard::before{display:none}
+html[data-look="pro"] .panel:hover{border-color:var(--edge2)}
+html[data-look="pro"] .panel>.panel-h:first-child,html[data-look="pro"] .panel>h3:first-child{background:transparent;border-bottom:1px solid var(--line);border-radius:10px 10px 0 0}
+html[data-look="pro"] .panel-h h2,html[data-look="pro"] .panel-h h3,html[data-look="pro"] .panel>h3,html[data-look="pro"] .dt{font-family:"Titillium Web",var(--f-display);font-weight:700;font-size:.86rem;letter-spacing:.12em;text-transform:uppercase;color:#fff}
+html[data-look="pro"] .panel-h h3::before,html[data-look="pro"] .panel-h h2::before,html[data-look="pro"] .panel>h3::before{display:none}
+html[data-look="pro"] .btn{clip-path:none;border-radius:8px;background:var(--panel2);border:1px solid var(--line);box-shadow:none}
+html[data-look="pro"] .btn:hover{border-color:var(--edge2);background:#132440}
+html[data-look="pro"] .btn.primary{background:linear-gradient(180deg,#1D5FD6,#1749A8);border-color:#3B82F6;color:#fff}
+html[data-look="pro"] select,html[data-look="pro"] input[type=number],html[data-look="pro"] input[type=text],html[data-look="pro"] input:not([type]),html[data-look="pro"] textarea{background:#08111F!important;border-color:var(--line)!important;border-radius:8px!important}
+html[data-look="pro"] select:focus,html[data-look="pro"] input:focus,html[data-look="pro"] textarea:focus{border-color:var(--pacc)!important;box-shadow:0 0 0 2px rgba(47,124,246,.25)}
+html[data-look="pro"] .seg button[aria-pressed="true"],html[data-look="pro"] .tog[aria-pressed="true"]{background:#13284A;border-color:var(--pacc);color:#fff}
+html[data-look="pro"] .kpi{background:linear-gradient(180deg,#0D1829,#0A1322);border:1px solid var(--line);border-radius:10px;clip-path:none}
+html[data-look="pro"] .kpi::after{display:none}
+html[data-look="pro"] th{background:#0C1729!important;color:var(--muted)}
+html[data-look="pro"] td{border-bottom-color:#132138}
+html[data-look="pro"] .sutabs button{clip-path:none;border-radius:8px;border:1px solid var(--line);background:var(--panel);font:600 .8rem var(--f-body);letter-spacing:.08em}
+html[data-look="pro"] .sutabs button[aria-selected="true"]{background:#13284A;border-color:var(--pacc);color:#fff}
+html[data-look="pro"] .sutabs[hidden]{display:none}
+html[data-look="pro"] .modal .mbox{border-radius:12px;background:#0B1526;border:1px solid var(--line)}
+html[data-look="pro"] .lookrow{margin:4px 0 14px}
+html[data-look="pro"] .dred{background:var(--pacc)!important}
+
+/* ---------- phone and narrow screens: the side menu becomes a row under the top bar ---------- */
+@media (max-width:1100px){
+  html[data-look="pro"]{--pnw:76px}
+  html[data-look="pro"] .brand{padding-left:12px}html[data-look="pro"] .brand .bt{display:none}
+  html[data-look="pro"] .pn{justify-content:center;padding:12px 6px}html[data-look="pro"] .pn span{display:none}
+  html[data-look="pro"] .pfoot{display:none}
+  html[data-look="pro"] .psync{display:none}
+}
+@media (max-width:760px){
+  html[data-look="pro"]{--pnw:0px}
+  html[data-look="pro"] .top-in{flex-wrap:wrap;padding:6px 10px;gap:6px}
+  html[data-look="pro"] .brand{width:auto;flex:0 0 auto;border:0;padding-left:0}
+  html[data-look="pro"] .psel{order:3;flex:1 1 100%;flex-wrap:wrap;gap:6px}
+  html[data-look="pro"] .pf{flex:1 1 140px;height:36px}html[data-look="pro"] .pf.pfs{flex:1 1 100%;max-width:none}
+  html[data-look="pro"] .hdr-tools{flex-wrap:wrap;margin-left:auto}
+  html[data-look="pro"] #proNav{position:relative;top:0;width:auto;bottom:auto;flex-direction:row;padding:6px 8px;overflow-x:auto;z-index:24;border-right:0;border-bottom:1px solid var(--hdr-line)}
+  html[data-look="pro"] #proNav::after{display:none}
+  html[data-look="pro"] #proNav nav{flex-direction:row;gap:4px}
+  html[data-look="pro"] .pn{padding:8px 10px;border-left:0;border-bottom:2px solid transparent;border-radius:8px}
+  html[data-look="pro"] .pn[aria-current="page"]{border-bottom-color:var(--pacc)}
+  html[data-look="pro"] .pn svg{width:22px;height:22px}
+  html[data-look="pro"] .pn{flex-direction:column;gap:3px;min-width:66px}html[data-look="pro"] .pn span{display:block;text-align:center}
+  html[data-look="pro"] .pn b{font-size:.68rem;font-weight:600;justify-content:center;white-space:nowrap}html[data-look="pro"] .pn small{display:none}
+  html[data-look="pro"] #botnav{display:none!important}
+  html[data-look="pro"] main{padding-bottom:40px!important}
+  html[data-look="pro"] main{margin:0;padding:12px 10px 64px}
+  html[data-look="pro"] .drawer{margin-left:0}
+  html[data-look="pro"] .hero.pstrip{flex-wrap:wrap}
+  html[data-look="pro"] .pstrip .ps{flex:1 1 45%;border-bottom:1px solid var(--line);padding:10px 12px}
+  html[data-look="pro"] .pstrip .ps1{flex-basis:100%}
+}
+
+html[data-look="pro"] #rcBar{left:var(--pnw)}
+@media (max-width:760px){
+  html[data-look="pro"] .pstrip .pbtn{flex-direction:row;flex-basis:100%;justify-content:flex-start}
+  html[data-look="pro"] .pcar{display:none}
+}
+/* other looks: the pieces added for Pro step aside, the session menu stays in the header */
+html:not([data-look="pro"]) .psel{display:contents}
+html:not([data-look="pro"]) .psel .pf:not(.pfs),html:not([data-look="pro"]) .psel svg,html:not([data-look="pro"]) #proSync,html:not([data-look="pro"]) #btnLoad svg{display:none}
+html:not([data-look="pro"]) .psel .pfs{display:contents}
 </style>
 <header class="top">
   <div class="top-in">
@@ -4017,6 +4182,7 @@ function openDebrief(){let m=$('#mDeb');if(!m){m=document.createElement('div');m
   openModal('#mDeb');}
 // Italian → English phrases. '#' stands for any number (kept as-is). Longest entries are applied first.
 const I18N_EN=[
+["Carica dati", "Load data"],["Ultimo controllo", "Last check"],["Sessione attuale", "Current session"],["Appena arrivata", "Just arrived"],["Delta ideale", "Ideal delta"],["Affidabilità dati", "Data reliability"],["giri validi", "valid laps"],["Stile dell'app", "App style"],["Pro · blu notte con menu laterale", "Pro · night blue with side menu"],["Carbon · rosso e nero", "Carbon · red and black"],["Analisi e panoramica", "Analysis and overview"],["Giri e confronti", "Laps and comparisons"],["Setup, confronto e generatore", "Setup, comparison and generator"],["Diagnosi e piano di lavoro", "Diagnosis and work plan"],["Guida curva per curva", "Corner by corner driving"],["Diario delle uscite", "Run diary"],["Bilanciamento prestazioni", "Balance of performance"],["Stagione e statistiche", "Season and statistics"],["Live con la squadra", "Live with the team"],["Analisi IA", "AI analysis"],["elemento da guardare", "item to check"],["elementi da guardare", "items to check"],["Niente di urgente", "Nothing urgent"],["Vedi tutti", "See all"],["Servono giri completi.", "Complete laps are needed."],["Solo telemetria: per i valori del setup scegli il .svm in Race Engineer.", "Telemetry only: for the setup values pick the .svm in Race Engineer."],["Lunghezza", "Length"],["con frenata", "with braking"],["Tratto in pieno più lungo", "Longest full-throttle stretch"],["Giro precedente", "Previous lap"],["Giro successivo", "Next lap"],["Confronta", "Compare"],["frenate", "braking"],["Giro completo", "Full lap"],["Scegli un giro B in alto per il confronto.", "Pick a lap B above to compare."],["Guadagni in", "You gain in"],["Perdi in", "You lose in"],["stesso modo di guidare, differenza piccola", "same driving, small difference"],["A e B sono quasi uguali in tutte le curve.", "A and B are almost the same in every corner."],["Niente di urgente. Scegli un giro B per vedere dove guadagni e dove perdi.", "Nothing urgent. Pick a lap B to see where you gain and lose."],["Nessuna differenza importante", "No important difference"],["Frenata", "Braking"],["Eventi sul giro", "Lap events"],["sopra A, sotto B", "A above, B below"],["tempi settore", "sector times"],["A contro B", "A vs B"],["dalla telemetria", "from telemetry"],["Analisi curva per curva", "Corner by corner analysis"],["Δ = quanto A perde (+) o guadagna (−) su B", "Δ = how much A loses (+) or gains (−) on B"],["scegli un giro B per i Δ", "pick a lap B for the Δ"],["Azioni rapide", "Quick actions"],["cosa vuoi dalla macchina", "what you want from the car"],["Diagnosi attuale", "Current diagnosis"],["basata sugli ultimi", "based on the last"],["Problema", "Problem"],["Area", "Area"],["Gravità", "Severity"],["Piano d'azione", "Action plan"],["una modifica alla volta · 3–5 giri per prova", "one change at a time · 3–5 laps per run"],["Fatto", "Done"],["Segna come fatto", "Mark as done"],["Apri nel generatore", "Open in the generator"],["Vai al Setup Builder", "Go to Setup Builder"],["Confronto ultimo test", "Last test comparison"],["Prima prova salvata con questa auto su questa pista.", "First saved run with this car on this track."],["Fai una modifica del piano d'azione.", "Make one change from the action plan."],["Gira 3–5 giri puliti nelle stesse condizioni.", "Drive 3–5 clean laps in the same conditions."],["Carica la nuova telemetria (o lascia che arrivi da sola dal gioco).", "Load the new telemetry (or let it arrive from the game by itself)."],["Qui vedrai prima e dopo: tempi, settori, velocità e se il problema è sparito.", "Here you will see before and after: times, sectors, speed and whether the problem is gone."],["in uso", "in use"],["differenze", "differences"],["Carica altri .svm della stessa auto per vederli qui.", "Load other .svm files of the same car to see them here."],["Assetto", "Setup"],["Versioni setup", "Setup versions"],["stessa auto", "same car"],["Problemi rilevati dai dati", "Problems found in the data"],["Niente di urgente.", "Nothing urgent."],["Più rotazione in ingresso", "More rotation on entry"],["Più stabilità in frenata", "More stability under braking"],["Frena forte, poi si gira in trail braking", "Brakes hard, then spins in trail braking"],["Migliora trazione", "Improve traction"],["Perde trazione in uscita", "Loses traction on exit"],["Riduci usura gomme", "Reduce tyre wear"],["Le gomme calano nello stint", "Tyres drop off during the stint"],["Più velocità sul dritto", "More top speed"],["Lenta sul dritto", "Slow on the straight"],["Bilanciamento nel veloce", "Balance in fast corners"],["Media", "Medium"],["Alta", "High"],["Comp. lenta", "Slow bump"],["Est. lenta", "Slow rebound"],["Ripartizione", "Bias"],["Migrazione", "Migration"],["Anteriore", "Front"],["Posteriore", "Rear"],["Molla ant.", "Front spring"],["Packer ant.", "Front packer"],["Molla post.", "Rear spring"],["Packer post.", "Rear packer"],["Precarico", "Preload"],["Rilascio", "Coast"],["TC taglio", "TC power cut"],["Barre antirollio", "Anti-roll bars"],["Terzo elemento", "Third element"],["Differenziale", "Differential"],["Elettronica e ibrido", "Electronics and hybrid"],["Bridge collegato", "Bridge connected"],["Bridge in attesa del gioco", "Bridge waiting for the game"],["Solo file", "Files only"],["Telemetria dalla cartella di LMU", "Telemetry from the LMU folder"],["Carica i file a mano", "Load the files by hand"],["Tutte le piste", "All tracks"],
 ["Nuova telemetria dal gioco", "New telemetry from the game"],["aperta", "opened"],["Telemetrie nel PC", "Telemetry on this PC"],["Dalla cartella Telemetry di LMU: le sessioni nuove si aprono da sole appena il gioco finisce di scriverle.", "From the LMU Telemetry folder: new sessions open by themselves as soon as the game finishes writing them."],["Riferimenti", "References"],["Metti nella sottocartella «Riferimenti» le telemetrie dei piloti veloci (per esempio quelle dei pacchetti setup): le trovi come giro B in Telemetria e come riferimento nel Coach.", "Put fast drivers' telemetry (for example from setup packs) in the «Riferimenti» subfolder: you will find it as lap B in Telemetry and as reference in the Coach."],["Nessun riferimento.", "No references."],["Riferimenti nel PC", "References on this PC"],["Il riferimento è di un'altra pista", "The reference is from another track"],["Il cambio ha funzionato?", "Did the change work?"],["Questa è la prima prova salvata con questa auto su questa pista. Cambia il setup, fai 3–5 giri puliti e carica la nuova telemetria: qui vedrai cosa è cambiato e se è servito.", "This is the first saved run with this car on this track. Change the setup, do 3–5 clean laps and load the new telemetry: here you will see what changed and whether it helped."],["meglio", "better"],["peggio", "worse"],["cambiato, ma il problema c'è ancora", "changed, but the problem is still there"],["cambiato e il problema non c'è più", "changed and the problem is gone"],["non cambiato", "not changed"],["Il setup è lo stesso della prova precedente: le differenze vengono da pista, gomme o guida.", "The setup is the same as the previous run: the differences come from track, tyres or driving."],["Il passo è migliorato di", "Pace improved by"],["Il passo è peggiorato di", "Pace got worse by"],["Il passo è rimasto uguale: guarda i numeri qui sotto per capire cosa è cambiato.", "Pace stayed the same: look at the numbers below to see what changed."],["rispetto a", "compared to"],["Attenzione: la pista era", "Warning: the track was"],["rispetto a prima", "compared to before"],["Cosa hai cambiato", "What you changed"],["Niente.", "Nothing."],["Il piano della prova precedente", "The previous run's plan"],["Ora", "Now"],["Bloccaggi ant.", "Front lock-ups"],["Bloccaggi post.", "Rear lock-ups"],["Pattinamento", "Wheelspin"],["Fondo che tocca", "Floor bottoming"],["Carcassa ant.", "Front carcass"],["Carcassa post.", "Rear carcass"],["Sterzo relativo ingresso", "Relative steer entry"],["Sterzo relativo centro", "Relative steer mid"],["Sterzo relativo uscita", "Relative steer exit"],["Sterzo rel. curve lente", "Rel. steer slow corners"],["Sterzo rel. curve veloci", "Rel. steer fast corners"],
 ["rettilineo","straight"],["interno − esterno","inner − outer"],["campanatura in appoggio","camber under load"],["Il bordo interno lavora troppo: meno impronta in frenata e in trazione e usura interna.","The inner edge is overworked: less contact patch under braking and traction, and inner-edge wear."],["meno negativa di 0,2–0,3°","0.2–0.3° less negative"],["appoggia di più il bordo esterno","puts more load on the outer edge"],["serve più campanatura negativa","needs more negative camber"],["La gomma lavora sul bordo esterno in curva: perde grip in appoggio e si consuma fuori.","The tyre is running on its outer edge in corners: it loses grip under load and wears on the outside."],["più negativa di 0,2–0,3°","0.2–0.3° more negative"],["in curva la gomma appoggia piatta","the tyre sits flat in corners"],["campanatura nella finestra","camber in the window"],["centro − bordi","centre − edges"],["a caldo","hot"],["pressione alta","pressure high"],["La gomma lavora sul centro: meno impronta, scivola e si surriscalda al centro.","The tyre is running on its centre: smaller contact patch, it slides and overheats in the middle."],["−1 click (circa −1 kPa a freddo)","−1 click (about −1 kPa cold)"],["impronta più larga","wider contact patch"],["pressione bassa","pressure low"],["La gomma si schiaccia: lavora sui bordi, scalda la carcassa e la risposta è lenta.","The tyre squashes: it runs on the edges, heats the carcass and response is slow."],["+1 click","+1 click"],["carcassa più sostenuta","better-supported carcass"],["pressione equilibrata","pressure balanced"],["fredde","cold"],["Fuori finestra la gomma non dà grip: sottosterzo o sovrasterzo che sparisce quando si scaldano.","Outside the window the tyre gives no grip: understeer or oversteer that goes away once they warm up."],["+1 click sulle anteriori","+1 click on the fronts"],["la carcassa lavora e scalda","the carcass works and heats up"],["prese freni anteriori più chiuse","front brake ducts more closed"],["il calore dei freni passa al cerchio","brake heat transfers to the rim"],["+1 click sulle posteriori","+1 click on the rears"],["prese freni posteriori più chiuse","rear brake ducts more closed"],["più calore alle gomme","more heat into the tyres"],["nella finestra di temperatura","in the temperature window"],["troppo calde","too hot"],["Sopra la finestra il grip cala giro dopo giro e l'usura sale.","Above the window grip drops lap after lap and wear goes up."],["l'anteriore scivola meno e scalda meno","the front slides less and runs cooler"],["prese freni anteriori più aperte","front brake ducts more open"],["meno calore dai freni","less heat from the brakes"],["meno scivolamento in uscita","less sliding on exit"],["TC un passo più alto","TC one step higher"],["Anteriori molto più calde delle posteriori","Fronts much hotter than rears"],["Posteriori molto più calde delle anteriori","Rears much hotter than fronts"],["L'anteriore lavora più del posteriore: di solito sottosterzo che consuma il davanti.","The front works harder than the rear: usually understeer that wears the front."],["Il posteriore lavora più dell'anteriore: scivola in uscita e si consuma.","The rear works harder than the front: it slides on exit and wears."],["Bloccaggi all'anteriore","Front lock-ups"],["di ruota bloccata","of locked wheel"],["soprattutto a","mostly at"],["Ruota anteriore bloccata = spazio di frenata più lungo, sottosterzo in inserimento e spiattellamento.","Locked front wheel = longer braking distance, understeer on turn-in and flat spots."],["ripartizione 0,5–1% più verso il posteriore","brake bias 0.5–1% further rearward"],["l'anteriore frena un po' meno","the front brakes a bit less"],["pressione freni −2–3%","brake pressure −2–3%"],["compressione lenta anteriore +1","front slow bump +1"],["l'auto si abbassa meno sul davanti e scarica meno il posteriore","the car dives less at the front and unloads the rear less"],["Bloccaggi al posteriore","Rear lock-ups"],["Il posteriore bloccato rende l'auto instabile in staccata e la fa girare in ingresso.","A locked rear makes the car unstable under braking and spins it on entry."],["ripartizione 0,5–1% più avanti","brake bias 0.5–1% further forward"],["il posteriore frena meno","the rear brakes less"],["differenziale in rilascio più chiuso","diff coast more locked"],["le ruote posteriori girano insieme e la coda si muove meno","the rear wheels turn together and the tail moves less"],["meno freno motore elettrico sul posteriore","less electric motor braking on the rear"],["Nessun bloccaggio importante","No significant lock-ups"],["Temperature freni","Brake temperatures"],["picchi","peaks"],["troppo caldo","too hot"],["Freni troppo caldi perdono efficacia e si consumano.","Overheated brakes lose effectiveness and wear faster."],["prese più aperte","ducts more open"],["più aria sui dischi","more air on the discs"],["freddo","cold"],["Dischi freddi mordono meno nelle prime staccate.","Cold discs bite less in the first braking zones."],["prese più chiuse","ducts more closed"],["il disco resta in temperatura","the disc stays in temperature"],["In frenata l'anteriore va sul packer","Front on the packer under braking"],["della frenata con il 3° elemento anteriore a fine corsa","of braking with the front heave element at full travel"],["pressione freno","brake pressure"],["Sul packer la rigidezza sale di colpo: l'anteriore perde aderenza e tende a bloccare.","On the packer stiffness rises sharply: the front loses grip and tends to lock."],["3ª molla anteriore +1","front third spring +1"],["meno beccheggio prima del packer","less pitch before the packer"],["packer anteriore −1 mm","front packer −1 mm"],["ci arriva più tardi","reaches it later"],["controlla la velocità del beccheggio","controls pitch speed"],["Le ruote posteriori girano più dell'auto: perdi uscita e scaldi le posteriori.","The rear wheels spin faster than the car: you lose drive on exit and heat the rears."],["TC +1","TC +1"],["taglia prima lo slittamento","cuts wheelspin earlier"],["differenziale in trazione più aperto","diff power more open"],["la ruota interna non trascina via la coda","the inside wheel doesn't drag the tail out"],["più carico sulla ruota interna in uscita","more load on the inside wheel on exit"],["Trazione pulita","Clean traction"],["pattinamento","wheelspin"],["Il fondo tocca","Floor bottoming"],["del giro sotto","of the lap under"],["su","on"],["Quando il fondo tocca perdi carico di colpo e l'auto diventa imprevedibile, specie nelle curve veloci.","When the floor bottoms you lose downforce suddenly and the car becomes unpredictable, especially in fast corners."],["packer anteriore +1 mm","front packer +1 mm"],["ferma prima l'abbassamento","stops the car dropping earlier"],["packer posteriore +1 mm","rear packer +1 mm"],["altezza +1 mm sull'asse che tocca","ride height +1 mm on the axle that bottoms"],["più margine dal suolo","more ground clearance"],["Il fondo non tocca","Floor not bottoming"],["3° elemento","heave element"],["sul packer nelle curve lente","on the packer in slow corners"],["del tempo nelle curve sotto 150 km/h","of the time in corners below 150 km/h"],["Nelle curve lente l'auto non dovrebbe essere sul packer: la sospensione diventa rigida e perde grip meccanico.","In slow corners the car shouldn't be on the packer: the suspension goes stiff and loses mechanical grip."],["packer −1 mm","packer −1 mm"],["più corsa libera","more free travel"],["sul packer in rettilineo","on the packer on the straight"],["del tempo sopra 200 km/h","of the time above 200 km/h"],["Normale sulle Hypercar: il packer tiene la piattaforma aerodinamica alle alte velocità. Va bene finché il fondo non tocca e l'auto non saltella.","Normal on Hypercars: the packer holds the aero platform at high speed. Fine as long as the floor doesn't bottom and the car doesn't bounce."],["Ruote che si alzano","Wheels lifting"],["del giro sopra 60 km/h","of the lap above 60 km/h"],["picco verticale","vertical peak"],["Una ruota scarica non frena, non sterza e non spinge: succede sui cordoli o con barre troppo rigide.","An unloaded wheel can't brake, steer or drive: it happens on kerbs or with anti-roll bars too stiff."],["barra più morbida su quell'asse","softer anti-roll bar on that axle"],["la ruota interna resta a terra","the inside wheel stays on the ground"],["compressione veloce −1","fast bump −1"],["la ruota assorbe il cordolo invece di saltare","the wheel absorbs the kerb instead of jumping"],["L'anteriore rolla più del posteriore: tende al sovrasterzo in appoggio.","The front rolls more than the rear: tends to oversteer under load."],["Il posteriore rolla più dell'anteriore: tende al sottosterzo in appoggio.","The rear rolls more than the front: tends to understeer under load."],["Rollio simile davanti e dietro: bilanciamento meccanico neutro.","Similar roll front and rear: neutral mechanical balance."],["Troppo beccheggio in frenata","Too much pitch under braking"],["l'anteriore scende di","the front drops by"],["in frenata","under braking"],["Un'auto che si siede molto sul davanti scarica il posteriore: instabile in staccata.","A car that dives a lot at the front unloads the rear: unstable under braking."],["rallenta il trasferimento di carico","slows the load transfer"],["meno escursione","less travel"],["lente","slow"],["medie","medium"],["veloci","fast"],["oltre 1 = sottosterzo","above 1 = understeer"],["Sottosterzo nelle curve veloci","Understeer in fast corners"],["Nelle curve veloci comanda l'aerodinamica: manca carico davanti rispetto a dietro.","In fast corners aero dominates: not enough front downforce relative to the rear."],["ala posteriore −1","rear wing −1"],["sposta il bilanciamento in avanti e guadagni velocità","shifts the balance forward and gains top speed"],["posteriore +1 mm (più rake)","rear +1 mm (more rake)"],["più carico all'anteriore","more front downforce"],["Sovrasterzo nelle curve veloci","Oversteer in fast corners"],["Il posteriore ha poco carico rispetto all'anteriore alle alte velocità: pericoloso e lento.","The rear has too little downforce relative to the front at high speed: dangerous and slow."],["ala posteriore +1","rear wing +1"],["più carico dietro","more rear downforce"],["posteriore −1 mm (meno rake)","rear −1 mm (less rake)"],["sposta carico al posteriore","shifts load to the rear"],["Sottosterzo nelle curve lente","Understeer in slow corners"],["Nelle curve lente comanda il grip meccanico: barre, molle e differenziale, non l'ala.","In slow corners mechanical grip dominates: anti-roll bars, springs and diff, not the wing."],["precarico differenziale più basso","lower diff preload"],["l'auto ruota di più a centro curva","the car rotates more mid-corner"],["Sovrasterzo nelle curve lente","Oversteer in slow corners"],["Il posteriore perde grip meccanico nelle curve lente.","The rear loses mechanical grip in slow corners."],["meno spinta laterale in uscita","less lateral push on exit"],["Bilanciamento aerodinamico","Aero balance"],["Equilibrio simile tra curve lente e veloci: l'ala è nella finestra giusta.","Similar balance in slow and fast corners: the wing is in the right window."],["Limitatore sul rettilineo","Rev limiter on the straight"],["al limitatore","on the limiter"],["Stai perdendo velocità di punta: rapporto finale troppo corto o troppo carico.","You're losing top speed: final drive too short or too much downforce."],["rapporto finale più lungo","longer final drive"],["in ingresso","on entry"],["a centro curva","mid-corner"],["in uscita","on exit"],["scivolamento","sliding"],["controsterzi","countersteers"],["più grip meccanico dietro in appoggio","more rear mechanical grip under load"],["barra anteriore più rigida","stiffer front anti-roll bar"],["l'anteriore prende un po' più carico e l'auto ruota meno","the front takes a bit more load and the car rotates less"],["precarico differenziale più alto","higher diff preload"],["il posteriore resta più stabile a centro curva","the rear stays more stable mid-corner"],["Sottosterzo","Understeer"],["Sovrasterzo","Oversteer"],["L'anteriore arriva al limite prima del posteriore: devi sterzare di più per fare la stessa curva.","The front reaches the limit before the rear: you need more steering for the same corner."],["Il posteriore arriva al limite prima: l'auto ruota troppo e devi correggere.","The rear reaches the limit first: the car rotates too much and you have to correct."],["Equilibrio","Balance"],["alta","high"],["bassa","low"],["in contrasto con","conflicts with"],["risolvi prima quello più importante","fix the more important one first"],["Apri il punto in Telemetria","Open this point in Telemetry"],["a posto","OK"],["da controllare","to check"],["importante","important"],["Nessun dato per questa area in questa telemetria.","No data for this area in this telemetry."],["controllo a posto","check OK"],["controlli a posto","checks OK"],["Ingegnere di pista","Track engineer"],["nessun setup scelto: indicazioni senza i valori attuali","no setup selected: advice without current values"],["giri analizzati","laps analysed"],["affidabilità","confidence"],["importanti","important"],["Il setup scelto non sembra della stessa auto della telemetria: i valori attuali potrebbero non corrispondere.","The selected setup doesn't appear to be for the same car as the telemetry: current values may not match."],["Piano di lavoro","Work plan"],["Una modifica alla volta, nell'ordine. Poi 3–5 giri puliti nelle stesse condizioni e ricarica la telemetria: l'ingegnere ricontrolla.","One change at a time, in order. Then 3–5 clean laps in the same conditions and reload the telemetry: the engineer will re-check."],["Niente di urgente: il setup lavora nella finestra giusta. Per il tempo sul giro guarda Telemetria e Coach.","Nothing urgent: the setup is working in the right window. For lap time, see Telemetry and Coach."],["Carica la telemetria (.ld) della sessione e il setup (.svm) che usavi: l'ingegnere li legge insieme e ti dice cosa cambiare.","Load the session telemetry (.ld) and the setup (.svm) you used: the engineer reads them together and tells you what to change."],["Nella telemetria aperta l'ingegnere non chiede di cambiarlo.","In the loaded telemetry the engineer doesn't ask to change it."],["Di quanto cambiarlo","How much to change it"],["Quando toccarlo","When to adjust it"],["Interazioni con gli altri parametri","Interactions with other parameters"],["Sintomi che lo chiamano in causa","Symptoms that point to it"],["Cosa dice l'ingegnere sulla tua telemetria","What the engineer says about your telemetry"],["Carica telemetria e setup per vedere cosa dice.","Load telemetry and setup to see what it says."],["1 click alla volta (circa 1 kPa a freddo). A caldo la pressione sale di 10–20 kPa: giudica sempre il valore a caldo, dopo 3 giri.","1 click at a time (about 1 kPa cold). Hot pressure rises by 10–20 kPa: always judge the hot value, after 3 laps."],["Più pressione = gomma più rigida, come una molla più dura su quella ruota: sposta anche il bilanciamento. Interagisce con campanatura (la forma dell'impronta) e con le prese dei freni (il calore del disco scalda il cerchio).","More pressure = stiffer tyre, like a harder spring on that wheel: it also shifts the balance. Interacts with camber (contact patch shape) and brake ducts (disc heat warms the rim)."],["Primo parametro da sistemare: tutto il resto si legge male con le gomme fuori pressione.","First parameter to sort out: everything else reads wrong with tyres out of pressure."],["0,1–0,3° alla volta. Guarda la differenza interno − esterno a caldo: 3–12 °C è la finestra di partenza.","0.1–0.3° at a time. Look at the inner − outer difference when hot: 3–12 °C is the starting window."],["Più campanatura negativa aiuta in curva ma toglie impronta in frenata e in trazione. Con molto rollio (barre morbide) serve più negativa; con barre rigide ne serve meno.","More negative camber helps in corners but costs contact patch under braking and traction. With lots of roll (soft bars) you need more negative; with stiff bars you need less."],["Subito dopo le pressioni, prima di molle e barre.","Right after pressures, before springs and anti-roll bars."],["Pochissimo: 0,02–0,05° alla volta. Effetti grandi su stabilità, temperature e usura.","Very little: 0.02–0.05° at a time. Big effects on stability, temperatures and wear."],["Convergenza anteriore aperta (toe-out) = inserimento più pronto ma auto nervosa sul dritto. Convergenza posteriore chiusa (toe-in) = posteriore stabile in trazione e nei curvoni, ma più resistenza e gomme più calde.","Front toe-out = sharper turn-in but nervous on the straight. Rear toe-in = stable rear under traction and in fast sweepers, but more drag and hotter tyres."],["Dopo campanatura e altezze, quando il bilanciamento è già vicino.","After camber and ride heights, when the balance is already close."],["0,5% alla volta. Sposta di 1% solo se i bloccaggi sono chiari.","0.5% at a time. Move 1% only if the lock-ups are clear."],["Con la migrazione dei freni il bias cambia durante la frenata. La rigenerazione dell'ibrido frena il posteriore: più rigenerazione = bias effettivo più indietro. Il differenziale in rilascio cambia quanto la coda è stabile.","With brake migration the bias changes during the braking phase. Hybrid regen brakes the rear: more regen = effective bias further rearward. Diff coast changes how stable the tail is."],["Insieme alla pressione dei freni, prima di toccare le sospensioni per la frenata.","Together with brake pressure, before touching the suspension for braking."],["2–3% alla volta.","2–3% at a time."],["Meno pressione = più margine prima del bloccaggio ma serve più forza sul pedale. Con l'ABS cambia quando interviene.","Less pressure = more margin before lock-up but needs more pedal force. With ABS it changes when it intervenes."],["Quando il bias è giusto ma blocchi comunque nella prima parte della frenata.","When the bias is right but you still lock in the first part of braking."],["1 click.","1 click."],["Più chiuse = freni e gomme più caldi (il calore passa al cerchio), meno resistenza. Più aperte = freni freschi, gomme più fredde.","More closed = hotter brakes and tyres (heat passes to the rim), less drag. More open = cooler brakes, colder tyres."],["Dopo le pressioni, per mettere freni e gomme nella finestra.","After pressures, to get brakes and tyres into the window."],["1 passo.","1 step."],["Più migrazione = il bias si sposta verso il posteriore mentre rilasci il freno: aiuta l'auto a ruotare in inserimento ma può renderla nervosa.","More migration = bias moves rearward as you release the brake: helps the car rotate on turn-in but can make it nervous."],["Dopo il bias, per rifinire l'inserimento.","After brake bias, to fine-tune turn-in."],["1 mappa.","1 map."],["La rigenerazione frena l'asse con il motore elettrico: aumenta l'instabilità posteriore in staccata se è sull'asse posteriore. Cambia anche quanta energia recuperi.","Regen brakes the axle with the electric motor: it increases rear instability under braking if it's on the rear axle. It also changes how much energy you recover."],["Insieme a bias e differenziale in rilascio quando il posteriore è instabile in frenata.","Together with brake bias and diff coast when the rear is unstable under braking."],["1 livello.","1 level."],["TC più alto = meno pattinamento ma meno spinta quando la gomma sarebbe ancora al limite. Interagisce con differenziale in trazione e barra posteriore.","Higher TC = less wheelspin but less drive when the tyre would still be at the limit. Interacts with diff power and rear anti-roll bar."],["Prima di toccare il differenziale per i problemi di uscita.","Before touching the diff for exit problems."],["Con più ABS puoi frenare più forte senza bloccare, ma allunghi lo spazio di frenata se interviene troppo.","With more ABS you can brake harder without locking, but you lengthen braking distance if it intervenes too much."],["Solo dopo aver sistemato bias e pressione dei freni.","Only after sorting brake bias and brake pressure."],["1 click alla volta. Ogni click vale velocità di punta: confronta settori veloci e rettilinei, non solo il giro.","1 click at a time. Every click costs top speed: compare fast sectors and straights, not just the lap."],["Più ala posteriore = più carico dietro (sottosterzo nei curvoni) e più resistenza. Si bilancia con l'altezza (rake) e con l'ala anteriore dove c'è.","More rear wing = more rear downforce (understeer in fast corners) and more drag. Balance it with ride height (rake) and the front wing where available."],["Dopo le gomme e prima di barre e molle: decide il bilanciamento alle alte velocità.","After tyres and before anti-roll bars and springs: it sets the high-speed balance."],["1–2 mm alla volta, e controlla l'altezza minima in pista.","1–2 mm at a time, and check minimum ride height on track."],["Più bassa = più carico e meno resistenza fino a quando il fondo tocca. Davanti contro dietro decide il rake e quindi il bilanciamento aerodinamico. Packer e terza molla decidono quanto scende alle alte velocità.","Lower = more downforce and less drag until the floor bottoms. Front versus rear sets the rake and therefore the aero balance. Packers and third spring set how far it drops at high speed."],["Insieme all'ala: prima la piattaforma, poi il resto.","Together with the wing: platform first, then the rest."],["1 mm sul posteriore alla volta.","1 mm on the rear at a time."],["Più rake (posteriore più alto) = più carico all'anteriore, auto più pronta in inserimento e più nervosa nei curvoni. Cambia anche la resistenza.","More rake (higher rear) = more front downforce, sharper turn-in and more nervous in fast corners. It also changes drag."],["Dopo l'altezza minima sicura, per rifinire il bilanciamento aerodinamico.","After a safe minimum ride height, to fine-tune the aero balance."],["1 click alla volta, un asse per volta.","1 click at a time, one axle at a time."],["Più rigida = piattaforma più ferma (aero stabile) ma meno grip meccanico e più salti sui cordoli. Lavora insieme a terza molla, barre e ammortizzatori.","Stiffer = steadier platform (stable aero) but less mechanical grip and more jumping over kerbs. Works together with third spring, anti-roll bars and dampers."],["Dopo altezze e ala, prima degli ammortizzatori.","After ride heights and wing, before dampers."],["La terza molla regge il carico aerodinamico e il beccheggio senza irrigidire il rollio: più rigida = l'auto scende meno alle alte velocità e in frenata.","The third spring carries aero load and pitch without stiffening roll: stiffer = the car drops less at high speed and under braking."],["Quando il fondo tocca nei rettilinei o in frenata ma il grip in curva è buono.","When the floor bottoms on straights or under braking but cornering grip is good."],["1 mm alla volta.","1 mm at a time."],["Il packer è un fine corsa: quando lo tocchi la rigidezza sale di colpo. Più spessore = ci arrivi prima. Normale toccarlo ad alta velocità, non nelle curve lente.","The packer is a bump stop: when you hit it stiffness rises sharply. Thicker = you reach it sooner. Normal to touch it at high speed, not in slow corners."],["Insieme alla terza molla per gestire la piattaforma ad alta velocità.","Together with the third spring to manage the platform at high speed."],["La molla tender lavora solo nei primi millimetri: rende l'auto più morbida sui piccoli dossi senza cambiare la rigidezza in appoggio.","The tender spring only works in the first few millimetres: it makes the car softer over small bumps without changing stiffness under load."],["Rifinitura, dopo molle e barre.","Fine-tuning, after springs and anti-roll bars."],["Barra anteriore più rigida = più sottosterzo a centro curva, risposta più pronta, ruota interna che si alza sui cordoli. Più morbida = più grip davanti e più rollio.","Stiffer front anti-roll bar = more mid-corner understeer, sharper response, inside wheel lifting over kerbs. Softer = more front grip and more roll."],["Primo strumento per il bilanciamento a centro curva nelle curve lente e medie.","First tool for mid-corner balance in slow and medium corners."],["Barra posteriore più rigida = l'auto ruota di più (meno sottosterzo) ma meno trazione in uscita. Più morbida = più trazione e più sottosterzo.","Stiffer rear anti-roll bar = the car rotates more (less understeer) but less traction on exit. Softer = more traction and more understeer."],["Insieme alla barra anteriore per il bilanciamento meccanico.","Together with the front anti-roll bar for mechanical balance."],["Controlla la velocità dei trasferimenti di carico (frenata, inserimento, uscita). Più rigida davanti = l'auto si siede meno in frenata e reagisce prima.","Controls the speed of load transfer (braking, turn-in, exit). Stiffer at the front = the car dives less under braking and reacts sooner."],["Dopo molle e barre, per i transitori.","After springs and anti-roll bars, for transients."],["Controlla come la sospensione torna su: più rigida dietro in uscita tiene il carico sul posteriore più a lungo, davanti in inserimento tiene il carico sull'anteriore.","Controls how the suspension extends back: stiffer at the rear on exit keeps load on the rear longer, at the front on turn-in keeps load on the front."],["Insieme alla compressione lenta, guardando il bilanciamento per fase.","Together with slow bump, looking at balance by phase."],["Lavora sui colpi veloci: cordoli e dossi. Più morbida = la ruota assorbe e resta a terra, ma la piattaforma si muove di più.","Works on fast hits: kerbs and bumps. Softer = the wheel absorbs and stays on the ground, but the platform moves more."],["Quando l'auto salta sui cordoli o le ruote si alzano.","When the car jumps over kerbs or the wheels lift."],["Quanto velocemente la ruota torna giù dopo un colpo: più morbida = torna a terra prima dopo un cordolo.","How quickly the wheel comes back down after a hit: softer = it's back on the ground sooner after a kerb."],["Insieme alla compressione veloce per i cordoli.","Together with fast bump for kerbs."],["Ammortizza il movimento della terza molla: controlla quanto oscilla la piattaforma in frenata e sui dossi ad alta velocità.","Damps the third spring's movement: controls how much the platform oscillates under braking and over bumps at high speed."],["Quando la piattaforma oscilla (porpoising, frenate nervose).","When the platform oscillates (porpoising, nervous braking)."],["Più precarico = differenziale più chiuso sempre: auto stabile ma che ruota meno a centro curva.","More preload = diff always more locked: stable car but less mid-corner rotation."],["Dopo barre e molle, per rifinire centro curva.","After anti-roll bars and springs, to fine-tune mid-corner."],["Più chiuso in trazione = entrambe le ruote spingono (trazione in rettilineo) ma l'auto allarga in uscita; più aperto = ruota meglio ma la ruota interna pattina.","More locked on power = both wheels drive (traction on the straight) but the car runs wide on exit; more open = better rotation but the inside wheel spins."],["Dopo il TC per i problemi di uscita.","After TC, for exit problems."],["Più chiuso in rilascio = posteriore stabile in frenata e inserimento, ma meno rotazione. Più aperto = l'auto ruota di più in ingresso.","More locked on coast = stable rear under braking and turn-in, but less rotation. More open = the car rotates more on entry."],["Con bias e rigenerazione per il comportamento in ingresso.","With brake bias and regen for entry behaviour."],["1 rapporto finale alla volta.","1 final drive step at a time."],["Più lungo = più velocità di punta e meno tempo al limitatore, uscite più lente. Dipende dall'ala: meno ala = rapporto più lungo.","Longer = more top speed and less time on the limiter, slower exits. Depends on the wing: less wing = longer final drive."],["Dopo aver deciso l'ala.","After deciding the wing."],["Più chiuso = meno resistenza e motore più caldo. Guarda acqua e olio nei giri più caldi.","More closed = less drag and a hotter engine. Watch water and oil on the hottest laps."],["Alla fine, in base alle temperature della sessione.","At the end, based on session temperatures."],["Il necessario per lo stint + 1 giro di margine.","What the stint needs + 1 lap of margin."],["Ogni litro in più è peso: più lento e più usura. Con l'energia virtuale il limite può essere l'energia, non il carburante.","Every extra litre is weight: slower and more wear. With virtual energy the limit may be energy, not fuel."],["Prima di ogni sessione in base al piano gara.","Before each session, based on the race plan."],
 ["Invita un compagno","Invite a teammate"],["Nessuna squadra: creane una o entra in una squadra","No team: create one or join a team"],["Link copiato. Il compagno avvia Data Engineer sul suo PC e apre questo link: entra nella squadra da solo, anche il suo bridge. Chi ha il link vede i dati della squadra: mandalo solo al team.","Link copied. Your teammate starts Data Engineer on their PC and opens this link: they join the team on their own, bridge included. Anyone with the link sees the team's data: send it only to the team."],["Link della squadra non valido","Invalid team link"],["Sei nella squadra: il bridge si riavvia con il nuovo collegamento","You are in the team: the bridge restarts with the new link"],["Sei nella squadra","You are in the team"],["Bridge collegato alla squadra","Bridge linked to the team"],["Collega squadra","Link a team"],["Entra in una squadra","Join a team"],["Crea un'altra squadra","Create another team"],["Posizioni sul giro","Positions on the lap"],["Traguardo","Finish line"],["Consumo di ognuno degli ultimi 3 giri (energia virtuale, o benzina se l'auto non ne ha), in % del serbatoio","Use on each of the last 3 laps (virtual energy, or fuel if the car has none), in % of the tank"],["Ultimo giro meno la media degli ultimi 5: negativo = sta andando più forte","Last lap minus the average of the last 5: negative = getting faster"],["Contatti segnalati dal gioco in questa sessione","Contacts reported by the game in this session"],["Ultimi 3","Last 3"],["Tend.","Trend"],
@@ -4733,9 +4899,10 @@ const tr=I18N.tr;
 })();
 const AI_LANG=()=>LANG==='en'?'\n\nIMPORTANT: write your whole answer in English (the instructions above are in Italian, but the driver reads English).':'';
 // ================= VERSIONE, NOVITÀ E AGGIORNAMENTI =================
-const APP_VERSION='2.7.0';
+const APP_VERSION='2.8.0';
 const DEFAULT_UPD='https://raw.githubusercontent.com/KubaMovitech/Race-Engineer/main/';   // update channel (folder with version.json), set when the team repository exists
 const CHANGELOG=[
+{v:'2.8.0',d:'27/10/2026',items:['Nuova grafica «Pro» blu notte su tutta l\'app: menu laterale con Dashboard, Telemetria, Setup Builder, Race Engineer, Coach, Sessioni, BOP, Progressi e Muretto; in alto i filtri Auto e Pista accanto alla sessione e lo stato del bridge. La grafica Carbon resta in Personalizza.','Fascia della sessione: auto, pista, miglior giro, delta ideale, affidabilità dei dati e temperatura pista sempre in vista.','Dashboard: dati della pista accanto alla mappa (lunghezza, curve, tratto in pieno più lungo), telemetria di qualsiasi giro con le frecce, Analisi IA con i 3 problemi principali, velocità massima tra gli indicatori.','Telemetria: eventi sul giro (frenate, sollevamenti, deploy e recupero ibrido), confronto dei settori A/B, Analisi IA (dove perdi e dove guadagni) e schede curva per curva.','Race Engineer: azioni rapide (più rotazione, stabilità in frenata, trazione, usura, velocità, veloce), diagnosi attuale, piano d\'azione con «Segna come fatto» e confronto con l\'ultimo test con grafico della velocità.','Setup Builder: l\'auto vista dall\'alto con i valori del .svm su ogni ruota (campanatura, convergenza, pressione, molla, altezza, ammortizzatori), aerodinamica, freni, barre, terzo elemento, differenziale ed elettronica, più l\'elenco delle versioni del setup.']},
 {v:'2.7.0',d:'27/10/2026',items:['Telemetria automatica: il bridge legge la cartella Telemetry di LMU e appena finisci una sessione la telemetria nuova si apre da sola. Nel pannello file c\'è l\'elenco «Telemetrie nel PC».','Riferimenti: metti le telemetrie dei piloti veloci in UserData\\Telemetry\\Riferimenti e le scegli come giro B in Telemetria (avviso se la pista è diversa).','«Il cambio ha funzionato?» nel Setup: confronta la prova con la precedente sulla stessa pista e auto, mostra cosa hai cambiato, se hai seguito il piano e i numeri prima/ora (bloccaggi, pattinamento, fondo, carcassa, sterzo) con il verdetto.','Font inclusi nell\'app: lo stile è uguale anche senza internet.','Test automatico di tutte le schermate (italiano/inglese, PC e telefono) a ogni modifica.','Corretto: cambiando file .svm nel Setup non si aggiornavano tutti i pannelli.']},
 {v:'2.6.0',d:'27/10/2026',items:['Setup diviso in schede: Ingegnere · Analisi dettagliata · Setup e confronto · Generatore · Guida.','Nuovo «Ingegnere di pista»: legge telemetria e setup insieme e per ogni area (gomme, freni, trazione, piattaforma e altezze, molle barre e ammortizzatori, aerodinamica e ala, bilanciamento) dice cosa vede, dove, perché conta e cosa cambiare, con il valore attuale del tuo setup. In cima il piano di lavoro con le prime 3 modifiche, una per area, e i consigli in contrasto segnalati.','Analisi nuove: campanatura in appoggio della ruota esterna, terzi elementi sul packer in frenata / curve lente / rettilineo, ruote che si alzano sui cordoli, beccheggio in frenata, sottosterzo e sovrasterzo per fase con soglie più severe, bilanciamento aerodinamico per velocità.','Guida più dettagliata: per ogni parametro di quanto cambiarlo, quando toccarlo, le interazioni con gli altri, i sintomi che lo chiamano in causa e cosa dice l\'ingegnere sulla tua telemetria; lista dei parametri con cosa fa ognuno.','Telemetria: campanatura, convergenza e angoli della scocca corretti anche nei file che li danno già in gradi. Corretto un errore che bloccava la guida delle auto.']},
 {v:'2.5.0',d:'26/10/2026',items:['Squadra senza codici da copiare: il menu mostra il nome della squadra, «Invita un compagno» copia un link; il compagno lo apre sul suo PC con Data Engineer acceso ed entra da solo, anche il suo bridge. Se il bridge di questo PC non è nella squadra della pagina, ci entra da solo.','Muretto: striscia con tutte le auto sul giro (la nostra evidenziata, la classe a colori pieni, i rivali bordati, chi è ai box più in basso), visibile in ogni scheda.','Classifica: consumo di ognuno degli ultimi 3 giri (energia virtuale o benzina), tendenza (ultimo giro meno la media degli ultimi 5) e numero di contatti segnalati dal gioco.']},
@@ -7545,6 +7712,395 @@ function engCompareHTML(S){const H=LS.get('suhist',{});const cur=H[S.id];if(!cur
 // the setup file menu was bound to the first version of RENDER.setup, before the other panels hooked in:
 // changing the .svm did not refresh the engineer, tyres, suspension and history. Always call the current one.
 setTimeout(()=>{const s=$('#suFile');if(s)s.onchange=()=>RENDER.setup();},50);
+// ================= PRO LAYOUT: side menu, top bar with car / track / session, session strip =================
+// Only the frame changes: every view, panel and number stays where it was. The old look ("carbon") stays in Personalizza.
+const PRO_ICONS={
+  dash:'<path d="M3 11l9-7 9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/>',
+  tel:'<path d="M2 12h4l2-6 4 13 3-9 2 4h5"/>',
+  setb:'<path d="M14.7 6.3a4 4 0 0 0 5 5L21 13l-8 8-2.5-2.5"/><path d="M3 21l6-6"/><path d="M9.3 17.7l-3-3 8-8a4 4 0 0 0 0 0"/>',
+  eng:'<circle cx="12" cy="10" r="6"/><path d="M6 10H4v4h2M18 10h2v4h-2"/><path d="M9 20h6M12 16v4"/><path d="M9.5 9.5h5"/>',
+  coach:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/>',
+  ses:'<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/>',
+  bop:'<path d="M12 3v18M5 7h14"/><path d="M5 7l-3 7h6zM19 7l-3 7h6z"/>',
+  prog:'<path d="M4 20V12M10 20V6M16 20v-9M22 20H2"/>',
+  live:'<circle cx="12" cy="12" r="2"/><path d="M7.8 7.8a6 6 0 0 0 0 8.4M16.2 7.8a6 6 0 0 1 0 8.4M5 5a10 10 0 0 0 0 14M19 5a10 10 0 0 1 0 14"/>'};
+// [id, title, subtitle, views, setup tab]
+const PRO_NAV=[['dash','Dashboard','Analisi e panoramica',['stint']],
+  ['tel','Telemetria','Giri e confronti',['tele','lap','cmp']],
+  ['setb','Setup Builder','Setup, confronto e generatore',['setup'],'set'],
+  ['eng','Race Engineer','Diagnosi e piano di lavoro',['setup'],'eng'],
+  ['coach','Coach','Guida curva per curva',['coach']],
+  ['ses','Sessioni','Diario delle uscite',['diary']],
+  ['bop','BOP','Bilanciamento prestazioni',['bop']],
+  ['prog','Progressi','Stagione e statistiche',['prog']],
+  ['live','Muretto','Live con la squadra',['live']]];
+const proLook=()=>LS.get('look','pro')==='pro';
+function proNavOf(v){if(v==='setup')return LS.get('su:tab','eng')==='eng'?'eng':'setb';return (PRO_NAV.find(n=>n[3].includes(v))||PRO_NAV[0])[0];}
+function proSync(){if(!proLook())return;const v=curView(),id=proNavOf(v);const g=PRO_NAV.find(n=>n[0]===id);
+  $$('#proNav .pn').forEach(b=>b.setAttribute('aria-current',b.dataset.n===id?'page':'false'));
+  const nav=$('.tabs.subtabs');if(nav){$$('.tabs .tab').forEach(t=>t.hidden=!g[3].includes(t.dataset.view));nav.hidden=g[3].length<2;}
+  const su=$('#suTabs');if(su){su.hidden=id==='eng';su.querySelectorAll('button').forEach(b=>b.hidden=b.dataset.t==='eng');}
+  document.documentElement.dataset.pnav=id;}
+function proBuild(){if($('#proNav'))return;
+  const side=document.createElement('aside');side.id='proNav';side.setAttribute('aria-label',tr('Sezioni'));
+  side.innerHTML=`<nav>${PRO_NAV.map(([id,t,s])=>`<button type="button" class="pn" data-n="${id}"><svg viewBox="0 0 24 24" aria-hidden="true">${PRO_ICONS[id]}</svg><span><b>${id==='live'?'<i class="livedot"></i>':''}${tr(t)}</b><small>${tr(s)}</small></span></button>`).join('')}</nav>
+    <div class="pfoot" data-noi18n>DATA<br>DRIVES<br>PERFORMANCE</div>`;
+  $('header.top').after(side);
+  side.querySelectorAll('.pn').forEach(b=>b.onclick=()=>{const g=PRO_NAV.find(n=>n[0]===b.dataset.n);
+    if(g[4]){const cur=LS.get('su:tab','eng');if(g[4]==='eng')LS.set('su:tab','eng');else if(cur==='eng')LS.set('su:tab','set');}
+    const last=LS.get('pgrp:'+g[0],g[3][0]);showView(g[3].includes(last)?last:g[3][0]);if(g[4]&&typeof suTabsApply==='function')suTabsApply();proSync();window.scrollTo({top:0});});
+  // the second row of tabs goes on top of the page
+  const sub=$('.tabs.subtabs');if(sub)$('main').prepend(sub);
+  // car and track filters next to the session menu
+  const g=$('#gSess');if(g&&!$('#proCar')){const w=document.createElement('div');w.className='psel';
+    w.innerHTML=`<label class="pf"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 16l2-5 4-2h6l4 3 2 1v3H3z"/><circle cx="7.5" cy="16.5" r="1.8"/><circle cx="17" cy="16.5" r="1.8"/></svg><select id="proCar" aria-label="${tr('Auto')}"></select></label>
+      <label class="pf"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 18c-2-3 0-6 3-6s4-5 7-6 5 2 3 5-6 2-6 5 4 4 1 5-6 0-8-3z"/></svg><select id="proTrack" aria-label="${tr('Pista')}"></select></label>
+      <label class="pf pfs"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg></label>`;
+    $('.top-in .brand').after(w);w.querySelector('.pfs').append(g);
+    $('#proCar').onchange=$('#proTrack').onchange=()=>{LS.set('pro:car',$('#proCar').value);LS.set('pro:track',$('#proTrack').value);proFilter(true);};}
+  const st=document.createElement('div');st.id='proSync';st.className='psync';$('.hdr-tools').append(st);
+  const lb=$('#btnLoad');if(lb)lb.innerHTML=`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3M7 8l5-5 5 5"/><path d="M4 15v5h16v-5"/></svg>${tr('Carica dati')}`;}
+const proCarOf=S=>(S.merged?.d?.car||S.meta?.car||'').trim()||tr('Auto non indicata');
+const proTrackOf=S=>(S.meta?.venue||'').trim()||tr('Pista');
+// the two filters only narrow the session menu; the session you pick is the same as before
+function proFilter(pick){const g=$('#gSess'),c=$('#proCar'),t=$('#proTrack');if(!g||!c||!t)return;const L=lds();
+  const cars=[...new Set(L.map(proCarOf))].sort(),tracks=[...new Set(L.filter(S=>!c.value||proCarOf(S)===c.value).map(proTrackOf))].sort();
+  const keep=(sel,list,want)=>{sel.innerHTML=`<option value="">${tr(sel===c?'Tutte le auto':'Tutte le piste')}</option>`+list.map(x=>`<option>${esc(x)}</option>`).join('');sel.value=list.includes(want)?want:'';};
+  keep(c,cars,LS.get('pro:car',''));keep(t,tracks,LS.get('pro:track',''));
+  const ok=o=>{if(o.value.startsWith('xml:')||!o.value)return !c.value&&!t.value;const S=byId(o.value);return !S||(!c.value||proCarOf(S)===c.value)&&(!t.value||proTrackOf(S)===t.value);};
+  [...g.options].forEach(o=>o.hidden=!ok(o));
+  if(pick&&g.selectedOptions[0]?.hidden){const f=[...g.options].find(o=>!o.hidden);if(f){g.value=f.value;g.onchange&&g.onchange();}}}
+function proSyncChip(){const el=$('#proSync');if(!el)return;const br=isBridgeHost();const on=br&&typeof LIVE!=='undefined'&&LIVE.status?.local==='on';
+  const last=typeof LDSYNC!=='undefined'&&LDSYNC.last?new Date(LDSYNC.last):null;
+  el.className='psync '+(on?'on':br?'off':'file');
+  el.innerHTML=`<b><i></i>${tr(on?'Bridge collegato':br?'Bridge in attesa del gioco':'Solo file')}</b><small>${last?tr('Ultimo controllo')+' '+last.toTimeString().slice(0,5):tr(br?'Telemetria dalla cartella di LMU':'Carica i file a mano')}</small>`;}
+
+// ---------- session strip: the same facts as before, in one row like a timing screen ----------
+function proCarSvg(){return `<svg viewBox="0 0 120 40" class="pcar" aria-hidden="true"><path d="M4 30c2-6 8-8 16-9l18-7c8-3 20-4 30-3l14 4c8 1 16 3 24 6 6 2 9 5 10 9z" fill="url(#pcg)" stroke="rgba(255,255,255,.35)" stroke-width=".8"/><path d="M44 15l10-4h12l6 5z" fill="#0B1320" stroke="rgba(255,255,255,.4)" stroke-width=".6"/><path d="M98 19l14-6v9" fill="none" stroke="#E5354B" stroke-width="2"/><circle cx="26" cy="31" r="6" fill="#0B0F16" stroke="#3A4558"/><circle cx="92" cy="31" r="6" fill="#0B0F16" stroke="#3A4558"/><defs><linearGradient id="pcg" x1="0" x2="1"><stop offset="0" stop-color="#2A3446"/><stop offset=".6" stop-color="#5B6578"/><stop offset="1" stop-color="#C8102E"/></linearGradient></defs></svg>`;}
+function proTrackSvg(S){try{const d=typeof dashData==='function'?dashData(S):null;if(!d?.xy)return '';const P=dashFit(d.xy,52,34,3);return `<svg viewBox="0 0 52 34" class="ptrk" aria-hidden="true"><path d="${dPath(P)}Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>`;}catch(e){return '';}}
+function proStrip(){const h=$('#hero'),a=active();if(!proLook()||!h||!a?.S)return;const S=a.S,m=S.meta||{},c=S.cond||{};
+  const B=S.best,L=S.laps.filter(l=>l.complete);let ideal=null;
+  try{const sec=L.map(l=>twLapSectors(S,l)).filter(Boolean);if(sec.length)ideal=[0,1,2].map(k=>Math.min(...sec.map(s=>s[k]))).reduce((x,y)=>x+y,0);}catch(e){}
+  const ses=S.merged?.sess?.name||tr('Telemetria MoTeC');const live=Date.now()-(S.addedAt||0)<15*60e3;
+  const valid=L.filter(l=>!l.invalid).length;const q=Math.round(Math.min(1,valid/5)*70+(S.merged?20:0)+(m.venue?10:0));
+  const tk=c.track?fx(c.track.avg,0):'—';const wx=c.label||'';
+  const keep=[...h.querySelectorAll('#btnReport,#btnDebrief')];
+  h.classList.add('pstrip');
+  h.innerHTML=`<div class="ps ps1"><div class="pl">${tr('Sessione attuale')}</div><div class="pn1">${esc(ses)}${live?`<span class="plive"><i></i>${tr('Appena arrivata')}</span>`:''}</div><div class="pm">${esc(m.date||'')} ${esc((m.time||'').slice(0,5))} · ${esc((m.driver||'').replace(/#\d+$/,''))}</div></div>
+   <div class="ps ps2">${proCarSvg()}<div><b>${esc(proCarOf(S))}</b><small>${esc(m.car&&m.car!==proCarOf(S)?m.car:'')}</small></div></div>
+   <div class="ps ps2">${proTrackSvg(S)}<div><b>${esc(proTrackOf(S))}</b><small>${fx((S.trackLen||0)/1000,3)} km</small></div></div>
+   <div class="ps"><div class="pl">${tr('Miglior giro')}</div><div class="pv best">${B?fmtLap(B.time):'—'}</div><small>${B?tr('Giro')+' '+B.num:''}</small></div>
+   <div class="ps"><div class="pl">${tr('Delta ideale')}</div><div class="pv good">${B&&ideal?'−'+(B.time-ideal).toFixed(3):'—'}</div><small>${ideal?tr('Ideale')+' '+fmtLap(ideal):''}</small></div>
+   <div class="ps"><div class="pl">${tr('Affidabilità dati')}</div><div class="pv">${q}%</div><div class="pbar"><i style="width:${q}%"></i></div><small>${valid} ${tr('giri validi')}${S.merged?' · .xml':''}</small></div>
+   <div class="ps pwx"><svg viewBox="0 0 24 24" aria-hidden="true">${c.wet&&c.wet.max>0?'<path d="M7 15a4 4 0 0 1 .5-8A6 6 0 0 1 19 9a3 3 0 0 1-1 6z"/><path d="M8 19l-1 2M12 19l-1 2M16 19l-1 2"/>':'<circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/>'}</svg><div><div class="pl">${tr('Pista')}</div><div class="pv">${tk}<small>°C</small></div><small>${esc(tr(wx))}${c.air?' · '+tr('aria')+' '+fx(c.air.avg,0)+'°':''}</small></div></div>
+   <div class="ps pbtn"></div>`;
+  const pb=h.querySelector('.pbtn');keep.forEach(b=>pb.append(b));}
+(function(){const rh=renderHero;window.renderHero=renderHero=function(){const h=$('#hero');h&&h.classList.remove('pstrip');rh();try{proStrip();}catch(e){console.error(e);}};})();
+(function(){const sv=showView;window.showView=showView=function(v){sv(v);const id=proNavOf(v);LS.set('pgrp:'+id,v);proSync();};})();
+(function(){const fs=fillSelects;window.fillSelects=fillSelects=function(){fs();try{proFilter(false);}catch(e){}};})();
+(function(){const sa=window.suTabsApply;if(typeof sa==='function')window.suTabsApply=suTabsApply=function(){sa();proSync();};})();
+// the store sets addedAt only on new files: mark the session that arrives while the app is open
+(function(){const af=window.addFile;if(typeof af==='function')window.addFile=addFile=async function(...a){const it=await af(...a);try{if(it&&it.kind==='ld'&&!it.addedAt)it.addedAt=Date.now();}catch(e){}return it;};})();
+
+function proApply(){const on=proLook();document.documentElement.dataset.look=on?'pro':'carbon';if(on){proBuild();proSync();proSyncChip();proFilter(false);}
+  const n=$('#proNav');if(n)n.hidden=!on;const sub=$('.tabs.subtabs');if(sub&&!on&&!$('.top').contains(sub))$('.top').append(sub);if(sub&&on&&!$('main').contains(sub))$('main').prepend(sub);}
+setTimeout(()=>{proApply();renderHero();setInterval(proSyncChip,5000);},0);
+
+// ---------- Personalizza: choose the look ----------
+setTimeout(()=>{const h=$('#mSettings .mbox>.panel-h');if(!h||$('#lookSel'))return;
+  h.insertAdjacentHTML('afterend',`<div class="lookrow"><label class="f">${tr('Stile dell\'app')}<select id="lookSel"><option value="pro">${tr('Pro · blu notte con menu laterale')}</option><option value="carbon">${tr('Carbon · rosso e nero')}</option></select></label></div>`);
+  const s=$('#lookSel');s.value=LS.get('look','pro');s.onchange=()=>{LS.set('look',s.value);proApply();showView(curView());};},0);
+// ================= PRO DASHBOARD: track facts beside the map, any lap in the trace, the engineer's top findings =================
+// What it adds reads the same telemetry as the rest of the app; nothing here is estimated or made up.
+
+// the engineer's findings for a session, from telemetry only unless the Setup page already read a .svm for it
+function proFindings(S){try{let laps=S.laps.filter(l=>l.complete&&l.type==='lanciato');if(!laps.length)laps=S.laps.filter(l=>l.complete);laps=[...laps].sort((a,b)=>a.time-b.time).slice(0,5);if(!laps.length)return null;
+  let D=typeof DIAG!=='undefined'&&DIAG&&DIAG.S===S?DIAG:null;
+  if(!D){const k='pdiag';D=S.cache.get(k);if(!D){D=diagnose(S,laps,null);D.S=S;D.su=null;S.cache.set(k,D);}}
+  return {D,laps,F:engFindings(D,S,D.su||null,laps)};}catch(e){console.error(e);return null;}}
+const PSEV=[['OK','ok'],['Medio','mid'],['Alto','hi']];
+function proFindRow(f,i){const s=PSEV[f.s]||PSEV[0];const fx0=f.fx.find(x=>!x.conflict);
+  return `<div class="pfr s${f.s}"><span class="pfi">${f.s===2?'!':f.s===1?'⚠':'✓'}</span><div><b>${i+1}. ${esc(f.t)}</b><small>${esc(f.ev.slice(0,2).join(' · ')||f.why||'')}</small>${fx0?`<small class="pfx">→ ${esc(tr(fx0.label))}: ${esc(fx0.dir)}</small>`:''}</div><em class="${s[1]}">${tr(s[0])}</em></div>`;}
+function proAIHTML(S){const R=proFindings(S);if(!R)return '';const F=[...R.F].sort((a,b)=>b.s-a.s||ENG_ORDER.indexOf(a.a)-ENG_ORDER.indexOf(b.a));
+  const top=F.filter(f=>f.s>0).slice(0,3);const list=top.length?top:F.filter(f=>f.s===0).slice(0,2);
+  const n=F.filter(f=>f.s>0).length;
+  return `<div class="panel pai"><div class="dt"><span class="psp">✦</span> ${tr('Analisi IA')}<span class="pai-r">${tr('Data Engineer')} <b>AI</b></span></div>
+    <div class="pai-h">${n?`${n} ${n===1?tr('elemento da guardare'):tr('elementi da guardare')}`:tr('Niente di urgente')}<button type="button" class="btn pai-all">${tr('Vedi tutti')} →</button></div>
+    ${list.map(proFindRow).join('')||`<p class="muted small">${tr('Servono giri completi.')}</p>`}
+    <p class="muted small pai-n">${R.D.su?esc(R.D.su.name):tr('Solo telemetria: per i valori del setup scegli il .svm in Race Engineer.')} · ${R.laps.length} ${tr('giri analizzati')}</p></div>`;}
+
+// track facts measured on the best lap
+function proTrackFacts(S){const d=dashData(S);if(!d)return null;const step=5;let run=0,best=0,full=0;const th=d.thr,br=d.brk;
+  for(let i=0;i<th.length;i++){if(th[i]>95&&!(br&&br[i]>5)){run+=step;full+=step;best=Math.max(best,run);}else run=0;}
+  return {len:S.trackLen||0,corners:d.cor.length,straight:best,full:full/((th.length||1)*step)*100,brakes:d.cor.filter(c=>c.brake!=null).length};}
+
+// a lap of the session in the speed / throttle / brake strip, with axes, braking zones and corners
+function proTelSVG(S,lap,W=900,H=230){const g=lapGrid(S,lap,5);const v=g.get('Ground Speed'),th=g.get('Throttle Pos'),br=g.get('Brake Pos');if(!v)return '';
+  const n=v.length,X=i=>(46+i/(n-1)*(W-56)).toFixed(1);let hi=0;for(const x of v)hi=Math.max(hi,x);hi=Math.ceil(hi/10)*10;
+  const yv=x=>(10+(1-x/hi)*120).toFixed(1),yp=(x,top)=>(top+30-(x/100)*30).toFixed(1);
+  const line=(a,f)=>Array.from(a,(x,i)=>X(i)+','+f(x)).join(' ');
+  let z='';let s=-1;for(let i=0;i<=n;i++){const on=i<n&&br&&br[i]>5;if(on&&s<0)s=i;if(!on&&s>=0){z+=`<rect x="${X(s)}" y="8" width="${(X(i-1)-X(s)).toFixed(1)}" height="${H-34}" fill="rgba(229,53,75,.10)"/>`;s=-1;}}
+  const len=g.d[n-1]||S.trackLen||0;const tick=len>4000?1000:500;let ax='';for(let m=0;m<=len;m+=tick)ax+=`<text x="${X(Math.round(m/len*(n-1)))}" y="${H-6}" text-anchor="middle">${m.toLocaleString()}</text>`;
+  const cor=detectCorners(g);
+  return `<g class="pg">${[0,.5,1].map(f=>`<line x1="46" x2="${W-10}" y1="${10+f*120}" y2="${10+f*120}"/><text x="40" y="${14+f*120}" text-anchor="end">${Math.round(hi*(1-f))}</text>`).join('')}<text x="4" y="22" class="pu">km/h</text>
+    <line x1="46" x2="${W-10}" y1="${yp(0,140)}" y2="${yp(0,140)}"/><line x1="46" x2="${W-10}" y1="${yp(0,176)}" y2="${yp(0,176)}"/><text x="40" y="${+yp(50,140)+4}" text-anchor="end">${tr('Gas')}</text><text x="40" y="${+yp(50,176)+4}" text-anchor="end">${tr('Freno')}</text></g>
+    ${z}${cor.map(c=>`<text x="${X(c.apex)}" y="8" text-anchor="middle" class="pc">T${c.k}</text>`).join('')}
+    <polyline points="${line(v,yv)}" fill="none" stroke="#fff" stroke-width="1.7"/>
+    ${th?`<polyline points="${line(th,x=>yp(x,140))}" fill="none" stroke="#2BE38A" stroke-width="1.3"/>`:''}
+    ${br?`<polyline points="${line(br,x=>yp(x,176))}" fill="none" stroke="#FF3B4E" stroke-width="1.3"/>`:''}
+    <g class="pg pax">${ax}</g>`;}
+
+function proTelDraw(S){const t=$('#stBody .dtel.ptel');if(!t)return;const L=S.laps.filter(l=>l.complete);const lap=L.find(l=>l.i===LS.get('pdl:'+S.id,S.best?.i))||S.best||L[0];if(!lap)return;
+  const sv=t.querySelector('svg');sv.setAttribute('viewBox','0 0 900 230');sv.innerHTML=proTelSVG(S,lap);}
+(function(){const dd=dashDraw;window.dashDraw=dashDraw=function(S){dd(S);try{proTelDraw(S);}catch(e){console.error(e);}};})();
+(function(){const rs=RENDER.stint;RENDER.stint=()=>{rs();const S=active()?.S;const dash=$('#stBody .dash');if(!S||!dash||!proLook())return;
+  try{
+    // track facts beside the map
+    const m=dash.querySelector('.dmap'),f=proTrackFacts(S);if(m&&f&&!m.querySelector('.pinfo')){m.classList.add('pmapx');m.insertAdjacentHTML('beforeend',`<div class="pinfo">
+      <div><span>${tr('Lunghezza')}</span><b>${fx(f.len/1000,3)} km</b></div><div><span>${tr('Curve')}</span><b>${f.corners}</b><small>${f.brakes} ${tr('con frenata')}</small></div>
+      <div><span>${tr('Tratto in pieno più lungo')}</span><b>${Math.round(f.straight)} m</b></div><div><span>${tr('Gas pieno')}</span><b>${fx(f.full,0)}%</b><small>${tr('del giro')}</small></div></div>`);dashDraw(S);}
+    // the trace: any complete lap, with arrows
+    const L=S.laps.filter(l=>l.complete);const t=dash.querySelector('.dtel');
+    if(t&&L.length){let k=Math.max(0,L.indexOf(L.find(l=>l.i===LS.get('pdl:'+S.id,S.best?.i))));if(k<0)k=0;
+      const draw=()=>{const lap=L[k];LS.set('pdl:'+S.id,lap.i);t.querySelector('.dt').innerHTML=`${tr('Telemetria')}`;
+        t.querySelector('.plap b').textContent=`${tr('Giro')} ${lap.num} · ${fmtLap(lap.time)}${lap===S.best?' ★':''}`;
+        proTelDraw(S);};
+      t.classList.add('ptel');t.insertAdjacentHTML('beforeend',`<div class="plap"><button type="button" class="btn icon" data-k="-1" aria-label="${tr('Giro precedente')}">‹</button><b></b><button type="button" class="btn icon" data-k="1" aria-label="${tr('Giro successivo')}">›</button><button type="button" class="btn pcmp">${tr('Confronta')}</button></div>
+        <div class="plg"><span><i style="background:#fff"></i>${tr('Velocità')} (km/h)</span><span><i style="background:#2BE38A"></i>${tr('Gas')} (%)</span><span><i style="background:#FF3B4E"></i>${tr('Freno')} (%)</span><span><i style="background:rgba(229,53,75,.35)"></i>${tr('frenate')}</span></div>`);
+      t.querySelectorAll('.plap [data-k]').forEach(b=>b.onclick=()=>{k=(k+ +b.dataset.k+L.length)%L.length;draw();});
+      t.querySelector('.pcmp').onclick=()=>{TW.SA=S;TW.a=L[k].i;TW.auto=false;showView('tele');};
+      draw();}
+    // the engineer's top findings instead of the lap list and energy (both are further down the page)
+    const ai=proAIHTML(S);if(ai){dash.insertAdjacentHTML('beforeend',ai);dash.classList.add('pdash');
+      dash.querySelector('.pai-all').onclick=()=>$('#proNav .pn[data-n="eng"]')?.click();}
+    // the top speed tile joins the key numbers below
+    const st=dashData(S)?.st;const kp=$('#stBody .kpis');if(kp&&st&&Number.isFinite(st.vmax)&&!kp.querySelector('.pvmax'))kp.insertAdjacentHTML('beforeend',`<div class="kpi pvmax"><div class="l">${tr('Velocità max')}</div><div class="v">${fx(st.vmax,0)} <small>km/h</small></div><div class="s">${tr('Giro')} ${S.best.num}</div></div>`);
+  }catch(e){console.error(e);}};})();
+
+(function(){const st=document.createElement('style');st.textContent=`
+html[data-look="pro"] .dash{font-family:"Titillium Web",sans-serif}
+html[data-look="pro"] .dash .dt{font:700 .86rem "Titillium Web",sans-serif;letter-spacing:.12em;color:#fff}html[data-look="pro"] .dash .dt b{color:#fff}
+html[data-look="pro"] .dbig{font:600 clamp(2.6rem,4.6vw,4.4rem)/1 "JetBrains Mono",monospace;color:#fff;letter-spacing:-.03em}
+html[data-look="pro"] .dl{font:600 .72rem "Titillium Web",sans-serif;letter-spacing:.14em}html[data-look="pro"] .dv{font:600 1.5rem "JetBrains Mono",monospace}
+html[data-look="pro"] .dideal{font:500 .9rem "Titillium Web",sans-serif}html[data-look="pro"] .dideal b{font:600 1.05rem "JetBrains Mono",monospace}
+html[data-look="pro"] .dred{width:120px;height:3px}
+html[data-look="pro"] .dmap.pmapx{display:grid;grid-template-columns:minmax(0,1fr) 190px;gap:10px;padding:46px 12px 12px!important}
+html[data-look="pro"] .dmap.pmapx svg{height:540px}
+.pinfo{display:flex;flex-direction:column;gap:8px}.pinfo>div{background:rgba(255,255,255,.025);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.pinfo span{display:block;font:600 .68rem "Titillium Web",sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}.pinfo b{display:block;font:600 1.15rem "JetBrains Mono",monospace;color:#fff;margin-top:2px}.pinfo small{color:var(--muted);font-size:.75rem}
+html[data-look="pro"] .dash.pdash .dlaps,html[data-look="pro"] .dash.pdash .den{display:none}
+@media (min-width:1101px){html[data-look="pro"] .dash.pdash{grid-template-columns:minmax(0,1.45fr) minmax(0,1fr)}html[data-look="pro"] .dash.pdash .dside{grid-column:2}html[data-look="pro"] .dash.pdash .pai{grid-column:2}}
+.ptel .plap{position:absolute;right:14px;top:9px;display:flex;gap:6px;align-items:center}.ptel .plap b{font:600 .85rem "JetBrains Mono",monospace;color:#fff;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:6px 12px;white-space:nowrap}
+.ptel .plap .btn{height:32px}.ptel svg{height:230px!important}
+.ptel .pg line{stroke:rgba(255,255,255,.07)}.ptel .pg text{fill:#7F8EA8;font:11px "JetBrains Mono",monospace}.ptel .pu{fill:#7F8EA8;font-size:10px}.ptel .pc{fill:#C9D3E3;font:600 11px "Titillium Web",sans-serif}
+.plg{display:flex;gap:18px;flex-wrap:wrap;margin-top:8px;font-size:.8rem;color:#C9D3E3}.plg i{display:inline-block;width:16px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle}
+.pai{padding:50px 18px 14px!important}.pai .psp{color:#B57BFF}.pai-r{position:absolute;right:0;font-size:.72rem;color:var(--muted);letter-spacing:.14em}.pai-r b{color:#B57BFF}
+.pai-h{display:flex;justify-content:space-between;align-items:center;gap:10px;font:600 1.05rem "Titillium Web",sans-serif;color:#B57BFF;margin-bottom:10px}.pai-h .btn{height:30px;font-size:.78rem;color:#7FB2FF}
+.pfr{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:12px;align-items:start;padding:12px;border:1px solid var(--line);border-radius:8px;background:rgba(255,255,255,.02);margin-bottom:8px}
+.pfr .pfi{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;font-weight:700;font-size:1.05rem}
+.pfr.s2 .pfi{background:rgba(255,59,78,.15);color:#FF3B4E}.pfr.s1 .pfi{background:rgba(255,197,61,.15);color:#FFC53D}.pfr.s0 .pfi{background:rgba(43,227,138,.12);color:#2BE38A}
+.pfr b{display:block;color:#fff;font-size:.92rem}.pfr.s2 b{color:#FF5A6A}.pfr.s1 b{color:#FFC53D}
+.pfr small{display:block;color:#AEB9CB;font-size:.78rem;margin-top:2px}.pfr .pfx{color:#7FB2FF}
+.pfr em{font-style:normal;font:600 .72rem "Titillium Web",sans-serif;padding:4px 10px;border-radius:6px;white-space:nowrap}
+.pfr em.hi{background:rgba(255,59,78,.15);color:#FF5A6A}.pfr em.mid{background:rgba(255,197,61,.14);color:#FFC53D}.pfr em.ok{background:rgba(43,227,138,.12);color:#2BE38A}
+.pai-n{margin:6px 0 0}
+html[data-look="pro"] #stBody .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr))}
+.pvmax .v small{font-size:.8rem;color:var(--muted)}
+@media (max-width:1100px){html[data-look="pro"] .dmap.pmapx{grid-template-columns:1fr}html[data-look="pro"] .dmap.pmapx svg{height:400px}.pinfo{display:grid;grid-template-columns:repeat(4,1fr)}}
+@media (max-width:760px){.pinfo{grid-template-columns:repeat(2,1fr)}html[data-look="pro"] .dmap.pmapx svg{height:300px}.ptel .plap{position:static;margin:-6px 0 8px}.ptel .plap b{flex:1;text-align:center}}
+`;document.head.appendChild(st);})();
+// ================= PRO TELEMETRIA: events along the lap, sector comparison, three insights, corner cards =================
+// All of it comes from the two laps already chosen in Telemetria (A and, if set, B).
+
+// stretches of the lap where something happens: [name, colour, test(i)]
+function proEvents(g){const br=g.get('Brake Pos'),th=g.get('Throttle Pos'),mt=g.get('Motor Torque'),v=g.get('Ground Speed');const n=g.n;
+  const E=[['Zone di frenata','#FF3B4E',i=>br&&br[i]>5],
+    ['Sollevamenti','#FFC53D',i=>th&&br&&th[i]<90&&th[i]>3&&br[i]<3&&v&&v[i]>120],
+    ['Deploy ibrido','#B57BFF',i=>mt&&mt[i]>15],
+    ['Recupero ibrido','#22D3EE',i=>mt&&mt[i]<-15]];
+  return E.map(([l,c,f])=>{const Z=[];let s=-1;for(let i=0;i<=n;i++){const on=i<n&&!!f(i);if(on&&s<0)s=i;if(!on&&s>=0){if(g.d[i-1]-g.d[s]>=4)Z.push([g.d[s],g.d[i-1]]);s=-1;}}return {l,c,Z,has:l==='Zone di frenata'?!!br:l==='Sollevamenti'?!!(th&&br):!!mt};}).filter(e=>e.has);}
+function proEventsSVG(D){const W=1000,len=D.gA.d[D.n-1]||1;const X=m=>(m/len*W).toFixed(1);const EA=proEvents(D.gA),EB=D.gB?proEvents(D.gB):null;
+  const row=(E,y,h)=>E.map((e,k)=>e.Z.map(([a,b])=>`<rect x="${X(a)}" y="${y+k*h}" width="${Math.max(1.5,X(b)-X(a))}" height="${h-3}" rx="1.5" fill="${e.c}"/>`).join('')).join('');
+  const h=9,ya=4,yb=ya+EA.length*h+8;const H=(EB?yb+EB.length*h:ya+EA.length*h)+22;
+  const tick=len>4000?1000:500;let ax='';for(let m=0;m<=len;m+=tick)ax+=`<text x="${X(m)}" y="${H-4}" text-anchor="middle">${m}</text><line x1="${X(m)}" x2="${X(m)}" y1="0" y2="${H-16}"/>`;
+  return {svg:`<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" class="pevs" style="height:${H*1.1}px"><g class="pg">${ax}</g>${row(EA,ya,h)}${EB?`<text x="2" y="${yb-2}" class="pbl">B</text>`+row(EB,yb,h):''}</svg>`,E:EA};}
+function proSecTable(){const A=TW.SA,B=TW.SB;const lA=A?.laps.find(l=>l.i===TW.a),lB=B?.laps.find(l=>l.i===TW.b);if(!lA)return '';
+  const sa=twLapSectors(A,lA),sb=lB?twLapSectors(B,lB):null;const f=x=>x==null||!Number.isFinite(x)?'—':x.toFixed(3);
+  const d=(a,b)=>a==null||b==null?'':Math.abs(a-b)<5e-4?'<b class="muted">0.000</b>':`<b class="${a-b>0?'up':'dn'}">${a-b>0?'+':'−'}${Math.abs(a-b).toFixed(3)}</b>`;
+  const rows=[0,1,2].map(k=>`<tr><td class="l">S${k+1}</td><td>${f(sa?.[k])}</td>${sb?`<td>${f(sb[k])}</td><td>${d(sa?.[k],sb[k])}</td>`:''}</tr>`).join('');
+  return `<table class="lbt psec"><thead><tr><th class="l">${tr('Settore')}</th><th>A · ${tr('G')}${lA.num}</th>${lB?`<th>B · ${tr('G')}${lB.num}</th><th>Δ A−B</th>`:''}</tr></thead><tbody>${rows}
+    <tr class="ptot"><td class="l">${tr('Giro completo')}</td><td><b>${fmtLap(lA.time)}</b></td>${lB?`<td>${fmtLap(lB.time)}</td><td>${d(lA.time,lB.time)}</td>`:''}</tr></tbody></table>${lB?'':`<p class="muted small">${tr('Scegli un giro B in alto per il confronto.')}</p>`}`;}
+function proTeleInsights(D){if(D.gB){const C=D.corners.filter(c=>c.dt!=null&&Number.isFinite(c.dt));if(!C.length)return '';
+    const lose=[...C].filter(c=>c.dt<-0.02).sort((a,b)=>a.dt-b.dt).slice(0,2),gain=[...C].filter(c=>c.dt>0.02).sort((a,b)=>b.dt-a.dt).slice(0,1);
+    const item=(c,good)=>`<div class="pfr ${good?'s0':'s2'}" data-c="${c.k}"><span class="pfi">${good?'▲':'▼'}</span><div><b>${good?tr('Guadagni in'):tr('Perdi in')} T${c.k}</b><small>${esc(twCornerHint(c).replace(/ → .*$/,'')||tr('stesso modo di guidare, differenza piccola'))}</small></div><em class="${good?'ok':'hi'}">${good?'−':'+'}${Math.abs(c.dt).toFixed(3)}s</em></div>`;
+    const L=[...lose.map(c=>item(c,false)),...gain.map(c=>item(c,true))];
+    return L.length?L.join(''):`<p class="muted small">${tr('A e B sono quasi uguali in tutte le curve.')}</p>`;}
+  const S=TW.SA,R=typeof proFindings==='function'?proFindings(S):null;if(!R)return '';const F=[...R.F].filter(f=>f.s>0).sort((a,b)=>b.s-a.s).slice(0,3);
+  return F.length?F.map(proFindRow).join(''):`<p class="muted small">${tr('Niente di urgente. Scegli un giro B per vedere dove guadagni e dove perdi.')}</p>`;}
+function proCornerCards(D){return `<div class="pcc">${D.corners.map(c=>{const b=c.B;const dt=c.dt;const has=D.gB&&dt!=null&&Number.isFinite(dt);
+  const st=!has?'':dt<-0.02?'hi':dt>0.02?'ok':'eq';const z=has&&Math.abs(dt)<5e-4;const hint=has?(twCornerHint(c).replace(/ → .*$/,'').split(' · ')[0]||tr('Nessuna differenza importante')):'';
+  return `<button type="button" class="pcard ${st}" data-c="${c.k}"><div class="pch"><b>T${c.k}</b>${has?`<em>${z?'':dt<0?'+':'−'}${Math.abs(dt).toFixed(3)}s</em>`:`<em class="n">${fx(c.time,2)} s</em>`}</div>
+    <div class="pcv"><span>${tr('Vel. min')}<b>${fx(c.vMin,0)} <small>km/h</small></b></span><span>${tr('Frenata')}<b>${c.brake!=null?Math.round(c.dApex-c.brake)+' <small>m</small>':'—'}</b></span></div>
+    ${hint?`<div class="pcn"><i></i>${esc(hint)}</div>`:`<div class="pcn n">${tr('Marcia')} ${fx(c.gear,0)} · ${tr('uscita')} ${fx(c.vExit,0)} km/h</div>`}</button>`;}).join('')}</div>`;}
+
+(function(){const rt=RENDER.tele;RENDER.tele=()=>{rt();const D=TW.D;const body=$('#twBody');if(!D||!body||!proLook())return;
+  try{const tr_=body.querySelector('.twtr');if(!tr_)return;
+    const ev=proEventsSVG(D);
+    tr_.insertAdjacentHTML('afterend',`<div class="panel pevp"><div class="panel-h"><h3>${tr('Eventi sul giro')}</h3><div class="pevl">${ev.E.map(e=>`<span><i style="background:${e.c}"></i>${tr(e.l)}</span>`).join('')}${D.gB?`<span class="muted">${tr('sopra A, sotto B')}</span>`:''}</div></div>${ev.svg}</div>
+      <div class="pcmpr"><div class="panel"><div class="panel-h"><h3>${tr('Confronto giri')}</h3><span class="muted small">${tr('tempi settore')}</span></div>${proSecTable()}</div>
+      <div class="panel pai2"><div class="panel-h"><h3><span class="psp">✦</span> ${tr('Analisi IA')}</h3><span class="muted small">${D.gB?tr('A contro B'):tr('dalla telemetria')}</span></div>${proTeleInsights(D)}</div></div>`);
+    const low=body.querySelector('.twlow');if(low)low.insertAdjacentHTML('beforebegin',`<div class="panel pccp"><div class="panel-h"><h3>${tr('Analisi curva per curva')}</h3><span class="muted small">${D.gB?tr('Δ = quanto A perde (+) o guadagna (−) su B'):tr('scegli un giro B per i Δ')}</span></div>${proCornerCards(D)}</div>`);
+    body.querySelectorAll('.pcard[data-c],.pai2 .pfr[data-c]').forEach(b=>b.onclick=()=>{twZoomCorner(D.corners.find(c=>c.k===+b.dataset.c));$('.twmapp')?.scrollIntoView({behavior:'smooth',block:'start'});});
+  }catch(e){console.error(e);}};})();
+
+(function(){const st=document.createElement('style');st.textContent=`
+.pevp .panel-h{flex-wrap:wrap;gap:8px}.pevl{display:flex;gap:14px;flex-wrap:wrap;font-size:.8rem;color:#C9D3E3}.pevl i{display:inline-block;width:12px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.pevs{width:100%;display:block}.pevs .pg line{stroke:rgba(255,255,255,.06)}.pevs .pg text{fill:#7F8EA8;font:10px "JetBrains Mono",monospace}.pevs .pbl{fill:#F59E0B;font:600 9px sans-serif}
+.pcmpr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;margin:16px 0}
+.psec td,.psec th{text-align:right}.psec .l{text-align:left}.psec b.up{color:#FF5A6A}.psec b.dn{color:#2BE38A}.psec .ptot td{border-top:1px solid var(--line);font-weight:600}
+.pai2 .psp{color:#B57BFF}.pai2 .pfr{cursor:pointer}.pai2 .pfr:hover{border-color:var(--edge2)}
+.pcc{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(170px,1fr);gap:10px;overflow-x:auto;padding-bottom:4px}
+.pcard{text-align:left;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.02);color:inherit;padding:10px 12px;cursor:pointer;font:inherit;display:flex;flex-direction:column;gap:8px}
+.pcard:hover{border-color:var(--edge2);background:rgba(255,255,255,.04)}
+.pch{display:flex;justify-content:space-between;align-items:center}.pch b{font:700 1rem "Titillium Web",sans-serif;color:#fff}.pch em{font:600 .85rem "JetBrains Mono",monospace;font-style:normal}
+.pcard.hi .pch em{color:#FF5A6A}.pcard.ok .pch em{color:#2BE38A}.pcard.eq .pch em{color:#C9D3E3}.pch em.n{color:#C9D3E3}
+.pcv{display:grid;grid-template-columns:1fr 1fr;gap:6px}.pcv span{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}.pcv b{display:block;font:600 .95rem "JetBrains Mono",monospace;color:#fff;text-transform:none;letter-spacing:0}.pcv small{font-size:.7rem;color:var(--muted)}
+.pcn{font-size:.76rem;color:#AEB9CB;display:flex;gap:6px;align-items:flex-start;line-height:1.3}.pcn i{width:8px;height:8px;border-radius:50%;flex:none;margin-top:4px;background:#C9D3E3}
+.pcard.hi .pcn i{background:#FF3B4E}.pcard.ok .pcn i{background:#2BE38A}.pcn.n{color:var(--muted)}
+.pccp{margin-bottom:16px}
+@media (max-width:900px){.pcmpr{grid-template-columns:1fr}}
+`;document.head.appendChild(st);})();
+// ================= PRO RACE ENGINEER and SETUP BUILDER =================
+// Race Engineer: quick actions (the symptom guide), current diagnosis, action plan with "done", last test comparison.
+// Setup Builder: the car seen from above with the values of the .svm on each corner, and the other versions of the setup.
+
+// ---------- quick actions: what you want from the car → the guide's answer for that symptom ----------
+const PRO_ACT=[['rot','Più rotazione in ingresso','Sottosterzo in ingresso','#5AA2FF'],['stab','Più stabilità in frenata','Frena forte, poi si gira in trail braking','#FF5A6A'],
+  ['tra','Migliora trazione','Perde trazione in uscita','#2BE38A'],['wear','Riduci usura gomme','Le gomme calano nello stint','#FFC53D'],
+  ['vmax','Più velocità sul dritto','Lenta sul dritto','#22D3EE'],['aero','Bilanciamento nel veloce','Sottosterzo nelle curve veloci','#B57BFF']];
+const PRO_ACT_IC={rot:'<path d="M12 4a8 8 0 1 1-7.4 5"/><path d="M4 4v5h5"/>',stab:'<circle cx="12" cy="12" r="8"/><path d="M12 8v4"/><circle cx="12" cy="16" r=".6"/>',tra:'<circle cx="12" cy="12" r="8"/><path d="M8 12l3 3 5-6"/>',
+  wear:'<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/>',vmax:'<path d="M4 18L14 8M14 8h-5M14 8v5"/><path d="M12 18l8-8"/>',aero:'<path d="M3 14c4-6 14-6 18 0"/><path d="M7 14v3M17 14v3M12 10v7"/>'};
+function proActBox(id){const a=PRO_ACT.find(x=>x[0]===id);const s=typeof GUIDE_SYM!=='undefined'&&GUIDE_SYM.find(x=>x.s===a[2]);if(!s)return '';
+  return `<div class="pactb"><b>${tr(a[1])}</b> · <span class="muted">${tr(s.s)}</span><ol>${s.f.map(f=>`<li>${esc(tr(f))}</li>`).join('')}</ol><p class="small muted">${esc(tr(s.p))}</p>
+    <div class="gchips">${s.k.map(k=>GUIDE_P[k]?`<button type="button" class="gchip" data-gp="${k}">${tr(GUIDE_P[k].t)}</button>`:'').join('')}</div></div>`;}
+
+// ---------- the previous run of this car on this track (same rule as «Il cambio ha funzionato?») ----------
+function proPrevRun(S){const H=LS.get('suhist',{});const cur=H[S.id];if(!cur)return null;const car=(cur.car||'').toLowerCase();
+  return Object.values(H).filter(h=>h.id!==S.id&&h.venue===cur.venue&&(!car||!h.car||h.car.toLowerCase()===car)&&(h.when<cur.when||(h.when===cur.when&&h.at<cur.at))).sort((a,b)=>String(b.when).localeCompare(String(a.when))||b.at-a.at)[0]||null;}
+// speed of the best lap before and now, when the previous session is still loaded
+function proTestChart(S,P){const B=S.best,PB=P?.best;if(!B||!PB)return '';const gA=lapGrid(P,PB,10),gB=lapGrid(S,B,10);const a=gA.get('Ground Speed'),b=gB.get('Ground Speed');if(!a||!b)return '';
+  const n=Math.min(a.length,b.length),W=600,H=150;let hi=0;for(let i=0;i<n;i++)hi=Math.max(hi,a[i],b[i]);hi=Math.ceil(hi/20)*20;
+  const X=i=>(34+i/(n-1)*(W-40)).toFixed(1),Y=v=>(8+(1-v/hi)*(H-28)).toFixed(1);const pl=(s,c)=>`<polyline points="${Array.from({length:n},(_,i)=>X(i)+','+Y(s[i])).join(' ')}" fill="none" stroke="${c}" stroke-width="1.4"/>`;
+  const sa=twLapSectors(P,PB),sb=twLapSectors(S,B);
+  const secs=sa&&sb?`<div class="ptsec">${[0,1,2].map(k=>{const d=sb[k]-sa[k];const z=Math.abs(d)<5e-4;return `<span>S${k+1} <b class="${z?'muted':d<0?'pos':'neg'}">${z?'':d>0?'+':'−'}${Math.abs(d).toFixed(3)}</b></span>`;}).join('')}</div>`:'';
+  return `<div class="ptc"><div class="ptl"><span><i style="background:#FF5A6A"></i>${tr('Prima')} · ${fmtLap(PB.time)}</span><span><i style="background:#2BE38A"></i>${tr('Ora')} · ${fmtLap(B.time)}</span></div>${secs}
+    <svg viewBox="0 0 ${W} ${H}"><g class="pg">${[0,.5,1].map(f=>`<line x1="34" x2="${W-6}" y1="${8+f*(H-28)}" y2="${8+f*(H-28)}"/><text x="30" y="${12+f*(H-28)}" text-anchor="end">${Math.round(hi*(1-f))}</text>`).join('')}</g>${pl(a,'#FF5A6A')}${pl(b,'#2BE38A')}</svg></div>`;}
+
+function proEngHTML(S,D,laps){const F=engFindings(D,S,D.su||null,laps);const P=engPlan(F);const done=LS.get('pdone',{});
+  const diag=[...F].sort((a,b)=>b.s-a.s||ENG_ORDER.indexOf(a.a)-ENG_ORDER.indexOf(b.a)).filter((f,i)=>f.s>0||i<4).slice(0,6);
+  const area=k=>{const a=ENG_AREAS.find(x=>x[0]===k);return a?tr(a[1]):'';};
+  const sev=s=>`<em class="${['ok','mid','hi'][s]}">${tr(['OK','Media','Alta'][s])}</em>`;
+  const conf=laps.length>=3?tr('alta'):laps.length===2?tr('media'):tr('bassa');
+  return `<div class="pre1"><div class="panel pact"><div class="panel-h"><h3>${tr('Azioni rapide')}</h3><span class="muted small">${tr('cosa vuoi dalla macchina')}</span></div>
+      <div class="pactg">${PRO_ACT.map(([id,l,,c])=>`<button type="button" class="pab" data-a="${id}" style="--c:${c}"><svg viewBox="0 0 24 24" aria-hidden="true">${PRO_ACT_IC[id]}</svg><span>${tr(l)}</span></button>`).join('')}</div><div id="pActBox"></div></div>
+    <div class="panel pdiag"><div class="panel-h"><h3>${tr('Diagnosi attuale')}</h3><span class="muted small">${tr('basata sugli ultimi')} ${laps.length} ${laps.length===1?tr('giro'):tr('giri')} · ${tr('affidabilità')} ${conf}</span></div>
+      <table class="lbt pdt"><thead><tr><th class="l">${tr('Problema')}</th><th class="l">${tr('Area')}</th><th>${tr('Gravità')}</th><th class="l">${tr('Dati')}</th></tr></thead><tbody>
+      ${diag.map(f=>`<tr class="s${f.s}"><td class="l"><span class="pdi">${f.s===2?'!':f.s===1?'⚠':'✓'}</span><b>${esc(f.t)}</b></td><td class="l muted">${area(f.a)}</td><td>${sev(f.s)}</td><td class="l small">${esc(f.ev.slice(0,2).join(' · '))}</td></tr>`).join('')}</tbody></table></div></div>
+   <div class="pre2"><div class="panel pplan"><div class="panel-h"><h3>${tr('Piano d\'azione')}</h3><span class="muted small">${tr('una modifica alla volta · 3–5 giri per prova')}</span></div>
+      ${P.length?P.map((f,i)=>{const x=f.fx.find(x=>!x.conflict)||{};const k=S.id+'|'+f.t;const ok=!!done[k];return `<div class="ppl${ok?' done':''}"><span class="ppn">${i+1}</span><div><b>${esc(tr(x.label||''))}: ${esc(x.dir||'')}</b>${x.now?` <span class="muted small">(${tr('ora')} <span class="mono">${esc(x.now)}</span>)</span>`:''}<small>${esc(f.t)} — ${esc(f.why||f.ev[0]||'')}</small></div>
+        <button type="button" class="btn ppd" data-k="${esc(k)}" aria-pressed="${ok}">${ok?'✓ '+tr('Fatto'):tr('Segna come fatto')}</button></div>`;}).join('')+
+        `<div class="ppb"><button type="button" class="btn primary" id="pToGen">${tr('Apri nel generatore')}</button><button type="button" class="btn" id="pToSet">${tr('Vai al Setup Builder')}</button></div>`
+        :`<p class="small">${tr('Niente di urgente: il setup lavora nella finestra giusta. Per il tempo sul giro guarda Telemetria e Coach.')}</p>`}</div>
+    <div class="panel ptest" id="pTest"><div class="panel-h"><h3>${tr('Confronto ultimo test')}</h3></div></div></div>`;}
+
+(function(){const re=renderEng;window.renderEng=renderEng=function(){re();const el=$('#suEng');const S=active()?.S;const D=typeof DIAG!=='undefined'?DIAG:null;if(!el||!S||!D||D.S!==S||!proLook())return;
+  try{let laps=S.laps.filter(l=>l.complete&&l.type==='lanciato');if(!laps.length)laps=S.laps.filter(l=>l.complete);laps=[...laps].sort((a,b)=>a.time-b.time).slice(0,5);
+    const head=el.querySelector('.ehead');if(!head)return;head.classList.add('pehead');head.insertAdjacentHTML('afterend',`<div class="pre">${proEngHTML(S,D,laps)}</div>`);
+    // the comparison with the previous run goes in the right column, with the speed of both best laps when that session is loaded
+    const pt=$('#pTest'),cm=el.querySelector('.ecmp');if(pt&&cm){const P=proPrevRun(S);const PS=P&&lds().find(x=>x.id===P.id);
+      pt.insertAdjacentHTML('beforeend',P?(PS?proTestChart(S,PS):'')+`<div class="ptcm">${cm.innerHTML.replace(/^[\s\S]*?<\/div>/,'')}</div>`
+        :`<div class="ptfirst"><b>${tr('Prima prova salvata con questa auto su questa pista.')}</b><ol><li>${tr('Fai una modifica del piano d\'azione.')}</li><li>${tr('Gira 3–5 giri puliti nelle stesse condizioni.')}</li><li>${tr('Carica la nuova telemetria (o lascia che arrivi da sola dal gioco).')}</li></ol><span>${tr('Qui vedrai prima e dopo: tempi, settori, velocità e se il problema è sparito.')}</span></div>`);
+      const h=cm.querySelector('.panel-h span');if(h)pt.querySelector('.panel-h').append(h.cloneNode(true));cm.remove();}
+    el.querySelectorAll('.pab').forEach(b=>b.onclick=()=>{const on=b.getAttribute('aria-pressed')!=='true';el.querySelectorAll('.pab').forEach(x=>x.setAttribute('aria-pressed',x===b&&on));
+      const box=$('#pActBox');box.innerHTML=on?proActBox(b.dataset.a):'';box.querySelectorAll('[data-gp]').forEach(c=>c.onclick=()=>openGuide(c.dataset.gp));});
+    el.querySelectorAll('.ppd').forEach(b=>b.onclick=()=>{const d=LS.get('pdone',{});d[b.dataset.k]=!d[b.dataset.k];if(!d[b.dataset.k])delete d[b.dataset.k];LS.set('pdone',d);renderEng();});
+    const g=$('#pToGen');if(g)g.onclick=()=>{LS.set('su:tab','gen');$('#proNav .pn[data-n="setb"]')?.click();};
+    const s=$('#pToSet');if(s)s.onclick=()=>{LS.set('su:tab','set');$('#proNav .pn[data-n="setb"]')?.click();};
+  }catch(e){console.error(e);}};})();
+
+// ---------- Setup Builder: the car from above ----------
+function suFind(su,sec,re){const L=su?.sec?.[sec];const x=L&&L.find(i=>re.test(i.key));return x&&x.disp&&!/N\/A|Non-adjustable|Detached/.test(x.disp)?x.disp.replace(/\s*\(soft\)|\s*\(\d+\s*laps\)/g,''):null;}
+function proCarHTML(su){const C={FL:'FRONTLEFT',FR:'FRONTRIGHT',RL:'REARLEFT',RR:'REARRIGHT'};const WN={FL:'Ant. sinistra',FR:'Ant. destra',RL:'Post. sinistra',RR:'Post. destra'};
+  const corner=w=>{const s=C[w];const front=w[0]==='F';const rows=[['Campanatura',suFind(su,s,/^CamberSetting/)],['Convergenza',suFind(su,'SUSPENSION',front?/^FrontToeIn/:/^RearToeIn/)],['Pressione',suFind(su,s,/^PressureSetting/)],['Molla',suFind(su,s,/^SpringSetting/)],['Altezza',suFind(su,s,/^RideHeightSetting/)],['Packer',suFind(su,s,/^PackerSetting/)],['Comp. lenta',suFind(su,s,/^SlowBumpSetting/)],['Est. lenta',suFind(su,s,/^SlowReboundSetting/)],['Mescola',suFind(su,s,/^CompoundSetting/)]].filter(r=>r[1]);
+    return `<div class="pcw pc${w}"><h4><span class="pwd"></span>${tr(WN[w])}</h4>${rows.map(([l,v])=>`<div><span>${tr(l)}</span><b>${esc(v)}</b></div>`).join('')}</div>`;};
+  const box=(t,ic,rows)=>{rows=rows.filter(r=>r[1]);return rows.length?`<div class="pcb"><h4>${ic} ${tr(t)}</h4>${rows.map(([l,v])=>`<div><span>${tr(l)}</span><b>${esc(v)}</b></div>`).join('')}</div>`:'';};
+  const mid=[box('Aerodinamica','✈',[['Ala anteriore',suFind(su,'FRONTWING',/^FWSetting/)],['Ala posteriore',suFind(su,'REARWING',/^RWSetting/)]]),
+    box('Freni','◉',[['Ripartizione',suFind(su,'CONTROLS',/^RearBrakeSetting/)],['Pressione',suFind(su,'CONTROLS',/^BrakePressureSetting/)],['Migrazione',suFind(su,'CONTROLS',/^BrakeMigrationSetting/)]]),
+    box('Barre antirollio','⇄',[['Anteriore',suFind(su,'SUSPENSION',/^FrontAntiSway/)],['Posteriore',suFind(su,'SUSPENSION',/^RearAntiSway/)]]),
+    box('Terzo elemento','⌇',[['Molla ant.',suFind(su,'SUSPENSION',/^Front3rdSpring/)],['Packer ant.',suFind(su,'SUSPENSION',/^Front3rdPacker/)],['Molla post.',suFind(su,'SUSPENSION',/^Rear3rdSpring/)],['Packer post.',suFind(su,'SUSPENSION',/^Rear3rdPacker/)]]),
+    box('Differenziale','⚙',[['Precarico',suFind(su,'DRIVELINE',/^DiffPreload/)],['Trazione',suFind(su,'DRIVELINE',/^DiffPower/)],['Rilascio',suFind(su,'DRIVELINE',/^DiffCoast/)]]),
+    box('Elettronica e ibrido','ϟ',[['TC mappa',suFind(su,'CONTROLS',/^TractionControlMap/)],['TC taglio',suFind(su,'CONTROLS',/^TCPowerCut/)],['Rigenerazione',suFind(su,'ENGINE',/^RegenerationMap/)],['Motore elettrico',suFind(su,'ENGINE',/^ElectricMotorMap/)]])].join('');
+  const car=`<svg viewBox="0 0 160 300" class="pcarv" aria-hidden="true"><defs><linearGradient id="pcb" x1="0" x2="1"><stop offset="0" stop-color="#0E2240"/><stop offset=".5" stop-color="#1B3E6E"/><stop offset="1" stop-color="#0E2240"/></linearGradient></defs>
+    <path d="M60 18h40l8 30 14 6v40l-8 10 4 60 12 10v60l-10 30H54l-10-30v-60l12-10 4-60-8-10V54l14-6z" fill="url(#pcb)" stroke="#3B82F6" stroke-width="1.2" opacity=".95"/>
+    <path d="M30 16h100v10H30z" fill="#16335C" stroke="#3B82F6"/><path d="M26 276h108v12H26z" fill="#16335C" stroke="#3B82F6"/>
+    <rect x="14" y="58" width="22" height="46" rx="5" fill="#0B1526" stroke="#2BE38A" stroke-width="2"/><rect x="124" y="58" width="22" height="46" rx="5" fill="#0B1526" stroke="#2BE38A" stroke-width="2"/>
+    <rect x="12" y="196" width="26" height="52" rx="5" fill="#0B1526" stroke="#FFC53D" stroke-width="2"/><rect x="122" y="196" width="26" height="52" rx="5" fill="#0B1526" stroke="#FFC53D" stroke-width="2"/>
+    <ellipse cx="80" cy="132" rx="14" ry="22" fill="#08111F" stroke="#5AA2FF"/><path d="M80 40v230" stroke="rgba(90,162,255,.25)" stroke-dasharray="3 5"/></svg>`;
+  return `<div class="pcar2">${corner('FL')}${corner('FR')}<div class="pcc2">${car}</div>${corner('RL')}${corner('RR')}</div><div class="pcmid">${mid}</div>`;}
+function proVersions(su){const car=(su?.car||'').toLowerCase();const L=svms().filter(x=>!car||(x.car||'').toLowerCase()===car);
+  const nd=(a,b)=>{let n=0;for(const [sec,it] of Object.entries(a.sec||{}))for(const i of it){const o=b.sec?.[sec]?.find(x=>x.key===i.key);if(o&&o.raw!==i.raw)n++;}return n;};
+  return L.map(x=>`<button type="button" class="pvr${x===su?' cur':''}" data-id="${esc(x.id)}"><i></i><div><b>${esc(x.label||x.name)}</b><small>${x===su?tr('in uso'):nd(su,x)+' '+tr('differenze')}</small></div></button>`).join('')||`<p class="muted small">${tr('Carica altri .svm della stessa auto per vederli qui.')}</p>`;}
+function proSetupPanel(){const old=$('#pSetCar');const su=byId($('#suFile')?.value);const nav=$('#suTabs');if(!nav||!proLook()){old?.remove();return;}
+  const S=active()?.S;const R=S?proFindings(S):null;const F=R?[...R.F].filter(f=>f.s>0).sort((a,b)=>b.s-a.s).slice(0,3):[];
+  const h=`<div id="pSetCar" class="pset">${su?`<div class="panel psc"><div class="panel-h"><h3>${tr('Assetto')} · <span class="muted">${esc(su.label||su.name)}</span></h3><span class="muted small">${esc(su.car||'')}</span></div>${proCarHTML(su)}</div>
+     <div class="pset-r"><div class="panel"><div class="panel-h"><h3>${tr('Versioni setup')}</h3><span class="muted small">${tr('stessa auto')}</span></div><div class="pvl">${proVersions(su)}</div></div>
+     ${S?`<div class="panel"><div class="panel-h"><h3>${tr('Problemi rilevati dai dati')}</h3><button type="button" class="btn" id="pToEng">${tr('Race Engineer')} →</button></div>${F.length?F.map(proFindRow).join(''):`<p class="muted small">${tr('Niente di urgente.')}</p>`}</div>`:''}</div>`
+     :`<div class="panel"><div class="empty">${tr('Carica un file setup .svm (Documenti o cartella UserData/player/Settings di Le Mans Ultimate).')}</div></div>`}</div>`;
+  if(old)old.outerHTML=h;else nav.insertAdjacentHTML('afterend',h);
+  $$('#pSetCar .pvr').forEach(b=>b.onclick=()=>{const s=$('#suFile');s.value=b.dataset.id;s.onchange&&s.onchange();});
+  const e=$('#pToEng');if(e)e.onclick=()=>$('#proNav .pn[data-n="eng"]')?.click();}
+(function(){const so=window.suTabOf;window.suTabOf=suTabOf=function(p){return p.id==='pSetCar'?'set':so(p);};})();
+setTimeout(()=>{const base=RENDER.setup;RENDER.setup=()=>{base();try{proSetupPanel();}catch(e){console.error(e);}suTabsApply();};},0);
+
+(function(){const st=document.createElement('style');st.textContent=`
+html[data-look="pro"] .pehead .eplan{display:none}
+html[data-look="pro"] .ehead .ey{color:#7FB2FF;font:600 .72rem "Titillium Web",sans-serif;letter-spacing:.14em}html[data-look="pro"] .ehead h2{font:700 1.4rem "Titillium Web",sans-serif;color:#fff;text-transform:none}
+html[data-look="pro"] .ecount span{border-radius:10px;background:var(--panel2);border:1px solid var(--line)}
+.pre1,.pre2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:16px;margin-bottom:16px}
+.pactg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.pab{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.02);color:#DCE4F0;padding:12px;cursor:pointer;font:600 .85rem "Titillium Web",sans-serif;text-align:left}
+.pab svg{width:26px;height:26px;flex:none;fill:none;stroke:var(--c);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.pab:hover{border-color:var(--c)}.pab[aria-pressed="true"]{border-color:var(--c);background:color-mix(in srgb,var(--c) 12%,transparent)}
+.pactb{margin-top:12px;border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:rgba(255,255,255,.02)}.pactb ol{margin:8px 0;padding-left:20px}.pactb li{margin:3px 0}
+.pdt{table-layout:fixed;width:100%}.pdt th:nth-child(1){width:34%}.pdt th:nth-child(2){width:18%}.pdt th:nth-child(3){width:12%}.pdt td{vertical-align:top;white-space:normal!important;overflow-wrap:anywhere}.pdt td b{color:#fff}.pdt .pdi{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:6px;margin-right:8px;font-weight:700;font-size:.8rem}
+.pdt tr.s2 .pdi{background:rgba(255,59,78,.15);color:#FF3B4E}.pdt tr.s1 .pdi{background:rgba(255,197,61,.15);color:#FFC53D}.pdt tr.s0 .pdi{background:rgba(43,227,138,.12);color:#2BE38A}
+.pdt em{font-style:normal;font:600 .72rem "Titillium Web",sans-serif;padding:4px 10px;border-radius:6px;white-space:nowrap}.pdt em.hi{background:rgba(255,59,78,.15);color:#FF5A6A}.pdt em.mid{background:rgba(255,197,61,.14);color:#FFC53D}.pdt em.ok{background:rgba(43,227,138,.12);color:#2BE38A}
+.ppl{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.ppn{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#13284A;color:#fff;font-weight:700}
+.ppl b{color:#fff}.ppl small{display:block;color:var(--muted);margin-top:2px}.ppl.done{opacity:.6}.ppl.done .ppn{background:#14532D}
+.ppd[aria-pressed="true"]{color:#2BE38A;border-color:#2BE38A}
+.ppb{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.ptc svg{width:100%;height:auto;display:block}.ptc .pg line{stroke:rgba(255,255,255,.07)}.ptc .pg text{fill:#7F8EA8;font:10px "JetBrains Mono",monospace}
+.ptl{display:flex;gap:16px;flex-wrap:wrap;font-size:.8rem;color:#C9D3E3}.ptl i{display:inline-block;width:14px;height:3px;margin-right:6px;vertical-align:middle}
+.ptsec{display:flex;gap:18px;margin:6px 0;font-size:.8rem;color:var(--muted)}.ptsec b{font-family:"JetBrains Mono",monospace;margin-left:4px}
+.ptcm .ecg{margin-top:10px;grid-template-columns:1fr!important}.ptfirst{color:#C9D3E3;font-size:.9rem}.ptfirst b{color:#fff}.ptfirst ol{margin:10px 0;padding-left:20px}.ptfirst li{margin:4px 0}.ptfirst span{color:var(--muted);font-size:.82rem}
+.pset{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:16px;margin-bottom:16px}.pset>.panel:only-child{grid-column:1/-1}
+.pset-r{display:flex;flex-direction:column;gap:16px}
+.pcar2{display:grid;grid-template-columns:1fr 170px 1fr;grid-template-rows:auto auto;gap:12px;align-items:center}
+.pcc2{grid-row:1/3;grid-column:2}.pcarv{width:100%;height:auto;max-height:340px}
+.pcFL{grid-column:1;grid-row:1}.pcFR{grid-column:3;grid-row:1}.pcRL{grid-column:1;grid-row:2}.pcRR{grid-column:3;grid-row:2}
+.pcw,.pcb{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:rgba(255,255,255,.025)}
+.pcw h4,.pcb h4{margin:0 0 6px;font:700 .78rem "Titillium Web",sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#fff;display:flex;align-items:center;gap:8px}
+.pcw .pwd{width:8px;height:8px;border-radius:50%;background:#2BE38A}.pcRL .pwd,.pcRR .pwd{background:#FFC53D}
+.pcw>div,.pcb>div{display:flex;justify-content:space-between;gap:10px;font-size:.82rem;padding:2px 0}.pcw span,.pcb span{color:var(--muted)}.pcw b,.pcb b{font:600 .85rem "JetBrains Mono",monospace;color:#fff;white-space:nowrap}
+.pcmid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px}
+.pvl{display:flex;flex-direction:column;gap:6px}
+.pvr{display:flex;gap:10px;align-items:center;text-align:left;border:1px solid var(--line);border-radius:8px;background:transparent;color:inherit;padding:8px 10px;cursor:pointer;font:inherit}
+.pvr i{width:10px;height:10px;border-radius:50%;border:2px solid #5A6A85;flex:none}.pvr.cur{border-color:var(--pacc,#2F7CF6);background:#13284A}.pvr.cur i{border-color:#FFC53D;background:#FFC53D}
+.pvr b{display:block;font-size:.85rem;color:#fff}.pvr small{color:var(--muted);font-size:.74rem}
+@media (max-width:1200px){.pre1,.pre2,.pset{grid-template-columns:1fr}}
+@media (max-width:760px){.pactg{grid-template-columns:1fr 1fr}.pcar2{grid-template-columns:1fr 1fr}.pcc2{display:none}.pcFL,.pcFR,.pcRL,.pcRR{grid-column:auto;grid-row:auto}.pcmid{grid-template-columns:1fr 1fr}.ppl{grid-template-columns:30px 1fr}.ppl .ppd{grid-column:2}}
+`;document.head.appendChild(st);})();
 // ================= SETUP =================
 let DIAG=null;
 RENDER.setup=()=>{
