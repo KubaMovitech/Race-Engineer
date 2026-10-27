@@ -96,3 +96,8 @@ setTimeout(()=>{proApply();renderHero();setInterval(proSyncChip,5000);},0);
 setTimeout(()=>{const h=$('#mSettings .mbox>.panel-h');if(!h||$('#lookSel'))return;
   h.insertAdjacentHTML('afterend',`<div class="lookrow"><label class="f">${tr('Stile dell\'app')}<select id="lookSel"><option value="pro">${tr('Pro · nero, argento e oro')}</option><option value="problu">${tr('Pro · blu notte')}</option><option value="carbon">${tr('Carbon · rosso e nero')}</option></select></label></div>`);
   const s=$('#lookSel');s.value=LS.get('look','pro');s.onchange=()=>{LS.set('look',s.value);proApply();showView(curView());};},0);
+
+// ---------- team logo (Personalizza): in Pro it sits at the bottom of the side menu, where there is room for it ----------
+(function(){const al=window.applyTeamLogo;if(typeof al!=='function')return;window.applyTeamLogo=applyTeamLogo=function(){al();const nav=$('#proNav');if(!nav)return;const u=LS.get('teamLogo','');let w=$('#proLogo');
+  if(!u){w&&w.remove();return;}if(!w){w=document.createElement('div');w.id='proLogo';w.innerHTML='<img alt="">';nav.querySelector('.pfoot')?.before(w);}w.querySelector('img').src=u;};
+  setTimeout(()=>applyTeamLogo(),0);})();
