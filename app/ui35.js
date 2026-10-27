@@ -26,7 +26,10 @@ function twMeta(name){if(TWC[name])return TWC[name];for(const k in TWW){const re
 function twArr(g,name){const key='tw:'+name;if(g._c[key])return g._c[key];let o=null;const n=g.n;
   if(name==='@power'){const E=g.get('Engine Torque'),R=g.get('Engine RPM'),M=g.get('Motor Torque'),MR=g.get('Motor RPM');if(E&&R){o=new Float32Array(n);for(let i=0;i<n;i++)o[i]=(E[i]*R[i]+(M&&MR?M[i]*MR[i]:0))*Math.PI/30/1000;}}
   else if(name==='@gsum'){const a=g.get('G Force Lat'),b=g.get('G Force Long');if(a&&b){o=new Float32Array(n);for(let i=0;i<n;i++)o[i]=Math.hypot(a[i],b[i]);}}
-  else{const a=g.get(name);if(a){const k=twMeta(name)[3];if(k){o=new Float32Array(n);for(let i=0;i<n;i++)o[i]=a[i]*k;}else o=a;}}
+  else{const a=g.get(name);if(a){let k=twMeta(name)[3];
+    // some files already give camber, toe and body angles in degrees: convert only what looks like radians
+    if(k===R2D){let s=0,c=0;for(let i=0;i<n;i+=7)if(Number.isFinite(a[i])){s+=Math.abs(a[i]);c++;}if(c&&s/c>0.2)k=null;}
+    if(k){o=new Float32Array(n);for(let i=0;i<n;i++)o[i]=a[i]*k;}else o=a;}}
   g._c[key]=o;return o;}
 const twFmt=(v,d)=>Number.isFinite(v)?v.toFixed(d):'—';
 

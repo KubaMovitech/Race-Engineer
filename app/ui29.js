@@ -179,7 +179,7 @@ const GUIDE_CAR=[[/alpine|a424/i,'LMDh, V6 turbo, ibrido posteriore','Parti dall
   [/963/i,'LMDh, V8 biturbo, ibrido posteriore','Se sottosterza nel lento lavora sul bilancio meccanico; se è instabile nell\'inserimento veloce guarda altezza dinamica, ala e ripartizione.','Porsche 963'],
   [/toyota|gr010|tr010/i,'LMH, V6 biturbo, ibrido anteriore','La TR010 2026 ha aero nuovo: riparti da un setup 2026, controlla altezze nel veloce.','Toyota GR010 / TR010'],
   [/vanwall/i,'LMH senza ibrido, V8 aspirato','Fissa frenata e piattaforma prima di cercare il compromesso di ala.','Vanwall Vandervell 680'],
-  [/glickenhaus|scg/i,'LMH senza ibrido, V8 biturbo','Base di freni e trazione, poi ala/resistenza.'],'Glickenhaus SCG 007'];
+  [/glickenhaus|scg/i,'LMH senza ibrido, V8 biturbo','Base di freni e trazione, poi ala/resistenza.','Glickenhaus SCG 007']];
 const guideCar=c=>GUIDE_CAR.find(x=>x[0].test(c||''));
 const guideCls=c=>/gt3|lmgt3/i.test(c||'')?'gt3':/lmp2|oreca/i.test(c||'')?'lmp2':/lmp3|p325|ginetta|d09|ad25/i.test(c||'')?'lmp3':/gte/i.test(c||'')?'gte':'hy';
 
