@@ -1,17 +1,17 @@
 {
- "version": "2.5.0",
- "date": "2026-10-26",
+ "version": "2.6.0",
+ "date": "2026-10-27",
  "notes": [
-  "Squadra senza codici: invito con un link, il compagno entra da solo",
-  "Muretto: striscia con tutte le auto sul giro",
-  "Classifica: consumo degli ultimi 3 giri, tendenza e contatti"
+  "Setup diviso in schede e nuovo Ingegnere di pista che legge telemetria e setup insieme",
+  "Analisi nuove: campanatura in appoggio, packer e terzi elementi, ruote che si alzano, beccheggio, bilanciamento per fase e per velocità",
+  "Guida più dettagliata con interazioni, passi e cosa dice l'ingegnere"
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "42ec60c684ca240a36497a3a0e03b80db2efe60288fffe9823cee099bb9b4b2c"
+  "sha256": "ff4996ce12280619b91ab44d3bf9ba9fb7862a2f27d454165f15f3c9723e58fc"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "886cf9b5bcc3719435815a0de09f33ce6ba6ef82d98a3c1e372e202bbecc486b"
+  "sha256": "1f3a0904ee443489e07e9cba66bdfe93c37cc2e91ea8ef9f562ba09833c5d9ae"
  }
 }
