@@ -1,0 +1,165 @@
+/* ================= PRO (html[data-look="pro"], ui41.js) =================
+   Night blue engineering screen: side menu with icons, a top bar with car / track / session, rounded panels,
+   blue for what is selected, red only for the brand and for problems. Only looks change here. */
+html[data-look="pro"],html[data-look="pro"][data-skin]{
+  --bg:#060C17; --panel:#0B1526; --panel2:#0F1C31; --band:#0A1322; --line:#1A2942; --grid:#13213A; --trackbed:#1A2740;
+  --ink:#E8EEF7; --muted:#8495AF; --faint:#55657F; --hdr:#060B15; --hdr-line:#16243A; --hdr-ink:#E8EEF7; --hdr-muted:#8495AF;
+  --pacc:#2F7CF6; --accent2:#22D3EE; --lapA:#38BDF8; --lapB:#F59E0B; --cyan:#22D3EE;
+  --edge:#1A2942; --edge2:#26395A; --r:10px; --shadow:0 10px 30px rgba(0,0,0,.35);
+  --pnw:236px; --ptop:64px; --f-display:"Titillium Web","Barlow Condensed",sans-serif;
+}
+html[data-look="pro"] body{background:radial-gradient(1200px 600px at 70% -10%,rgba(47,124,246,.10),transparent 60%),linear-gradient(180deg,#07101F,#050A13 60%) fixed;}
+
+/* ---------- top bar ---------- */
+html[data-look="pro"] .top{position:sticky;top:0;background:rgba(6,11,21,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--hdr-line);box-shadow:none}
+html[data-look="pro"] .top::after{display:none}
+html[data-look="pro"] .top-in{max-width:none;min-height:var(--ptop);padding:0 18px 0 0;gap:10px 14px;flex-wrap:nowrap}
+html[data-look="pro"] .brand{width:var(--pnw);flex:0 0 var(--pnw);padding-left:20px;box-sizing:border-box;align-self:stretch;display:flex;align-items:center;border-right:1px solid var(--hdr-line)}
+html[data-look="pro"] .brand .logo{filter:none}
+html[data-look="pro"] .brand b{font-family:"Titillium Web",var(--f-display);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:1.3rem;color:#fff}
+html[data-look="pro"] .brand b span{color:#E5354B}
+html[data-look="pro"] .brand small{letter-spacing:.32em;color:var(--muted)}
+html[data-look="pro"] .mtabs{display:none!important}
+html[data-look="pro"] .psel{display:flex;gap:10px;min-width:0;flex:1 1 auto}
+html[data-look="pro"] .pf{display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:0 6px 0 12px;height:40px;min-width:0;flex:0 1 220px}
+html[data-look="pro"] .pf.pfs{flex:1 1 300px;max-width:420px}
+html[data-look="pro"] .pf svg{width:18px;height:18px;flex:none;fill:none;stroke:#C9D3E3;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+html[data-look="pro"] .pf select{flex:1;min-width:0;border:0!important;background:transparent!important;color:#fff;height:38px;font:600 .9rem var(--f-body);box-shadow:none!important;padding-left:2px}
+html[data-look="pro"] .pf select option{background:#0B1526;color:#fff}
+html[data-look="pro"] .pf:focus-within{border-color:var(--pacc)}
+html[data-look="pro"] .hdr-tools{flex-wrap:nowrap;gap:8px}
+html[data-look="pro"] .hdr-tools .btn{border-radius:8px;height:38px;clip-path:none;background:var(--panel);border:1px solid var(--line);color:#DCE4F0;font:600 .8rem var(--f-body);letter-spacing:.06em;text-transform:uppercase;box-shadow:none}
+html[data-look="pro"] .hdr-tools .btn:hover{border-color:var(--edge2);background:var(--panel2)}
+html[data-look="pro"] #btnLoad{background:linear-gradient(180deg,#1D5FD6,#1749A8);border-color:#3B82F6;color:#fff;display:inline-flex;gap:8px;align-items:center;padding:0 16px}
+html[data-look="pro"] #btnLoad svg{width:17px;height:17px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+html[data-look="pro"] .seg.lang{border-radius:8px;overflow:hidden;border:1px solid var(--line)}
+html[data-look="pro"] .seg.lang button{background:var(--panel);color:var(--muted);height:36px;min-width:36px;border:0;clip-path:none}
+html[data-look="pro"] .seg.lang button[aria-pressed="true"]{background:#E8EEF7;color:#0B1526}
+html[data-look="pro"] .verchip{background:transparent;border:0;color:#C9D3E3;font:600 .85rem var(--f-mono)}
+html[data-look="pro"] .psync{display:flex;flex-direction:column;line-height:1.15;padding-left:10px;min-width:150px}
+html[data-look="pro"] .psync b{font:600 .78rem var(--f-body);display:flex;align-items:center;gap:6px;color:#C9D3E3;white-space:nowrap}
+html[data-look="pro"] .psync b i{width:8px;height:8px;border-radius:50%;background:#5A6A85}
+html[data-look="pro"] .psync.on b{color:#2BE38A}html[data-look="pro"] .psync.on b i{background:#2BE38A;box-shadow:0 0 8px #2BE38A}
+html[data-look="pro"] .psync.off b i{background:#F5B83D}
+@media (max-width:1500px){html[data-look="pro"] .psync small{display:none}html[data-look="pro"] .psync{min-width:0}}
+html[data-look="pro"] .psync small{font-size:.7rem;color:var(--muted);white-space:nowrap}
+
+/* ---------- side menu ---------- */
+#proNav{display:none}
+html[data-look="pro"] #proNav{display:flex;flex-direction:column;position:fixed;left:0;top:var(--ptop);bottom:0;width:var(--pnw);z-index:25;padding:14px 12px;box-sizing:border-box;
+  background:linear-gradient(180deg,#07101D,#050A13);border-right:1px solid var(--hdr-line);overflow:auto}
+html[data-look="pro"] #proNav::after{content:"";position:absolute;left:-40px;bottom:120px;width:260px;height:140px;background:radial-gradient(closest-side,rgba(229,53,75,.22),transparent);pointer-events:none}
+html[data-look="pro"] #proNav nav{display:flex;flex-direction:column;gap:4px}
+html[data-look="pro"] .pn{display:flex;gap:14px;align-items:center;text-align:left;border:0;background:transparent;color:#C9D3E3;border-radius:10px;padding:11px 12px;cursor:pointer;border-left:3px solid transparent}
+html[data-look="pro"] .pn svg{width:26px;height:26px;flex:none;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;opacity:.85}
+html[data-look="pro"] .pn b{display:flex;align-items:center;gap:6px;font:600 .98rem var(--f-body);color:#fff}
+html[data-look="pro"] .pn small{display:block;font-size:.76rem;color:var(--muted);margin-top:1px}
+html[data-look="pro"] .pn:hover{background:rgba(255,255,255,.04)}
+html[data-look="pro"] .pn[aria-current="page"]{background:linear-gradient(90deg,#13284A,#0E1D35);border-left-color:var(--pacc);color:#fff}
+html[data-look="pro"] .pn[aria-current="page"] svg{opacity:1;stroke:#fff}
+html[data-look="pro"] .pn .livedot{width:7px;height:7px;border-radius:50%;background:#E5354B;display:inline-block}
+html[data-look="pro"] .pfoot{margin-top:auto;padding:24px 10px 6px;font:600 .9rem var(--f-display);letter-spacing:.42em;color:#AEB9CB;line-height:1.7;position:relative;z-index:1}
+html[data-look="pro"] main{max-width:none;margin:0 0 0 var(--pnw);padding:18px 22px 64px}
+html[data-look="pro"] .drawer{margin-left:var(--pnw)}
+
+/* second row of tabs (Telemetria · Giro · Confronto) on top of the page */
+html[data-look="pro"] main>.tabs.subtabs{display:flex;gap:6px;margin:0 0 14px;padding:0;background:none;border:0;min-height:0}
+html[data-look="pro"] main>.tabs.subtabs[hidden]{display:none}
+html[data-look="pro"] main>.tabs.subtabs .tab{min-height:36px;padding:0 18px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--muted);font:600 .82rem var(--f-body);letter-spacing:.06em;clip-path:none;box-shadow:none}
+html[data-look="pro"] main>.tabs.subtabs .tab[aria-selected="true"]{background:#13284A;border-color:var(--pacc);color:#fff}
+
+/* ---------- session strip ---------- */
+html[data-look="pro"] .hero.pstrip{display:flex;align-items:stretch;gap:0;padding:0;margin:0 0 16px;background:linear-gradient(180deg,#0D1A2E,#0A1424);border:1px solid var(--line);border-left:3px solid var(--pacc);border-radius:10px;overflow:hidden;min-height:96px}
+html[data-look="pro"] .pstrip .ps{padding:14px 18px;border-right:1px solid var(--line);display:flex;flex-direction:column;justify-content:center;min-width:0}
+html[data-look="pro"] .pstrip .ps:last-child{border-right:0}
+html[data-look="pro"] .pstrip .ps1{flex:1.5 1 260px}
+html[data-look="pro"] .pstrip .pl{font:600 .7rem var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+html[data-look="pro"] .pstrip .pn1{font:700 1.45rem "Titillium Web",sans-serif;color:#fff;display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:2px}
+html[data-look="pro"] .pstrip .pm{font-size:.8rem;color:var(--muted)}
+html[data-look="pro"] .plive{display:inline-flex;align-items:center;gap:6px;font:600 .78rem var(--f-body);color:#2BE38A}
+html[data-look="pro"] .plive i{width:8px;height:8px;border-radius:50%;background:#2BE38A;box-shadow:0 0 8px #2BE38A}
+html[data-look="pro"] .pstrip .ps2{flex-direction:row;align-items:center;gap:12px;flex:1 1 200px}
+html[data-look="pro"] .pstrip .ps2 b{display:block;font:700 .95rem "Titillium Web",sans-serif;color:#fff;line-height:1.2}
+html[data-look="pro"] .pstrip .ps2>div{min-width:0}
+html[data-look="pro"] .pstrip .ps2 small{color:var(--muted);font-size:.78rem}
+html[data-look="pro"] .pcar{width:92px;height:32px;flex:none}
+html[data-look="pro"] .ptrk{width:46px;height:32px;flex:none;color:#C9D3E3}
+html[data-look="pro"] .pstrip .pv{font:600 1.55rem var(--f-mono);color:#fff;line-height:1.2;white-space:nowrap}
+html[data-look="pro"] .pstrip .pv small{font-size:.9rem;color:#C9D3E3}
+html[data-look="pro"] .pstrip .pv.best{color:#B57BFF}html[data-look="pro"] .pstrip .pv.good{color:#2BE38A}
+html[data-look="pro"] .pstrip .pwx small{white-space:nowrap}
+html[data-look="pro"] .pstrip .ps>small{font-size:.76rem;color:var(--muted);white-space:nowrap}
+html[data-look="pro"] .pbar{height:5px;background:#1A2942;border-radius:3px;margin:5px 0 4px;min-width:110px}
+html[data-look="pro"] .pbar i{display:block;height:100%;border-radius:3px;background:linear-gradient(90deg,#20C673,#2BE38A)}
+html[data-look="pro"] .pstrip .pwx{flex-direction:row;align-items:center;gap:12px}
+html[data-look="pro"] .pstrip .pwx svg{width:34px;height:34px;fill:none;stroke:#FFC53D;stroke-width:1.7;stroke-linecap:round}
+html[data-look="pro"] .pstrip .pbtn{flex-direction:column;gap:6px;justify-content:center}
+html[data-look="pro"] .pstrip .pbtn .btn{height:32px;border-radius:8px;clip-path:none;font:600 .74rem var(--f-body);letter-spacing:.08em;text-transform:uppercase;background:var(--panel2);border:1px solid var(--line);color:#DCE4F0;box-shadow:none}
+html[data-look="pro"] .pstrip .pbtn .btn:hover{border-color:var(--pacc)}
+html[data-look="pro"] .hero:not(.pstrip){border-radius:10px}
+
+/* ---------- panels and controls ---------- */
+html[data-look="pro"] .panel,html[data-look="pro"] .wcard,html[data-look="pro"] .lbcard,html[data-look="pro"] .suscard{background:linear-gradient(180deg,#0D1829,#0A1322);border:1px solid var(--line);border-radius:10px;box-shadow:none;clip-path:none}
+html[data-look="pro"] .panel::before,html[data-look="pro"] .wcard::before{display:none}
+html[data-look="pro"] .panel:hover{border-color:var(--edge2)}
+html[data-look="pro"] .panel>.panel-h:first-child,html[data-look="pro"] .panel>h3:first-child{background:transparent;border-bottom:1px solid var(--line);border-radius:10px 10px 0 0}
+html[data-look="pro"] .panel-h h2,html[data-look="pro"] .panel-h h3,html[data-look="pro"] .panel>h3,html[data-look="pro"] .dt{font-family:"Titillium Web",var(--f-display);font-weight:700;font-size:.86rem;letter-spacing:.12em;text-transform:uppercase;color:#fff}
+html[data-look="pro"] .panel-h h3::before,html[data-look="pro"] .panel-h h2::before,html[data-look="pro"] .panel>h3::before{display:none}
+html[data-look="pro"] .btn{clip-path:none;border-radius:8px;background:var(--panel2);border:1px solid var(--line);box-shadow:none}
+html[data-look="pro"] .btn:hover{border-color:var(--edge2);background:#132440}
+html[data-look="pro"] .btn.primary{background:linear-gradient(180deg,#1D5FD6,#1749A8);border-color:#3B82F6;color:#fff}
+html[data-look="pro"] select,html[data-look="pro"] input[type=number],html[data-look="pro"] input[type=text],html[data-look="pro"] input:not([type]),html[data-look="pro"] textarea{background:#08111F!important;border-color:var(--line)!important;border-radius:8px!important}
+html[data-look="pro"] select:focus,html[data-look="pro"] input:focus,html[data-look="pro"] textarea:focus{border-color:var(--pacc)!important;box-shadow:0 0 0 2px rgba(47,124,246,.25)}
+html[data-look="pro"] .seg button[aria-pressed="true"],html[data-look="pro"] .tog[aria-pressed="true"]{background:#13284A;border-color:var(--pacc);color:#fff}
+html[data-look="pro"] .kpi{background:linear-gradient(180deg,#0D1829,#0A1322);border:1px solid var(--line);border-radius:10px;clip-path:none}
+html[data-look="pro"] .kpi::after{display:none}
+html[data-look="pro"] th{background:#0C1729!important;color:var(--muted)}
+html[data-look="pro"] td{border-bottom-color:#132138}
+html[data-look="pro"] .sutabs button{clip-path:none;border-radius:8px;border:1px solid var(--line);background:var(--panel);font:600 .8rem var(--f-body);letter-spacing:.08em}
+html[data-look="pro"] .sutabs button[aria-selected="true"]{background:#13284A;border-color:var(--pacc);color:#fff}
+html[data-look="pro"] .sutabs[hidden]{display:none}
+html[data-look="pro"] .modal .mbox{border-radius:12px;background:#0B1526;border:1px solid var(--line)}
+html[data-look="pro"] .lookrow{margin:4px 0 14px}
+html[data-look="pro"] .dred{background:var(--pacc)!important}
+
+/* ---------- phone and narrow screens: the side menu becomes a row under the top bar ---------- */
+@media (max-width:1100px){
+  html[data-look="pro"]{--pnw:76px}
+  html[data-look="pro"] .brand{padding-left:12px}html[data-look="pro"] .brand .bt{display:none}
+  html[data-look="pro"] .pn{justify-content:center;padding:12px 6px}html[data-look="pro"] .pn span{display:none}
+  html[data-look="pro"] .pfoot{display:none}
+  html[data-look="pro"] .psync{display:none}
+}
+@media (max-width:760px){
+  html[data-look="pro"]{--pnw:0px}
+  html[data-look="pro"] .top-in{flex-wrap:wrap;padding:6px 10px;gap:6px}
+  html[data-look="pro"] .brand{width:auto;flex:0 0 auto;border:0;padding-left:0}
+  html[data-look="pro"] .psel{order:3;flex:1 1 100%;flex-wrap:wrap;gap:6px}
+  html[data-look="pro"] .pf{flex:1 1 140px;height:36px}html[data-look="pro"] .pf.pfs{flex:1 1 100%;max-width:none}
+  html[data-look="pro"] .hdr-tools{flex-wrap:wrap;margin-left:auto}
+  html[data-look="pro"] #proNav{position:relative;top:0;width:auto;bottom:auto;flex-direction:row;padding:6px 8px;overflow-x:auto;z-index:24;border-right:0;border-bottom:1px solid var(--hdr-line)}
+  html[data-look="pro"] #proNav::after{display:none}
+  html[data-look="pro"] #proNav nav{flex-direction:row;gap:4px}
+  html[data-look="pro"] .pn{padding:8px 10px;border-left:0;border-bottom:2px solid transparent;border-radius:8px}
+  html[data-look="pro"] .pn[aria-current="page"]{border-bottom-color:var(--pacc)}
+  html[data-look="pro"] .pn svg{width:22px;height:22px}
+  html[data-look="pro"] .pn{flex-direction:column;gap:3px;min-width:66px}html[data-look="pro"] .pn span{display:block;text-align:center}
+  html[data-look="pro"] .pn b{font-size:.68rem;font-weight:600;justify-content:center;white-space:nowrap}html[data-look="pro"] .pn small{display:none}
+  html[data-look="pro"] #botnav{display:none!important}
+  html[data-look="pro"] main{padding-bottom:40px!important}
+  html[data-look="pro"] main{margin:0;padding:12px 10px 64px}
+  html[data-look="pro"] .drawer{margin-left:0}
+  html[data-look="pro"] .hero.pstrip{flex-wrap:wrap}
+  html[data-look="pro"] .pstrip .ps{flex:1 1 45%;border-bottom:1px solid var(--line);padding:10px 12px}
+  html[data-look="pro"] .pstrip .ps1{flex-basis:100%}
+}
+
+html[data-look="pro"] #rcBar{left:var(--pnw)}
+@media (max-width:760px){
+  html[data-look="pro"] .pstrip .pbtn{flex-direction:row;flex-basis:100%;justify-content:flex-start}
+  html[data-look="pro"] .pcar{display:none}
+}
+/* other looks: the pieces added for Pro step aside, the session menu stays in the header */
+html:not([data-look="pro"]) .psel{display:contents}
+html:not([data-look="pro"]) .psel .pf:not(.pfs),html:not([data-look="pro"]) .psel svg,html:not([data-look="pro"]) #proSync,html:not([data-look="pro"]) #btnLoad svg{display:none}
+html:not([data-look="pro"]) .psel .pfs{display:contents}

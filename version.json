@@ -1,19 +1,17 @@
 {
- "version": "2.7.0",
+ "version": "2.8.0",
  "date": "2026-10-27",
  "notes": [
-  "Telemetria automatica dalla cartella di LMU",
-  "Riferimenti (telemetrie dei piloti veloci) come giro B",
-  "Il cambio ha funzionato? nel Setup",
-  "Font inclusi nell'app",
-  "Test automatico di tutte le schermate"
+  "Nuova grafica Pro con menu laterale",
+  "Dashboard, Telemetria, Race Engineer e Setup Builder ridisegnati",
+  "La grafica Carbon resta in Personalizza"
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "c6cbe2b9bb06f4a36b57b5834b737eaea9fde5ec6a15700f777c0efbb5521a2e"
+  "sha256": "630cb0c77d3a961b7bf7009f61259696ba09359008f87c0f5e8d47c36908e6fb"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "97ae45258528424edb32a5e8247bbb9758aa95ce8f07172ae257df011d9927bb"
+  "sha256": "02dd8cda3cffa3fedbd1dacf98e7f5d9ea33bb0a36b8fdb3b0caebcdbd44a5ee"
  }
 }
