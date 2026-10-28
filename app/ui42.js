@@ -2,9 +2,9 @@
 // What it adds reads the same telemetry as the rest of the app; nothing here is estimated or made up.
 
 // the engineer's findings for a session, from telemetry only unless the Setup page already read a .svm for it
-function proFindings(S){try{let laps=S.laps.filter(l=>l.complete&&l.type==='lanciato');if(!laps.length)laps=S.laps.filter(l=>l.complete);laps=[...laps].sort((a,b)=>a.time-b.time).slice(0,5);if(!laps.length)return null;
+function proFindings(S){try{let laps=engLaps(S);if(!laps.length)return null;
   let D=typeof DIAG!=='undefined'&&DIAG&&DIAG.S===S?DIAG:null;
-  if(!D){const k='pdiag';D=S.cache.get(k);if(!D){D=diagnose(S,laps,null);D.S=S;D.su=null;S.cache.set(k,D);}}
+  if(!D){const k='pdiag:'+engLapMode();D=S.cache.get(k);if(!D){D=diagnose(S,laps,null);D.S=S;D.su=null;S.cache.set(k,D);}}
   return {D,laps,F:engFindings(D,S,D.su||null,laps)};}catch(e){console.error(e);return null;}}
 const PSEV=[['OK','ok'],['Medio','mid'],['Alto','hi']];
 function proFindRow(f,i){const s=PSEV[f.s]||PSEV[0];const fx0=f.fx.find(x=>!x.conflict);
@@ -15,7 +15,7 @@ function proAIHTML(S){const R=proFindings(S);if(!R)return '';const F=[...R.F].so
   return `<div class="panel pai"><div class="dt"><span class="psp">✦</span> ${tr('Analisi IA')}<span class="pai-r">${tr('Data Engineer')} <b>AI</b></span></div>
     <div class="pai-h">${n?`${n} ${n===1?tr('elemento da guardare'):tr('elementi da guardare')}`:tr('Niente di urgente')}<button type="button" class="btn pai-all">${tr('Vedi tutti')} →</button></div>
     ${list.map(proFindRow).join('')||`<p class="muted small">${tr('Servono giri completi.')}</p>`}
-    <p class="muted small pai-n">${R.D.su?esc(R.D.su.name):tr('Solo telemetria: per i valori del setup scegli il .svm in Race Engineer.')} · ${R.laps.length} ${tr('giri analizzati')}</p></div>`;}
+    <p class="muted small pai-n">${R.D.su?esc(R.D.su.name):tr('Solo telemetria: per i valori del setup scegli il .svm in Race Engineer.')} · ${esc(engLapsText(R.laps))}</p></div>`;}
 
 // track facts measured on the best lap
 function proTrackFacts(S){const d=dashData(S);if(!d)return null;const step=5;let run=0,best=0,full=0;const th=d.thr,br=d.brk;
@@ -67,15 +67,15 @@ function proTelDraw(S){const t=$('#stBody .dtel.ptel');if(!t)return;const L=S.la
 
 (function(){const st=document.createElement('style');st.textContent=`
 html[data-look="pro"] .dash{font-family:"Titillium Web",sans-serif}
-html[data-look="pro"] .dash .dt{font:700 .86rem "Titillium Web",sans-serif;letter-spacing:.12em;color:#fff}html[data-look="pro"] .dash .dt b{color:#fff}
+html[data-look="pro"] .dash .dt{font:700 .92rem "Titillium Web",sans-serif;letter-spacing:.06em;color:#fff}html[data-look="pro"] .dash .dt b{color:#fff}
 html[data-look="pro"] .dbig{font:600 clamp(2.6rem,4.6vw,4.4rem)/1 "JetBrains Mono",monospace;color:#fff;letter-spacing:-.03em}
-html[data-look="pro"] .dl{font:600 .72rem "Titillium Web",sans-serif;letter-spacing:.14em}html[data-look="pro"] .dv{font:600 1.5rem "JetBrains Mono",monospace}
+html[data-look="pro"] .dl{font:600 .78rem "Titillium Web",sans-serif;letter-spacing:.05em}html[data-look="pro"] .dv{font:600 1.5rem "JetBrains Mono",monospace}
 html[data-look="pro"] .dideal{font:500 .9rem "Titillium Web",sans-serif}html[data-look="pro"] .dideal b{font:600 1.05rem "JetBrains Mono",monospace}
 html[data-look="pro"] .dred{width:120px;height:3px}
 html[data-look="pro"] .dmap.pmapx{display:grid;grid-template-columns:minmax(0,1fr) 190px;gap:10px;padding:46px 12px 12px!important}
 html[data-look="pro"] .dmap.pmapx svg{height:540px}
 .pinfo{display:flex;flex-direction:column;gap:8px}.pinfo>div{background:rgba(255,255,255,.025);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
-.pinfo span{display:block;font:600 .68rem "Titillium Web",sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}.pinfo b{display:block;font:600 1.15rem "JetBrains Mono",monospace;color:#fff;margin-top:2px}.pinfo small{color:var(--muted);font-size:.75rem}
+.pinfo span{display:block;font:600 .78rem "Titillium Web",sans-serif;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}.pinfo b{display:block;font:600 1.15rem "JetBrains Mono",monospace;color:#fff;margin-top:2px}.pinfo small{color:var(--muted);font-size:.75rem}
 html[data-look="pro"] .dash.pdash .dlaps,html[data-look="pro"] .dash.pdash .den{display:none}
 @media (min-width:1101px){html[data-look="pro"] .dash.pdash{grid-template-columns:minmax(0,1.45fr) minmax(0,1fr)}html[data-look="pro"] .dash.pdash .dside{grid-column:2}html[data-look="pro"] .dash.pdash .pai{grid-column:2}}
 .ptel .plap{position:absolute;right:14px;top:9px;display:flex;gap:6px;align-items:center}.ptel .plap b{font:600 .85rem "JetBrains Mono",monospace;color:#fff;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:6px 12px;white-space:nowrap}
@@ -88,7 +88,7 @@ html[data-look="pro"] .dash.pdash .dlaps,html[data-look="pro"] .dash.pdash .den{
 .pfr .pfi{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;font-weight:700;font-size:1.05rem}
 .pfr.s2 .pfi{background:rgba(255,59,78,.15);color:#FF3B4E}.pfr.s1 .pfi{background:var(--pwarnbg);color:var(--pwarn)}.pfr.s0 .pfi{background:rgba(43,227,138,.12);color:#2BE38A}
 .pfr b{display:block;color:#fff;font-size:.92rem}.pfr.s2 b{color:#FF5A6A}.pfr.s1 b{color:var(--pwarn)}
-.pfr small{display:block;color:var(--psil3);font-size:.78rem;margin-top:2px}.pfr .pfx{color:var(--pacc2)}
+.pfr small{display:block;color:var(--psil3);font-size:.86rem;margin-top:2px}.pfr .pfx{color:var(--pacc2)}
 .pfr em{font-style:normal;font:600 .72rem "Titillium Web",sans-serif;padding:4px 10px;border-radius:6px;white-space:nowrap}
 .pfr em.hi{background:rgba(255,59,78,.15);color:#FF5A6A}.pfr em.mid{background:var(--pwarnbg);color:var(--pwarn)}.pfr em.ok{background:rgba(43,227,138,.12);color:#2BE38A}
 .pai-n{margin:6px 0 0}

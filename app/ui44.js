@@ -18,11 +18,11 @@ function proPrevRun(S){const H=LS.get('suhist',{});const cur=H[S.id];if(!cur)ret
 // speed of the best lap before and now, when the previous session is still loaded
 function proTestChart(S,P){const B=S.best,PB=P?.best;if(!B||!PB)return '';const gA=lapGrid(P,PB,10),gB=lapGrid(S,B,10);const a=gA.get('Ground Speed'),b=gB.get('Ground Speed');if(!a||!b)return '';
   const n=Math.min(a.length,b.length),W=600,H=150;let hi=0;for(let i=0;i<n;i++)hi=Math.max(hi,a[i],b[i]);hi=Math.ceil(hi/20)*20;
-  const X=i=>(34+i/(n-1)*(W-40)).toFixed(1),Y=v=>(8+(1-v/hi)*(H-28)).toFixed(1);const pl=(s,c)=>`<polyline points="${Array.from({length:n},(_,i)=>X(i)+','+Y(s[i])).join(' ')}" fill="none" stroke="${c}" stroke-width="1.4"/>`;
+  const X=i=>(34+i/(n-1)*(W-40)).toFixed(1),Y=v=>(8+(1-v/hi)*(H-28)).toFixed(1);const pl=(s,c)=>`<polyline points="${Array.from({length:n},(_,i)=>X(i)+','+Y(s[i])).join(' ')}" fill="none" style="stroke:${c}" stroke-width="1.4"/>`;
   const sa=twLapSectors(P,PB),sb=twLapSectors(S,B);
   const secs=sa&&sb?`<div class="ptsec">${[0,1,2].map(k=>{const d=sb[k]-sa[k];const z=Math.abs(d)<5e-4;return `<span>S${k+1} <b class="${z?'muted':d<0?'pos':'neg'}">${z?'':d>0?'+':'−'}${Math.abs(d).toFixed(3)}</b></span>`;}).join('')}</div>`:'';
-  return `<div class="ptc"><div class="ptl"><span><i style="background:#FF5A6A"></i>${tr('Prima')} · ${fmtLap(PB.time)}</span><span><i style="background:#2BE38A"></i>${tr('Ora')} · ${fmtLap(B.time)}</span></div>${secs}
-    <svg viewBox="0 0 ${W} ${H}"><g class="pg">${[0,.5,1].map(f=>`<line x1="34" x2="${W-6}" y1="${8+f*(H-28)}" y2="${8+f*(H-28)}"/><text x="30" y="${12+f*(H-28)}" text-anchor="end">${Math.round(hi*(1-f))}</text>`).join('')}</g>${pl(a,'#FF5A6A')}${pl(b,'#2BE38A')}</svg></div>`;}
+  return `<div class="ptc"><div class="ptl"><span><i style="background:var(--lapB)"></i>${tr('Prima')} · ${fmtLap(PB.time)}</span><span><i style="background:var(--lapA)"></i>${tr('Ora')} · ${fmtLap(B.time)}</span></div>${secs}
+    <svg viewBox="0 0 ${W} ${H}"><g class="pg">${[0,.5,1].map(f=>`<line x1="34" x2="${W-6}" y1="${8+f*(H-28)}" y2="${8+f*(H-28)}"/><text x="30" y="${12+f*(H-28)}" text-anchor="end">${Math.round(hi*(1-f))}</text>`).join('')}</g>${pl(a,'var(--lapB)')}${pl(b,'var(--lapA)')}</svg></div>`;}
 
 function proEngHTML(S,D,laps){const F=engFindings(D,S,D.su||null,laps);const P=engPlan(F);const done=LS.get('pdone',{});
   const diag=[...F].sort((a,b)=>b.s-a.s||ENG_ORDER.indexOf(a.a)-ENG_ORDER.indexOf(b.a)).filter((f,i)=>f.s>0||i<4).slice(0,6);
@@ -31,7 +31,7 @@ function proEngHTML(S,D,laps){const F=engFindings(D,S,D.su||null,laps);const P=e
   const conf=laps.length>=3?tr('alta'):laps.length===2?tr('media'):tr('bassa');
   return `<div class="pre1"><div class="panel pact"><div class="panel-h"><h3>${tr('Azioni rapide')}</h3><span class="muted small">${tr('cosa vuoi dalla macchina')}</span></div>
       <div class="pactg">${PRO_ACT.map(([id,l,,c])=>`<button type="button" class="pab" data-a="${id}" style="--c:${c}"><svg viewBox="0 0 24 24" aria-hidden="true">${PRO_ACT_IC[id]}</svg><span>${tr(l)}</span></button>`).join('')}</div><div id="pActBox"></div></div>
-    <div class="panel pdiag"><div class="panel-h"><h3>${tr('Diagnosi attuale')}</h3><span class="muted small">${tr('basata sugli ultimi')} ${laps.length} ${laps.length===1?tr('giro'):tr('giri')} · ${tr('affidabilità')} ${conf}</span></div>
+    <div class="panel pdiag"><div class="panel-h"><h3>${tr('Diagnosi attuale')}</h3><span class="pdlm"><span class="muted small">${esc(engLapsText(laps))} · ${tr('affidabilità')} ${conf}</span><span class="seg" role="group" aria-label="${esc(tr('Giri da analizzare'))}"><button type="button" data-lm="best" aria-pressed="${engLapMode()==='best'}" title="${esc(tr('I giri puliti: il quadro più affidabile del setup'))}">${tr('Più veloci')}</button><button type="button" data-lm="last" aria-pressed="${engLapMode()==='last'}" title="${esc(tr('Dopo una modifica al setup: guarda solo come va adesso'))}">${tr('Ultimi')}</button></span></span></div>
       <table class="lbt pdt"><thead><tr><th class="l">${tr('Problema')}</th><th class="l">${tr('Area')}</th><th>${tr('Gravità')}</th><th class="l">${tr('Dati')}</th></tr></thead><tbody>
       ${diag.map(f=>`<tr class="s${f.s}"><td class="l"><span class="pdi">${f.s===2?'!':f.s===1?'⚠':'✓'}</span><b>${esc(f.t)}</b></td><td class="l muted">${area(f.a)}</td><td>${sev(f.s)}</td><td class="l small">${esc(f.ev.slice(0,2).join(' · '))}</td></tr>`).join('')}</tbody></table></div></div>
    <div class="pre2"><div class="panel pplan"><div class="panel-h"><h3>${tr('Piano d\'azione')}</h3><span class="muted small">${tr('una modifica alla volta · 3–5 giri per prova')}</span></div>
@@ -42,7 +42,7 @@ function proEngHTML(S,D,laps){const F=engFindings(D,S,D.su||null,laps);const P=e
     <div class="panel ptest" id="pTest"><div class="panel-h"><h3>${tr('Confronto ultimo test')}</h3></div></div></div>`;}
 
 (function(){const re=renderEng;window.renderEng=renderEng=function(){re();const el=$('#suEng');const S=active()?.S;const D=typeof DIAG!=='undefined'?DIAG:null;if(!el||!S||!D||D.S!==S||!proLook())return;
-  try{let laps=S.laps.filter(l=>l.complete&&l.type==='lanciato');if(!laps.length)laps=S.laps.filter(l=>l.complete);laps=[...laps].sort((a,b)=>a.time-b.time).slice(0,5);
+  try{let laps=engLaps(S);
     const head=el.querySelector('.ehead');if(!head)return;head.classList.add('pehead');head.insertAdjacentHTML('afterend',`<div class="pre">${proEngHTML(S,D,laps)}</div>`);
     // the comparison with the previous run goes in the right column, with the speed of both best laps when that session is loaded
     const pt=$('#pTest'),cm=el.querySelector('.ecmp');if(pt&&cm){const P=proPrevRun(S);const PS=P&&lds().find(x=>x.id===P.id);
@@ -51,6 +51,7 @@ function proEngHTML(S,D,laps){const F=engFindings(D,S,D.su||null,laps);const P=e
       const h=cm.querySelector('.panel-h span');if(h)pt.querySelector('.panel-h').append(h.cloneNode(true));cm.remove();}
     el.querySelectorAll('.pab').forEach(b=>b.onclick=()=>{const on=b.getAttribute('aria-pressed')!=='true';el.querySelectorAll('.pab').forEach(x=>x.setAttribute('aria-pressed',x===b&&on));
       const box=$('#pActBox');box.innerHTML=on?proActBox(b.dataset.a):'';box.querySelectorAll('[data-gp]').forEach(c=>c.onclick=()=>openGuide(c.dataset.gp));});
+    el.querySelectorAll('.pdlm [data-lm]').forEach(b=>b.onclick=()=>{LS.set('eng:laps',b.dataset.lm);RENDER.setup();});
     el.querySelectorAll('.ppd').forEach(b=>b.onclick=()=>{const d=LS.get('pdone',{});d[b.dataset.k]=!d[b.dataset.k];if(!d[b.dataset.k])delete d[b.dataset.k];LS.set('pdone',d);renderEng();});
     const g=$('#pToGen');if(g)g.onclick=()=>{LS.set('su:tab','gen');$('#proNav .pn[data-n="setb"]')?.click();};
     const s=$('#pToSet');if(s)s.onclick=()=>{LS.set('su:tab','set');$('#proNav .pn[data-n="setb"]')?.click();};
@@ -100,12 +101,13 @@ html[data-look="pro"] .ecount span{border-radius:10px;background:var(--panel2);b
 .pab svg{width:26px;height:26px;flex:none;fill:none;stroke:var(--c);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .pab:hover{border-color:var(--c)}.pab[aria-pressed="true"]{border-color:var(--c);background:color-mix(in srgb,var(--c) 12%,transparent)}
 .pactb{margin-top:12px;border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:rgba(255,255,255,.02)}.pactb ol{margin:8px 0;padding-left:20px}.pactb li{margin:3px 0}
+.pdlm{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end}.pdlm .seg button{padding:4px 10px;font-size:.8rem}
 .pdt{table-layout:fixed;width:100%}.pdt th:nth-child(1){width:34%}.pdt th:nth-child(2){width:18%}.pdt th:nth-child(3){width:12%}.pdt td{vertical-align:top;white-space:normal!important;overflow-wrap:anywhere}.pdt td b{color:#fff}.pdt .pdi{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:6px;margin-right:8px;font-weight:700;font-size:.8rem}
 .pdt tr.s2 .pdi{background:rgba(255,59,78,.15);color:#FF3B4E}.pdt tr.s1 .pdi{background:var(--pwarnbg);color:var(--pwarn)}.pdt tr.s0 .pdi{background:rgba(43,227,138,.12);color:#2BE38A}
 .pdt em{font-style:normal;font:600 .72rem "Titillium Web",sans-serif;padding:4px 10px;border-radius:6px;white-space:nowrap}.pdt em.hi{background:rgba(255,59,78,.15);color:#FF5A6A}.pdt em.mid{background:var(--pwarnbg);color:var(--pwarn)}.pdt em.ok{background:rgba(43,227,138,.12);color:#2BE38A}
 .ppl{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
 .ppn{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--psel);color:#fff;font-weight:700}
-.ppl b{color:#fff}.ppl small{display:block;color:var(--muted);margin-top:2px}.ppl.done{opacity:.6}.ppl.done .ppn{background:#14532D}
+.ppl b{color:#fff}.ppl small{display:block;color:var(--muted);margin-top:2px;font-size:.86rem}.ppl.done{opacity:.6}.ppl.done .ppn{background:#14532D}
 .ppd[aria-pressed="true"]{color:#2BE38A;border-color:#2BE38A}
 .ppb{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 .ptc svg{width:100%;height:auto;display:block}.ptc .pg line{stroke:rgba(255,255,255,.07)}.ptc .pg text{fill:var(--muted);font:10px "JetBrains Mono",monospace}

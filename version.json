@@ -1,16 +1,18 @@
 {
- "version": "2.8.2",
- "date": "2026-10-27",
+ "version": "2.9.0",
+ "date": "2026-10-28",
  "notes": [
-  "Logo della squadra visibile nel menu laterale",
-  "Pagina iniziale in argento e oro"
+  "Affidabilità dei dati a parole con il perché",
+  "Race Engineer: giri letti in chiaro, più veloci o ultimi",
+  "Confronto test con avvisi sulle condizioni",
+  "Fascia più chiara e testi più leggibili"
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "44830ad03775667dcdc7e8fa6d1ec3bf7b388676ea961e291bb49b813565fccf"
+  "sha256": "d95eae29c9fea8153768dd55f1534920aa61f869f22971a2400c15119651e4ab"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "69ec73cd8dc7ffd0e02f842378b01b498b186387f3769daeef7f5c1d3a22e106"
+  "sha256": "ea54108aba61ccea2c644f301b671ff74bf715d812766a530049761d97004d30"
  }
 }

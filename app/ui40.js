@@ -67,21 +67,30 @@ function engCompareHTML(S){const H=LS.get('suhist',{});const cur=H[S.id];if(!cur
     return `<li><b>${esc(p.t)}</b> → ${esc(SETUP_LABELS[p.key]||p.key)}: ${esc(p.dir)} · ${changed?(still?`<span class="neg">${tr('cambiato, ma il problema c\'è ancora')}</span>`:`<span class="pos">${tr('cambiato e il problema non c\'è più')}</span>`):`<span class="muted">${tr('non cambiato')}</span>`}</li>`;}).join('');
   const dT=Number.isFinite(cur.track)&&Number.isFinite(prev.track)?cur.track-prev.track:NaN;const dp=cur.pace-prev.pace;
   const verdict=!diff.length?tr('Il setup è lo stesso della prova precedente: le differenze vengono da pista, gomme o guida.'):Number.isFinite(dp)?(dp<-0.05?`${tr('Il passo è migliorato di')} ${fx(-dp,3)} s.`:dp>0.05?`${tr('Il passo è peggiorato di')} ${fx(dp,3)} s.`:tr('Il passo è rimasto uguale: guarda i numeri qui sotto per capire cosa è cambiato.')):'';
+  // what else changed between the two runs: if any, the comparison is not only the setup
+  const W=[];const fuel=x=>x.vals?.['GENERAL|FuelCapacitySetting']||x.vals?.['GENERAL|FuelSetting'],cmpd=x=>Object.entries(x.vals||{}).filter(([k])=>/\|CompoundSetting$/.test(k)).map(([,v])=>v).join('/');
+  if(fuel(prev)&&fuel(cur)&&fuel(prev)!==fuel(cur))W.push(`${tr('carburante diverso')} (${esc(fuel(prev))} → ${esc(fuel(cur))}): ${tr('il peso cambia i tempi')}`);
+  if(cmpd(prev)&&cmpd(cur)&&cmpd(prev)!==cmpd(cur))W.push(`${tr('mescola diversa')} (${esc(cmpd(prev))} → ${esc(cmpd(cur))})`);
+  if(prev.cond&&cur.cond&&prev.cond!==cur.cond)W.push(`${tr('meteo diverso')} (${esc(tr(prev.cond))} → ${esc(tr(cur.cond))})`);
+  if(Number.isFinite(dT)&&Math.abs(dT)>3)W.push(`${tr('pista')} ${dT>0?'+':''}${fx(dT,1)} °C`);
+  if((prev.n||0)<3||(cur.n||0)<3)W.push(`${tr('pochi giri buoni')} (${prev.n||0} → ${cur.n||0}): ${tr('servono almeno 3 giri per prova')}`);
+  if(prev.lm&&cur.lm&&prev.lm!==cur.lm)W.push(tr('le due prove sono state analizzate su giri scelti in modo diverso (più veloci / ultimi)'));
   return `<div class="panel ecmp"><div class="panel-h"><h3>${tr('Il cambio ha funzionato?')}</h3><span class="muted small">${tr('rispetto a')} ${esc(prev.when)} · ${esc(prev.su||'')}</span></div>
-    <p class="ecv">${verdict}${Number.isFinite(dT)&&Math.abs(dT)>3?` <span class="neg">${tr('Attenzione: la pista era')} ${dT>0?'+':''}${fx(dT,1)} °C ${tr('rispetto a prima')}.</span>`:''}</p>
+    <p class="ecv">${verdict}</p>${W.length?`<div class="ecw"><b>${tr('Prima di fidarti del confronto')}:</b><ul>${W.map(w=>`<li>${w}</li>`).join('')}</ul></div>`:`<p class="ecok small">✓ ${tr('Stesse condizioni: la differenza viene dal setup e dalla guida.')}</p>`}
     <div class="ecg"><div><h4>${tr('Cosa hai cambiato')}</h4>${diff.length?`<ul class="small">${diff.map(x=>`<li>${x}</li>`).join('')}</ul>`:`<p class="muted small">${tr('Niente.')}</p>`}
       ${plan?`<h4 style="margin-top:10px">${tr('Il piano della prova precedente')}</h4><ul class="small">${plan}</ul>`:''}</div>
       <div class="tw"><table class="lbt"><thead><tr><th class="l"></th><th>${tr('Prima')}</th><th>${tr('Ora')}</th><th>Δ</th><th></th></tr></thead><tbody>${rows}</tbody></table></div></div></div>`;}
 (function(){const re=renderEng;window.renderEng=renderEng=function(){re();const S=active()?.S;const D=typeof DIAG!=='undefined'?DIAG:null;const el=$('#suEng');if(!el||!S||!D||D.S!==S)return;
-  try{let laps=S.laps.filter(l=>l.complete&&l.type==='lanciato');if(!laps.length)laps=S.laps.filter(l=>l.complete);laps=[...laps].sort((a,b)=>a.time-b.time).slice(0,5);
+  try{let laps=engLaps(S);
     const H=LS.get('suhist',{});if(H[S.id]){const F=engFindings(D,S,D.su,laps);H[S.id].m=engMetrics(D,S,laps);H[S.id].plan=engPlan(F).map(f=>{const x=f.fx.find(x=>!x.conflict&&x.key);return x?{t:f.t,key:x.key,dir:x.dir}:null;}).filter(Boolean);
-      H[S.id].open=F.filter(f=>f.s>0).map(f=>f.t);LS.set('suhist',H);}
+      H[S.id].open=F.filter(f=>f.s>0).map(f=>f.t);H[S.id].lm=engLapMode();LS.set('suhist',H);}
     el.querySelector('.ehead')?.insertAdjacentHTML('afterend',engCompareHTML(S));}catch(e){console.error(e);}};})();
 
 (function(){const st=document.createElement('style');st.textContent=`
 .ecmp{margin-bottom:14px}.ecv{margin:0 0 10px;font-size:.95rem}.ecg{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:18px}.ecg h4{margin:0 0 6px;font:600 .74rem var(--f-display);letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}.ecg ul{margin:0;padding-left:18px}.ecg li{margin:3px 0}
 .ecmp td.pos,.ecmp .pos{color:var(--good)}.ecmp td.neg,.ecmp .neg{color:var(--bad)}
 .ldpc{grid-column:1/-1}
+.ecw{border:1px solid rgba(255,159,67,.4);background:rgba(255,159,67,.08);border-radius:8px;padding:8px 12px;margin:0 0 10px;font-size:.88rem}.ecw ul{margin:4px 0 0;padding-left:18px}.ecok{color:#2BE38A;margin:0 0 10px}
 @media (max-width:900px){.ecg{grid-template-columns:1fr}}`;document.head.appendChild(st);})();
 // the setup file menu was bound to the first version of RENDER.setup, before the other panels hooked in:
 // changing the .svm did not refresh the engineer, tyres, suspension and history. Always call the current one.

@@ -26,11 +26,11 @@ html[data-look="pro"][data-pal="blu"],html[data-look="pro"][data-pal="blu"][data
   --psil:#C9D3E3; --psil2:#DCE4F0; --psil3:#AEB9CB; --pinput:#08111F; --pth:#0C1729; --pline2:#132138; --pbrand:#E5354B;
   --pcar1:#0E2240; --pcar2:#1B3E6E; --pcar3:#16335C; --pwarn:#FFC53D; --pwarnbg:rgba(255,197,61,.15);
 }
-html[data-look="pro"] body{background:radial-gradient(1200px 600px at 70% -10%,var(--pglow),transparent 60%),linear-gradient(180deg,var(--pbody1),var(--pbody2) 60%) fixed;}
+html[data-look="pro"] body{background:linear-gradient(180deg,var(--pbody1),var(--pbody2) 60%) fixed;}
 /* gold: metallic text for the brand and the selected item, silver for the rest */
-html[data-look="pro"]:not([data-pal="blu"]) .brand b span{background:linear-gradient(180deg,#F3DE9A,#C9A54C 55%,#9C7B2C);-webkit-background-clip:text;background-clip:text;color:transparent}
+html[data-look="pro"]:not([data-pal="blu"]) .brand b span{color:var(--pacc)}
 html[data-look="pro"]:not([data-pal="blu"]) .brand .logo stop:first-child{stop-color:#E6C877}html[data-look="pro"]:not([data-pal="blu"]) .brand .logo stop:last-child{stop-color:#8C6D24}
-html[data-look="pro"]:not([data-pal="blu"]) .pfoot{background:linear-gradient(180deg,#E3E6EA,#8F9298);-webkit-background-clip:text;background-clip:text;color:transparent}
+
 html[data-look="pro"]:not([data-pal="blu"]) .pn[aria-current="page"] svg{stroke:var(--pacc2)}
 html[data-look="pro"]:not([data-pal="blu"]) .pstrip .pv.best{color:#E6C877}
 
@@ -72,7 +72,7 @@ html[data-look="pro"] .psync small{font-size:.7rem;color:var(--muted);white-spac
 #proNav{display:none}
 html[data-look="pro"] #proNav{display:flex;flex-direction:column;position:fixed;left:0;top:var(--ptop);bottom:0;width:var(--pnw);z-index:25;padding:14px 12px;box-sizing:border-box;
   background:linear-gradient(180deg,var(--pside1),var(--pbody2));border-right:1px solid var(--hdr-line);overflow:auto}
-html[data-look="pro"] #proNav::after{content:"";position:absolute;left:-40px;bottom:120px;width:260px;height:140px;background:radial-gradient(closest-side,var(--psideglow),transparent);pointer-events:none}
+html[data-look="pro"] #proNav::after{display:none;content:"";position:absolute;left:-40px;bottom:120px;width:260px;height:140px;background:radial-gradient(closest-side,var(--psideglow),transparent);pointer-events:none}
 html[data-look="pro"] #proNav nav{display:flex;flex-direction:column;gap:4px}
 html[data-look="pro"] .pn{display:flex;gap:14px;align-items:center;text-align:left;border:0;background:transparent;color:var(--psil);border-radius:10px;padding:11px 12px;cursor:pointer;border-left:3px solid transparent}
 html[data-look="pro"] .pn svg{width:26px;height:26px;flex:none;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;opacity:.85}
@@ -196,6 +196,33 @@ html[data-look="pro"] .brand .teamlogo{display:none}
 @media (max-width:1100px){html[data-look="pro"] #proLogo img{max-width:52px;max-height:52px}}
 @media (max-width:760px){html[data-look="pro"] #proLogo{display:none}html[data-look="pro"] .brand .teamlogo{display:block}}
 /* page title (welcome page and the titles of the old pages): silver, with the eyebrow in the accent colour */
-html[data-look="pro"] .hero h1{background:linear-gradient(180deg,#F4F5F7,var(--psil3));-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none}
+html[data-look="pro"] .hero h1{background:none;color:var(--ink);text-shadow:none}
 html[data-look="pro"] .hero .ey{color:var(--pacc);text-shadow:none}
 html[data-look="pro"] .hero.welcome::after,html[data-look="pro"] .hero::after{background:var(--pacc)!important;box-shadow:none!important}
+
+/* ---------- 2.9: hierarchy of the session strip ---------- */
+html[data-look="pro"] .pstrip .pk{flex:0 0 auto;min-width:168px}
+html[data-look="pro"] .pstrip .pk .pv{font-size:2rem;font-weight:600}
+html[data-look="pro"] .pstrip .psec{flex:1 1 280px;gap:4px;justify-content:center}
+html[data-look="pro"] .pstrip .psec>div{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;min-width:0}
+html[data-look="pro"] .pstrip .psec b{flex:1 1 0;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html[data-look="pro"] .pstrip .psec small{flex-basis:100%;padding-left:74px}
+html[data-look="pro"] .pstrip .psec span{color:var(--muted);font-size:.8rem;min-width:64px}
+html[data-look="pro"] .pstrip .psec b{color:var(--psil);font:600 .9rem var(--f-body)}
+html[data-look="pro"] .pstrip .psec small{color:var(--muted);font-size:.78rem}
+html[data-look="pro"] .pq.q2{color:#2BE38A!important}html[data-look="pro"] .pq.q1{color:var(--pwarn)!important}html[data-look="pro"] .pq.q0{color:#FF5A6A!important}
+@media (max-width:1300px){html[data-look="pro"] .pstrip .pk{min-width:140px}html[data-look="pro"] .pstrip .pk .pv{font-size:1.6rem}}
+@media (max-width:760px){html[data-look="pro"] .pstrip .pk{flex:1 1 30%;min-width:0}html[data-look="pro"] .pstrip .pk .pv{font-size:1.3rem}html[data-look="pro"] .pstrip .psec{flex-basis:100%}}
+
+/* ---------- 2.9: readability: bigger secondary text, less letter spacing ---------- */
+html[data-look="pro"] .pstrip .pl{font-size:.78rem;letter-spacing:.06em}
+html[data-look="pro"] .pstrip .ps>small{font-size:.82rem}
+html[data-look="pro"] .panel-h h2,html[data-look="pro"] .panel-h h3,html[data-look="pro"] .panel>h3,html[data-look="pro"] .dt,html[data-look="pro"] .dash .dt{font-size:.92rem;letter-spacing:.06em}
+html[data-look="pro"] .pn small{font-size:.8rem}
+html[data-look="pro"] .small,html[data-look="pro"] .muted.small,html[data-look="pro"] .hint{font-size:.86rem}
+html[data-look="pro"] th{font-size:.78rem;letter-spacing:.03em}
+html[data-look="pro"] .kpi .l{font-size:.8rem;letter-spacing:.05em}html[data-look="pro"] .kpi .s{font-size:.8rem}
+html[data-look="pro"] .pinfo span,html[data-look="pro"] .pcv span,html[data-look="pro"] .dl{font-size:.78rem;letter-spacing:.05em}
+html[data-look="pro"] .pfr small,html[data-look="pro"] .pcn,html[data-look="pro"] .ppl small{font-size:.86rem}
+html[data-look="pro"] .pcw>div,html[data-look="pro"] .pcb>div{font-size:.88rem}
+html[data-look="pro"] .pfoot{letter-spacing:.3em;font-size:.82rem;color:var(--faint)}

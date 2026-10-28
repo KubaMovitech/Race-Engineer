@@ -10,7 +10,7 @@ RENDER.setup=()=>{
     else if(!car)w.push(`Il file .ld non indica l'auto: verifica che telemetria e setup (${su.car}) siano della stessa vettura.`);}
   $('#suWarn').innerHTML=w.map(x=>`<div class="warnbar" style="margin-bottom:10px">${esc(x)}</div>`).join('');
   if(!S){$('#suDiag').innerHTML='<div class="empty">Scegli una telemetria .ld in alto: i controlli partono da lì.</div>';DIAG=null;renderDoctor();return;}
-  const laps=S.laps.filter(l=>l.complete&&l.type==='lanciato');const use=laps.length?laps:S.laps.filter(l=>l.complete);
+  const use=engLaps(S);
   if(!use.length){$('#suDiag').innerHTML='<div class="empty">Servono giri completi.</div>';return;}
   $('#suDiagNote').textContent=`${use.length} ${use.length===1?'giro':'giri'} · ${S.label}`;
   const D=diagnose(S,use,mismatch?null:su);DIAG=D;DIAG.S=S;DIAG.su=mismatch?null:su;

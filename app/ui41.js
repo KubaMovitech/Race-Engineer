@@ -61,24 +61,28 @@ function proSyncChip(){const el=$('#proSync');if(!el)return;const br=isBridgeHos
   el.className='psync '+(on?'on':br?'off':'file');
   el.innerHTML=`<b><i></i>${tr(on?'Bridge collegato':br?'Bridge in attesa del gioco':'Solo file')}</b><small>${last?tr('Ultimo controllo')+' '+last.toTimeString().slice(0,5):tr(br?'Telemetria dalla cartella di LMU':'Carica i file a mano')}</small>`;}
 
-// ---------- session strip: the same facts as before, in one row like a timing screen ----------
-function proCarSvg(){return `<svg viewBox="0 0 120 40" class="pcar" aria-hidden="true"><path d="M4 30c2-6 8-8 16-9l18-7c8-3 20-4 30-3l14 4c8 1 16 3 24 6 6 2 9 5 10 9z" fill="url(#pcg)" stroke="rgba(255,255,255,.35)" stroke-width=".8"/><path d="M44 15l10-4h12l6 5z" fill="#0B1320" stroke="rgba(255,255,255,.4)" stroke-width=".6"/><path d="M98 19l14-6v9" fill="none" style="stroke:var(--pacc,#E5354B)" stroke-width="2"/><circle cx="26" cy="31" r="6" fill="#0B0F16" stroke="#3A4558"/><circle cx="92" cy="31" r="6" fill="#0B0F16" stroke="#3A4558"/><defs><linearGradient id="pcg" x1="0" x2="1"><stop offset="0" style="stop-color:var(--pcar1,#2A3446)"/><stop offset=".6" style="stop-color:var(--psil3,#5B6578)"/><stop offset="1" style="stop-color:var(--pacc,#C8102E)"/></linearGradient></defs></svg>`;}
-function proTrackSvg(S){try{const d=typeof dashData==='function'?dashData(S):null;if(!d?.xy)return '';const P=dashFit(d.xy,52,34,3);return `<svg viewBox="0 0 52 34" class="ptrk" aria-hidden="true"><path d="${dPath(P)}Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>`;}catch(e){return '';}}
+// ---------- session strip: three numbers in front (best lap, ideal delta, track), the rest smaller ----------
+// how much the numbers can be trusted, said in words with the reasons (no made-up percentage)
+function dataQuality(S){const L=S.laps.filter(l=>l.complete&&l.type==='lanciato');const valid=L.filter(l=>!l.invalid).length;const c=S.cond||{};
+  let lv=valid>=5?2:valid>=2?1:0;const why=[`${valid} ${valid===1?tr('giro lanciato valido'):tr('giri lanciati validi')}`];
+  const tr_=c.track&&Number.isFinite(c.track.max-c.track.min)?c.track.max-c.track.min:0;
+  if(tr_>4){lv=Math.max(0,lv-1);why.push(`${tr('pista cambiata di')} ${fx(tr_,0)} °C`);}else if(c.track)why.push(tr('pista stabile'));
+  if(c.wet&&c.wet.max>0&&c.wet.min!=null&&c.wet.max-c.wet.min>0.1){lv=Math.max(0,lv-1);why.push(tr('asciutto e bagnato mischiati'));}
+  why.push(S.merged?tr('giri non validi ufficiali dal .xml'):tr('senza .xml: giri non validi stimati'));
+  return {lv,label:tr(['Bassa','Media','Alta'][lv]),why};}
 function proStrip(){const h=$('#hero'),a=active();if(!proLook()||!h||!a?.S)return;const S=a.S,m=S.meta||{},c=S.cond||{};
   const B=S.best,L=S.laps.filter(l=>l.complete);let ideal=null;
   try{const sec=L.map(l=>twLapSectors(S,l)).filter(Boolean);if(sec.length)ideal=[0,1,2].map(k=>Math.min(...sec.map(s=>s[k]))).reduce((x,y)=>x+y,0);}catch(e){}
   const ses=S.merged?.sess?.name||tr('Telemetria MoTeC');const live=Date.now()-(S.addedAt||0)<15*60e3;
-  const valid=L.filter(l=>!l.invalid).length;const q=Math.round(Math.min(1,valid/5)*70+(S.merged?20:0)+(m.venue?10:0));
-  const tk=c.track?fx(c.track.avg,0):'—';const wx=c.label||'';
+  const Q=dataQuality(S);const tk=c.track?fx(c.track.avg,0):'—';const wx=c.label||'';
   const keep=[...h.querySelectorAll('#btnReport,#btnDebrief')];
   h.classList.add('pstrip');
   h.innerHTML=`<div class="ps ps1"><div class="pl">${tr('Sessione attuale')}</div><div class="pn1">${esc(ses)}${live?`<span class="plive"><i></i>${tr('Appena arrivata')}</span>`:''}</div><div class="pm">${esc(m.date||'')} ${esc((m.time||'').slice(0,5))} · ${esc((m.driver||'').replace(/#\d+$/,''))}</div></div>
-   <div class="ps ps2">${proCarSvg()}<div><b>${esc(proCarOf(S))}</b><small>${esc(m.car&&m.car!==proCarOf(S)?m.car:'')}</small></div></div>
-   <div class="ps ps2">${proTrackSvg(S)}<div><b>${esc(proTrackOf(S))}</b><small>${fx((S.trackLen||0)/1000,3)} km</small></div></div>
-   <div class="ps"><div class="pl">${tr('Miglior giro')}</div><div class="pv best">${B?fmtLap(B.time):'—'}</div><small>${B?tr('Giro')+' '+B.num:''}</small></div>
-   <div class="ps"><div class="pl">${tr('Delta ideale')}</div><div class="pv good">${B&&ideal?'−'+(B.time-ideal).toFixed(3):'—'}</div><small>${ideal?tr('Ideale')+' '+fmtLap(ideal):''}</small></div>
-   <div class="ps"><div class="pl">${tr('Affidabilità dati')}</div><div class="pv">${q}%</div><div class="pbar"><i style="width:${q}%"></i></div><small>${valid} ${tr('giri validi')}${S.merged?' · .xml':''}</small></div>
-   <div class="ps pwx"><svg viewBox="0 0 24 24" aria-hidden="true">${c.wet&&c.wet.max>0?'<path d="M7 15a4 4 0 0 1 .5-8A6 6 0 0 1 19 9a3 3 0 0 1-1 6z"/><path d="M8 19l-1 2M12 19l-1 2M16 19l-1 2"/>':'<circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/>'}</svg><div><div class="pl">${tr('Pista')}</div><div class="pv">${tk}<small>°C</small></div><small>${esc(tr(wx))}${c.air?' · '+tr('aria')+' '+fx(c.air.avg,0)+'°':''}</small></div></div>
+   <div class="ps pk"><div class="pl">${tr('Miglior giro')}</div><div class="pv best">${B?fmtLap(B.time):'—'}</div><small>${B?tr('Giro')+' '+B.num:''}</small></div>
+   <div class="ps pk"><div class="pl">${tr('Delta ideale')}</div><div class="pv good">${B&&ideal?'−'+(B.time-ideal).toFixed(3):'—'}</div><small>${ideal?tr('Ideale')+' '+fmtLap(ideal):''}</small></div>
+   <div class="ps pk"><div class="pl">${tr('Pista')}</div><div class="pv">${tk}<small>°C</small></div><small>${esc(tr(wx))}${c.air?' · '+tr('aria')+' '+fx(c.air.avg,0)+'°':''}</small></div>
+   <div class="ps psec"><div><span>${tr('Auto')}</span><b>${esc(proCarOf(S))}</b></div><div><span>${tr('Circuito')}</span><b>${esc(proTrackOf(S))} · ${fx((S.trackLen||0)/1000,3)} km</b></div>
+     <div title="${esc(Q.why.join(' · '))}"><span>${tr('Dati')}</span><b class="pq q${Q.lv}">${Q.label}</b><small>${esc(Q.why.slice(0,2).join(' · '))}</small></div></div>
    <div class="ps pbtn"></div>`;
   const pb=h.querySelector('.pbtn');keep.forEach(b=>pb.append(b));}
 (function(){const rh=renderHero;window.renderHero=renderHero=function(){const h=$('#hero');h&&h.classList.remove('pstrip');rh();try{proStrip();}catch(e){console.error(e);}};})();

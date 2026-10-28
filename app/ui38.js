@@ -134,16 +134,24 @@ function engHTML(D,S,su,laps,mismatch){const F=engFindings(D,S,su,laps);const P=
         return `<details class="eok"${L.some(f=>f.s>0)?'':' open'}><summary>✓ ${ok.length} ${ok.length===1?tr('controllo a posto'):tr('controlli a posto')}</summary>${ok.map(f=>`<div class="eokr"><b>${esc(f.t)}</b><span>${esc(f.ev.join(' · '))}</span>${f.why?`<small>${esc(f.why)}</small>`:''}</div>`).join('')}</details>`;})()}</div>`;}).join('');
   const T=D.raw?.T||{};const tyreMini=['FL','FR','RL','RR'].map(w=>{const t=T[w];if(!t)return '';const col=x=>!Number.isFinite(x)?'#333':x<70?'#3B82F6':x<78?'#22D3EE':x<92?'#2BE38A':x<102?'#FFD23F':'#FF1A2D';const o=w.endsWith('L')?[t.O,t.C,t.I]:[t.I,t.C,t.O];
     return `<div class="etm"><b>${w}</b><div>${o.map(v=>`<i style="background:${col(v)}">${fx(v,0)}</i>`).join('')}</div><small>${fx(t.p,1)} kPa · ${fx(t.carc,0)}°</small></div>`;}).join('');
-  return `<div class="panel ehead"><div class="eh1"><div><div class="ey">${tr('Ingegnere di pista')}</div><h2>${esc(S.meta?.venue||'')}</h2><p class="muted small">${esc(su?su.name:tr('nessun setup scelto: indicazioni senza i valori attuali'))} · ${laps.length} ${tr('giri analizzati')} · ${tr('affidabilità')} ${conf}</p></div>
+  return `<div class="panel ehead"><div class="eh1"><div><div class="ey">${tr('Ingegnere di pista')}</div><h2>${esc(S.meta?.venue||'')}</h2><p class="muted small">${esc(su?su.name:tr('nessun setup scelto: indicazioni senza i valori attuali'))} · ${tr('analizza')} ${esc(engLapsText(laps))} · ${tr('affidabilità')} ${conf}</p></div>
      <div class="ecount"><span class="s2"><b>${nb}</b>${tr('importanti')}</span><span class="s1"><b>${nw}</b>${tr('da controllare')}</span></div></div>
      ${mismatch?`<div class="warnbar">${tr('Il setup scelto non sembra della stessa auto della telemetria: i valori attuali potrebbero non corrispondere.')}</div>`:''}
      <div class="etyres">${tyreMini}</div>
      <div class="eplan"><h4>${tr('Piano di lavoro')}</h4>${P.length?`<ol>${P.map(f=>`<li><b>${esc(f.t)}</b> → ${f.fx.filter(x=>!x.conflict).slice(0,1).map(x=>`<span class="ep">${esc(tr(x.label))}: ${esc(x.dir)}${x.now?` (${tr('ora')} <span class="mono">${esc(x.now)}</span>)`:''}</span>`).join('')}<div class="muted small">${esc(f.why||f.ev[0]||'')}</div></li>`).join('')}</ol>
        <p class="muted small">${tr('Una modifica alla volta, nell\'ordine. Poi 3–5 giri puliti nelle stesse condizioni e ricarica la telemetria: l\'ingegnere ricontrolla.')}</p>`:`<p class="small">${tr('Niente di urgente: il setup lavora nella finestra giusta. Per il tempo sul giro guarda Telemetria e Coach.')}</p>`}</div></div>
    <div class="egrid">${areas}</div>`;}
+// ---------- which laps the engineer reads: the 5 fastest flying laps (clean laps) or the last 5 (after a setup change) ----------
+const ENG_LAPN=5;
+function engLapMode(){return LS.get('eng:laps','best')==='last'?'last':'best';}
+function engLaps(S){let L=S.laps.filter(l=>l.complete&&l.type==='lanciato');if(!L.length)L=S.laps.filter(l=>l.complete);
+  return engLapMode()==='last'?L.slice(-ENG_LAPN).sort((a,b)=>a.time-b.time):[...L].sort((a,b)=>a.time-b.time).slice(0,ENG_LAPN);}
+// how the laps were chosen, said in words, with the lap numbers
+function engLapsText(laps){const m=engLapMode();const n=laps.length;
+  return `${m==='last'?(n===1?tr('ultimo giro'):tr('ultimi')+' '+n+' '+tr('giri')):(n===1?tr('giro più veloce'):n+' '+tr('giri più veloci'))} (${laps.map(l=>tr('G')+l.num).sort((a,b)=>parseInt(a.slice(1))-parseInt(b.slice(1))).join(', ')})`;}
 function renderEng(){const el=$('#suEng');if(!el)return;const S=active()?.S;const D=typeof DIAG!=='undefined'?DIAG:null;
   if(!S||!D||D.S!==S){el.innerHTML=`<div class="panel"><div class="empty">${tr('Carica la telemetria (.ld) della sessione e il setup (.svm) che usavi: l\'ingegnere li legge insieme e ti dice cosa cambiare.')}</div></div>`;return;}
-  let laps=S.laps.filter(l=>l.complete&&l.type==='lanciato');if(!laps.length)laps=S.laps.filter(l=>l.complete);laps=[...laps].sort((a,b)=>a.time-b.time).slice(0,5);
+  let laps=engLaps(S);
   const su=D.su||null;const mismatch=!!$('#suWarn')?.textContent.trim();
   try{el.innerHTML=engHTML(D,S,su,laps,mismatch);}catch(e){console.error(e);el.innerHTML=`<div class="warnbar">${esc(e.message)}</div>`;return;}
   el.querySelectorAll('.etl').forEach(b=>b.onclick=()=>{const d=+b.dataset.d;showView('tele');setTimeout(()=>{const D2=TW.D;if(!D2)return;const c=D2.corners.reduce((m,x)=>!m||Math.abs(x.dApex-d)<Math.abs(m.dApex-d)?x:m,null);if(c)twZoomCorner(c);},500);});}

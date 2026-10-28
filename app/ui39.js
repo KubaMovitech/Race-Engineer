@@ -33,7 +33,7 @@ const GUIDE_X={
   radiator:{step:'1 passo.',int:'Più chiuso = meno resistenza e motore più caldo. Guarda acqua e olio nei giri più caldi.',ord:'Alla fine, in base alle temperature della sessione.'},
   fuel:{step:'Il necessario per lo stint + 1 giro di margine.',int:'Ogni litro in più è peso: più lento e più usura. Con l\'energia virtuale il limite può essere l\'energia, non il carburante.',ord:'Prima di ogni sessione in base al piano gara.'}};
 // the engineer's findings about a guide card
-function guideEng(id){try{const S=active()?.S;if(!S||typeof DIAG==='undefined'||!DIAG||DIAG.S!==S)return '';let laps=S.laps.filter(l=>l.complete&&l.type==='lanciato');if(!laps.length)laps=S.laps.filter(l=>l.complete);laps=[...laps].sort((a,b)=>a.time-b.time).slice(0,5);
+function guideEng(id){try{const S=active()?.S;if(!S||typeof DIAG==='undefined'||!DIAG||DIAG.S!==S)return '';let laps=engLaps(S);
   const F=engFindings(DIAG,S,DIAG.su,laps).filter(f=>f.s>0&&f.fx.some(x=>x.key&&guideId(x.key)===id));if(!F.length)return `<p class="small" style="color:var(--good)">${tr('Nella telemetria aperta l\'ingegnere non chiede di cambiarlo.')}</p>`;
   return F.map(f=>{const x=f.fx.find(x=>x.key&&guideId(x.key)===id);return `<div class="gl warn"><b>${esc(f.t)}</b><p>${esc(f.ev.join(' · '))}</p><p><b style="color:var(--good)">${esc(x.dir)}</b>${x.now?` · ${tr('ora')} <span class="mono">${esc(x.now)}</span>`:''}</p></div>`;}).join('');}catch(e){return '';}}
 (function(){const og=openGuide;window.openGuide=openGuide=function(key,ctx={}){og(key,ctx);const id=GUIDE_P[key]?key:guideId(key);const X=GUIDE_X[id];const b=$('#mGuideB');if(!b||!GUIDE_P[id])return;
