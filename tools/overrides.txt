@@ -1,0 +1,143 @@
+# Funzioni avvolte o sostituite dai file successivi (generato da tools/check_overrides.py --update).
+# Ordine = ordine di caricamento in app/build.sh. wrap = chiama la versione precedente;
+# replace = la sostituisce; define = definizione; "later" = dentro setTimeout, gira dopo il caricamento.
+
+addFile
+    ui13.js    wrap
+    ui26.js    wrap
+    ui41.js    wrap
+applyTeamLogo
+    ui41.js    wrap
+compHTML
+    ui16.js    replace
+dashDraw
+    ui42.js    wrap
+drawLap
+    ui31.js    wrap
+drawLiveMap
+    ui14.js    wrap
+    ui18.js    wrap
+energyCell
+    ui32.js    wrap
+extOf
+    ui13.js    wrap
+fillSelects
+    ui27.js    wrap
+    ui41.js    wrap
+guideHTML
+    ui39.js    wrap
+gwOurs
+    ui25.js    wrap
+liveIn_
+    ui20.js    wrap
+liveSkeleton
+    ui18.js    wrap
+    ui19.js    wrap
+    ui19.js    wrap
+    ui20.js    wrap
+    ui21.js    wrap
+    ui25.js    wrap
+    ui27.js    wrap
+    ui30.js    wrap
+    ui34.js    wrap
+    ui37.js    wrap
+lvBoard
+    ui37.js    wrap
+lvCar
+    ui15.js    wrap
+    ui15.js    wrap
+    ui16.js    wrap
+    ui21.js    wrap
+    ui34.js    wrap
+lvGame
+    ui16.js    replace
+lvOverview
+    ui21.js    wrap
+    ui25.js    wrap
+lvStrategy
+    ui19.js    wrap
+    ui21.js    wrap
+    ui25.js    wrap
+lvWeather
+    ui21.js    wrap
+    ui25.js    wrap
+openCarModal
+    ui21.js    wrap
+openGuide
+    ui39.js    wrap
+openReport
+    ui23.js    wrap
+R
+    ui16.js    wrap
+refreshAll
+    ui35.js    wrap
+renderEng
+    ui40.js    wrap
+    ui44.js    wrap
+renderGen
+    ui29.js    wrap
+renderGuide
+    ui39.js    wrap
+renderHero
+    ui23.js    wrap
+    ui27.js    wrap
+    ui41.js    wrap
+renderLib
+    ui40.js    wrap
+renderLive
+    ui18.js    replace
+    ui20.js    replace
+    ui20.js    wrap
+    ui37.js    wrap
+sessDebrief
+    ui24.js    wrap
+showView
+    ui12.js    wrap
+    ui14.js    wrap
+    ui19.js    wrap
+    ui33.js    wrap
+    ui41.js    wrap
+stintLD
+    ui24.js    wrap
+stintXML
+    ui24.js    wrap
+suTabOf
+    ui44.js    wrap
+suTabsApply
+    ui41.js    wrap
+welcomeHTML
+    ui30.js    wrap
+RENDER.bop
+    ui34.js    define
+RENDER.cmp
+    ui1.js     define
+RENDER.coach
+    ui4.js     define
+RENDER.diary
+    ui4.js     define
+RENDER.lap
+    ui1.js     define
+RENDER.live
+    ui12.js    define
+RENDER.prog
+    ui10.js    define
+RENDER.setup
+    ui18.js    wrap later
+    ui22.js    wrap later
+    ui24.js    wrap later
+    ui26.js    wrap later
+    ui27.js    wrap later
+    ui29.js    wrap later
+    ui38.js    wrap later
+    ui44.js    wrap later
+    ui2.js     define
+RENDER.stint
+    ui1.js     define
+    ui27.js    wrap
+    ui30.js    wrap
+    ui36.js    wrap
+    ui42.js    wrap
+RENDER.tele
+    ui35.js    define
+    ui40.js    wrap
+    ui43.js    wrap

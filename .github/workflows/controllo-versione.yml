@@ -14,6 +14,8 @@ jobs:
           go-version-file: bridge/go.mod
       - name: Versione, SHA-256 e app coerenti
         run: python3 tools/check_release.py
+      - name: Funzioni avvolte tra i file (ordine di caricamento)
+        run: python3 tools/check_overrides.py
       - name: Test del bridge
         working-directory: bridge
         run: |
