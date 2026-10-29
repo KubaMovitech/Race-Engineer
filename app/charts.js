@@ -65,14 +65,14 @@ class Stack{
       if(p.zero){c.strokeStyle=faint;c.beginPath();c.moveTo(this.padL,Math.round(Y(0))+.5);c.lineTo(w-this.padR,Math.round(Y(0))+.5);c.stroke();}
       c.save();c.beginPath();c.rect(this.padL,top-4,w-this.padL-this.padR,bot-top+6);c.clip();
       this.marks.forEach(m=>{if(m.x<this.lo||m.x>this.hi)return;const xx=Math.round(this.xToPx(m.x))+.5;c.strokeStyle=line;c.setLineDash([2,4]);c.beginPath();c.moveTo(xx,top);c.lineTo(xx,bot);c.stroke();c.setLineDash([]);});
-      p.series.forEach(s=>{if(!s.data)return;c.strokeStyle=s.color;c.lineWidth=s.w||1.6;c.globalAlpha=s.alpha||1;c.shadowColor=s.color;c.shadowBlur=(s.alpha||1)>=.9?6*GL():0;c.beginPath();let started=false,prevY=null;
+      p.series.forEach(s=>{if(!s.data)return;c.strokeStyle=s.color;c.lineWidth=s.w||1.6;c.setLineDash(s.dash||(s.name==='B'?[6,4]:[]));c.globalAlpha=s.alpha||1;c.shadowColor=s.color;c.shadowBlur=(s.alpha||1)>=.9?6*GL():0;c.beginPath();let started=false,prevY=null;
         const stepN=Math.max(1,Math.floor((i1-i0)/(w*1.5)));
         for(let i=i0;i<=i1;i+=stepN){const v=s.data[i];if(!Number.isFinite(v)){started=false;continue;}const xx=this.xToPx(this.x[i]),yy=Y(v);
           if(!started){c.moveTo(xx,yy);started=true;}else{if(s.step&&prevY!=null)c.lineTo(xx,prevY);c.lineTo(xx,yy);}prevY=yy;}
         c.stroke();
         if(s.fill){const z=Y(Math.min(hi,Math.max(lo,0)));c.lineTo(this.xToPx(this.x[i1]),z);c.lineTo(this.xToPx(this.x[i0]),z);c.closePath();c.globalAlpha=0.14;c.fillStyle=s.color;c.fill();}
         c.globalAlpha=1;c.shadowBlur=0;
-        if(this.cursor!=null&&this.cursor>=i0&&this.cursor<=i1&&Number.isFinite(s.data[this.cursor])){const xx=this.xToPx(this.x[this.cursor]),yy=Y(s.data[this.cursor]);c.fillStyle=s.color;c.strokeStyle='#05070A';c.lineWidth=1.5;c.beginPath();c.arc(xx,yy,3.5,0,7);c.fill();c.stroke();}});
+        c.setLineDash([]);if(this.cursor!=null&&this.cursor>=i0&&this.cursor<=i1&&Number.isFinite(s.data[this.cursor])){const xx=this.xToPx(this.x[this.cursor]),yy=Y(s.data[this.cursor]);c.fillStyle=s.color;c.strokeStyle='#05070A';c.lineWidth=1.5;c.beginPath();c.arc(xx,yy,3.5,0,7);c.fill();c.stroke();}});
       c.restore();
       c.textAlign='left';c.textBaseline='top';c.font='600 11.5px "Barlow Condensed",sans-serif';const lab=p.label.toUpperCase();
       const lw=c.measureText(lab).width;c.fillStyle=tok('panel');c.globalAlpha=.85;c.fillRect(this.padL+2,top-5,lw+8,15);c.globalAlpha=1;c.fillStyle=muted;c.fillText(lab,this.padL+6,top-3);c.font='11px "JetBrains Mono",monospace';
@@ -162,16 +162,16 @@ class TrackMap{
     c.clearRect(0,0,w,h);c.lineCap='round';c.lineJoin='round';
     // measuring grid every 50/100/250 m
     const gm=scale>3?25:scale>1.2?50:scale>.5?100:250;const gp=gm*scale;if(gp>14){c.strokeStyle='rgba(255,255,255,.035)';c.lineWidth=1;const offx=((v.dx+ox-x0*s0*v.k)%gp+gp)%gp,offy=((v.dy+oy-y0*s0*v.k)%gp+gp)%gp;c.beginPath();for(let x=offx;x<w;x+=gp){c.moveTo(Math.round(x)+.5,0);c.lineTo(Math.round(x)+.5,h);}for(let y=offy;y<h;y+=gp){c.moveTo(0,Math.round(y)+.5);c.lineTo(w,Math.round(y)+.5);}c.stroke();}
-    const path=(Q,lw,col,alpha=1)=>{c.globalAlpha=alpha;c.strokeStyle=col;c.lineWidth=lw;c.beginPath();let st=false;Q.forEach(p=>{if(!p||!Number.isFinite(p[0])){st=false;return;}st?c.lineTo(p[0],p[1]):c.moveTo(p[0],p[1]);st=true;});c.stroke();c.globalAlpha=1;};
+    const path=(Q,lw,col,alpha=1,dash)=>{c.globalAlpha=alpha;c.strokeStyle=col;c.lineWidth=lw;c.setLineDash(dash||[]);c.beginPath();let st=false;Q.forEach(p=>{if(!p||!Number.isFinite(p[0])){st=false;return;}st?c.lineTo(p[0],p[1]):c.moveTo(p[0],p[1]);st=true;});c.stroke();c.globalAlpha=1;};
     // the track: a real width (about 13 m) when zoomed in, a bed when far
     const bed=Math.max(zoom?26:12,13*scale);path(P,bed+4,'rgba(255,255,255,.06)');path(P,bed,tok('trackbed'));
     const lines=P2&&(zoom||v.k>=2.5||scale>1.5);
     if(lines){const lw=Math.max(2.5,Math.min(5,scale*1.2));
-      c.save();c.shadowBlur=10*GL();c.shadowColor=tok('lapB');path(P2,lw,tok('lapB'));c.shadowColor=tok('lapA');path(P,lw,tok('lapA'));c.restore();
+      c.save();c.shadowBlur=10*GL();c.shadowColor=tok('lapB');path(P2,lw,tok('lapB'),1,[8,5]);c.shadowColor=tok('lapA');path(P,lw,tok('lapA'));c.restore();
       c.fillStyle=tok('muted');c.font='11px "JetBrains Mono",monospace';c.textAlign='left';c.textBaseline='top';}
     else{const W0=this.win?this.win[0]:-1,W1=this.win?this.win[1]:n;const lw=Math.max(4,Math.min(8,scale*1.4));c.lineWidth=lw;
       for(let i=1;i<n;i++){const p0=P[i-1],p1=P[i];if(!p0||!p1)continue;c.globalAlpha=(i<W0||i>W1)?0.18:1;c.strokeStyle=this.colors[i]||tok('muted');c.beginPath();c.moveTo(p0[0],p0[1]);c.lineTo(p1[0],p1[1]);c.stroke();}c.globalAlpha=1;
-      if(P2)path(P2,1.2,tok('lapB'),.55);}
+      if(P2)path(P2,1.2,tok('lapB'),.55,[5,4]);}
     // start / finish: chequered block
     const p0=P.find(Boolean);if(p0){const q=6;for(let a=0;a<2;a++)for(let b=0;b<2;b++){c.fillStyle=(a+b)%2?'#000':'#fff';c.fillRect(p0[0]-q+a*q,p0[1]-q+b*q,q,q);}}
     c.font='700 11px "Barlow Condensed",sans-serif';c.textAlign='center';c.textBaseline='middle';

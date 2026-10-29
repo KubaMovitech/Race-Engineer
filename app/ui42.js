@@ -12,7 +12,7 @@ function proFindRow(f,i){const s=PSEV[f.s]||PSEV[0];const fx0=f.fx.find(x=>!x.co
 function proAIHTML(S){const R=proFindings(S);if(!R)return '';const F=[...R.F].sort((a,b)=>b.s-a.s||ENG_ORDER.indexOf(a.a)-ENG_ORDER.indexOf(b.a));
   const top=F.filter(f=>f.s>0).slice(0,3);const list=top.length?top:F.filter(f=>f.s===0).slice(0,2);
   const n=F.filter(f=>f.s>0).length;
-  return `<div class="panel pai"><div class="dt"><span class="psp">✦</span> ${tr('Analisi IA')}<span class="pai-r">${tr('Data Engineer')} <b>AI</b></span></div>
+  return `<div class="panel pai"><div class="dt"><span class="psp">⚙</span> ${tr('Analisi automatica')}<span class="pai-r">${tr('regole e calcoli sulla telemetria')}</span></div>
     <div class="pai-h">${n?`${n} ${n===1?tr('elemento da guardare'):tr('elementi da guardare')}`:tr('Niente di urgente')}<button type="button" class="btn pai-all">${tr('Vedi tutti')} →</button></div>
     ${list.map(proFindRow).join('')||`<p class="muted small">${tr('Servono giri completi.')}</p>`}
     <p class="muted small pai-n">${R.D.su?esc(R.D.su.name):tr('Solo telemetria: per i valori del setup scegli il .svm in Race Engineer.')} · ${esc(engLapsText(R.laps))}</p></div>`;}

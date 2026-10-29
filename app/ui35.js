@@ -113,7 +113,7 @@ class TWMap{
       if(kind==='inputs'){const th=g.get('Throttle Pos'),br=g.get('Brake Pos');return Array.from(th,(t,i)=>br[i]>5?(br[i]>60?'#FF2D55':'#FF8A9B'):t>95?'#22E58B':t>30?'#9BE8B9':'#8A93A3');}
       if(kind==='gear'){const ge=g.get('Gear');return Array.from(ge,x=>TWGEAR[Math.max(0,Math.min(8,Math.round(x)))]);}
       if(kind==='delta'){const d=D.delta;const out=new Array(D.n);const W=12;for(let i=0;i<D.n;i++){const a=d[Math.max(0,i-W)],b=d[Math.min(D.n-1,i+W)];const r=(b-a)/(2*W*D.step)*1000;out[i]=r>0.15?'#22E58B':r<-0.15?'#FF2D55':r>0.04?'#7FD8A6':r<-0.04?'#E88A9A':'#6B7585';}return out;}return null;};
-    if(D.B){const cb=m==='inputs'?cols(D.gB,'inputs'):null;if(cb)this.colored(c,D.B,cb,lw*0.75,[6,4]);else this.line(c,D.B,0,n-1,tB,lw*0.8,m==='delta'||m==='speed'||m==='gear'?[6,4]:null);}
+    if(D.B){const cb=m==='inputs'?cols(D.gB,'inputs'):null;if(cb)this.colored(c,D.B,cb,lw*0.75,[6,4]);else this.line(c,D.B,0,n-1,tB,lw*0.8,[6,4]);}
     const ca=m==='line'?null:cols(D.gA,m);if(ca)this.colored(c,D.A,ca,lw);else this.line(c,D.A,0,n-1,tA,lw);
     // brake and throttle points of each corner
     this.lbl=[];const dot=(S,i,col,shape,lab)=>{if(i==null||i<0)return;const [x,y]=this.P(S.x[i],S.y[i]);c.fillStyle=col;c.strokeStyle='#05070A';c.lineWidth=1.5;c.beginPath();
@@ -196,7 +196,7 @@ function twPanels(D,list){const tA=tok('lapA'),tB=tok('lapB');const out=[];
     if(id.startsWith('4:')){const k=id.slice(2);const m=TWW[k];const ss=TW4.map((w,j)=>({a:twArr(D.gA,k.replace('#',w)),col:TW4C[j],tag:w,w:1.3})).filter(s=>s.a);if(ss.length)out.push({label:tr(m[0])+' · A',unit:m[1],dec:m[2],h:104,series:ss});continue;}
     const m=twMeta(id);const a=twArr(D.gA,id);if(!a)continue;const b=D.gB?twArr(D.gB,id):null;const step=STEP_CH.test(id);
     out.push({label:tr(m[0]),unit:m[1],dec:m[2],h:id==='Ground Speed'?130:id==='Gear'?60:84,step,zero:id==='Path Lateral'||id==='Steering'||/G Force (Lat|Long)/.test(id),fix:/Throttle|Brake Pos/.test(id)?[0,100]:null,
-      series:[...(b?[{a:b,col:tB,w:1.3,tag:'B'}]:[]),{a,col:tA,w:1.7,tag:'A'}]});}
+      series:[...(b?[{a:b,col:tB,w:1.3,tag:'B',dash:[6,4]}]:[]),{a,col:tA,w:1.7,tag:'A'}]});}
   return out;}
 
 // ---------- inspector: every value under the cursor ----------
@@ -297,7 +297,7 @@ RENDER.tele=()=>{const el=$('#twBody');const SS=twSessions();
     let t=D.gA.t[TW.cur||0],last=performance.now();const tick=now=>{t+=(now-last)/1000*+$('#twSpd').value;last=now;let i=TW.cur||0;while(i<D.n-1&&D.gA.t[i]<t)i++;if(i>=D.n-1){t=0;i=0;}
       if(D.gB){let j=0;const tb=D.gB.t;let lo=0,hi=D.n-1;while(hi-lo>1){const m=(lo+hi)>>1;if(tb[m]<t)lo=m;else hi=m;}j=lo;map.ghost=j;}twCursor(i,'play');play=requestAnimationFrame(tick);};play=requestAnimationFrame(tick);};
 };
-function twLegend(m,hasB){const A=`<span><i style="background:var(--lapA)"></i>A</span>`,B=hasB?`<span><i style="background:var(--lapB)"></i>B</span>`:'';
+function twLegend(m,hasB){const A=`<span><i style="background:var(--lapA)"></i>A</span>`,B=hasB?`<span><i style="background:repeating-linear-gradient(90deg,var(--lapB) 0 5px,transparent 5px 8px)"></i>B ${tr('tratteggiato')}</span>`:'';
   const pts=`<span>● ${tr('frenata')}</span><span>▲ ${tr('gas pieno')}</span>`;
   if(m==='inputs')return `<span><i style="background:#FF2D55"></i>${tr('freno')}</span><span><i style="background:#22E58B"></i>${tr('gas pieno')}</span><span><i style="background:#9BE8B9"></i>${tr('gas parziale')}</span><span><i style="background:#8A93A3"></i>${tr('senza pedali')}</span>${hasB?`<span>- - B</span>`:''}`;
   if(m==='delta')return hasB?`<span><i style="background:#22E58B"></i>${tr('A guadagna')}</span><span><i style="background:#FF2D55"></i>${tr('A perde')}</span>${B}`:`<span>${tr('Scegli un giro B per il delta.')}</span>`;

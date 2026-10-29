@@ -18,11 +18,11 @@ function proPrevRun(S){const H=LS.get('suhist',{});const cur=H[S.id];if(!cur)ret
 // speed of the best lap before and now, when the previous session is still loaded
 function proTestChart(S,P){const B=S.best,PB=P?.best;if(!B||!PB)return '';const gA=lapGrid(P,PB,10),gB=lapGrid(S,B,10);const a=gA.get('Ground Speed'),b=gB.get('Ground Speed');if(!a||!b)return '';
   const n=Math.min(a.length,b.length),W=600,H=150;let hi=0;for(let i=0;i<n;i++)hi=Math.max(hi,a[i],b[i]);hi=Math.ceil(hi/20)*20;
-  const X=i=>(34+i/(n-1)*(W-40)).toFixed(1),Y=v=>(8+(1-v/hi)*(H-28)).toFixed(1);const pl=(s,c)=>`<polyline points="${Array.from({length:n},(_,i)=>X(i)+','+Y(s[i])).join(' ')}" fill="none" style="stroke:${c}" stroke-width="1.4"/>`;
+  const X=i=>(34+i/(n-1)*(W-40)).toFixed(1),Y=v=>(8+(1-v/hi)*(H-28)).toFixed(1);const pl=(s,c,dash)=>`<polyline points="${Array.from({length:n},(_,i)=>X(i)+','+Y(s[i])).join(' ')}" fill="none" style="stroke:${c}" stroke-width="1.4"${dash?' stroke-dasharray="6 4"':''}/>`;
   const sa=twLapSectors(P,PB),sb=twLapSectors(S,B);
   const secs=sa&&sb?`<div class="ptsec">${[0,1,2].map(k=>{const d=sb[k]-sa[k];const z=Math.abs(d)<5e-4;return `<span>S${k+1} <b class="${z?'muted':d<0?'pos':'neg'}">${z?'':d>0?'+':'−'}${Math.abs(d).toFixed(3)}</b></span>`;}).join('')}</div>`:'';
-  return `<div class="ptc"><div class="ptl"><span><i style="background:var(--lapB)"></i>${tr('Prima')} · ${fmtLap(PB.time)}</span><span><i style="background:var(--lapA)"></i>${tr('Ora')} · ${fmtLap(B.time)}</span></div>${secs}
-    <svg viewBox="0 0 ${W} ${H}"><g class="pg">${[0,.5,1].map(f=>`<line x1="34" x2="${W-6}" y1="${8+f*(H-28)}" y2="${8+f*(H-28)}"/><text x="30" y="${12+f*(H-28)}" text-anchor="end">${Math.round(hi*(1-f))}</text>`).join('')}</g>${pl(a,'var(--lapB)')}${pl(b,'var(--lapA)')}</svg></div>`;}
+  return `<div class="ptc"><div class="ptl"><span><i class="pdash" style="background:var(--lapB)"></i>${tr('Prima')} · ${fmtLap(PB.time)}</span><span><i style="background:var(--lapA)"></i>${tr('Ora')} · ${fmtLap(B.time)}</span></div>${secs}
+    <svg viewBox="0 0 ${W} ${H}"><g class="pg">${[0,.5,1].map(f=>`<line x1="34" x2="${W-6}" y1="${8+f*(H-28)}" y2="${8+f*(H-28)}"/><text x="30" y="${12+f*(H-28)}" text-anchor="end">${Math.round(hi*(1-f))}</text>`).join('')}</g>${pl(a,'var(--lapB)',1)}${pl(b,'var(--lapA)')}</svg></div>`;}
 
 function proEngHTML(S,D,laps){const F=engFindings(D,S,D.su||null,laps);const P=engPlan(F);const done=LS.get('pdone',{});
   const diag=[...F].sort((a,b)=>b.s-a.s||ENG_ORDER.indexOf(a.a)-ENG_ORDER.indexOf(b.a)).filter((f,i)=>f.s>0||i<4).slice(0,6);
@@ -111,7 +111,7 @@ html[data-look="pro"] .ecount span{border-radius:10px;background:var(--panel2);b
 .ppd[aria-pressed="true"]{color:#2BE38A;border-color:#2BE38A}
 .ppb{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 .ptc svg{width:100%;height:auto;display:block}.ptc .pg line{stroke:rgba(255,255,255,.07)}.ptc .pg text{fill:var(--muted);font:10px "JetBrains Mono",monospace}
-.ptl{display:flex;gap:16px;flex-wrap:wrap;font-size:.8rem;color:var(--psil)}.ptl i{display:inline-block;width:14px;height:3px;margin-right:6px;vertical-align:middle}
+.ptl{display:flex;gap:16px;flex-wrap:wrap;font-size:.8rem;color:var(--psil)}.ptl i{display:inline-block;width:14px;height:3px;margin-right:6px;vertical-align:middle}.ptl i.pdash{background:repeating-linear-gradient(90deg,var(--lapB) 0 5px,transparent 5px 8px)!important}
 .ptsec{display:flex;gap:18px;margin:6px 0;font-size:.8rem;color:var(--muted)}.ptsec b{font-family:"JetBrains Mono",monospace;margin-left:4px}
 .ptcm .ecg{margin-top:10px;grid-template-columns:1fr!important}.ptfirst{color:var(--psil);font-size:.9rem}.ptfirst b{color:#fff}.ptfirst ol{margin:10px 0;padding-left:20px}.ptfirst li{margin:4px 0}.ptfirst span{color:var(--muted);font-size:.82rem}
 .pset{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:16px;margin-bottom:16px}.pset>.panel:only-child{grid-column:1/-1}

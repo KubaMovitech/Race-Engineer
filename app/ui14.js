@@ -175,7 +175,7 @@ function renderLive(force){
   const ago=sc?Math.round((now-LIVE.scAt)/1000):null;
   $('#lvSess').innerHTML=sc?[['Pista',esc(I.trk)],['Sessione',SESN(I.ses)+(I.srv?' · '+esc(I.srv):'')],[kind==='race'&&I.maxLaps>0&&I.maxLaps<99999?'Giri':'Tempo rimasto',kind==='race'&&I.maxLaps>0&&I.maxLaps<99999?`${me?me.laps:'—'}/${I.maxLaps}`:hms(I.rem)],['Ora in pista',hms(I.tod)],
     ['Aria',fx(I.air,1)+' °C'],['Asfalto',fx(I.tt,1)+' °C'],['Pioggia',Math.round((I.rain||0)*100)+'%'],['Pista bagnata',Math.round((I.wavg||0)*100)+'%'],['Grip',['verde','basso','medio','alto','gommata'][I.grip]||'—'],
-    ...(I.yel>0?[['Bandiera',`<span class="neg">${FCY[I.yel]||'gialla'}</span>`]]:[]),...(ago>5?[['Dati',`<span class="neg">${ago} s fa</span>`]]:[])]
+    ...(I.yel>0?[['Bandiera',`<span class="neg">${FCY[I.yel]||'gialla'}</span>`]]:[]),...(ago>5?[['Dati',`<span class="dold" title="${esc(tr('Dato vecchio: il gioco non manda aggiornamenti da'))} ${ago} s">${ago} s fa</span>`]]:[])]
     .map(([l,v])=>`<div class="cchip"><span>${l}</span><b>${v}</b></div>`).join(''):(rec?'':`<div class="muted small">${tr('In attesa dei dati…')}</div>`);
   const S2=c&&liveStrat(stt,sc);const ctx={sc,I,kind,stt,c,S2,names,now,rows,me,rec};
   // alerts (always visible)
