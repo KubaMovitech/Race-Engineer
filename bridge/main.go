@@ -19,7 +19,7 @@ import (
 	"time"
 )
 
-const VERSION = "2.10.0"
+const VERSION = "2.11.0"
 
 //go:embed app.html
 var appHTML []byte

@@ -74,6 +74,7 @@ refreshAll
 renderEng
     ui40.js    wrap
     ui44.js    wrap
+    ui45.js    wrap
 renderGen
     ui29.js    wrap
 renderGuide
@@ -141,3 +142,4 @@ RENDER.tele
     ui35.js    define
     ui40.js    wrap
     ui43.js    wrap
+    ui45.js    wrap
