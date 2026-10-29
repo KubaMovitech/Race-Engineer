@@ -226,3 +226,54 @@ html[data-look="pro"] .pinfo span,html[data-look="pro"] .pcv span,html[data-look
 html[data-look="pro"] .pfr small,html[data-look="pro"] .pcn,html[data-look="pro"] .ppl small{font-size:.86rem}
 html[data-look="pro"] .pcw>div,html[data-look="pro"] .pcb>div{font-size:.88rem}
 html[data-look="pro"] .pfoot{letter-spacing:.3em;font-size:.82rem;color:var(--faint)}
+
+/* ---------- 2.10: strip = three answers to «how am I going?» + one compact line ---------- */
+html[data-look="pro"] .hero.pstrip{flex-direction:column;min-height:0}
+html[data-look="pro"] .pstrip .pmain{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.4fr)}
+html[data-look="pro"] .pstrip .pmain .pk{min-width:0;padding:14px 20px}
+html[data-look="pro"] .pstrip .pmain .pk .pv{font-size:2.1rem}
+html[data-look="pro"] .pstrip .pv.warn{color:var(--pwarn)}html[data-look="pro"] .pstrip .pv.bad{color:#FF5A6A}
+html[data-look="pro"] .pstrip .pprob{cursor:pointer;border-right:0}
+html[data-look="pro"] .pstrip .pprob:hover{background:rgba(255,255,255,.025)}
+html[data-look="pro"] .pstrip .pt{font:700 1.15rem var(--f-body);color:#fff;line-height:1.25;margin:4px 0 2px}
+html[data-look="pro"] .pstrip .pt.s2{color:#FF5A6A}html[data-look="pro"] .pstrip .pt.s1{color:var(--pwarn)}html[data-look="pro"] .pstrip .pt.ok{color:#2BE38A}
+html[data-look="pro"] .pstrip .pprob small{white-space:normal;display:block}
+html[data-look="pro"] .pstrip .pline{display:flex;flex-wrap:wrap;align-items:center;gap:6px 16px;padding:8px 20px;border-top:1px solid var(--line);font-size:.86rem;color:var(--muted)}
+html[data-look="pro"] .pstrip .pline>b{color:var(--psil);font-size:.9rem}
+html[data-look="pro"] .pstrip .pline span b{color:var(--psil)}
+html[data-look="pro"] .pstrip .pline .pbtn{margin-left:auto;display:flex;flex-direction:row;gap:6px;padding:0;border:0}
+html[data-look="pro"] .pstrip .pline .pbtn .btn{height:30px}
+@media (max-width:900px){html[data-look="pro"] .pstrip .pmain{grid-template-columns:1fr 1fr}html[data-look="pro"] .pstrip .pprob{grid-column:1/-1;border-top:1px solid var(--line)}}
+@media (max-width:760px){html[data-look="pro"] .pstrip .pmain .pk{flex:none;border-bottom:0;padding:10px 12px}html[data-look="pro"] .pstrip .pmain .pk .pv{font-size:1.45rem}html[data-look="pro"] .pstrip .pline{padding:8px 12px}html[data-look="pro"] .pstrip .pline .pbtn{margin-left:0}}
+
+/* ---------- 2.10: data states: missing, old, normal look different ---------- */
+.dmiss{display:inline-block;font:italic 500 .8em var(--f-body);color:var(--faint);border:1px dashed var(--faint);border-radius:6px;padding:0 8px;letter-spacing:0;vertical-align:middle}
+.dold{color:var(--pwarn,#FFC53D)}.dold::before{content:"◷ ";font-style:normal}
+
+/* ---------- 2.10: side menu grouped by activity; on the phone four places and «Altro» ---------- */
+html[data-look="pro"] .pgh{font:600 .74rem var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--faint);padding:12px 14px 4px}
+html[data-look="pro"] .pgh:first-child{padding-top:2px}
+html[data-look="pro"] .pmore{display:none}
+@media (max-width:1100px){html[data-look="pro"] .pgh{font-size:0;padding:6px 0;border-top:1px solid var(--line);margin:4px 8px}html[data-look="pro"] .pgh:first-child{border:0}}
+@media (max-width:760px){
+  html[data-look="pro"] .pgh{display:none}
+  html[data-look="pro"] #proNav nav{width:100%;justify-content:space-between}
+  html[data-look="pro"] .pn[data-n]:not(.pph){display:none}
+  html[data-look="pro"] .pn.pph,html[data-look="pro"] .pmore{display:flex;flex:1 1 0;min-width:0}
+  html[data-look="pro"] .pmore.pon{border-bottom-color:var(--pacc);color:#fff}
+  /* «Altro» opens every place, grouped, over the page */
+  html[data-look="pro"] #proNav.pmopen nav{position:fixed;inset:auto 0 0 0;top:auto;z-index:70;flex-direction:column;align-items:stretch;gap:2px;max-height:80vh;overflow:auto;
+    background:var(--panel);border-top:1px solid var(--line);border-radius:14px 14px 0 0;padding:10px 10px calc(14px + env(safe-area-inset-bottom,0px));box-shadow:0 -20px 50px rgba(0,0,0,.6)}
+  html[data-look="pro"] #proNav.pmopen .pgh{display:block;font-size:.74rem;border:0;margin:0;padding:10px 10px 4px}
+  html[data-look="pro"] #proNav.pmopen .pn[data-n]{display:flex;flex-direction:row;justify-content:flex-start;gap:14px;padding:10px 12px;min-width:0;border-bottom:0}
+  html[data-look="pro"] #proNav.pmopen .pn span{text-align:left}html[data-look="pro"] #proNav.pmopen .pn b{font-size:.95rem;justify-content:flex-start}html[data-look="pro"] #proNav.pmopen .pn small{display:block}
+  html[data-look="pro"] #proNav.pmopen .pn[aria-current="page"]{background:var(--psel)}
+  html[data-look="pro"] #proNav.pmopen .pmore{order:99;flex-direction:row;justify-content:center}
+  html[data-look="pro"] #proNav.pmopen::before{content:"";position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:69}
+}
+@media (max-width:760px){html[data-look="pro"] #proNav.pmopen{z-index:80}}
+
+/* ---------- 2.10: text density (Personalizza): Compatta for a laptop, Comoda for a tablet or a far monitor ---------- */
+html[data-dens="compatta"]{font-size:14.5px}html[data-dens="compatta"] body{font-size:14px}
+html[data-dens="comoda"]{font-size:18px}html[data-dens="comoda"] body{font-size:17px}
+.lookrow{display:flex;gap:12px;flex-wrap:wrap}

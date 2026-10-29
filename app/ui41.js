@@ -13,26 +13,32 @@ const PRO_ICONS={
 // [id, title, subtitle, views, setup tab]
 const PRO_NAV=[['dash','Dashboard','Analisi e panoramica',['stint']],
   ['tel','Telemetria','Giri e confronti',['tele','lap','cmp']],
-  ['setb','Setup Builder','Setup, confronto e generatore',['setup'],'set'],
-  ['eng','Race Engineer','Diagnosi e piano di lavoro',['setup'],'eng'],
   ['coach','Coach','Guida curva per curva',['coach']],
   ['ses','Sessioni','Diario delle uscite',['diary']],
-  ['bop','BOP','Bilanciamento prestazioni',['bop']],
   ['prog','Progressi','Stagione e statistiche',['prog']],
+  ['eng','Race Engineer','Diagnosi e piano di lavoro',['setup'],'eng'],
+  ['setb','Setup Builder','Setup, confronto e generatore',['setup'],'set'],
+  ['bop','BOP','Bilanciamento prestazioni',['bop']],
   ['live','Muretto','Live con la squadra',['live']]];
+// grouped by what you are doing; on the phone only the first four, the rest under «Altro»
+const PRO_GROUPS=[['Analizza',['dash','tel','coach','ses','prog']],['Prepara',['eng','setb','bop']],['Gara',['live']]];
+const PRO_PHONE=['dash','tel','eng','live'];
 const proLook=()=>/^pro/.test(LS.get('look','pro'));
 function proNavOf(v){if(v==='setup')return LS.get('su:tab','eng')==='eng'?'eng':'setb';return (PRO_NAV.find(n=>n[3].includes(v))||PRO_NAV[0])[0];}
 function proSync(){if(!proLook())return;const v=curView(),id=proNavOf(v);const g=PRO_NAV.find(n=>n[0]===id);
-  $$('#proNav .pn').forEach(b=>b.setAttribute('aria-current',b.dataset.n===id?'page':'false'));
+  $$('#proNav .pn[data-n]').forEach(b=>b.setAttribute('aria-current',b.dataset.n===id?'page':'false'));$('#proNav .pmore')?.classList.toggle('pon',!PRO_PHONE.includes(id));
   const nav=$('.tabs.subtabs');if(nav){$$('.tabs .tab').forEach(t=>t.hidden=!g[3].includes(t.dataset.view));nav.hidden=g[3].length<2;}
   const su=$('#suTabs');if(su){su.hidden=id==='eng';su.querySelectorAll('button').forEach(b=>b.hidden=b.dataset.t==='eng');}
   document.documentElement.dataset.pnav=id;}
 function proBuild(){if($('#proNav'))return;
   const side=document.createElement('aside');side.id='proNav';side.setAttribute('aria-label',tr('Sezioni'));
-  side.innerHTML=`<nav>${PRO_NAV.map(([id,t,s])=>`<button type="button" class="pn" data-n="${id}"><svg viewBox="0 0 24 24" aria-hidden="true">${PRO_ICONS[id]}</svg><span><b>${id==='live'?'<i class="livedot"></i>':''}${tr(t)}</b><small>${tr(s)}</small></span></button>`).join('')}</nav>
+  const btn=([id,t,s])=>`<button type="button" class="pn${PRO_PHONE.includes(id)?' pph':''}" data-n="${id}"><svg viewBox="0 0 24 24" aria-hidden="true">${PRO_ICONS[id]}</svg><span><b>${id==='live'?'<i class="livedot"></i>':''}${tr(t)}</b><small>${tr(s)}</small></span></button>`;
+  side.innerHTML=`<nav>${PRO_GROUPS.map(([g,ids])=>`<div class="pgh">${tr(g)}</div>${ids.map(id=>btn(PRO_NAV.find(n=>n[0]===id))).join('')}`).join('')}
+    <button type="button" class="pn pmore" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg><span><b>${tr('Altro')}</b></span></button></nav>
     <div class="pfoot" data-noi18n>DATA<br>DRIVES<br>PERFORMANCE</div>`;
   $('header.top').after(side);
-  side.querySelectorAll('.pn').forEach(b=>b.onclick=()=>{const g=PRO_NAV.find(n=>n[0]===b.dataset.n);
+  const more=side.querySelector('.pmore');more.onclick=()=>{const o=!side.classList.contains('pmopen');side.classList.toggle('pmopen',o);more.setAttribute('aria-expanded',o);};
+  side.querySelectorAll('.pn[data-n]').forEach(b=>b.onclick=()=>{side.classList.remove('pmopen');more.setAttribute('aria-expanded','false');const g=PRO_NAV.find(n=>n[0]===b.dataset.n);
     if(g[4]){const cur=LS.get('su:tab','eng');if(g[4]==='eng')LS.set('su:tab','eng');else if(cur==='eng')LS.set('su:tab','set');}
     const last=LS.get('pgrp:'+g[0],g[3][0]);showView(g[3].includes(last)?last:g[3][0]);if(g[4]&&typeof suTabsApply==='function')suTabsApply();proSync();window.scrollTo({top:0});});
   // the second row of tabs goes on top of the page
@@ -58,10 +64,10 @@ function proFilter(pick){const g=$('#gSess'),c=$('#proCar'),t=$('#proTrack');if(
   if(pick&&g.selectedOptions[0]?.hidden){const f=[...g.options].find(o=>!o.hidden);if(f){g.value=f.value;g.onchange&&g.onchange();}}}
 function proSyncChip(){const el=$('#proSync');if(!el)return;const br=isBridgeHost();const on=br&&typeof LIVE!=='undefined'&&LIVE.status?.local==='on';
   const last=typeof LDSYNC!=='undefined'&&LDSYNC.last?new Date(LDSYNC.last):null;
-  el.className='psync '+(on?'on':br?'off':'file');
-  el.innerHTML=`<b><i></i>${tr(on?'Bridge collegato':br?'Bridge in attesa del gioco':'Solo file')}</b><small>${last?tr('Ultimo controllo')+' '+last.toTimeString().slice(0,5):tr(br?'Telemetria dalla cartella di LMU':'Carica i file a mano')}</small>`;}
+  el.className='psync '+(on?'on':br?'off':'file');const old=last&&Date.now()-last>120e3;
+  el.innerHTML=`<b><i></i>${tr(on?'Bridge collegato':br?'Bridge in attesa del gioco':'Solo file')}</b><small${old?' class="dold"':''}>${last?tr('Ultimo controllo')+' '+last.toTimeString().slice(0,5):tr(br?'Telemetria dalla cartella di LMU':'Carica i file a mano')}</small>`;}
 
-// ---------- session strip: three numbers in front (best lap, ideal delta, track), the rest smaller ----------
+// ---------- session strip: pace, distance from the reference, main problem; the rest in one compact line ----------
 // how much the numbers can be trusted, said in words with the reasons (no made-up percentage)
 function dataQuality(S){const L=S.laps.filter(l=>l.complete&&l.type==='lanciato');const valid=L.filter(l=>!l.invalid).length;const c=S.cond||{};
   let lv=valid>=5?2:valid>=2?1:0;const why=[`${valid} ${valid===1?tr('giro lanciato valido'):tr('giri lanciati validi')}`];
@@ -70,21 +76,30 @@ function dataQuality(S){const L=S.laps.filter(l=>l.complete&&l.type==='lanciato'
   if(c.wet&&c.wet.max>0&&c.wet.min!=null&&c.wet.max-c.wet.min>0.1){lv=Math.max(0,lv-1);why.push(tr('asciutto e bagnato mischiati'));}
   why.push(S.merged?tr('giri non validi ufficiali dal .xml'):tr('senza .xml: giri non validi stimati'));
   return {lv,label:tr(['Bassa','Media','Alta'][lv]),why};}
+// pace: median of the good flying laps (valid, within 107% of the best); one lap = that lap
+function proPace(S){const b=S.best;if(!b)return null;let L=S.laps.filter(l=>l.complete&&l.type==='lanciato'&&!l.invalid&&l.time<=b.time*1.07);if(!L.length)L=[b];return {t:median(L.map(l=>l.time)),n:L.length};}
+// the lap to measure against: a reference from «Riferimenti», else your fastest other session here with this car, else your best lap
+function proRef(S){const v=S.meta?.venue,car=proCarOf(S);const O=lds().filter(x=>x!==S&&!x.sample&&x.best&&x.meta?.venue===v);
+  const R=O.filter(x=>LS.get('ref:'+x.id,false)).sort((a,b)=>a.best.time-b.best.time)[0];if(R)return {t:R.best.time,k:'ref',name:R.label||R.id};
+  const M=O.filter(x=>proCarOf(x)===car).sort((a,b)=>a.best.time-b.best.time)[0];if(M&&M.best.time<(S.best?.time??Infinity))return {t:M.best.time,k:'pb',name:M.label||M.id};
+  return S.best?{t:S.best.time,k:'best'}:null;}
 function proStrip(){const h=$('#hero'),a=active();if(!proLook()||!h||!a?.S)return;const S=a.S,m=S.meta||{},c=S.cond||{};
-  const B=S.best,L=S.laps.filter(l=>l.complete);let ideal=null;
-  try{const sec=L.map(l=>twLapSectors(S,l)).filter(Boolean);if(sec.length)ideal=[0,1,2].map(k=>Math.min(...sec.map(s=>s[k]))).reduce((x,y)=>x+y,0);}catch(e){}
-  const ses=S.merged?.sess?.name||tr('Telemetria MoTeC');const live=Date.now()-(S.addedAt||0)<15*60e3;
-  const Q=dataQuality(S);const tk=c.track?fx(c.track.avg,0):'—';const wx=c.label||'';
+  const B=S.best;const ses=S.merged?.sess?.name||tr('Telemetria MoTeC');const live=Date.now()-(S.addedAt||0)<15*60e3;
+  const Q=dataQuality(S);const P=proPace(S),R=proRef(S);const d=P&&R?P.t-R.t:null;
+  const refTxt=!R?'':R.k==='ref'?`${tr('dal riferimento')} ${fmtLap(R.t)}`:R.k==='pb'?`${tr('dal tuo record qui')} ${fmtLap(R.t)}`:`${tr('dal tuo miglior giro')} ${fmtLap(R.t)}`;
+  let F=null;try{const X=proFindings(S);F=X?[...X.F].filter(f=>f.s>0).sort((a,b)=>b.s-a.s||ENG_ORDER.indexOf(a.a)-ENG_ORDER.indexOf(b.a))[0]||'ok':null;}catch(e){}
+  const wx=[c.label?tr(c.label):'',c.track?`${tr('pista')} ${fx(c.track.avg,0)}°C`:'',c.air?`${tr('aria')} ${fx(c.air.avg,0)}°C`:''].filter(Boolean).join(' · ');
   const keep=[...h.querySelectorAll('#btnReport,#btnDebrief')];
   h.classList.add('pstrip');
-  h.innerHTML=`<div class="ps ps1"><div class="pl">${tr('Sessione attuale')}</div><div class="pn1">${esc(ses)}${live?`<span class="plive"><i></i>${tr('Appena arrivata')}</span>`:''}</div><div class="pm">${esc(m.date||'')} ${esc((m.time||'').slice(0,5))} · ${esc((m.driver||'').replace(/#\d+$/,''))}</div></div>
-   <div class="ps pk"><div class="pl">${tr('Miglior giro')}</div><div class="pv best">${B?fmtLap(B.time):'—'}</div><small>${B?tr('Giro')+' '+B.num:''}</small></div>
-   <div class="ps pk"><div class="pl">${tr('Delta ideale')}</div><div class="pv good">${B&&ideal?'−'+(B.time-ideal).toFixed(3):'—'}</div><small>${ideal?tr('Ideale')+' '+fmtLap(ideal):''}</small></div>
-   <div class="ps pk"><div class="pl">${tr('Pista')}</div><div class="pv">${tk}<small>°C</small></div><small>${esc(tr(wx))}${c.air?' · '+tr('aria')+' '+fx(c.air.avg,0)+'°':''}</small></div>
-   <div class="ps psec"><div><span>${tr('Auto')}</span><b>${esc(proCarOf(S))}</b></div><div><span>${tr('Circuito')}</span><b>${esc(proTrackOf(S))} · ${fx((S.trackLen||0)/1000,3)} km</b></div>
-     <div title="${esc(Q.why.join(' · '))}"><span>${tr('Dati')}</span><b class="pq q${Q.lv}">${Q.label}</b><small>${esc(Q.why.slice(0,2).join(' · '))}</small></div></div>
-   <div class="ps pbtn"></div>`;
-  const pb=h.querySelector('.pbtn');keep.forEach(b=>pb.append(b));}
+  h.innerHTML=`<div class="pmain">
+   <div class="ps pk"><div class="pl">${tr('Passo')}</div><div class="pv">${P?fmtLap(P.t):'<span class="dmiss">'+tr('manca')+'</span>'}</div><small>${P?(P.n===1?tr('1 giro buono'):P.n+' '+tr('giri buoni')+' · '+tr('mediana')):tr('servono giri completi')}</small></div>
+   <div class="ps pk"><div class="pl">${tr('Distanza dal riferimento')}</div><div class="pv ${d==null?'':d<=0.05?'good':d<=0.5?'warn':'bad'}">${d==null?'<span class="dmiss">'+tr('manca')+'</span>':(d>0?'+':d<0?'−':'')+Math.abs(d).toFixed(3)}</div><small>${esc(refTxt)}</small></div>
+   <div class="ps pk pprob" role="button" tabindex="0" title="${esc(tr('Apri Race Engineer'))}"><div class="pl">${tr('Problema principale')}</div>${F==='ok'?`<div class="pt ok">✓ ${tr('Niente di urgente')}</div>`:F?`<div class="pt s${F.s}">${esc(F.t)}</div><small>${esc((F.ev[0]||'').slice(0,90))}</small>`:`<div class="pt"><span class="dmiss">${tr('manca')}</span></div><small>${tr('servono giri completi')}</small>`}</div></div>
+   <div class="pline"><b>${esc(ses)}</b>${live?`<span class="plive"><i></i>${tr('Appena arrivata')}</span>`:''}<span>${esc(m.date||'')} ${esc((m.time||'').slice(0,5))}</span><span>${esc((m.driver||'').replace(/#\d+$/,''))}</span>
+     <span>${esc(proCarOf(S))}</span><span>${esc(proTrackOf(S))} · ${fx((S.trackLen||0)/1000,3)} km</span><span>${esc(wx)}</span><span>${tr('Miglior giro')} <b class="mono">${B?fmtLap(B.time):'—'}</b></span>
+     <span title="${esc(Q.why.join(' · '))}">${tr('Dati')} <b class="pq q${Q.lv}">${Q.label}</b></span><span class="pbtn"></span></div>`;
+  const pb=h.querySelector('.pbtn');keep.forEach(b=>pb.append(b));
+  const pp=h.querySelector('.pprob');if(pp)pp.onclick=pp.onkeydown=e=>{if(e.type==='keydown'&&e.key!=='Enter')return;$('#proNav .pn[data-n="eng"]')?.click();};}
 (function(){const rh=renderHero;window.renderHero=renderHero=function(){const h=$('#hero');h&&h.classList.remove('pstrip');rh();try{proStrip();}catch(e){console.error(e);}};})();
 (function(){const sv=showView;window.showView=showView=function(v){sv(v);const id=proNavOf(v);LS.set('pgrp:'+id,v);proSync();};})();
 (function(){const fs=fillSelects;window.fillSelects=fillSelects=function(){fs();try{proFilter(false);}catch(e){}};})();
@@ -92,16 +107,24 @@ function proStrip(){const h=$('#hero'),a=active();if(!proLook()||!h||!a?.S)retur
 // the store sets addedAt only on new files: mark the session that arrives while the app is open
 (function(){const af=window.addFile;if(typeof af==='function')window.addFile=addFile=async function(...a){const it=await af(...a);try{if(it&&it.kind==='ld'&&!it.addedAt)it.addedAt=Date.now();}catch(e){}return it;};})();
 
+function proDens(){const d=LS.get('dens','normale');if(d==='normale')delete document.documentElement.dataset.dens;else document.documentElement.dataset.dens=d;}
+proDens();
 function proApply(){const on=proLook();document.documentElement.dataset.look=on?'pro':'carbon';document.documentElement.dataset.pal=LS.get('look','pro')==='problu'?'blu':'oro';if(on){proBuild();proSync();proSyncChip();proFilter(false);}
   const n=$('#proNav');if(n)n.hidden=!on;const sub=$('.tabs.subtabs');if(sub&&!on&&!$('.top').contains(sub))$('.top').append(sub);if(sub&&on&&!$('main').contains(sub))$('main').prepend(sub);}
 setTimeout(()=>{proApply();renderHero();setInterval(proSyncChip,5000);},0);
 
 // ---------- Personalizza: choose the look ----------
 setTimeout(()=>{const h=$('#mSettings .mbox>.panel-h');if(!h||$('#lookSel'))return;
-  h.insertAdjacentHTML('afterend',`<div class="lookrow"><label class="f">${tr('Stile dell\'app')}<select id="lookSel"><option value="pro">${tr('Pro · nero, argento e oro')}</option><option value="problu">${tr('Pro · blu notte')}</option><option value="carbon">${tr('Carbon · rosso e nero')}</option></select></label></div>`);
+  h.insertAdjacentHTML('afterend',`<div class="lookrow"><label class="f">${tr('Stile dell\'app')}<select id="lookSel"><option value="pro">${tr('Pro · nero, argento e oro')}</option><option value="problu">${tr('Pro · blu notte')}</option><option value="carbon">${tr('Carbon · rosso e nero')}</option></select></label>
+    <label class="f">${tr('Dimensione dei testi')}<select id="densSel"><option value="compatta">${tr('Compatta')}</option><option value="normale">${tr('Normale')}</option><option value="comoda">${tr('Comoda · tablet o schermo lontano')}</option></select></label></div>`);
+  const d=$('#densSel');d.value=LS.get('dens','normale');d.onchange=()=>{LS.set('dens',d.value);proDens();RENDER[curView()]?.();};
   const s=$('#lookSel');s.value=LS.get('look','pro');s.onchange=()=>{LS.set('look',s.value);proApply();showView(curView());};},0);
 
 // ---------- team logo (Personalizza): in Pro it sits at the bottom of the side menu, where there is room for it ----------
 (function(){const al=window.applyTeamLogo;if(typeof al!=='function')return;window.applyTeamLogo=applyTeamLogo=function(){al();const nav=$('#proNav');if(!nav)return;const u=LS.get('teamLogo','');let w=$('#proLogo');
   if(!u){w&&w.remove();return;}if(!w){w=document.createElement('div');w.id='proLogo';w.innerHTML='<img alt="">';nav.querySelector('.pfoot')?.before(w);}w.querySelector('img').src=u;};
   setTimeout(()=>applyTeamLogo(),0);})();
+
+// ---------- data states: an empty value says «manca» in its own style, not a grey dash that looks like a number ----------
+function proMissing(root){if(!proLook())return;(root||document).querySelectorAll('.kpi .v,.pinfo b,.pcw b,.pcb b').forEach(e=>{if(e.children.length)return;const t=e.textContent.trim();if(t==='—'||t==='-'||t==='–'){e.innerHTML=`<span class="dmiss" title="${esc(tr('Il dato non c\'è in questi file'))}">${tr('manca')}</span>`;}});}
+setTimeout(()=>{const m=$('main');if(!m)return;let q=0;new MutationObserver(()=>{if(q)return;q=requestAnimationFrame(()=>{q=0;proMissing(m);});}).observe(m,{childList:true,subtree:true});proMissing(m);},0);

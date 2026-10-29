@@ -1,18 +1,17 @@
 {
- "version": "2.9.0",
- "date": "2026-10-28",
+ "version": "2.10.0",
+ "date": "2026-10-29",
  "notes": [
-  "Affidabilità dei dati a parole con il perché",
-  "Race Engineer: giri letti in chiaro, più veloci o ultimi",
-  "Confronto test con avvisi sulle condizioni",
-  "Fascia più chiara e testi più leggibili"
+  "Fascia: passo, distanza dal riferimento, problema principale",
+  "Menu per attività e «Altro» sul telefono",
+  "Dimensione dei testi, giro B tratteggiato, dati mancanti e vecchi distinti"
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "d95eae29c9fea8153768dd55f1534920aa61f869f22971a2400c15119651e4ab"
+  "sha256": "d557194804647ca6f79f881a66b132d2bd740aa91c6cffc603bf4c2565e91880"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "ea54108aba61ccea2c644f301b671ff74bf715d812766a530049761d97004d30"
+  "sha256": "915989a604992bf2276a929673ad51b37f183b73fc54340e8bbf80ee03dee64c"
  }
 }

@@ -37,7 +37,7 @@ function proCornerCards(D){return `<div class="pcc">${D.corners.map(c=>{const b=
     const ev=proEventsSVG(D);
     tr_.insertAdjacentHTML('afterend',`<div class="panel pevp"><div class="panel-h"><h3>${tr('Eventi sul giro')}</h3><div class="pevl">${ev.E.map(e=>`<span><i style="background:${e.c}"></i>${tr(e.l)}</span>`).join('')}${D.gB?`<span class="muted">${tr('sopra A, sotto B')}</span>`:''}</div></div>${ev.svg}</div>
       <div class="pcmpr"><div class="panel"><div class="panel-h"><h3>${tr('Confronto giri')}</h3><span class="muted small">${tr('tempi settore')}</span></div>${proSecTable()}</div>
-      <div class="panel pai2"><div class="panel-h"><h3><span class="psp">✦</span> ${tr('Analisi IA')}</h3><span class="muted small">${D.gB?tr('A contro B'):tr('dalla telemetria')}</span></div>${proTeleInsights(D)}</div></div>`);
+      <div class="panel pai2"><div class="panel-h"><h3><span class="psp">⚙</span> ${tr('Analisi automatica')}</h3><span class="muted small">${D.gB?tr('A contro B'):tr('dalla telemetria')}</span></div>${proTeleInsights(D)}</div></div>`);
     const low=body.querySelector('.twlow');if(low)low.insertAdjacentHTML('beforebegin',`<div class="panel pccp"><div class="panel-h"><h3>${tr('Analisi curva per curva')}</h3><span class="muted small">${D.gB?tr('Δ = quanto A perde (+) o guadagna (−) su B'):tr('scegli un giro B per i Δ')}</span></div>${proCornerCards(D)}</div>`);
     body.querySelectorAll('.pcard[data-c],.pai2 .pfr[data-c]').forEach(b=>b.onclick=()=>{twZoomCorner(D.corners.find(c=>c.k===+b.dataset.c));$('.twmapp')?.scrollIntoView({behavior:'smooth',block:'start'});});
   }catch(e){console.error(e);}};})();
