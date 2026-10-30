@@ -1549,6 +1549,67 @@ html[data-look="pro"] .pos,html[data-look="pro"] .dn,html[data-look="pro"] b.dn{
 }
 @media (max-width:760px){html[data-look="pro"] .top-in .hdr-tools{flex:0 1 auto;width:auto;margin-left:auto;padding:4px 0}html[data-look="pro"] .top-in .brand{align-self:center}}
 html[data-look="pro"] .ecount span{letter-spacing:.05em}
+
+/* ================= MOTION (ui46.js): tokens, entry, hover, focus, loading, feedback =================
+   Only transform and opacity animate; 150–400 ms; one natural easing; nothing moves with reduced motion. */
+:root{--m-fast:150ms;--m:220ms;--m-slow:360ms;--m-ease:cubic-bezier(.2,.8,.2,1);--m-out:cubic-bezier(.4,0,1,1)}
+
+/* page entry: panels rise 6 px and fade in, 35 ms apart (at most 8 steps) */
+@keyframes pvIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.view.pv-enter .panel{animation:pvIn var(--m-slow) var(--m-ease) both;animation-delay:calc(var(--pv-i,0) * 35ms)}
+.hero.pstrip{animation:pvIn var(--m) var(--m-ease) both}
+/* further down: revealed once on scroll */
+.panel.pr-wait{opacity:0;transform:translateY(10px)}
+.panel.pr-in{animation:pvIn var(--m-slow) var(--m-ease) both}
+
+/* controls: hover lifts 1 px, press sinks, state changes fade */
+html[data-look="pro"] .btn,html[data-look="pro"] .pn,html[data-look="pro"] .tab,html[data-look="pro"] .sutabs button,html[data-look="pro"] .seg button{transition:background-color var(--m-fast) var(--m-ease),border-color var(--m-fast) var(--m-ease),color var(--m-fast) var(--m-ease),transform var(--m-fast) var(--m-ease),opacity var(--m-fast)}
+html[data-look="pro"] .btn:hover:not(:disabled){transform:translateY(-1px)}
+html[data-look="pro"] .btn:active:not(:disabled),html[data-look="pro"] .pn:active,html[data-look="pro"] .seg button:active{transform:scale(.97);transition-duration:80ms}
+html[data-look="pro"] .btn:disabled,html[data-look="pro"] .btn[aria-disabled="true"],html[data-look="pro"] select:disabled,html[data-look="pro"] input:disabled{opacity:.45;cursor:not-allowed;transform:none}
+/* cards that are buttons: lift 2 px on hover */
+html[data-look="pro"] .pfr,html[data-look="pro"] .pcard,html[data-look="pro"] .pab,html[data-look="pro"] .psb,html[data-look="pro"] .pvr,html[data-look="pro"] .pinfo>div{transition:transform var(--m) var(--m-ease),border-color var(--m) var(--m-ease),background-color var(--m) var(--m-ease)}
+html[data-look="pro"] .pcard:hover,html[data-look="pro"] .pab:hover,html[data-look="pro"] .psb:hover,html[data-look="pro"] .pvr:hover,html[data-look="pro"] .pai2 .pfr:hover{transform:translateY(-2px)}
+html[data-look="pro"] .panel{transition:border-color var(--m) var(--m-ease)}
+html[data-look="pro"] .pstrip .pprob{transition:background-color var(--m) var(--m-ease)}
+
+/* focus: a gold ring for the keyboard only */
+html[data-look="pro"] :is(button,a,select,input,textarea,summary,[tabindex]):focus-visible{outline:2px solid var(--pacc);outline-offset:2px;border-radius:8px}
+html[data-look="pro"] .pn:focus-visible{outline-offset:-2px}
+
+/* modals and the «Altro» sheet open with a short scale and fade */
+@keyframes mIn{from{opacity:0;transform:translateY(8px) scale(.985)}to{opacity:1;transform:none}}
+@keyframes fIn{from{opacity:0}to{opacity:1}}
+html[data-look="pro"] .modal:not([hidden]){animation:fIn var(--m) var(--m-ease)}
+html[data-look="pro"] .modal:not([hidden]) .mbox{animation:mIn var(--m) var(--m-ease)}
+@keyframes sheetIn{from{transform:translateY(24px);opacity:0}to{transform:none;opacity:1}}
+@media (max-width:760px){html[data-look="pro"] #proNav.pmopen nav{animation:sheetIn var(--m) var(--m-ease)}html[data-look="pro"] #proNav.pmopen::before{animation:fIn var(--m) var(--m-ease)}}
+html[data-look="pro"] details[open]>:not(summary){animation:fIn var(--m) var(--m-ease)}
+
+/* loading: skeleton of the strip with a light sweep (transform only) */
+.pskel{display:grid;gap:10px;margin:0 0 16px;padding:16px 20px;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+.pskel .skr{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.pskel .sk{position:relative;overflow:hidden;border-radius:6px;background:var(--panel2)}
+.pskel .sk-t{height:12px;width:160px}.pskel .sk-b{height:44px}.pskel .sk-l{height:12px;width:60%}
+.pskel .sk::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent);transform:translateX(-100%);animation:skSweep 1.2s var(--m-ease) infinite}
+@keyframes skSweep{to{transform:translateX(100%)}}
+body.is-loading #btnLoad{opacity:.6;pointer-events:none}
+
+/* feedback: toasts say if it went well, badly, or just inform */
+html[data-look="pro"] #toastStack .toast{border-radius:10px;border:1px solid var(--line);border-left:3px solid var(--psil3,#A9ADB4);background:var(--panel2);font-family:var(--f-body);font-size:.88rem;display:flex;gap:10px;align-items:center;animation:pvIn var(--m) var(--m-ease)}
+html[data-look="pro"] #toastStack .toast .tk{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font:700 .75rem var(--f-body);font-style:normal;background:var(--panel);flex:none}
+html[data-look="pro"] #toastStack .toast[data-kind="ok"]{border-left-color:var(--good)}html[data-look="pro"] #toastStack .toast[data-kind="ok"] .tk{color:var(--good)}
+html[data-look="pro"] #toastStack .toast[data-kind="err"]{border-left-color:var(--bad)}html[data-look="pro"] #toastStack .toast[data-kind="err"] .tk{color:var(--bad)}
+html[data-look="pro"] #toastStack .toast[data-kind="info"] .tk{color:var(--pacc)}
+
+/* reduced motion: everything appears at once, nothing slides */
+@media (prefers-reduced-motion:reduce){
+  .view.pv-enter .panel,.panel.pr-in,.hero.pstrip,html[data-look="pro"] .modal:not([hidden]),html[data-look="pro"] .modal:not([hidden]) .mbox,html[data-look="pro"] #proNav.pmopen nav,html[data-look="pro"] details[open]>:not(summary),html[data-look="pro"] #toastStack .toast{animation:none!important}
+  .panel.pr-wait{opacity:1;transform:none}
+  .pskel .sk::after{animation:none}
+  html[data-look="pro"] *{transition-duration:0s!important}
+  html[data-look="pro"] .btn:hover,html[data-look="pro"] .pcard:hover,html[data-look="pro"] .pab:hover,html[data-look="pro"] .psb:hover,html[data-look="pro"] .pvr:hover{transform:none}
+}
 </style>
 <header class="top">
   <div class="top-in">
@@ -4338,6 +4399,7 @@ function openDebrief(){let m=$('#mDeb');if(!m){m=document.createElement('div');m
   openModal('#mDeb');}
 // Italian → English phrases. '#' stands for any number (kept as-is). Longest entries are applied first.
 const I18N_EN=[
+["Carico i file…", "Loading the files…"],
 ["Filtri auto e pista", "Car and track filters"],
 ["più consumate", "more worn"],["più nuove", "fresher"],["B sul bagnato", "B in the wet"],["B sull'asciutto", "B in the dry"],["B non valido", "B invalid"],["auto diversa", "different car"],["Confronto equo", "Fair comparison"],["carburante, gomme, pista e tipo di giro di A e B", "fuel, tyres, track and lap type of A and B"],["A e B non sono nelle stesse condizioni", "A and B are not in the same conditions"],["Le differenze di tempo possono venire da qui e non dalla guida.", "Time differences may come from here and not from the driving."],["A e B sono confrontabili: stesso tipo di giro, carburante, gomme e pista simili.", "A and B are comparable: same lap type, similar fuel, tyres and track."],["Scegli un giro B o usa uno di quelli suggeriti.", "Pick a lap B or use one of the suggested ones."],["Giri più confrontabili con A", "Laps most comparable with A"],["stesse condizioni", "same conditions"],["avvicinarsi a 1 (auto neutra)", "get closer to 1 (neutral car)"],["stare tra", "stay between"],["scendere", "go down"],["salire", "go up"],["manca il dato in una delle due prove", "the data is missing in one of the two runs"],["differenza troppo piccola", "difference too small"],["le condizioni sono cambiate: ripeti la prova con carburante, gomme e pista simili", "conditions changed: repeat the test with similar fuel, tyres and track"],["la modifica non risulta nel setup scelto", "the change is not in the chosen setup"],["Tengo la modifica", "Keep the change"],["Torno indietro", "Go back"],["Annulla la prova", "Cancel the test"],["Prova setup in corso", "Setup test in progress"],["iniziata il", "started on"],["Ipotesi", "Hypothesis"],["Modifica", "Change"],["era", "was"],["Cosa misuro", "What I measure"],["deve", "must"],["Ora cambia solo questo nel gioco, fai 3–5 giri puliti con carburante e gomme simili e carica la telemetria (o lascia che arrivi da sola): qui comparirà il risultato.", "Now change only this in the game, drive 3–5 clean laps with similar fuel and tyres and load the telemetry (or let it arrive by itself): the result will appear here."],["Scegli la telemetria della prova e il suo .svm.", "Pick the telemetry of the test and its .svm."],["Prove fatte su questa pista", "Tests done on this track"],["tenuta", "kept"],["tolta", "reverted"],["annullata", "cancelled"],["Verifica", "Check"],["e il passo non deve peggiorare", "and the pace must not get worse"],["Prova questa modifica", "Test this change"],["Prova", "Test"],["Migliorato", "Improved"],["Peggiorato", "Worse"],["Inconcludente", "Inconclusive"],
 ["Dato vecchio: il gioco non manda aggiornamenti da", "Old data: the game has sent no updates for"],["tratteggiato", "dashed"],["Altro", "More"],["dal riferimento", "from the reference"],["dal tuo record qui", "from your record here"],["dal tuo miglior giro", "from your best lap"],["manca", "missing"],["1 giro buono", "1 good lap"],["giri buoni", "good laps"],["mediana", "median"],["servono giri completi", "complete laps needed"],["Distanza dal riferimento", "Gap to reference"],["Apri Race Engineer", "Open Race Engineer"],["Problema principale", "Main problem"],["Dimensione dei testi", "Text size"],["Comoda · tablet o schermo lontano", "Large · tablet or far screen"],["Il dato non c'è in questi file", "The data is not in these files"],["Analisi automatica", "Automatic analysis"],["regole e calcoli sulla telemetria", "rules and calculations on the telemetry"],["Analizza", "Analyse"],["Prepara", "Prepare"],
@@ -5061,9 +5123,10 @@ const tr=I18N.tr;
 })();
 const AI_LANG=()=>LANG==='en'?'\n\nIMPORTANT: write your whole answer in English (the instructions above are in Italian, but the driver reads English).':'';
 // ================= VERSIONE, NOVITÀ E AGGIORNAMENTI =================
-const APP_VERSION='2.12.0';
+const APP_VERSION='2.13.0';
 const DEFAULT_UPD='https://raw.githubusercontent.com/KubaMovitech/Race-Engineer/main/';   // update channel (folder with version.json), set when the team repository exists
 const CHANGELOG=[
+{v:'2.13.0',d:'30/10/2026',items:['Animazioni leggere: entrando in una pagina i pannelli arrivano uno dopo l\'altro, quelli più in basso compaiono quando ci scorri; finestre e menu «Altro» si aprono con una breve dissolvenza. Sul Muretto niente animazioni, per non far tremolare i numeri live.','Pulsanti e schede reagiscono al mouse (si alzano di poco, si abbassano al clic); con la tastiera c\'è un bordo oro su ciò che è selezionato; i pulsanti non disponibili sono attenuati.','Mentre i file si caricano compare una sagoma della fascia al posto dello spazio vuoto.','Gli avvisi in basso dicono se è andata bene (verde ✓), male (rosso !) o se è solo un\'informazione.','Se nel sistema è attivo «riduci movimento», tutto appare subito senza animazioni.']},
 {v:'2.12.0',d:'30/10/2026',items:['Rifinitura grafica: niente più doppioni (il pannello del miglior giro in Dashboard mostra solo settori e ideale, in Telemetria non si ripetono pilota e data, in BOP e Muretto non c\'è la fascia della sessione), titoli senza le spaziature dei vecchi stili, mini-gomme dell\'Ingegnere tolte (sono nella Dashboard).','Muretto nei colori dell\'app: scheda attiva e «Direzione gara» in oro, nessun rosso decorativo.','Colori uguali ovunque: verde meglio, rosso peggio, arancione da controllare, viola tempi migliori; «Progresso dal primo» a zero non è più rosso.','Telefono: barra in alto su due righe, filtri Auto e Pista dietro il pulsante a imbuto. Su schermi bassi il menu laterale toglie lo slogan e rimpicciolisce il logo.','Personalizza: una sola impostazione per la dimensione dei testi («Densità»), che ora ingrandisce anche la grafica Pro; con la grafica Pro il colore principale è sempre quello dello stile (oro o blu).']},
 {v:'2.11.0',d:'29/10/2026',items:['Telemetria › Confronto equo: dice se A e B sono confrontabili (carburante, usura gomme, temperatura pista, asciutto/bagnato, tipo di giro, auto) e suggerisce i giri più simili ad A da usare come B.','Prova setup guidata: in Race Engineer premi «Prova» su una modifica; l\'app scrive l\'ipotesi, cosa misurare (per esempio bloccaggi anteriori, che devono scendere) e il valore di partenza. Con la telemetria nuova dà «Migliorato», «Peggiorato» o «Inconcludente», controlla che la modifica sia davvero nel setup e avvisa se le condizioni sono cambiate. Poi scegli: tengo la modifica, torno indietro o annullo; le prove fatte restano nell\'elenco.','Ogni consiglio di Race Engineer ha la stessa forma: problema, evidenza, modifica, verifica (cosa deve succedere ai numeri). Il perché si apre al clic.']},
 {v:'2.10.0',d:'29/10/2026',items:['La fascia in alto risponde a «come sto andando?»: passo (mediana dei giri buoni), distanza dal riferimento (il riferimento da «Riferimenti», altrimenti il tuo record qui, altrimenti il tuo miglior giro) e problema principale (clic per aprire Race Engineer). Sessione, auto, pista, meteo, miglior giro e dati in una riga compatta.','Menu raggruppato per attività: Analizza, Prepara, Gara. Sul telefono quattro voci (Dashboard, Telemetria, Race Engineer, Muretto) e «Altro» con tutto il resto.','Personalizza › Dimensione dei testi: Compatta, Normale o Comoda (tablet o schermo lontano).','Il giro B è tratteggiato in tutti i grafici e sulla mappa: A e B si distinguono anche senza i colori.','Dati che mancano scritti «manca» in un riquadro tratteggiato, dati vecchi in arancione con l\'orologio (per esempio nel Muretto quando il gioco non manda aggiornamenti): non si confondono più con un valore vero.','«Analisi IA» diventa «Analisi automatica»: sono regole e calcoli sulla telemetria. «Ingegnere AI» resta il nome dell\'assistente che usa Claude.']},
@@ -8461,6 +8524,35 @@ function adviceShape(card,f){if(card.dataset.shaped)return;card.dataset.shaped=1
 .ppl .ptgo,.ppl .ppd{grid-column:3}.ppl .ptgo{align-self:end}.ppl .ppd{align-self:start}.ppl>span.ppn{grid-row:span 2}.ppl>div{grid-row:span 2}
 @media (max-width:760px){.pthyp{grid-template-columns:1fr}}
 `;document.head.appendChild(st);})();
+// ================= MOTION: page entry, scroll reveal, loading skeleton, toast kinds =================
+// Only transform and opacity move, 150–400 ms, and nothing moves with prefers-reduced-motion (see pro.css «motion»).
+// The Muretto refreshes every second: it never gets entry animations, so live numbers do not flicker.
+const MOTION_OK=()=>!matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// ---------- page entry: the panels of the new page come in one after the other ----------
+let pvTimer=0,pvIO=null;
+function pvEnter(v){const sec=$('#v-'+v);if(!sec||v==='live'||!MOTION_OK())return;
+  clearTimeout(pvTimer);sec.classList.remove('pv-enter');void sec.offsetWidth;   // restart the animation on the same page
+  const kids=[...sec.querySelectorAll(':scope>.panel,:scope>div>.panel,:scope>div>div>.panel')].slice(0,12);
+  kids.forEach((k,i)=>k.style.setProperty('--pv-i',Math.min(i,8)));
+  sec.classList.add('pv-enter');pvTimer=setTimeout(()=>sec.classList.remove('pv-enter'),700);
+  // further down the page: shown when they scroll into view, once
+  pvIO?.disconnect();$$('.panel.pr-wait').forEach(p=>p.classList.remove('pr-wait'));pvIO=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('pr-in');e.target.classList.remove('pr-wait');pvIO.unobserve(e.target);}}),{rootMargin:'0px 0px -40px 0px'});
+  requestAnimationFrame(()=>[...sec.querySelectorAll('.panel')].forEach(p=>{if(p.offsetParent!==null&&p.getBoundingClientRect().top>innerHeight&&!p.parentElement.closest('.pr-wait')){p.classList.add('pr-wait');pvIO.observe(p);}}));}
+(function(){const sv=showView;window.showView=showView=function(v){sv(v);try{pvEnter(v);}catch(e){}};})();
+
+// ---------- loading: a skeleton of the session strip while the files are read ----------
+(function(){const hf=window.handleFiles;if(typeof hf!=='function')return;window.handleFiles=handleFiles=async function(files){
+  const main=$('main');let sk=null;
+  if(main&&files&&files.length){sk=document.createElement('div');sk.className='pskel';sk.setAttribute('aria-busy','true');sk.setAttribute('aria-label',tr('Carico i file…'));
+    sk.innerHTML=`<div class="sk sk-t"></div><div class="skr"><div class="sk sk-b"></div><div class="sk sk-b"></div><div class="sk sk-b"></div></div><div class="sk sk-l"></div>`;
+    const at=$('#hero');if(at)at.before(sk);else main.prepend(sk);document.body.classList.add('is-loading');}
+  try{return await hf.apply(this,arguments);}finally{sk?.remove();document.body.classList.remove('is-loading');}};})();
+
+// ---------- toasts: success, error or plain information, from the words of the message ----------
+(function(){const t0=window.toast;if(typeof t0!=='function')return;window.toast=toast=function(m,...a){t0(m,...a);const el=$('#toastStack')?.lastElementChild;if(!el||el.dataset.kind)return;const s=String(m);
+  const kind=/errore|non riesco|impossibile|non valid|fallit|non trovat|rifiutat|error|failed|invalid|not found/i.test(s)?'err':/^(caricat|salvat|copiat|inviat|aggiornat|fatto|✓|loaded|saved|copied|sent|updated|done)/i.test(s)?'ok':'info';
+  el.dataset.kind=kind;el.insertAdjacentHTML('afterbegin',`<i class="tk" aria-hidden="true">${kind==='ok'?'✓':kind==='err'?'!':'i'}</i>`);if(kind==='err')el.setAttribute('role','alert');};})();
 // ================= SETUP =================
 let DIAG=null;
 RENDER.setup=()=>{
