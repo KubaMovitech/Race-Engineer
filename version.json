@@ -1,16 +1,17 @@
 {
- "version": "2.13.0",
+ "version": "2.14.0",
  "date": "2026-10-30",
  "notes": [
-  "Animazioni leggere e micro-interazioni",
-  "Caricamento con sagoma e avvisi colorati"
+  "Il giro disegnato nella pagina iniziale",
+  "Guarda il giro sulla mappa della Dashboard",
+  "Animazioni più sobrie"
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "aeee49d6d6ad02defb737f011cba98578510c870e4597444db1dbee56d900d5b"
+  "sha256": "4059ebcdc9ad9a5767fecf9471153396cc9f367ba156775a312c59b69a159797"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "ed7aab78b372f14c5ee3fc4b8843cf66d47fc20469c64380c3dfe03e5ddb0380"
+  "sha256": "f481e7d63e779c3c037c11c842fc0a2070e2cd7581c20e777880c7df8fdd979e"
  }
 }

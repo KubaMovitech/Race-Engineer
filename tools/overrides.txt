@@ -87,6 +87,7 @@ renderHero
     ui23.js    wrap
     ui27.js    wrap
     ui41.js    wrap
+    ui47.js    wrap
 renderLib
     ui40.js    wrap
 renderLive
@@ -103,6 +104,7 @@ showView
     ui33.js    wrap
     ui41.js    wrap
     ui46.js    wrap
+    ui47.js    wrap
 stintLD
     ui24.js    wrap
 stintXML
@@ -145,6 +147,7 @@ RENDER.stint
     ui30.js    wrap
     ui36.js    wrap
     ui42.js    wrap
+    ui47.js    wrap
 RENDER.tele
     ui35.js    define
     ui40.js    wrap
