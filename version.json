@@ -1,17 +1,16 @@
 {
- "version": "2.11.0",
- "date": "2026-10-29",
+ "version": "2.12.0",
+ "date": "2026-10-30",
  "notes": [
-  "Confronto equo tra giri",
-  "Prova setup guidata",
-  "Consigli con problema, evidenza, modifica, verifica"
+  "Rifinitura grafica: niente doppioni, Muretto nei colori dell'app",
+  "Telefono più compatto, colori uguali ovunque"
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "fa25dbdbcb1e231e11dbf456533ac66441bdc36a39b05a1125c28ee07cb6d55e"
+  "sha256": "946b7775978c435f152033d2fe6d9f662e082f6ceeccc1202c25ff8195bd90db"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "1a2aa6c253ee1eb98401e174058f45c5fd9953bd6def0672e21f4bc25359b06b"
+  "sha256": "968088184266b4cba0544229437a01daaf3d700416638e6105a717c482ae790d"
  }
 }

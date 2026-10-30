@@ -49,6 +49,8 @@ function proBuild(){if($('#proNav'))return;
       <label class="pf"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 18c-2-3 0-6 3-6s4-5 7-6 5 2 3 5-6 2-6 5 4 4 1 5-6 0-8-3z"/></svg><select id="proTrack" aria-label="${tr('Pista')}"></select></label>
       <label class="pf pfs"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg></label>`;
     $('.top-in .brand').after(w);w.querySelector('.pfs').append(g);
+    w.insertAdjacentHTML('beforeend',`<button type="button" class="btn icon pfbtn" aria-expanded="false" title="${esc(tr('Filtri auto e pista'))}" aria-label="${esc(tr('Filtri auto e pista'))}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18l-7 8v6l-4-2v-4z"/></svg></button>`);
+    w.querySelector('.pfbtn').onclick=e=>{const o=!w.classList.contains('pfopen');w.classList.toggle('pfopen',o);e.currentTarget.setAttribute('aria-expanded',o);};
     $('#proCar').onchange=$('#proTrack').onchange=()=>{LS.set('pro:car',$('#proCar').value);LS.set('pro:track',$('#proTrack').value);proFilter(true);};}
   const st=document.createElement('div');st.id='proSync';st.className='psync';$('.hdr-tools').append(st);
   const lb=$('#btnLoad');if(lb)lb.innerHTML=`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3M7 8l5-5 5 5"/><path d="M4 15v5h16v-5"/></svg>${tr('Carica dati')}`;}
@@ -107,17 +109,19 @@ function proStrip(){const h=$('#hero'),a=active();if(!proLook()||!h||!a?.S)retur
 // the store sets addedAt only on new files: mark the session that arrives while the app is open
 (function(){const af=window.addFile;if(typeof af==='function')window.addFile=addFile=async function(...a){const it=await af(...a);try{if(it&&it.kind==='ld'&&!it.addedAt)it.addedAt=Date.now();}catch(e){}return it;};})();
 
-function proDens(){const d=LS.get('dens','normale');if(d==='normale')delete document.documentElement.dataset.dens;else document.documentElement.dataset.dens=d;}
-proDens();
-function proApply(){const on=proLook();document.documentElement.dataset.look=on?'pro':'carbon';document.documentElement.dataset.pal=LS.get('look','pro')==='problu'?'blu':'oro';if(on){proBuild();proSync();proSyncChip();proFilter(false);}
+// text size: the «Densità» of Personalizza (compact / normal / large) also scales the Pro layout; 2.10 kept it apart in «dens»
+function proDens(){const u=LS.get('ui',{});const old=LS.get('dens',null);if(old&&!u.density){u.density=old==='compatta'?'compact':old==='comoda'?'large':'normal';LS.set('ui',u);}if(old)LS.set('dens',null);
+  const d={compact:'compatta',large:'comoda'}[LS.get('ui',{}).density];if(d)document.documentElement.dataset.dens=d;else delete document.documentElement.dataset.dens;
+  // in Pro the accent is the look's own (gold or blue), whatever Personalizza had for the old looks
+  if(proLook()){const r=document.documentElement.style;const pal=document.documentElement.dataset.pal==='blu';r.setProperty('--accent',pal?'#2F7CF6':'#C9A54C');r.setProperty('--accent2',pal?'#7FB2FF':'#E6C877');r.setProperty('--accent-ink',pal?'#ffffff':'#111111');r.setProperty('--accent-soft',pal?'#1D4FA8':'#8C6D24');}}
+(function(){const au=window.applyUI;if(typeof au==='function')window.applyUI=applyUI=function(){au();proDens();};})();
+function proApply(){const on=proLook();document.documentElement.dataset.look=on?'pro':'carbon';document.documentElement.dataset.pal=LS.get('look','pro')==='problu'?'blu':'oro';if(on){proBuild();proSync();proSyncChip();proFilter(false);}proDens();
   const n=$('#proNav');if(n)n.hidden=!on;const sub=$('.tabs.subtabs');if(sub&&!on&&!$('.top').contains(sub))$('.top').append(sub);if(sub&&on&&!$('main').contains(sub))$('main').prepend(sub);}
 setTimeout(()=>{proApply();renderHero();setInterval(proSyncChip,5000);},0);
 
 // ---------- Personalizza: choose the look ----------
 setTimeout(()=>{const h=$('#mSettings .mbox>.panel-h');if(!h||$('#lookSel'))return;
-  h.insertAdjacentHTML('afterend',`<div class="lookrow"><label class="f">${tr('Stile dell\'app')}<select id="lookSel"><option value="pro">${tr('Pro · nero, argento e oro')}</option><option value="problu">${tr('Pro · blu notte')}</option><option value="carbon">${tr('Carbon · rosso e nero')}</option></select></label>
-    <label class="f">${tr('Dimensione dei testi')}<select id="densSel"><option value="compatta">${tr('Compatta')}</option><option value="normale">${tr('Normale')}</option><option value="comoda">${tr('Comoda · tablet o schermo lontano')}</option></select></label></div>`);
-  const d=$('#densSel');d.value=LS.get('dens','normale');d.onchange=()=>{LS.set('dens',d.value);proDens();RENDER[curView()]?.();};
+  h.insertAdjacentHTML('afterend',`<div class="lookrow"><label class="f">${tr('Stile dell\'app')}<select id="lookSel"><option value="pro">${tr('Pro · nero, argento e oro')}</option><option value="problu">${tr('Pro · blu notte')}</option><option value="carbon">${tr('Carbon · rosso e nero')}</option></select></label></div>`);
   const s=$('#lookSel');s.value=LS.get('look','pro');s.onchange=()=>{LS.set('look',s.value);proApply();showView(curView());};},0);
 
 // ---------- team logo (Personalizza): in Pro it sits at the bottom of the side menu, where there is room for it ----------
