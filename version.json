@@ -1,16 +1,16 @@
 {
- "version": "2.12.0",
+ "version": "2.13.0",
  "date": "2026-10-30",
  "notes": [
-  "Rifinitura grafica: niente doppioni, Muretto nei colori dell'app",
-  "Telefono più compatto, colori uguali ovunque"
+  "Animazioni leggere e micro-interazioni",
+  "Caricamento con sagoma e avvisi colorati"
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "946b7775978c435f152033d2fe6d9f662e082f6ceeccc1202c25ff8195bd90db"
+  "sha256": "aeee49d6d6ad02defb737f011cba98578510c870e4597444db1dbee56d900d5b"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "968088184266b4cba0544229437a01daaf3d700416638e6105a717c482ae790d"
+  "sha256": "ed7aab78b372f14c5ee3fc4b8843cf66d47fc20469c64380c3dfe03e5ddb0380"
  }
 }

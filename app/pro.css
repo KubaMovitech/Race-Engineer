@@ -319,3 +319,64 @@ html[data-look="pro"] .pos,html[data-look="pro"] .dn,html[data-look="pro"] b.dn{
 }
 @media (max-width:760px){html[data-look="pro"] .top-in .hdr-tools{flex:0 1 auto;width:auto;margin-left:auto;padding:4px 0}html[data-look="pro"] .top-in .brand{align-self:center}}
 html[data-look="pro"] .ecount span{letter-spacing:.05em}
+
+/* ================= MOTION (ui46.js): tokens, entry, hover, focus, loading, feedback =================
+   Only transform and opacity animate; 150–400 ms; one natural easing; nothing moves with reduced motion. */
+:root{--m-fast:150ms;--m:220ms;--m-slow:360ms;--m-ease:cubic-bezier(.2,.8,.2,1);--m-out:cubic-bezier(.4,0,1,1)}
+
+/* page entry: panels rise 6 px and fade in, 35 ms apart (at most 8 steps) */
+@keyframes pvIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.view.pv-enter .panel{animation:pvIn var(--m-slow) var(--m-ease) both;animation-delay:calc(var(--pv-i,0) * 35ms)}
+.hero.pstrip{animation:pvIn var(--m) var(--m-ease) both}
+/* further down: revealed once on scroll */
+.panel.pr-wait{opacity:0;transform:translateY(10px)}
+.panel.pr-in{animation:pvIn var(--m-slow) var(--m-ease) both}
+
+/* controls: hover lifts 1 px, press sinks, state changes fade */
+html[data-look="pro"] .btn,html[data-look="pro"] .pn,html[data-look="pro"] .tab,html[data-look="pro"] .sutabs button,html[data-look="pro"] .seg button{transition:background-color var(--m-fast) var(--m-ease),border-color var(--m-fast) var(--m-ease),color var(--m-fast) var(--m-ease),transform var(--m-fast) var(--m-ease),opacity var(--m-fast)}
+html[data-look="pro"] .btn:hover:not(:disabled){transform:translateY(-1px)}
+html[data-look="pro"] .btn:active:not(:disabled),html[data-look="pro"] .pn:active,html[data-look="pro"] .seg button:active{transform:scale(.97);transition-duration:80ms}
+html[data-look="pro"] .btn:disabled,html[data-look="pro"] .btn[aria-disabled="true"],html[data-look="pro"] select:disabled,html[data-look="pro"] input:disabled{opacity:.45;cursor:not-allowed;transform:none}
+/* cards that are buttons: lift 2 px on hover */
+html[data-look="pro"] .pfr,html[data-look="pro"] .pcard,html[data-look="pro"] .pab,html[data-look="pro"] .psb,html[data-look="pro"] .pvr,html[data-look="pro"] .pinfo>div{transition:transform var(--m) var(--m-ease),border-color var(--m) var(--m-ease),background-color var(--m) var(--m-ease)}
+html[data-look="pro"] .pcard:hover,html[data-look="pro"] .pab:hover,html[data-look="pro"] .psb:hover,html[data-look="pro"] .pvr:hover,html[data-look="pro"] .pai2 .pfr:hover{transform:translateY(-2px)}
+html[data-look="pro"] .panel{transition:border-color var(--m) var(--m-ease)}
+html[data-look="pro"] .pstrip .pprob{transition:background-color var(--m) var(--m-ease)}
+
+/* focus: a gold ring for the keyboard only */
+html[data-look="pro"] :is(button,a,select,input,textarea,summary,[tabindex]):focus-visible{outline:2px solid var(--pacc);outline-offset:2px;border-radius:8px}
+html[data-look="pro"] .pn:focus-visible{outline-offset:-2px}
+
+/* modals and the «Altro» sheet open with a short scale and fade */
+@keyframes mIn{from{opacity:0;transform:translateY(8px) scale(.985)}to{opacity:1;transform:none}}
+@keyframes fIn{from{opacity:0}to{opacity:1}}
+html[data-look="pro"] .modal:not([hidden]){animation:fIn var(--m) var(--m-ease)}
+html[data-look="pro"] .modal:not([hidden]) .mbox{animation:mIn var(--m) var(--m-ease)}
+@keyframes sheetIn{from{transform:translateY(24px);opacity:0}to{transform:none;opacity:1}}
+@media (max-width:760px){html[data-look="pro"] #proNav.pmopen nav{animation:sheetIn var(--m) var(--m-ease)}html[data-look="pro"] #proNav.pmopen::before{animation:fIn var(--m) var(--m-ease)}}
+html[data-look="pro"] details[open]>:not(summary){animation:fIn var(--m) var(--m-ease)}
+
+/* loading: skeleton of the strip with a light sweep (transform only) */
+.pskel{display:grid;gap:10px;margin:0 0 16px;padding:16px 20px;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+.pskel .skr{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.pskel .sk{position:relative;overflow:hidden;border-radius:6px;background:var(--panel2)}
+.pskel .sk-t{height:12px;width:160px}.pskel .sk-b{height:44px}.pskel .sk-l{height:12px;width:60%}
+.pskel .sk::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent);transform:translateX(-100%);animation:skSweep 1.2s var(--m-ease) infinite}
+@keyframes skSweep{to{transform:translateX(100%)}}
+body.is-loading #btnLoad{opacity:.6;pointer-events:none}
+
+/* feedback: toasts say if it went well, badly, or just inform */
+html[data-look="pro"] #toastStack .toast{border-radius:10px;border:1px solid var(--line);border-left:3px solid var(--psil3,#A9ADB4);background:var(--panel2);font-family:var(--f-body);font-size:.88rem;display:flex;gap:10px;align-items:center;animation:pvIn var(--m) var(--m-ease)}
+html[data-look="pro"] #toastStack .toast .tk{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font:700 .75rem var(--f-body);font-style:normal;background:var(--panel);flex:none}
+html[data-look="pro"] #toastStack .toast[data-kind="ok"]{border-left-color:var(--good)}html[data-look="pro"] #toastStack .toast[data-kind="ok"] .tk{color:var(--good)}
+html[data-look="pro"] #toastStack .toast[data-kind="err"]{border-left-color:var(--bad)}html[data-look="pro"] #toastStack .toast[data-kind="err"] .tk{color:var(--bad)}
+html[data-look="pro"] #toastStack .toast[data-kind="info"] .tk{color:var(--pacc)}
+
+/* reduced motion: everything appears at once, nothing slides */
+@media (prefers-reduced-motion:reduce){
+  .view.pv-enter .panel,.panel.pr-in,.hero.pstrip,html[data-look="pro"] .modal:not([hidden]),html[data-look="pro"] .modal:not([hidden]) .mbox,html[data-look="pro"] #proNav.pmopen nav,html[data-look="pro"] details[open]>:not(summary),html[data-look="pro"] #toastStack .toast{animation:none!important}
+  .panel.pr-wait{opacity:1;transform:none}
+  .pskel .sk::after{animation:none}
+  html[data-look="pro"] *{transition-duration:0s!important}
+  html[data-look="pro"] .btn:hover,html[data-look="pro"] .pcard:hover,html[data-look="pro"] .pab:hover,html[data-look="pro"] .psb:hover,html[data-look="pro"] .pvr:hover{transform:none}
+}
