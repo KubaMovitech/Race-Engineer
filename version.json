@@ -1,17 +1,17 @@
 {
- "version": "2.10.0",
+ "version": "2.11.0",
  "date": "2026-10-29",
  "notes": [
-  "Fascia: passo, distanza dal riferimento, problema principale",
-  "Menu per attività e «Altro» sul telefono",
-  "Dimensione dei testi, giro B tratteggiato, dati mancanti e vecchi distinti"
+  "Confronto equo tra giri",
+  "Prova setup guidata",
+  "Consigli con problema, evidenza, modifica, verifica"
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "d557194804647ca6f79f881a66b132d2bd740aa91c6cffc603bf4c2565e91880"
+  "sha256": "fa25dbdbcb1e231e11dbf456533ac66441bdc36a39b05a1125c28ee07cb6d55e"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "915989a604992bf2276a929673ad51b37f183b73fc54340e8bbf80ee03dee64c"
+  "sha256": "1a2aa6c253ee1eb98401e174058f45c5fd9953bd6def0672e21f4bc25359b06b"
  }
 }
