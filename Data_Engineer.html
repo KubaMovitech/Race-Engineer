@@ -1243,6 +1243,7 @@ html[data-look="pro"],html[data-look="pro"][data-skin]{
   --pglow:rgba(201,165,76,.07); --pfocus:rgba(201,165,76,.28); --ptopbg:rgba(7,7,8,.92); --psideglow:rgba(201,165,76,.16);
   --psil:#C9CDD3; --psil2:#E3E6EA; --psil3:#A9ADB4; --pinput:#09090A; --pth:#111113; --pline2:#1D1D21; --pbrand:#C9A54C;
   --pcar1:#1A1A1D; --pcar2:#3A3A40; --pcar3:#24242A; --pwarn:#FF9F43; --pwarnbg:rgba(255,159,67,.15);
+  --good:#2BE38A; --bad:#FF5A6A; --warn:#FF9F43; --best:#B57BFF;
 }
 /* palette: night blue (Personalizza › Stile) */
 html[data-look="pro"][data-pal="blu"],html[data-look="pro"][data-pal="blu"][data-skin]{
@@ -1255,6 +1256,7 @@ html[data-look="pro"][data-pal="blu"],html[data-look="pro"][data-pal="blu"][data
   --pglow:rgba(47,124,246,.10); --pfocus:rgba(47,124,246,.25); --ptopbg:rgba(6,11,21,.92); --psideglow:rgba(229,53,75,.22);
   --psil:#C9D3E3; --psil2:#DCE4F0; --psil3:#AEB9CB; --pinput:#08111F; --pth:#0C1729; --pline2:#132138; --pbrand:#E5354B;
   --pcar1:#0E2240; --pcar2:#1B3E6E; --pcar3:#16335C; --pwarn:#FFC53D; --pwarnbg:rgba(255,197,61,.15);
+  --good:#2BE38A; --bad:#FF5A6A; --warn:#FFC53D; --best:#B57BFF;
 }
 html[data-look="pro"] body{background:linear-gradient(180deg,var(--pbody1),var(--pbody2) 60%) fixed;}
 /* gold: metallic text for the brand and the selected item, silver for the rest */
@@ -1507,6 +1509,46 @@ html[data-look="pro"] .pmore{display:none}
 html[data-dens="compatta"]{font-size:14.5px}html[data-dens="compatta"] body{font-size:14px}
 html[data-dens="comoda"]{font-size:18px}html[data-dens="comoda"] body{font-size:17px}
 .lookrow{display:flex;gap:12px;flex-wrap:wrap}
+
+/* ================= 2.12: finishing pass ================= */
+/* no repeats: the strip already has the session, so the pages below do not say it again */
+html[data-look="pro"][data-pnav="bop"] .hero,html[data-look="pro"][data-pnav="live"] .hero{display:none}
+html[data-look="pro"] .dash .dbest .dbig,html[data-look="pro"] .dash .dbest .dred,html[data-look="pro"] .dash .dbest .leds{display:none}
+html[data-look="pro"] .dash .dbest .dv{font-size:1.9rem}
+html[data-look="pro"] .twhead .twtitle>div:first-child{display:none}
+html[data-look="pro"] .twhead .twtitle{justify-content:flex-end;margin-bottom:0}
+html[data-look="pro"] .pehead .etyres{display:none}
+/* the last wide-spaced titles of the old looks */
+html[data-look="pro"] .eh1 .ey,html[data-look="pro"] .eplan h4,html[data-look="pro"] .ea .eah h3,html[data-look="pro"] .ecg h4,html[data-look="pro"] .twtitle .ey,
+html[data-look="pro"] .dash .dl,html[data-look="pro"] .lvtabs button,html[data-look="pro"] .sutabs button,html[data-look="pro"] .kpi .l,html[data-look="pro"] th{letter-spacing:.05em}
+html[data-look="pro"] .ea .eah h3{font:700 .92rem var(--f-body)}
+html[data-look="pro"] .twtitle .ey{color:var(--muted)}
+/* Muretto: the timing-wall layout stays, the colours follow the look */
+html[data-look="pro"][data-skin="wall"] .lvtabs button[aria-selected="true"]{background:linear-gradient(0deg,color-mix(in srgb,var(--pacc) 16%,transparent),transparent 70%);border-bottom-color:var(--pacc)}
+html[data-look="pro"] #rcBar{background:var(--hdr);border-top-color:var(--line)}
+html[data-look="pro"] #rcBar .rcl{background:var(--pacc);color:#111}
+html[data-look="pro"][data-skin="wall"] .panel-h h3::before,html[data-look="pro"][data-skin="wall"] .panel-h h2::before{display:none}
+/* tables: our car and the best values */
+html[data-look="pro"] table.boptab tr.ours td{background:color-mix(in srgb,var(--pacc) 12%,transparent)!important}
+html[data-look="pro"] table.boptab tr.ours td:first-child{box-shadow:inset 3px 0 var(--pacc)}
+html[data-look="pro"] .pos,html[data-look="pro"] .dn,html[data-look="pro"] b.dn{color:var(--good)}html[data-look="pro"] .neg,html[data-look="pro"] .up,html[data-look="pro"] b.up{color:var(--bad)}
+/* the side menu on short screens: the slogan goes, the logo gets smaller */
+@media (max-height:860px){html[data-look="pro"] .pfoot{display:none}html[data-look="pro"] #proLogo img{max-height:64px}html[data-look="pro"] .pn{padding-top:8px;padding-bottom:8px}}
+/* phone: one line for the top bar, car and track filters behind a button */
+.pfbtn{display:none}
+@media (max-width:760px){
+  html[data-look="pro"] .verchip{display:none}
+  html[data-look="pro"] .psel{flex-wrap:wrap}
+  html[data-look="pro"] .psel .pf:not(.pfs){display:none}
+  html[data-look="pro"] .psel.pfopen .pf:not(.pfs){display:flex;order:5}
+  html[data-look="pro"] .psel .pf.pfs{flex:1 1 0;min-width:0}
+  html[data-look="pro"] .pfbtn{display:inline-flex;height:36px;width:40px;align-items:center;justify-content:center;flex:none}
+  html[data-look="pro"] .pfbtn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linejoin:round}
+  html[data-look="pro"] .psel.pfopen .pfbtn{border-color:var(--pacc);color:var(--pacc)}
+  html[data-look="pro"] .hdr-tools #btnSync{display:none}
+}
+@media (max-width:760px){html[data-look="pro"] .top-in .hdr-tools{flex:0 1 auto;width:auto;margin-left:auto;padding:4px 0}html[data-look="pro"] .top-in .brand{align-self:center}}
+html[data-look="pro"] .ecount span{letter-spacing:.05em}
 </style>
 <header class="top">
   <div class="top-in">
@@ -3265,7 +3307,7 @@ RENDER.prog=()=>{
   const corners=last.segs.map(s=>({d:s.d,rows:list.map(h=>h.segs.find(x=>Math.abs(x.d-s.d)<45))}));
   body.innerHTML=`<div class="panel"><div class="kpis">
     <div class="kpi hl" style="--kc:${tok('best')}"><div class="l">Record personale</div><div class="v">${fmtLap(bestEver.best)}</div><div class="s">${esc(bestEver.label)}</div></div>
-    <div class="kpi" style="--kc:${tok('good')}"><div class="l">Progresso dal primo</div><div class="v" style="color:${last.best<first.best?'var(--good)':'var(--bad)'}">${fsign(last.best-first.best,3)} s</div><div class="s">${list.length} sessioni</div></div>
+    <div class="kpi" style="--kc:${tok('good')}"><div class="l">Progresso dal primo</div><div class="v" style="color:${Math.abs(last.best-first.best)<5e-4?'var(--muted)':last.best<first.best?'var(--good)':'var(--bad)'}">${fsign(last.best-first.best,3)} s</div><div class="s">${list.length} sessioni</div></div>
     <div class="kpi" style="--kc:${tok('lapA')}"><div class="l">Passo ultima sessione</div><div class="v">${fmtLap(last.pace)}</div><div class="s">${Number.isFinite(first.pace)?fsign(last.pace-first.pace,3)+' s dal primo':''}</div></div>
     <div class="kpi" style="--kc:${tok('warn')}"><div class="l">Giri registrati</div><div class="v">${list.reduce((a,h)=>a+h.n,0)}</div><div class="s">giri lanciati validi</div></div></div></div>
    <div class="panel"><h3>Miglior giro e passo per sessione</h3><canvas class="mini" id="pgC" style="height:230px"></canvas><div class="legend"><span><i style="background:var(--best)"></i>miglior giro</span><span><i style="background:var(--lapA)"></i>passo</span></div></div>
@@ -4296,6 +4338,7 @@ function openDebrief(){let m=$('#mDeb');if(!m){m=document.createElement('div');m
   openModal('#mDeb');}
 // Italian → English phrases. '#' stands for any number (kept as-is). Longest entries are applied first.
 const I18N_EN=[
+["Filtri auto e pista", "Car and track filters"],
 ["più consumate", "more worn"],["più nuove", "fresher"],["B sul bagnato", "B in the wet"],["B sull'asciutto", "B in the dry"],["B non valido", "B invalid"],["auto diversa", "different car"],["Confronto equo", "Fair comparison"],["carburante, gomme, pista e tipo di giro di A e B", "fuel, tyres, track and lap type of A and B"],["A e B non sono nelle stesse condizioni", "A and B are not in the same conditions"],["Le differenze di tempo possono venire da qui e non dalla guida.", "Time differences may come from here and not from the driving."],["A e B sono confrontabili: stesso tipo di giro, carburante, gomme e pista simili.", "A and B are comparable: same lap type, similar fuel, tyres and track."],["Scegli un giro B o usa uno di quelli suggeriti.", "Pick a lap B or use one of the suggested ones."],["Giri più confrontabili con A", "Laps most comparable with A"],["stesse condizioni", "same conditions"],["avvicinarsi a 1 (auto neutra)", "get closer to 1 (neutral car)"],["stare tra", "stay between"],["scendere", "go down"],["salire", "go up"],["manca il dato in una delle due prove", "the data is missing in one of the two runs"],["differenza troppo piccola", "difference too small"],["le condizioni sono cambiate: ripeti la prova con carburante, gomme e pista simili", "conditions changed: repeat the test with similar fuel, tyres and track"],["la modifica non risulta nel setup scelto", "the change is not in the chosen setup"],["Tengo la modifica", "Keep the change"],["Torno indietro", "Go back"],["Annulla la prova", "Cancel the test"],["Prova setup in corso", "Setup test in progress"],["iniziata il", "started on"],["Ipotesi", "Hypothesis"],["Modifica", "Change"],["era", "was"],["Cosa misuro", "What I measure"],["deve", "must"],["Ora cambia solo questo nel gioco, fai 3–5 giri puliti con carburante e gomme simili e carica la telemetria (o lascia che arrivi da sola): qui comparirà il risultato.", "Now change only this in the game, drive 3–5 clean laps with similar fuel and tyres and load the telemetry (or let it arrive by itself): the result will appear here."],["Scegli la telemetria della prova e il suo .svm.", "Pick the telemetry of the test and its .svm."],["Prove fatte su questa pista", "Tests done on this track"],["tenuta", "kept"],["tolta", "reverted"],["annullata", "cancelled"],["Verifica", "Check"],["e il passo non deve peggiorare", "and the pace must not get worse"],["Prova questa modifica", "Test this change"],["Prova", "Test"],["Migliorato", "Improved"],["Peggiorato", "Worse"],["Inconcludente", "Inconclusive"],
 ["Dato vecchio: il gioco non manda aggiornamenti da", "Old data: the game has sent no updates for"],["tratteggiato", "dashed"],["Altro", "More"],["dal riferimento", "from the reference"],["dal tuo record qui", "from your record here"],["dal tuo miglior giro", "from your best lap"],["manca", "missing"],["1 giro buono", "1 good lap"],["giri buoni", "good laps"],["mediana", "median"],["servono giri completi", "complete laps needed"],["Distanza dal riferimento", "Gap to reference"],["Apri Race Engineer", "Open Race Engineer"],["Problema principale", "Main problem"],["Dimensione dei testi", "Text size"],["Comoda · tablet o schermo lontano", "Large · tablet or far screen"],["Il dato non c'è in questi file", "The data is not in these files"],["Analisi automatica", "Automatic analysis"],["regole e calcoli sulla telemetria", "rules and calculations on the telemetry"],["Analizza", "Analyse"],["Prepara", "Prepare"],
 ["ultimi", "last"],["giro più veloce", "fastest lap"],["giri più veloci", "fastest laps"],["analizza", "reads"],["carburante diverso", "different fuel"],["il peso cambia i tempi", "the weight changes the lap times"],["mescola diversa", "different compound"],["meteo diverso", "different weather"],["pochi giri buoni", "few good laps"],["servono almeno 3 giri per prova", "at least 3 laps per run are needed"],["le due prove sono state analizzate su giri scelti in modo diverso (più veloci / ultimi)", "the two runs were analysed on laps chosen in different ways (fastest / last)"],["Prima di fidarti del confronto", "Before trusting the comparison"],["Stesse condizioni: la differenza viene dal setup e dalla guida.", "Same conditions: the difference comes from setup and driving."],["giro lanciato valido", "valid flying lap"],["pista cambiata di", "track changed by"],["pista stabile", "stable track"],["asciutto e bagnato mischiati", "dry and wet mixed"],["giri non validi ufficiali dal .xml", "official invalid laps from the .xml"],["senza .xml: giri non validi stimati", "no .xml: invalid laps estimated"],["Bassa", "Low"],["Giri da analizzare", "Laps to analyse"],["I giri puliti: il quadro più affidabile del setup", "The clean laps: the most reliable picture of the setup"],["Più veloci", "Fastest"],["Dopo una modifica al setup: guarda solo come va adesso", "After a setup change: look only at how it goes now"],["Ultimi", "Last"],
@@ -5018,9 +5061,10 @@ const tr=I18N.tr;
 })();
 const AI_LANG=()=>LANG==='en'?'\n\nIMPORTANT: write your whole answer in English (the instructions above are in Italian, but the driver reads English).':'';
 // ================= VERSIONE, NOVITÀ E AGGIORNAMENTI =================
-const APP_VERSION='2.11.0';
+const APP_VERSION='2.12.0';
 const DEFAULT_UPD='https://raw.githubusercontent.com/KubaMovitech/Race-Engineer/main/';   // update channel (folder with version.json), set when the team repository exists
 const CHANGELOG=[
+{v:'2.12.0',d:'30/10/2026',items:['Rifinitura grafica: niente più doppioni (il pannello del miglior giro in Dashboard mostra solo settori e ideale, in Telemetria non si ripetono pilota e data, in BOP e Muretto non c\'è la fascia della sessione), titoli senza le spaziature dei vecchi stili, mini-gomme dell\'Ingegnere tolte (sono nella Dashboard).','Muretto nei colori dell\'app: scheda attiva e «Direzione gara» in oro, nessun rosso decorativo.','Colori uguali ovunque: verde meglio, rosso peggio, arancione da controllare, viola tempi migliori; «Progresso dal primo» a zero non è più rosso.','Telefono: barra in alto su due righe, filtri Auto e Pista dietro il pulsante a imbuto. Su schermi bassi il menu laterale toglie lo slogan e rimpicciolisce il logo.','Personalizza: una sola impostazione per la dimensione dei testi («Densità»), che ora ingrandisce anche la grafica Pro; con la grafica Pro il colore principale è sempre quello dello stile (oro o blu).']},
 {v:'2.11.0',d:'29/10/2026',items:['Telemetria › Confronto equo: dice se A e B sono confrontabili (carburante, usura gomme, temperatura pista, asciutto/bagnato, tipo di giro, auto) e suggerisce i giri più simili ad A da usare come B.','Prova setup guidata: in Race Engineer premi «Prova» su una modifica; l\'app scrive l\'ipotesi, cosa misurare (per esempio bloccaggi anteriori, che devono scendere) e il valore di partenza. Con la telemetria nuova dà «Migliorato», «Peggiorato» o «Inconcludente», controlla che la modifica sia davvero nel setup e avvisa se le condizioni sono cambiate. Poi scegli: tengo la modifica, torno indietro o annullo; le prove fatte restano nell\'elenco.','Ogni consiglio di Race Engineer ha la stessa forma: problema, evidenza, modifica, verifica (cosa deve succedere ai numeri). Il perché si apre al clic.']},
 {v:'2.10.0',d:'29/10/2026',items:['La fascia in alto risponde a «come sto andando?»: passo (mediana dei giri buoni), distanza dal riferimento (il riferimento da «Riferimenti», altrimenti il tuo record qui, altrimenti il tuo miglior giro) e problema principale (clic per aprire Race Engineer). Sessione, auto, pista, meteo, miglior giro e dati in una riga compatta.','Menu raggruppato per attività: Analizza, Prepara, Gara. Sul telefono quattro voci (Dashboard, Telemetria, Race Engineer, Muretto) e «Altro» con tutto il resto.','Personalizza › Dimensione dei testi: Compatta, Normale o Comoda (tablet o schermo lontano).','Il giro B è tratteggiato in tutti i grafici e sulla mappa: A e B si distinguono anche senza i colori.','Dati che mancano scritti «manca» in un riquadro tratteggiato, dati vecchi in arancione con l\'orologio (per esempio nel Muretto quando il gioco non manda aggiornamenti): non si confondono più con un valore vero.','«Analisi IA» diventa «Analisi automatica»: sono regole e calcoli sulla telemetria. «Ingegnere AI» resta il nome dell\'assistente che usa Claude.']},
 {v:'2.9.0',d:'28/10/2026',items:['Affidabilità dei dati a parole (Alta / Media / Bassa) con il perché: giri lanciati validi, pista stabile o no, asciutto e bagnato, giri non validi dal .xml o stimati. Niente più percentuale inventata.','Race Engineer: dice quali giri legge (per esempio «5 giri più veloci (G12, G14…)») e puoi scegliere «Più veloci» (i giri puliti) o «Ultimi» (dopo una modifica al setup). Analisi dettagliata, Dashboard e guida usano gli stessi giri.','Confronto ultimo test: prima di dare il verdetto avvisa se sono cambiati carburante, mescola, meteo, temperatura pista, se ci sono pochi giri o se le prove sono state lette in modo diverso.','Fascia della sessione più chiara: in grande miglior giro, delta ideale e temperatura pista; auto, circuito e dati più piccoli a lato.','Testi più grandi e meno spaziati, niente effetti metallici e bagliori: l\'oro resta solo per selezione e pulsanti. Nel confronto test «prima» è argento e «ora» oro, come i giri B e A in Telemetria.']},
@@ -7904,6 +7948,8 @@ function proBuild(){if($('#proNav'))return;
       <label class="pf"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 18c-2-3 0-6 3-6s4-5 7-6 5 2 3 5-6 2-6 5 4 4 1 5-6 0-8-3z"/></svg><select id="proTrack" aria-label="${tr('Pista')}"></select></label>
       <label class="pf pfs"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg></label>`;
     $('.top-in .brand').after(w);w.querySelector('.pfs').append(g);
+    w.insertAdjacentHTML('beforeend',`<button type="button" class="btn icon pfbtn" aria-expanded="false" title="${esc(tr('Filtri auto e pista'))}" aria-label="${esc(tr('Filtri auto e pista'))}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18l-7 8v6l-4-2v-4z"/></svg></button>`);
+    w.querySelector('.pfbtn').onclick=e=>{const o=!w.classList.contains('pfopen');w.classList.toggle('pfopen',o);e.currentTarget.setAttribute('aria-expanded',o);};
     $('#proCar').onchange=$('#proTrack').onchange=()=>{LS.set('pro:car',$('#proCar').value);LS.set('pro:track',$('#proTrack').value);proFilter(true);};}
   const st=document.createElement('div');st.id='proSync';st.className='psync';$('.hdr-tools').append(st);
   const lb=$('#btnLoad');if(lb)lb.innerHTML=`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3M7 8l5-5 5 5"/><path d="M4 15v5h16v-5"/></svg>${tr('Carica dati')}`;}
@@ -7962,17 +8008,19 @@ function proStrip(){const h=$('#hero'),a=active();if(!proLook()||!h||!a?.S)retur
 // the store sets addedAt only on new files: mark the session that arrives while the app is open
 (function(){const af=window.addFile;if(typeof af==='function')window.addFile=addFile=async function(...a){const it=await af(...a);try{if(it&&it.kind==='ld'&&!it.addedAt)it.addedAt=Date.now();}catch(e){}return it;};})();
 
-function proDens(){const d=LS.get('dens','normale');if(d==='normale')delete document.documentElement.dataset.dens;else document.documentElement.dataset.dens=d;}
-proDens();
-function proApply(){const on=proLook();document.documentElement.dataset.look=on?'pro':'carbon';document.documentElement.dataset.pal=LS.get('look','pro')==='problu'?'blu':'oro';if(on){proBuild();proSync();proSyncChip();proFilter(false);}
+// text size: the «Densità» of Personalizza (compact / normal / large) also scales the Pro layout; 2.10 kept it apart in «dens»
+function proDens(){const u=LS.get('ui',{});const old=LS.get('dens',null);if(old&&!u.density){u.density=old==='compatta'?'compact':old==='comoda'?'large':'normal';LS.set('ui',u);}if(old)LS.set('dens',null);
+  const d={compact:'compatta',large:'comoda'}[LS.get('ui',{}).density];if(d)document.documentElement.dataset.dens=d;else delete document.documentElement.dataset.dens;
+  // in Pro the accent is the look's own (gold or blue), whatever Personalizza had for the old looks
+  if(proLook()){const r=document.documentElement.style;const pal=document.documentElement.dataset.pal==='blu';r.setProperty('--accent',pal?'#2F7CF6':'#C9A54C');r.setProperty('--accent2',pal?'#7FB2FF':'#E6C877');r.setProperty('--accent-ink',pal?'#ffffff':'#111111');r.setProperty('--accent-soft',pal?'#1D4FA8':'#8C6D24');}}
+(function(){const au=window.applyUI;if(typeof au==='function')window.applyUI=applyUI=function(){au();proDens();};})();
+function proApply(){const on=proLook();document.documentElement.dataset.look=on?'pro':'carbon';document.documentElement.dataset.pal=LS.get('look','pro')==='problu'?'blu':'oro';if(on){proBuild();proSync();proSyncChip();proFilter(false);}proDens();
   const n=$('#proNav');if(n)n.hidden=!on;const sub=$('.tabs.subtabs');if(sub&&!on&&!$('.top').contains(sub))$('.top').append(sub);if(sub&&on&&!$('main').contains(sub))$('main').prepend(sub);}
 setTimeout(()=>{proApply();renderHero();setInterval(proSyncChip,5000);},0);
 
 // ---------- Personalizza: choose the look ----------
 setTimeout(()=>{const h=$('#mSettings .mbox>.panel-h');if(!h||$('#lookSel'))return;
-  h.insertAdjacentHTML('afterend',`<div class="lookrow"><label class="f">${tr('Stile dell\'app')}<select id="lookSel"><option value="pro">${tr('Pro · nero, argento e oro')}</option><option value="problu">${tr('Pro · blu notte')}</option><option value="carbon">${tr('Carbon · rosso e nero')}</option></select></label>
-    <label class="f">${tr('Dimensione dei testi')}<select id="densSel"><option value="compatta">${tr('Compatta')}</option><option value="normale">${tr('Normale')}</option><option value="comoda">${tr('Comoda · tablet o schermo lontano')}</option></select></label></div>`);
-  const d=$('#densSel');d.value=LS.get('dens','normale');d.onchange=()=>{LS.set('dens',d.value);proDens();RENDER[curView()]?.();};
+  h.insertAdjacentHTML('afterend',`<div class="lookrow"><label class="f">${tr('Stile dell\'app')}<select id="lookSel"><option value="pro">${tr('Pro · nero, argento e oro')}</option><option value="problu">${tr('Pro · blu notte')}</option><option value="carbon">${tr('Carbon · rosso e nero')}</option></select></label></div>`);
   const s=$('#lookSel');s.value=LS.get('look','pro');s.onchange=()=>{LS.set('look',s.value);proApply();showView(curView());};},0);
 
 // ---------- team logo (Personalizza): in Pro it sits at the bottom of the side menu, where there is room for it ----------

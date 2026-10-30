@@ -8,6 +8,8 @@ addFile
     ui41.js    wrap
 applyTeamLogo
     ui41.js    wrap
+applyUI
+    ui41.js    wrap
 compHTML
     ui16.js    replace
 dashDraw

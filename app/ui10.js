@@ -57,7 +57,7 @@ RENDER.prog=()=>{
   const corners=last.segs.map(s=>({d:s.d,rows:list.map(h=>h.segs.find(x=>Math.abs(x.d-s.d)<45))}));
   body.innerHTML=`<div class="panel"><div class="kpis">
     <div class="kpi hl" style="--kc:${tok('best')}"><div class="l">Record personale</div><div class="v">${fmtLap(bestEver.best)}</div><div class="s">${esc(bestEver.label)}</div></div>
-    <div class="kpi" style="--kc:${tok('good')}"><div class="l">Progresso dal primo</div><div class="v" style="color:${last.best<first.best?'var(--good)':'var(--bad)'}">${fsign(last.best-first.best,3)} s</div><div class="s">${list.length} sessioni</div></div>
+    <div class="kpi" style="--kc:${tok('good')}"><div class="l">Progresso dal primo</div><div class="v" style="color:${Math.abs(last.best-first.best)<5e-4?'var(--muted)':last.best<first.best?'var(--good)':'var(--bad)'}">${fsign(last.best-first.best,3)} s</div><div class="s">${list.length} sessioni</div></div>
     <div class="kpi" style="--kc:${tok('lapA')}"><div class="l">Passo ultima sessione</div><div class="v">${fmtLap(last.pace)}</div><div class="s">${Number.isFinite(first.pace)?fsign(last.pace-first.pace,3)+' s dal primo':''}</div></div>
     <div class="kpi" style="--kc:${tok('warn')}"><div class="l">Giri registrati</div><div class="v">${list.reduce((a,h)=>a+h.n,0)}</div><div class="s">giri lanciati validi</div></div></div></div>
    <div class="panel"><h3>Miglior giro e passo per sessione</h3><canvas class="mini" id="pgC" style="height:230px"></canvas><div class="legend"><span><i style="background:var(--best)"></i>miglior giro</span><span><i style="background:var(--lapA)"></i>passo</span></div></div>

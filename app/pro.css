@@ -13,6 +13,7 @@ html[data-look="pro"],html[data-look="pro"][data-skin]{
   --pglow:rgba(201,165,76,.07); --pfocus:rgba(201,165,76,.28); --ptopbg:rgba(7,7,8,.92); --psideglow:rgba(201,165,76,.16);
   --psil:#C9CDD3; --psil2:#E3E6EA; --psil3:#A9ADB4; --pinput:#09090A; --pth:#111113; --pline2:#1D1D21; --pbrand:#C9A54C;
   --pcar1:#1A1A1D; --pcar2:#3A3A40; --pcar3:#24242A; --pwarn:#FF9F43; --pwarnbg:rgba(255,159,67,.15);
+  --good:#2BE38A; --bad:#FF5A6A; --warn:#FF9F43; --best:#B57BFF;
 }
 /* palette: night blue (Personalizza › Stile) */
 html[data-look="pro"][data-pal="blu"],html[data-look="pro"][data-pal="blu"][data-skin]{
@@ -25,6 +26,7 @@ html[data-look="pro"][data-pal="blu"],html[data-look="pro"][data-pal="blu"][data
   --pglow:rgba(47,124,246,.10); --pfocus:rgba(47,124,246,.25); --ptopbg:rgba(6,11,21,.92); --psideglow:rgba(229,53,75,.22);
   --psil:#C9D3E3; --psil2:#DCE4F0; --psil3:#AEB9CB; --pinput:#08111F; --pth:#0C1729; --pline2:#132138; --pbrand:#E5354B;
   --pcar1:#0E2240; --pcar2:#1B3E6E; --pcar3:#16335C; --pwarn:#FFC53D; --pwarnbg:rgba(255,197,61,.15);
+  --good:#2BE38A; --bad:#FF5A6A; --warn:#FFC53D; --best:#B57BFF;
 }
 html[data-look="pro"] body{background:linear-gradient(180deg,var(--pbody1),var(--pbody2) 60%) fixed;}
 /* gold: metallic text for the brand and the selected item, silver for the rest */
@@ -277,3 +279,43 @@ html[data-look="pro"] .pmore{display:none}
 html[data-dens="compatta"]{font-size:14.5px}html[data-dens="compatta"] body{font-size:14px}
 html[data-dens="comoda"]{font-size:18px}html[data-dens="comoda"] body{font-size:17px}
 .lookrow{display:flex;gap:12px;flex-wrap:wrap}
+
+/* ================= 2.12: finishing pass ================= */
+/* no repeats: the strip already has the session, so the pages below do not say it again */
+html[data-look="pro"][data-pnav="bop"] .hero,html[data-look="pro"][data-pnav="live"] .hero{display:none}
+html[data-look="pro"] .dash .dbest .dbig,html[data-look="pro"] .dash .dbest .dred,html[data-look="pro"] .dash .dbest .leds{display:none}
+html[data-look="pro"] .dash .dbest .dv{font-size:1.9rem}
+html[data-look="pro"] .twhead .twtitle>div:first-child{display:none}
+html[data-look="pro"] .twhead .twtitle{justify-content:flex-end;margin-bottom:0}
+html[data-look="pro"] .pehead .etyres{display:none}
+/* the last wide-spaced titles of the old looks */
+html[data-look="pro"] .eh1 .ey,html[data-look="pro"] .eplan h4,html[data-look="pro"] .ea .eah h3,html[data-look="pro"] .ecg h4,html[data-look="pro"] .twtitle .ey,
+html[data-look="pro"] .dash .dl,html[data-look="pro"] .lvtabs button,html[data-look="pro"] .sutabs button,html[data-look="pro"] .kpi .l,html[data-look="pro"] th{letter-spacing:.05em}
+html[data-look="pro"] .ea .eah h3{font:700 .92rem var(--f-body)}
+html[data-look="pro"] .twtitle .ey{color:var(--muted)}
+/* Muretto: the timing-wall layout stays, the colours follow the look */
+html[data-look="pro"][data-skin="wall"] .lvtabs button[aria-selected="true"]{background:linear-gradient(0deg,color-mix(in srgb,var(--pacc) 16%,transparent),transparent 70%);border-bottom-color:var(--pacc)}
+html[data-look="pro"] #rcBar{background:var(--hdr);border-top-color:var(--line)}
+html[data-look="pro"] #rcBar .rcl{background:var(--pacc);color:#111}
+html[data-look="pro"][data-skin="wall"] .panel-h h3::before,html[data-look="pro"][data-skin="wall"] .panel-h h2::before{display:none}
+/* tables: our car and the best values */
+html[data-look="pro"] table.boptab tr.ours td{background:color-mix(in srgb,var(--pacc) 12%,transparent)!important}
+html[data-look="pro"] table.boptab tr.ours td:first-child{box-shadow:inset 3px 0 var(--pacc)}
+html[data-look="pro"] .pos,html[data-look="pro"] .dn,html[data-look="pro"] b.dn{color:var(--good)}html[data-look="pro"] .neg,html[data-look="pro"] .up,html[data-look="pro"] b.up{color:var(--bad)}
+/* the side menu on short screens: the slogan goes, the logo gets smaller */
+@media (max-height:860px){html[data-look="pro"] .pfoot{display:none}html[data-look="pro"] #proLogo img{max-height:64px}html[data-look="pro"] .pn{padding-top:8px;padding-bottom:8px}}
+/* phone: one line for the top bar, car and track filters behind a button */
+.pfbtn{display:none}
+@media (max-width:760px){
+  html[data-look="pro"] .verchip{display:none}
+  html[data-look="pro"] .psel{flex-wrap:wrap}
+  html[data-look="pro"] .psel .pf:not(.pfs){display:none}
+  html[data-look="pro"] .psel.pfopen .pf:not(.pfs){display:flex;order:5}
+  html[data-look="pro"] .psel .pf.pfs{flex:1 1 0;min-width:0}
+  html[data-look="pro"] .pfbtn{display:inline-flex;height:36px;width:40px;align-items:center;justify-content:center;flex:none}
+  html[data-look="pro"] .pfbtn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linejoin:round}
+  html[data-look="pro"] .psel.pfopen .pfbtn{border-color:var(--pacc);color:var(--pacc)}
+  html[data-look="pro"] .hdr-tools #btnSync{display:none}
+}
+@media (max-width:760px){html[data-look="pro"] .top-in .hdr-tools{flex:0 1 auto;width:auto;margin-left:auto;padding:4px 0}html[data-look="pro"] .top-in .brand{align-self:center}}
+html[data-look="pro"] .ecount span{letter-spacing:.05em}
