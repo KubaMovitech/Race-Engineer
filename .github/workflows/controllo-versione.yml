@@ -13,7 +13,8 @@ jobs:
         with:
           go-version-file: bridge/go.mod
       - name: Versione, SHA-256 e app coerenti
-        run: python3 tools/check_release.py
+        # sorgenti più avanti della versione pubblicata = avviso, non errore (vedi tools/check_release.py)
+        run: python3 tools/check_release.py --allow-unreleased
       - name: Funzioni avvolte tra i file (ordine di caricamento)
         run: python3 tools/check_overrides.py
       - name: Test del bridge
@@ -26,8 +27,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+      - name: Analisi della telemetria su segnali sintetici
+        run: node tools/test_analysis.js
       - name: Test di tutte le schermate (bridge demo + telemetria finta)
         run: |
+          # the app built from the sources, not the published one
+          sh app/build.sh && sed 's/<html>/<html lang="it">/' app/test.html > bridge/app.html
           (cd bridge && go build -o /tmp/de-bridge .)
           python3 tools/make_fixture_ld.py /tmp/fixture.ld
           (/tmp/de-bridge -demo -nowindow -speed 8 > /tmp/de-bridge.log 2>&1 &)

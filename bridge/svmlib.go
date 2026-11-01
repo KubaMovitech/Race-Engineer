@@ -29,8 +29,10 @@ func loadUserData() {
 		return
 	}
 	cand := []string{}
+	saved := ""
 	if b, err := os.ReadFile(udPath()); err == nil {
-		cand = append(cand, strings.TrimSpace(string(b)))
+		saved = strings.TrimSpace(string(b))
+		cand = append(cand, saved)
 	}
 	for _, d := range "CDEFGH" {
 		for _, p := range []string{`SteamLibrary\steamapps\common`, `Program Files (x86)\Steam\steamapps\common`, `Program Files\Steam\steamapps\common`, `Steam\steamapps\common`, `Games\SteamLibrary\steamapps\common`} {
@@ -43,6 +45,11 @@ func loadUserData() {
 		}
 		if st, err := os.Stat(filepath.Join(ud, "player", "Settings")); err == nil && st.IsDir() {
 			userData.Store(ud)
+			if ud == saved {
+				udSource.Store("salvata")
+			} else {
+				udSource.Store("ricerca")
+			}
 			return
 		}
 	}

@@ -63,7 +63,7 @@ function ptStart(S,D,laps,f){const x=f.fx.find(x=>!x.conflict)||{};const k=ptMet
   L.push({id:'pt'+Date.now(),at:Date.now(),venue:S.meta?.venue||'',car:proCarOf(S),problem:f.t,change:{label:x.label||'',dir:x.dir||'',key:x.key||'',now:x.now||''},metric:k,
     hyp:`${tr(x.label||'')}: ${x.dir||''} → ${f.t}: ${ptGoal(k)}`,base});ptSave(L);}
 function suValAny(su,key){for(const it of Object.values(su?.sec||{})){const x=it.find(i=>i.key===key);if(x)return x.disp;}return null;}
-function ptHTML(t,S,D,laps){const K=ptKpi(t.metric);const lab=tr(K?.[1]||t.metric),u=K?.[2]||'',dp=K?.[3]??2;const same=t.base.id===S.id;
+function ptHTML(t,S,D,laps){if(t.metric==='loc')return ptLocHTML(t,S,D,laps);const K=ptKpi(t.metric);const lab=tr(K?.[1]||t.metric),u=K?.[2]||'',dp=K?.[3]??2;const same=t.base.id===S.id;
   let res='';if(!same&&D&&D.S===S){const cur=ptSnap(S,D,laps);const a=ptVal(t.base,t.metric),b=ptVal(cur,t.metric);const J=ptJudge(t.metric,a,b);
     const pa=t.base.pace,pb=cur.pace;const W=[];
     if(t.base.fuel&&cur.fuel&&t.base.fuel!==cur.fuel)W.push(`${tr('carburante diverso')} (${esc(t.base.fuel)} → ${esc(cur.fuel)})`);
@@ -87,9 +87,36 @@ function ptHTML(t,S,D,laps){const K=ptKpi(t.metric);const lab=tr(K?.[1]||t.metri
       <div><span>${tr('Cosa misuro')}</span><b>${esc(lab)}</b> <small class="muted">${tr('deve')} ${ptGoal(t.metric)} · ${tr('prima')} ${fx(ptVal(t.base,t.metric),dp)} ${u}</small></div></div>
     ${same?`<p class="ptwait">${tr('Ora cambia solo questo nel gioco, fai 3–5 giri puliti con carburante e gomme simili e carica la telemetria (o lascia che arrivi da sola): qui comparirà il risultato.')}</p>`:res||`<p class="muted small">${tr('Scegli la telemetria della prova e il suo .svm.')}</p>`}
     ${same?`<div class="ppb"><button type="button" class="btn" data-pt="drop">${tr('Annulla la prova')}</button></div>`:''}</div>`;}
+// a test started from a card of «Analisi tecnica»: the metric is measured at the place of the card, lap by lap, and judged
+// against the spread between laps (vdCompare); the lap time is judged apart, because a faster lap does not prove the fix
+function ptLocHTML(t,S,D,laps){const p=t.loc;const same=t.base.id===S.id;const f=v=>fx(v,p.dec);const ms=(a)=>{const v=a.filter(Number.isFinite);return v.length?`${f(vdMean(v))} ± ${f(vdSd(v))} ${p.unit}`:'—';};
+  let res='';if(!same){const J=techJudge(t,S,laps);const W=[];const cur={fuel:null,cmp:null,cond:S.cond?.label,track:S.cond?.track?.avg};const su=D&&D.S===S?D.su:null;
+    if(su){cur.fuel=suFind(su,'GENERAL',/^FuelCapacity/)||suFind(su,'GENERAL',/^FuelSetting/);cur.cmp=suFind(su,'FRONTLEFT',/^CompoundSetting/);}
+    if(t.base.fuel&&cur.fuel&&t.base.fuel!==cur.fuel)W.push(`${tr('carburante diverso')} (${esc(t.base.fuel)} → ${esc(cur.fuel)})`);
+    if(t.base.cmp&&cur.cmp&&t.base.cmp!==cur.cmp)W.push(`${tr('mescola diversa')} (${esc(t.base.cmp)} → ${esc(cur.cmp)})`);
+    if(t.base.cond&&cur.cond&&t.base.cond!==cur.cond)W.push(`${tr('meteo diverso')} (${esc(tr(t.base.cond))} → ${esc(tr(cur.cond))})`);
+    if(Number.isFinite(t.base.track)&&Number.isFinite(cur.track)&&Math.abs(cur.track-t.base.track)>3)W.push(`${tr('pista')} ${cur.track>t.base.track?'+':'−'}${fx(Math.abs(cur.track-t.base.track),0)} °C`);
+    const nowVal=t.change.key&&su?suValAny(su,t.change.key):null;const changed=t.base.val==null||nowVal==null?null:nowVal!==t.base.val;
+    const r=W.length&&J.r!=='inc'?{r:'inc',why:tr('le condizioni sono cambiate: ripeti la prova con carburante, gomme e pista simili')}:changed===false?{r:'inc',why:tr('la modifica non risulta nel setup scelto')}:J;
+    const TV={migliorato:tr('più veloce'),peggiorato:tr('più lento'),inconcludente:tr('differenza nel rumore')}[J.T.verdict]||'';
+    res=`<div class="ptres ${PT_R[r.r][1]}"><b>${tr(PT_R[r.r][0])}</b>${r.why?` · <span>${esc(r.why)}</span>`:''}</div>
+      <table class="lbt ptt"><thead><tr><th class="l"></th><th>${tr('Prima')}</th><th>${tr('Ora')}</th></tr></thead><tbody>
+      <tr><td class="l">${esc(tr(p.label))}</td><td>${ms(t.base.per||[])}</td><td><b>${ms(J.now)}</b></td></tr>
+      <tr><td class="l">${tr('Per giro')}</td><td class="mono small">${(t.base.per||[]).map(f).join(' / ')}</td><td class="mono small">${J.now.map(f).join(' / ')}</td></tr>
+      <tr><td class="l">${tr('Tempo sul giro')}</td><td>${ms((t.base.lapTimes||[]).map(x=>x))}</td><td>${ms(laps.map(l=>l.time))} <small class="muted">${esc(TV)}</small></td></tr>
+      ${t.change.key?`<tr><td class="l">${esc(tr(t.change.label))}</td><td>${esc(t.base.val||'—')}</td><td>${esc(nowVal||'—')}</td></tr>`:''}</tbody></table>
+      <p class="muted small">${tr('L\'esito guarda la metrica nel punto della scheda, non il tempo: un giro più veloce non dimostra che il problema sia risolto. Una differenza più piccola della variabilità tra i giri è «inconcludente».')}</p>
+      ${W.length?`<div class="ecw"><b>${tr('Prima di fidarti del confronto')}:</b><ul>${W.map(w=>`<li>${w}</li>`).join('')}</ul></div>`:''}
+      <div class="ppb"><button type="button" class="btn primary" data-pt="keep">${tr('Tengo la modifica')}</button><button type="button" class="btn" data-pt="back">${tr('Torno indietro')}</button><button type="button" class="btn" data-pt="drop">${tr('Annulla la prova')}</button></div>`;
+    t._last={r:r.r,a:vdMean(t.base.per||[]),b:vdMean(J.now),pa:t.base.pace,pb:typeof proPace==='function'?proPace(S)?.t:NaN,id:S.id};}
+  return `<div class="panel ptest2"><div class="panel-h"><h3>${tr('Prova setup in corso')}</h3><span class="muted small">${tr('iniziata il')} ${new Date(t.at).toLocaleDateString()} · ${esc(t.base.when)} · ${esc(t.base.su||'')}</span></div>
+    <div class="pthyp"><div><span>${tr('Ipotesi')}</span><input type="text" id="ptHyp" value="${esc(t.hyp)}"></div>
+      <div><span>${tr('Problema')}</span><b>${esc(t.problem)}</b></div><div><span>${tr('Modifica')}</span><b>${esc(tr(t.change.label))}: ${esc(t.change.dir)}</b>${t.change.now?` <small class="muted">(${tr('era')} ${esc(t.change.now)})</small>`:''}</div>
+      <div><span>${tr('Cosa misuro')}</span><b>${esc(tr(p.label))}</b> <small class="muted">${tr('nello stesso punto')} · ${tr('prima')} ${ms(t.base.per||[])}</small></div></div>
+    ${same?`<p class="ptwait">${tr('Ora cambia solo questo nel gioco, fai 3–5 giri puliti con carburante e gomme simili e carica la telemetria (o lascia che arrivi da sola): qui comparirà il risultato.')}</p><div class="ppb"><button type="button" class="btn" data-pt="drop">${tr('Annulla la prova')}</button></div>`:res}</div>`;}
 function ptHistHTML(S){const H=ptAll().filter(t=>t.closed&&t.venue===S.meta?.venue).slice(-5).reverse();if(!H.length)return '';
   return `<details class="pthist"><summary>${tr('Prove fatte su questa pista')} (${H.length})</summary>${H.map(t=>{const K=ptKpi(t.metric);const r=PT_R[t.res?.r||'inc'];
-    return `<div class="pth"><b class="${r[1]}">${tr(r[0])}</b> · ${esc(tr(t.change.label))}: ${esc(t.change.dir)} · ${esc(tr(K?.[1]||t.metric))} ${t.res?`${fx(t.res.a,K?.[3]??2)} → ${fx(t.res.b,K?.[3]??2)}`:''} · <span class="muted">${t.closed==='keep'?tr('tenuta'):t.closed==='back'?tr('tolta'):tr('annullata')}</span></div>`;}).join('')}</details>`;}
+    return `<div class="pth"><b class="${r[1]}">${tr(r[0])}</b> · ${esc(tr(t.change.label))}: ${esc(t.change.dir)} · ${esc(tr(K?.[1]||t.loc?.label||t.metric))} ${t.res?`${fx(t.res.a,K?.[3]??2)} → ${fx(t.res.b,K?.[3]??2)}`:''} · <span class="muted">${t.closed==='keep'?tr('tenuta'):t.closed==='back'?tr('tolta'):tr('annullata')}</span></div>`;}).join('')}</details>`;}
 
 // ---------- 3. one shape for every piece of advice: problem, evidence, change, check; the why on click ----------
 function adviceShape(card,f){if(card.dataset.shaped)return;card.dataset.shaped=1;const k=ptMetric(f);const K=ptKpi(k);

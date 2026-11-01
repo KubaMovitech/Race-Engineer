@@ -167,7 +167,8 @@ function renderLive(force){
   if(LIVE.err)help+=`<div class="warnbar" style="margin-top:8px">${esc(LIVE.err)}</div>`;
   const age=LIVE.L.sc&&!rec?Math.round((now-LIVE.L.scAt)/60000):0;
   if(age>=2)help+=`<div class="warnbar" style="margin-top:8px;display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span>Nessun dato nuovo da ${age} min: la sessione è finita o il bridge è chiuso. Questi sono gli ultimi dati ricevuti.</span><button class="btn" type="button" id="lvClear">Svuota</button></div>`;
-  $('#lvHelp').innerHTML=help;const clr=$('#lvClear');if(clr)clr.onclick=liveClear;
+  // the guided state of the Muretto (ui52.js) on top, then the messages; rewritten only when they change
+  const lh=$('#lvHelp'),hh=(typeof muGuideHTML==='function'?muGuideHTML():'')+help;if(lh._h!==hh){lh.innerHTML=hh;lh._h=hh;}if(typeof muBind==='function')muBind();const clr=$('#lvClear');if(clr)clr.onclick=liveClear;
   const cars=liveCars(),names=Object.keys(cars);if(!names.includes(LIVE.focus)){const drv=names.find(n=>cars[n].some(D=>D.car&&now-D.carAt<8000));LIVE.focus=drv||names[0]||'';}
   const sel=$('#lvCar');const lbl=n=>{const rr=(LIVE.sc?.v||[]).find(z=>z[2]===n);return rr?R(rr).label:n;};const opts=names.map(n=>`<option value="${esc(n)}"${n===LIVE.focus?' selected':''}>${esc(lbl(n))}</option>`).join('')||`<option>${esc(tr('— nessuna auto —'))}</option>`;if(sel.dataset.o!==opts){sel.innerHTML=opts;sel.dataset.o=opts;}
   const sc=LIVE.sc,I=sc?.i||{};const kind=sesKind(I);const stt=liveCarState(LIVE.focus),c=stt.c;const rows=liveRows(sc);const me=rows.find(r=>r.veh===LIVE.focus);

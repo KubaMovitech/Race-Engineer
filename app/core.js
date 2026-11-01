@@ -21,13 +21,14 @@ function parseLD(buf){
         if(dta!==7&&dp%size===0){const A=size===1?new Int8Array(buf,dp,n):size===2?new Int16Array(buf,dp,n):new Int32Array(buf,dp,n);for(let i=0;i<n;i++)v[i]=A[i]*k+sh;return v;}
         for(let i=0,o=dp;i<n;i++,o+=size){if(dta===7){v[i]=size===4?dv.getFloat32(o,true):f16(dv.getUint16(o,true));}else{const r=size===1?dv.getInt8(o):size===2?dv.getInt16(o,true):dv.getInt32(o,true);v[i]=r*k+sh;}}
         return v;};
-      // LMU writes camber, toe, pitch and roll in radians and no unit: shown in degrees
-      const rad=!unit&&/^(Camber|Toe) [FR][LR]$|^Body (Pitch|Roll)$/.test(name);
-      const c={f:f||1,u:unit||guessUnit(name),n,_v:null};Object.defineProperty(c,'v',{get(){if(!this._v){this._v=decode();if(rad)for(let i=0;i<this._v.length;i++)this._v[i]*=180/Math.PI;}return this._v;}});
+      // unit and conversion from the file's metadata (chq.js): radians → degrees, metres → mm, m/s² → G …, each one recorded in c.conv
+      const P=chqPrepare(name,unit,f||1,n,(dta===7?'float':'int')+size*8);
+      const c={f:f||1,u:P.u,n,_v:null,_k:P.k,_nil:P.nil,raw:P.raw,conv:P.conv,src:'misurato'};Object.defineProperty(c,'v',{get(){if(!this._v){this._v=decode();const k=this._k,z=this._nil;if(k!==1)for(let i=0;i<this._v.length;i++)this._v[i]*=k;if(z!=null)for(let i=0;i<this._v.length;i++)if(this._v[i]<=z)this._v[i]=NaN;}return this._v;}});
       ch[name]=c;
     }
     if(next===p)break;p=next;
   }
+  chqFinish(ch);
   if(!ch['Ground Speed']) throw new Error('Canale "Ground Speed" non trovato: il file non sembra una telemetria LMU');
   return {meta,ch};
 }
@@ -40,6 +41,8 @@ function buildSession(parsed,name){
   const ch=parsed.ch,sp=ch['Ground Speed'];
   const dur=sp.v.length/sp.f;
   const S={id:'ld:'+name,kind:'ld',name,meta:parsed.meta,ch,dur,laps:[],cache:new Map()};
+  // physical channels that never move carry no information: treated as missing, listed in «Qualità telemetria»
+  chqDead(S);
   const ln=ch['Lap Number'];
   const cuts=[0];const nums=[];
   if(ln){let prev=ln.v[0];nums.push(prev);for(let i=1;i<ln.v.length;i++){if(ln.v[i]!==prev){cuts.push(i/ln.f);prev=ln.v[i];nums.push(prev);}}}
@@ -141,7 +144,7 @@ function lapStats(S,lap){
   const key='st'+lap.i;if(S.cache.has(key))return S.cache.get(key);
   const g=lapGrid(S,lap,4),v=g.get('Ground Speed'),n=g.n;
   const fast=i=>v[i]>50;
-  const avgF=(name)=>{const a=g.get(name);if(!a)return NaN;let s=0,c=0;for(let i=0;i<n;i++)if(fast(i)){s+=a[i];c++;}return c?s/c:NaN;};
+  const avgF=(name)=>{const a=g.get(name);if(!a)return NaN;let s=0,c=0;for(let i=0;i<n;i++)if(fast(i)&&Number.isFinite(a[i])){s+=a[i];c++;}return c?s/c:NaN;};
   const at=(name,t)=>S.ch[name]?sampleAt(S.ch[name],t):NaN;
   const o={lap,time:lap.time,vmax:pct(v,1)};
   o.fuel=at('Fuel Level',lap.t0+0.5)-at('Fuel Level',lap.t1-0.5);
@@ -330,6 +333,7 @@ function parseSVM(text,name){
   }
   if(!Object.keys(out.sec).length)throw new Error('File setup non riconosciuto');
   out.car=(out.head.VehicleClassSetting||'').replace(/"/g,'');
+  out.text=text;  // the content as read: kept with the session it was used for (ui51 sesSetup)
   return out;
 }
 function setupText(su){

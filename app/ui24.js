@@ -90,8 +90,8 @@ function shHTML(S){const H=Object.values(LS.get('suhist',{}));const venue=S?.met
 
 // panels in the Setup tab, after the automatic checks (RENDER.setup is defined later in the bundle)
 setTimeout(()=>{const anchor=$('#suDiag')?.closest('.panel');if(anchor&&!$('#suTyreP'))anchor.insertAdjacentHTML('afterend',`<div class="panel" id="suTyreP"><div class="panel-h"><h3>${tr('Pressioni e campanature: quanto cambiare')}</h3></div><div id="suTyre"></div></div>`);
-  const sus=$('#suSuspP');if(sus&&!$('#suHistP'))sus.insertAdjacentHTML('afterend',`<div class="panel" id="suHistP"><div class="panel-h"><h3>${tr('Storico setup e risultati')}</h3><span class="muted small">${tr('stessa pista e stessa auto')}</span></div><div id="suHist"></div></div>`);
-  const base=RENDER.setup;RENDER.setup=()=>{base();try{const S=active()?.S;const D=DIAG&&DIAG.S===S?DIAG:null;$('#suTyre').innerHTML=S?tyreFixHTML(D,S):`<div class="empty">${tr('Scegli una telemetria .ld in alto.')}</div>`;
+  const sus=$('#doc');if(sus&&!$('#suHistP'))sus.insertAdjacentHTML('afterend',`<div class="panel" id="suHistP"><div class="panel-h"><h3>${tr('Storico setup e risultati')}</h3><span class="muted small">${tr('stessa pista e stessa auto')}</span></div><div id="suHist"></div></div>`);
+  const base=RENDER.setup;RENDER.setup=()=>{base();try{const S=active()?.S;const D=DIAG&&DIAG.S===S?DIAG:null;if(!$('#suTyre')||!$('#suHist'))return;$('#suTyre').innerHTML=S?tyreFixHTML(D,S):`<div class="empty">${tr('Scegli una telemetria .ld in alto.')}</div>`;
       if(S&&D&&D.su)shRecord(S,D,D.su);$('#suHist').innerHTML=S?shHTML(S):'';}catch(e){console.error(e);}};if(curView()==='setup')RENDER.setup();},0);
 
 // the debrief also reports the tyre degradation

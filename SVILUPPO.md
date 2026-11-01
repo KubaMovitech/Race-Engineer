@@ -32,3 +32,12 @@ definiscono, nell'ordine di caricamento; "later" vuol dire dentro `setTimeout`, 
 
 Per le funzioni nuove meglio aggiungere al file dell'area giusta che avvolgere: ogni voce in più nella mappa è un
 pezzo di comportamento che dipende dall'ordine.
+
+## Analisi della telemetria (chq.js, vdyn.js) e test
+- `app/chq.js` e `app/vdyn.js` vengono subito dopo `core.js` e contengono solo calcoli (niente pagina): unità e conversioni
+  dei canali decise dai metadati del file, canali piatti trattati come mancanti, qualità e affidabilità per analisi,
+  sospensioni, eventi, assi, packer, piattaforma. Le pagine sono in `ui51.js` (Analisi tecnica) e `ui52.js` (Muretto).
+- `node tools/test_analysis.js` prova questi calcoli su segnali sintetici con risultato noto (anche nel controllo su GitHub).
+  Non sostituisce la taratura su telemetrie reali: vedi `STATO_LAVORI.md`.
+- `python3 tools/check_release.py --allow-unreleased` (controllo automatico) segnala come avviso, non come errore, i sorgenti
+  cambiati dopo l'ultima versione pubblicata; senza l'opzione (prima di pubblicare) resta un errore.

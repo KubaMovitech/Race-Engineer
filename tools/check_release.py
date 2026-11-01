@@ -35,10 +35,20 @@ if f"const APP_VERSION='{v}'".encode() not in open(p("DataEngineerBridge.exe"), 
 # the published app must be exactly the one built from the sources
 subprocess.run(["sh", p("app/build.sh")], check=True)
 built = open(p("app/test.html"), encoding="utf-8").read().replace("<html>", '<html lang="it">', 1)
-if built != open(p("Data_Engineer.html"), encoding="utf-8").read():
-    err.append("Data_Engineer.html è diverso dall'app costruita da app/: rifai la versione con release.sh")
+# Between two releases the sources move ahead of the published app: that is expected, not an error of the channel.
+# With --allow-unreleased (used by the automatic check on every push) it is reported apart and does not fail;
+# release.sh and a manual run stay strict.
+unreleased = built != open(p("Data_Engineer.html"), encoding="utf-8").read()
 
+allow = "--allow-unreleased" in sys.argv
+if unreleased and not allow:
+    err.append("Data_Engineer.html è diverso dall'app costruita da app/: rifai la versione con release.sh")
 for e in err:
     print("ERRORE:", e)
+if unreleased and allow:
+    print("AVVISO (atteso tra due versioni): i sorgenti in app/ sono cambiati dopo la versione " + v +
+          " pubblicata. Non è un errore del canale aggiornamenti: si allinea alla prossima versione fatta con release.sh.")
+    if os.environ.get("GITHUB_ACTIONS"):
+        print("::warning::Sorgenti dell'app cambiati dopo la versione " + v + " pubblicata (atteso fino alla prossima release)")
 print(("OK: versione " + v + " coerente") if not err else ("Versione " + v + " NON coerente"))
 sys.exit(1 if err else 0)

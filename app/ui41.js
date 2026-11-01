@@ -9,6 +9,7 @@ const PRO_ICONS={
   ses:'<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/>',
   bop:'<path d="M12 3v18M5 7h14"/><path d="M5 7l-3 7h6zM19 7l-3 7h6z"/>',
   prog:'<path d="M4 20V12M10 20V6M16 20v-9M22 20H2"/>',
+  tech:'<path d="M3 18h18"/><path d="M6 18V9l3-3 3 3v9"/><path d="M14 18v-6l3-3 3 3v6"/><path d="M9 6V3M17 9V5"/>',
   live:'<circle cx="12" cy="12" r="2"/><path d="M7.8 7.8a6 6 0 0 0 0 8.4M16.2 7.8a6 6 0 0 1 0 8.4M5 5a10 10 0 0 0 0 14M19 5a10 10 0 0 1 0 14"/>'};
 // [id, title, subtitle, views, setup tab]
 const PRO_NAV=[['dash','Dashboard','Analisi e panoramica',['stint']],
@@ -17,18 +18,19 @@ const PRO_NAV=[['dash','Dashboard','Analisi e panoramica',['stint']],
   ['ses','Sessioni','Diario delle uscite',['diary']],
   ['prog','Progressi','Stagione e statistiche',['prog']],
   ['eng','Race Engineer','Diagnosi e piano di lavoro',['setup'],'eng'],
+  ['tech','Analisi tecnica','Sospensioni, piattaforma, qualità dati',['setup'],'dyn'],
   ['setb','Setup Builder','Setup, confronto e generatore',['setup'],'set'],
   ['bop','BOP','Bilanciamento prestazioni',['bop']],
   ['live','Muretto','Live con la squadra',['live']]];
 // grouped by what you are doing; on the phone only the first four, the rest under «Altro»
-const PRO_GROUPS=[['Analizza',['dash','tel','coach','ses','prog']],['Prepara',['eng','setb','bop']],['Gara',['live']]];
+const PRO_GROUPS=[['Analizza',['dash','tel','coach','ses','prog']],['Prepara',['eng','tech','setb','bop']],['Gara',['live']]];
 const PRO_PHONE=['dash','tel','eng','live'];
 const proLook=()=>/^pro/.test(LS.get('look','pro'));
-function proNavOf(v){if(v==='setup')return LS.get('su:tab','eng')==='eng'?'eng':'setb';return (PRO_NAV.find(n=>n[3].includes(v))||PRO_NAV[0])[0];}
+function proNavOf(v){if(v==='setup'){const t=LS.get('su:tab','eng');return t==='eng'?'eng':t==='dyn'?'tech':'setb';}return (PRO_NAV.find(n=>n[3].includes(v))||PRO_NAV[0])[0];}
 function proSync(){if(!proLook())return;const v=curView(),id=proNavOf(v);const g=PRO_NAV.find(n=>n[0]===id);
   $$('#proNav .pn[data-n]').forEach(b=>b.setAttribute('aria-current',b.dataset.n===id?'page':'false'));$('#proNav .pmore')?.classList.toggle('pon',!PRO_PHONE.includes(id));
   const nav=$('.tabs.subtabs');if(nav){$$('.tabs .tab').forEach(t=>t.hidden=!g[3].includes(t.dataset.view));nav.hidden=g[3].length<2;}
-  const su=$('#suTabs');if(su){su.hidden=id==='eng';su.querySelectorAll('button').forEach(b=>b.hidden=b.dataset.t==='eng');}
+  const su=$('#suTabs');if(su){su.hidden=id==='eng'||id==='tech';su.querySelectorAll('button').forEach(b=>b.hidden=b.dataset.t==='eng'||b.dataset.t==='dyn');}
   document.documentElement.dataset.pnav=id;}
 function proBuild(){if($('#proNav'))return;
   const side=document.createElement('aside');side.id='proNav';side.setAttribute('aria-label',tr('Sezioni'));
@@ -39,7 +41,7 @@ function proBuild(){if($('#proNav'))return;
   $('header.top').after(side);
   const more=side.querySelector('.pmore');more.onclick=()=>{const o=!side.classList.contains('pmopen');side.classList.toggle('pmopen',o);more.setAttribute('aria-expanded',o);};
   side.querySelectorAll('.pn[data-n]').forEach(b=>b.onclick=()=>{side.classList.remove('pmopen');more.setAttribute('aria-expanded','false');const g=PRO_NAV.find(n=>n[0]===b.dataset.n);
-    if(g[4]){const cur=LS.get('su:tab','eng');if(g[4]==='eng')LS.set('su:tab','eng');else if(cur==='eng')LS.set('su:tab','set');}
+    if(g[4]){const cur=LS.get('su:tab','eng');if(g[4]==='eng'||g[4]==='dyn')LS.set('su:tab',g[4]);else if(cur==='eng'||cur==='dyn')LS.set('su:tab','set');}
     const last=LS.get('pgrp:'+g[0],g[3][0]);showView(g[3].includes(last)?last:g[3][0]);if(g[4]&&typeof suTabsApply==='function')suTabsApply();proSync();window.scrollTo({top:0});});
   // the second row of tabs goes on top of the page
   const sub=$('.tabs.subtabs');if(sub)$('main').prepend(sub);
