@@ -1,6 +1,6 @@
 # Stato dei lavori: analisi MoTeC, setup, Libreria e Muretto (solo PC)
 
-Pubblicato nella versione **2.18.0** (01/11/2026).
+Pubblicato nelle versioni **2.18.0** (fasi 1–5 e 7) e **2.19.0** (fasi 6 e 8), 01/11/2026.
 
 ## Dove sta il codice nuovo
 
