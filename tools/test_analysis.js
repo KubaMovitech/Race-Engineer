@@ -146,4 +146,10 @@ console.log('12. Setup associato alla sessione');
   ok(C.sesSetupGet(S).text.includes('CamberSetting=5')&&C.svmHash(su2.text)!==kept.hash,'file cambiato dopo: resta la copia storica, il cambio si riconosce');
   ok(C.suCarMatch({meta:{car:'BMW M Hybrid V8'}},{car:'Porsche_963 Hypercar'})===false&&C.suCarMatch({meta:{car:'BMW M Hybrid V8'}},{car:'BMW_M_Hybrid Hypercar WEC2026'})!==false,'auto diversa riconosciuta');}
 
+console.log('13. File reali: nomi con accenti e setup salvati in italiano');
+{const v='Autódromo José Carlos Pace';const b=ldWrite([{name:'Ground Speed',unit:'km/h',f:10,v:[0,1,2,3]}]);const u8=new Uint8Array(b);const e=new TextEncoder().encode(v);u8.fill(0,0x15e,0x15e+64);u8.set(e,0x15e);
+  ok(C.parseLD(b).meta.venue===v,'nome della pista in UTF-8 letto correttamente');
+  const su=C.parseSVM('[FRONTLEFT]\nTenderSpringSetting=0//Separata\nCamberSetting=5//-1.2 deg\n[GENERAL]\nPitstop1Setting=0//N/D\n','it.svm');
+  ok(C.setupVal(su,'TenderSpringSetting')==null&&C.setupVal(su,'Pitstop1Setting')==null&&C.setupVal(su,'CamberSetting')==='-1.2 deg','setup in italiano: «Separata» e «N/D» non sono valori regolabili');}
+
 console.log(`\n${n-fails}/${n} controlli superati`);process.exit(fails?1:0);

@@ -5,7 +5,9 @@ function f16(h){const s=(h&0x8000)?-1:1,e=(h>>10)&0x1f,m=h&0x3ff;if(e===0)return
 
 function parseLD(buf){
   const dv=new DataView(buf),u8=new Uint8Array(buf),L=buf.byteLength,dec=new TextDecoder('latin1');
-  const str=(o,n)=>{if(o+n>L)return'';let e=o;while(e<o+n&&u8[e])e++;return dec.decode(u8.subarray(o,e)).trim();};
+  // header texts: UTF-8 when valid (LMU writes «Autódromo José Carlos Pace» in UTF-8), else Latin-1
+  const utf=new TextDecoder('utf-8',{fatal:true});
+  const str=(o,n)=>{if(o+n>L)return'';let e=o;while(e<o+n&&u8[e])e++;const b=u8.subarray(o,e);try{return utf.decode(b).trim();}catch(x){return dec.decode(b).trim();}};
   if(L<0x200) throw new Error('File .ld troppo piccolo');
   const meta={date:str(0x5e,16),time:str(0x7e,16),driver:str(0x9e,64),car:str(0xde,64),venue:str(0x15e,64)};
   let p=dv.getUint32(8,true);const ch={};let guard=0;
@@ -338,7 +340,7 @@ function parseSVM(text,name){
 }
 function setupText(su){
   const lines=[`Auto: ${su.car}`,su.head.Notes?`Note: ${su.head.Notes}`:''];
-  for(const [s,items] of Object.entries(su.sec)){const it=items.filter(x=>x.disp&&!/N\/A|Non-adjustable|Detached/.test(x.disp));if(!it.length)continue;lines.push(`[${s}]`);it.forEach(x=>lines.push(`${x.key} = ${x.disp} (indice ${x.raw})`));}
+  for(const [s,items] of Object.entries(su.sec)){const it=items.filter(x=>x.disp&&!/N\/A|N\/D|Non regolabile|Separat[ao]|Non-adjustable|Detached/.test(x.disp));if(!it.length)continue;lines.push(`[${s}]`);it.forEach(x=>lines.push(`${x.key} = ${x.disp} (indice ${x.raw})`));}
   return lines.filter(Boolean).join('\n');
 }
 
@@ -414,7 +416,7 @@ function gearingCheck(S,laps){
 }
 function steerCheck(S,laps){let mx=0,where=null;for(const lap of laps){const g=lapGrid(S,lap,2),st=g.get('Steering');if(!st)return null;const cr=detectCorners(g);for(let i=0;i<g.n;i++)if(Math.abs(st[i])>mx){mx=Math.abs(st[i]);const c=cr.find(c=>g.d[i]>=c.dS&&g.d[i]<=c.dE);where=c?'T'+c.k:null;}}return {max:mx,where};}
 function engineCheck(S){const g=n=>S.ch[n]?pct(S.ch[n].v,0.995):NaN;const oh=S.ch['Overheating State']?pct(S.ch['Overheating State'].v,1):0;return {water:g('Eng Water Temp'),oil:g('Eng Oil Temp'),overheat:oh>0};}
-function setupVal(su,key,sec){if(!su)return null;for(const [s,items] of Object.entries(su.sec)){if(sec&&s!==sec)continue;const x=items.find(i=>i.key===key);if(x&&x.disp&&!/N\/A|Non-adjustable/.test(x.disp))return x.disp;}return null;}
+function setupVal(su,key,sec){if(!su)return null;for(const [s,items] of Object.entries(su.sec)){if(sec&&s!==sec)continue;const x=items.find(i=>i.key===key);if(x&&x.disp&&!/N\/A|N\/D|Non regolabile|Separat[ao]|Non-adjustable/.test(x.disp))return x.disp;}return null;}
 
 // Lap-counter channels update at scoring rate (~0.1 s). Refine each start/finish crossing with the GPS trace:
 // average line position + direction, then find where the car crosses that plane (linear interpolation, 10 ms search).

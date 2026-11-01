@@ -286,7 +286,7 @@ const SU_W={CamberSetting:[{bal:1,tyre:-0.5},{bal:-1,trac:0.5,tyre:-0.5},['meno 
 const SU_DIM=[['bal','Bilanciamento','più sottosterzo','più sovrasterzo'],['df','Carico aerodinamico','più carico','meno carico'],['top','Velocità di punta','più veloce in rettilineo','più lenta in rettilineo'],
   ['brk','Stabilità in frenata','più stabile','più nervosa'],['trac','Trazione','più trazione','meno trazione'],['tyre','Gomme','più calde / più usura','più fredde / meno usura'],['cool','Raffreddamento','più fresco','più caldo'],['kerb','Cordoli e buche','più morbida','più rigida']];
 const num1=s=>{const m=String(s||'').match(/-?\d+(\.\d+)?/);return m?+m[0]:NaN;};
-function suIndex(su){const o={};Object.entries(su.sec).forEach(([sec,items])=>items.forEach(x=>{if(!x.disp||/N\/A|Non-adjustable/.test(x.disp))return;o[sec+'|'+x.key]={sec,key:x.key,raw:+x.raw,disp:x.disp,label:x.label};}));return o;}
+function suIndex(su){const o={};Object.entries(su.sec).forEach(([sec,items])=>items.forEach(x=>{if(!x.disp||/N\/A|N\/D|Non regolabile|Separat[ao]|Non-adjustable/.test(x.disp))return;o[sec+'|'+x.key]={sec,key:x.key,raw:+x.raw,disp:x.disp,label:x.label};}));return o;}
 function suCompare(A,B){const a=suIndex(A),b=suIndex(B);const keys=[...new Set([...Object.keys(a),...Object.keys(b)])];const ch=[];const tot={};SU_DIM.forEach(([k])=>tot[k]=0);
   keys.forEach(k=>{const x=a[k],y=b[k];if(!x||!y||x.disp===y.disp)return;const st=Number.isFinite(x.raw)&&Number.isFinite(y.raw)?y.raw-x.raw:NaN;let w={},txt='';
     const wheel=/^(FRONT|REAR)(LEFT|RIGHT)$/.exec(y.sec);

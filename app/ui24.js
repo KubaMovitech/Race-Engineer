@@ -66,7 +66,7 @@ function tyreFixHTML(D,S){const F=tyreFix(D,S);if(!F)return `<div class="empty">
 // ---------- setup history: every analysed run with its setup, and what each change did ----------
 const SH_SEC={FRONTLEFT:'ant. sx',FRONTRIGHT:'ant. dx',REARLEFT:'post. sx',REARRIGHT:'post. dx'};
 function shRecord(S,D,su){if(!S||!D||!su)return;const b=bestValid(S);if(!b)return;const fl=S.laps.filter(l=>l.complete&&l.type==='lanciato'&&!l.invalid&&l.time<=b.time*1.07);
-  const vals={};Object.entries(su.sec).forEach(([sec,items])=>items.forEach(x=>{if(x.disp&&!/N\/A|Non-adjustable|Detached/.test(x.disp))vals[sec+'|'+x.key]=x.disp;}));
+  const vals={};Object.entries(su.sec).forEach(([sec,items])=>items.forEach(x=>{if(x.disp&&!/N\/A|N\/D|Non regolabile|Separat[ao]|Non-adjustable|Detached/.test(x.disp))vals[sec+'|'+x.key]=x.disp;}));
   const B=D.raw.B||{};const ph=B.phases||{},sp=B.speedIdx||{};const T=D.raw.T||{};const tav=ws=>mean(ws.map(w=>T[w]?.carc));
   const H=LS.get('suhist',{});H[S.id]={id:S.id,venue:S.meta.venue||'',car:(S.meta.car||S.merged?.d.car||su.car||''),when:`${S.meta.date||''} ${(S.meta.time||'').slice(0,5)}`,su:su.name,vals,
     best:b.time,pace:median(fl.map(l=>l.time)),n:fl.length,track:S.cond?.track?.avg,cond:S.cond?.label,

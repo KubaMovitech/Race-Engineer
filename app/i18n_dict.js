@@ -1,5 +1,7 @@
 // Italian → English phrases. '#' stands for any number (kept as-is). Longest entries are applied first.
 const I18N_EN=[
+["rigidezza che cala vicino alla massima corsa: relazione forza/posizione non leggibile", "stiffness dropping near maximum travel: force/position relation not readable"],
+["più lento del 4%", "more than 4% slower"],
 ["Qualità telemetria", "Telemetry quality"],
 ["Molle, assi e 3° elemento", "Springs, axles and 3rd element"],
 ["Piattaforma e aero", "Platform and aero"],

@@ -123,7 +123,9 @@ function engHTML(D,S,su,laps,mismatch){const F=engFindings(D,S,su,laps);const P=
 // ---------- which laps the engineer reads: the 5 fastest flying laps (clean laps) or the last 5 (after a setup change) ----------
 const ENG_LAPN=5;
 function engLapMode(){return LS.get('eng:laps','best')==='last'?'last':'best';}
+// laps more than 4% slower than the fastest (traffic, cold tyres, a mistake) are not compared with the others
 function engLaps(S){let L=S.laps.filter(l=>l.complete&&l.type==='lanciato');if(!L.length)L=S.laps.filter(l=>l.complete);
+  const fast=Math.min(...L.filter(l=>!l.invalid).map(l=>l.time));if(Number.isFinite(fast)){const K=L.filter(l=>l.time<=fast*1.04);if(K.length)L=K;}
   return engLapMode()==='last'?L.slice(-ENG_LAPN).sort((a,b)=>a.time-b.time):[...L].sort((a,b)=>a.time-b.time).slice(0,ENG_LAPN);}
 // how the laps were chosen, said in words, with the lap numbers
 function engLapsText(laps){const m=engLapMode();const n=laps.length;

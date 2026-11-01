@@ -97,6 +97,20 @@ Lavoro sui sorgenti, **non ancora pubblicato**: nessuna release, `Data_Engineer.
 - Da fare: vista gara compatta con prossima sosta e avvisi in ordine di priorità in un solo riquadro (oggi le informazioni
   sono già nelle schede Panoramica e Strategia).
 
+## Prima prova con telemetrie reali (Bahrain, Genesis GMR001, 31/10–1/11/2026)
+
+File ricevuti solo per la prova (non nel repository): 8 `.ld` di Bahrain, 1 di Interlagos, 4 `.svm`.
+- Lettura: tutti i file letti; canali piatti riconosciuti (a Interlagos il carico gomme è sempre 0: niente analisi degli
+  scarichi, senza inventare risultati). Corretti due problemi trovati: nomi pista con accenti (UTF-8) e setup salvati
+  in italiano (`N/D`, `Separata` erano presi per valori).
+- Giri: i giri più lenti del 4% del migliore ora sono esclusi dal confronto (in un'uscita c'era un 2:00 tra gli 1:46).
+- Coerenza tra uscite: il livello del 3° elemento anteriore sul packer cambia tra le uscite (≈12 → ≈16 → ≈15 mm) in
+  modo stabile dentro ogni uscita: compatibile con modifiche al 3° elemento anteriore tra un'uscita e l'altra. **Da
+  confermare** sapendo quale setup è stato usato in ogni uscita.
+- Ammortizzatori: velocità al 95% molto simili tra le uscite (35–42 mm/s): le differenze sono dentro la variabilità.
+- Gli scarichi delle ruote sui cordoli sono ripetibili in quasi tutti i giri: gravità abbassata a «da controllare»
+  finché non è tarata (scarico breve sui cordoli è normale su queste auto).
+
 ## Cosa resta da validare con dati reali
 
 I test sintetici verificano gli algoritmi, non la correttezza delle diagnosi su un'auto vera. Per tarare servono:

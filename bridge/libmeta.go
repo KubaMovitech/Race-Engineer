@@ -7,6 +7,7 @@ import (
 	"os"
 	"strings"
 	"sync"
+	"unicode/utf8"
 )
 
 // What the Libreria page needs to sort the files without opening them: from the first bytes of each
@@ -28,7 +29,8 @@ type metaKey struct {
 
 var ldMetaCache, svmCarCache sync.Map
 
-// hdrStr: a zero-terminated latin-1 string at off in the header
+// hdrStr: a zero-terminated string at off in the header: UTF-8 when valid (LMU writes accented track
+// names in UTF-8), else latin-1
 func hdrStr(b []byte, off, n int) string {
 	if off >= len(b) {
 		return ""
@@ -40,6 +42,9 @@ func hdrStr(b []byte, off, n int) string {
 	s := b[off:end]
 	if i := strings.IndexByte(string(s), 0); i >= 0 {
 		s = s[:i]
+	}
+	if utf8.Valid(s) {
+		return strings.TrimSpace(string(s))
 	}
 	r := make([]rune, 0, len(s))
 	for _, c := range s {

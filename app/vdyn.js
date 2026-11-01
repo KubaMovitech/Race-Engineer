@@ -245,6 +245,7 @@ function vdStops(S,laps,sg){const out={};for(const w of VD_W){const F=vdChan(S,'
     const ratio=top.b/base.b;r.rate={base:base.b,top:top.b,ratio,rows};
     if(ratio>=1.8){let knee=rows[rows.length-3][0];for(let k=m;k<rows.length-1;k++){const s=(rows[k+1][1]-rows[k][1])/(rows[k+1][0]-rows[k][0]);if(s>1.5*base.b){knee=rows[k][0];break;}}
       r.st='stimato';r.at=knee;r.ev=[`${tr('rigidezza')} ${fx(base.b/1000,2)} → ${fx(top.b/1000,2)} kN/mm ${tr('oltre')} ≈${fx(knee,0)} mm`];r.why=tr('la rigidezza sale di colpo vicino alla massima compressione: compatibile con tampone o packer (incertezza ± 1 mm)');}
+    else if(ratio<0.7){r.why=tr('rigidezza che cala vicino alla massima corsa: relazione forza/posizione non leggibile');}
     else if(ratio<1.3){r.st='non rilevato';r.why=tr('rigidezza costante fino alla corsa massima osservata: nessun segno di contatto (non esclude un contatto oltre quella corsa)');}
     else r.why=tr('aumento di rigidezza piccolo: non basta per dire che c\'è un contatto');}
   return out;}

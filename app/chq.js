@@ -97,7 +97,7 @@ function chqDead(S){const ch=S.ch,sp=ch['Ground Speed'];S.deadCh=S.deadCh||{};if
   for(const name of Object.keys(ch)){if(name==='Ground Speed')continue;const s=chqSpec(name);if(!s||s[4]!=='cont')continue;const c=ch[name];const v=c.v;
     let a=Infinity,b=-Infinity,fin=0;for(let i=0;i<v.length;i++){const x=v[i];if(!Number.isFinite(x))continue;fin++;if(x<a)a=x;if(x>b)b=x;}
     if(!fin){S.deadCh[name]={c,why:'nessun valore numerico nel file'};delete ch[name];continue;}
-    if(b-a<1e-6){S.deadCh[name]={c,why:`costante (${+a.toFixed(3)}) per tutta la sessione: il gioco non lo esporta per questa auto`};delete ch[name];}}
+    if(b-a<1e-6){S.deadCh[name]={c,why:`costante (${+a.toFixed(3)}) per tutta la sessione: nessuna informazione (il gioco non lo ha esportato)`};delete ch[name];}}
   // aliases point to the same object: drop them too
   for(const name of Object.getOwnPropertyNames(ch)){const c=ch[name];if(Object.values(S.deadCh).some(d=>d.c===c))delete ch[name];}
   return S.deadCh;}
@@ -157,7 +157,9 @@ function chqAnalysis(S,a){const miss=[],lim=[],ok=[],optMiss=[];let effHz=Infini
 
 // laps that can be compared with each other: complete flying laps, valid, out of the pits, same wet/dry state
 function chqComparable(S,laps){const c=S.cond||{};const out=[],why=[];
-  laps.forEach(l=>{if(!l.complete||l.type!=='lanciato'){why.push(`${tr('G')}${l.num}: ${tr(l.type)}`);return;}if(l.invalid){why.push(`${tr('G')}${l.num}: ${tr('non valido')}`);return;}out.push(l);});
+  const fast=Math.min(...laps.filter(l=>l.complete&&!l.invalid).map(l=>l.time));
+  laps.forEach(l=>{if(!l.complete||l.type!=='lanciato'){why.push(`${tr('G')}${l.num}: ${tr(l.type)}`);return;}if(l.invalid){why.push(`${tr('G')}${l.num}: ${tr('non valido')}`);return;}
+    if(Number.isFinite(fast)&&l.time>fast*1.04){why.push(`${tr('G')}${l.num}: ${tr('più lento del 4%')}`);return;}out.push(l);});
   let tSpread=NaN;if(typeof lapConditions==='function'&&out.length>1){const T=out.map(l=>lapConditions(S,l).track).filter(Number.isFinite);if(T.length>1)tSpread=Math.max(...T)-Math.min(...T);}
   const wetMix=!!(c.wet&&c.wet.max-c.wet.min>0.1);
   return {laps:out,why,tSpread,wetMix};}
