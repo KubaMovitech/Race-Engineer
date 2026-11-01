@@ -69,12 +69,7 @@ function proCarHTML(su){const C={FL:'FRONTLEFT',FR:'FRONTRIGHT',RL:'REARLEFT',RR
     box('Terzo elemento','⌇',[['Molla ant.',suFind(su,'SUSPENSION',/^Front3rdSpring/)],['Packer ant.',suFind(su,'SUSPENSION',/^Front3rdPacker/)],['Molla post.',suFind(su,'SUSPENSION',/^Rear3rdSpring/)],['Packer post.',suFind(su,'SUSPENSION',/^Rear3rdPacker/)]]),
     box('Differenziale','⚙',[['Precarico',suFind(su,'DRIVELINE',/^DiffPreload/)],['Trazione',suFind(su,'DRIVELINE',/^DiffPower/)],['Rilascio',suFind(su,'DRIVELINE',/^DiffCoast/)]]),
     box('Elettronica e ibrido','ϟ',[['TC mappa',suFind(su,'CONTROLS',/^TractionControlMap/)],['TC taglio',suFind(su,'CONTROLS',/^TCPowerCut/)],['Rigenerazione',suFind(su,'ENGINE',/^RegenerationMap/)],['Motore elettrico',suFind(su,'ENGINE',/^ElectricMotorMap/)]])].join('');
-  const car=`<svg viewBox="0 0 160 300" class="pcarv" aria-hidden="true"><defs><linearGradient id="pcb" x1="0" x2="1"><stop offset="0" style="stop-color:var(--pcar1)"/><stop offset=".5" style="stop-color:var(--pcar2)"/><stop offset="1" style="stop-color:var(--pcar1)"/></linearGradient></defs>
-    <path d="M60 18h40l8 30 14 6v40l-8 10 4 60 12 10v60l-10 30H54l-10-30v-60l12-10 4-60-8-10V54l14-6z" fill="url(#pcb)" style="stroke:var(--pacc)" stroke-width="1.2" opacity=".95"/>
-    <path d="M30 16h100v10H30z" style="fill:var(--pcar3);stroke:var(--pacc)"/><path d="M26 276h108v12H26z" style="fill:var(--pcar3);stroke:var(--pacc)"/>
-    <rect x="14" y="58" width="22" height="46" rx="5" style="fill:var(--panel)" stroke="#2BE38A" stroke-width="2"/><rect x="124" y="58" width="22" height="46" rx="5" style="fill:var(--panel)" stroke="#2BE38A" stroke-width="2"/>
-    <rect x="12" y="196" width="26" height="52" rx="5" style="fill:var(--panel)" stroke="#FFC53D" stroke-width="2"/><rect x="122" y="196" width="26" height="52" rx="5" style="fill:var(--panel)" stroke="#FFC53D" stroke-width="2"/>
-    <ellipse cx="80" cy="132" rx="14" ry="22" style="fill:var(--bg);stroke:var(--pacc2)"/><path d="M80 40v230" style="stroke:var(--pline2)" stroke-dasharray="3 5"/></svg>`;
+  const car=carTopSVG();
   return `<div class="pcar2">${corner('FL')}${corner('FR')}<div class="pcc2">${car}</div>${corner('RL')}${corner('RR')}</div><div class="pcmid">${mid}</div>`;}
 function proVersions(su){const car=(su?.car||'').toLowerCase();const L=svms().filter(x=>!car||(x.car||'').toLowerCase()===car);
   const nd=(a,b)=>{let n=0;for(const [sec,it] of Object.entries(a.sec||{}))for(const i of it){const o=b.sec?.[sec]?.find(x=>x.key===i.key);if(o&&o.raw!==i.raw)n++;}return n;};
@@ -93,7 +88,7 @@ setTimeout(()=>{const base=RENDER.setup;RENDER.setup=()=>{base();try{proSetupPan
 
 (function(){const st=document.createElement('style');st.textContent=`
 html[data-look="pro"] .pehead .eplan{display:none}
-html[data-look="pro"] .ehead .ey{color:var(--pacc2);font:600 .72rem "Titillium Web",sans-serif;letter-spacing:.14em}html[data-look="pro"] .ehead h2{font:700 1.4rem "Titillium Web",sans-serif;color:#fff;text-transform:none}
+html[data-look="pro"] .ehead .ey{color:var(--pacc2);font:600 .72rem "Titillium Web",sans-serif;letter-spacing:.14em}html[data-look="pro"] .ehead h2{font:600 1.4rem "Titillium Web",sans-serif;color:#fff;text-transform:none}
 html[data-look="pro"] .ecount span{border-radius:10px;background:var(--panel2);border:1px solid var(--line)}
 .pre1,.pre2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:16px;margin-bottom:16px}
 .pactg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
@@ -102,11 +97,11 @@ html[data-look="pro"] .ecount span{border-radius:10px;background:var(--panel2);b
 .pab:hover{border-color:var(--c)}.pab[aria-pressed="true"]{border-color:var(--c);background:color-mix(in srgb,var(--c) 12%,transparent)}
 .pactb{margin-top:12px;border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:rgba(255,255,255,.02)}.pactb ol{margin:8px 0;padding-left:20px}.pactb li{margin:3px 0}
 .pdlm{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end}.pdlm .seg button{padding:4px 10px;font-size:.8rem}
-.pdt{table-layout:fixed;width:100%}.pdt th:nth-child(1){width:34%}.pdt th:nth-child(2){width:18%}.pdt th:nth-child(3){width:12%}.pdt td{vertical-align:top;white-space:normal!important;overflow-wrap:anywhere}.pdt td b{color:#fff}.pdt .pdi{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:6px;margin-right:8px;font-weight:700;font-size:.8rem}
+.pdt{table-layout:fixed;width:100%}.pdt th:nth-child(1){width:34%}.pdt th:nth-child(2){width:18%}.pdt th:nth-child(3){width:12%}.pdt td{vertical-align:top;white-space:normal!important;overflow-wrap:anywhere}.pdt td b{color:#fff}.pdt .pdi{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:6px;margin-right:8px;font-weight:600;font-size:.8rem}
 .pdt tr.s2 .pdi{background:rgba(255,59,78,.15);color:#FF3B4E}.pdt tr.s1 .pdi{background:var(--pwarnbg);color:var(--pwarn)}.pdt tr.s0 .pdi{background:rgba(43,227,138,.12);color:#2BE38A}
 .pdt em{font-style:normal;font:600 .72rem "Titillium Web",sans-serif;padding:4px 10px;border-radius:6px;white-space:nowrap}.pdt em.hi{background:rgba(255,59,78,.15);color:#FF5A6A}.pdt em.mid{background:var(--pwarnbg);color:var(--pwarn)}.pdt em.ok{background:rgba(43,227,138,.12);color:#2BE38A}
 .ppl{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
-.ppn{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--psel);color:#fff;font-weight:700}
+.ppn{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--psel);color:#fff;font-weight:600}
 .ppl b{color:#fff}.ppl small{display:block;color:var(--muted);margin-top:2px;font-size:.86rem}.ppl.done{opacity:.6}.ppl.done .ppn{background:#14532D}
 .ppd[aria-pressed="true"]{color:#2BE38A;border-color:#2BE38A}
 .ppb{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
@@ -120,7 +115,7 @@ html[data-look="pro"] .ecount span{border-radius:10px;background:var(--panel2);b
 .pcc2{grid-row:1/3;grid-column:2}.pcarv{width:100%;height:auto;max-height:340px}
 .pcFL{grid-column:1;grid-row:1}.pcFR{grid-column:3;grid-row:1}.pcRL{grid-column:1;grid-row:2}.pcRR{grid-column:3;grid-row:2}
 .pcw,.pcb{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:rgba(255,255,255,.025)}
-.pcw h4,.pcb h4{margin:0 0 6px;font:700 .78rem "Titillium Web",sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#fff;display:flex;align-items:center;gap:8px}
+.pcw h4,.pcb h4{margin:0 0 6px;font:600 .78rem "Titillium Web",sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#fff;display:flex;align-items:center;gap:8px}
 .pcw .pwd{width:8px;height:8px;border-radius:50%;background:#2BE38A}.pcRL .pwd,.pcRR .pwd{background:#FFC53D}
 .pcw>div,.pcb>div{display:flex;justify-content:space-between;gap:10px;font-size:.82rem;padding:2px 0}.pcw span,.pcb span{color:var(--muted)}.pcw b,.pcb b{font:600 .85rem "JetBrains Mono",monospace;color:#fff;white-space:nowrap}
 .pcmid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px}

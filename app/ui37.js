@@ -28,8 +28,11 @@ function teamInvite(){const url=teamInviteUrl();if(!url){toast(tr('Nessuna squad
 // ---------- 2. every car on the lap, in one strip ----------
 function lvStripHTML(){const sc=LIVE.sc;const I=sc?.i||{};const len=I.lapDist;if(!sc||!(len>0))return '';const rows=liveRows(sc);const riv=typeof liveRivals==='function'?liveRivals():[];
   const me=rows.find(r=>r.veh===LIVE.focus);
-  return `<div class="lsbar"><i class="sf" title="${esc(tr('Traguardo'))}"></i>${rows.filter(r=>!r.gar).map(r=>{const f=Math.max(0,Math.min(1,(r.ld||0)/len));const us=r.veh===LIVE.focus,rv=riv.includes(r.veh);
-    return `<span class="lsc${us?' us':''}${rv?' rv':''}${r.inPit?' pit':''}${me&&r.cls===me.cls?' cl':''}" style="left:${(f*100).toFixed(2)}%;--c:${LV_CLS(r.cls)}" title="${esc(`P${r.pos} · ${r.drv} · ${r.label||r.veh}`)}">${r.pos}</span>`;}).join('')}</div>`;}
+  // cars closer than a bubble's width go on the next line down, so their numbers never sit on top of each other
+  const R=rows.filter(r=>!r.gar).map(r=>({r,f:Math.max(0,Math.min(1,(r.ld||0)/len))})).sort((a,b)=>a.f-b.f);const lane=[];let nl=1;const th=Math.max(0.03,36/Math.max(200,($('#lvStrip')?.clientWidth||900)-20));
+  R.forEach(o=>{let k=0;while(k<3&&lane[k]!=null&&o.f-lane[k]<th)k++;if(k>=3)k=2;lane[k]=o.f;o.k=k;nl=Math.max(nl,k+1);});
+  return `<div class="lsbar" style="height:${30+(nl-1)*24}px"><i class="sf" title="${esc(tr('Traguardo'))}"></i>${R.map(({r,f,k})=>{const us=r.veh===LIVE.focus,rv=riv.includes(r.veh);
+    return `<span class="lsc${us?' us':''}${rv?' rv':''}${r.inPit?' pit':''}${me&&r.cls===me.cls?' cl':''}" style="left:${(f*100).toFixed(2)}%;--c:${LV_CLS(r.cls)};--k:${k}" title="${esc(`P${r.pos} · ${r.drv} · ${r.label||r.veh}`)}">${r.pos}</span>`;}).join('')}</div>`;}
 (function(){const rl=renderLive;window.renderLive=renderLive=function(force){rl(force);const el=$('#lvStrip');if(!el||curView()!=='live')return;try{const h=lvStripHTML();if(el.dataset.h!==h){el.innerHTML=h;el.dataset.h=h;}}catch(e){}};})();
 
 // ---------- 3. the leaderboard: last 3 laps of energy, trend, incidents ----------
@@ -52,7 +55,7 @@ function incidents(){const n={};const rows=liveRows(LIVE.sc);const byDrv=d=>rows
 .lvstrip:empty{display:none}.lvstrip{margin:10px 0 2px;padding:14px 10px 8px}
 .lsbar{position:relative;height:30px;border-top:2px solid rgba(255,255,255,.18);margin:0 10px}
 .lsbar .sf{position:absolute;left:0;top:-8px;width:3px;height:14px;background:repeating-linear-gradient(0deg,#fff 0 3px,#000 3px 6px)}
-.lsc{position:absolute;top:-12px;transform:translateX(-50%);min-width:22px;height:22px;padding:0 4px;border-radius:11px;background:#0B0C0F;border:2px solid var(--c);color:#fff;font:700 11px/18px var(--f-mono);text-align:center;opacity:.55;transition:left .9s linear}
+.lsc{position:absolute;top:calc(-12px + var(--k,0) * 24px);transform:translateX(-50%);min-width:24px;height:22px;padding:0 4px;border-radius:11px;background:#0B0C0F;border:2px solid var(--c);color:#fff;font:600 12px/18px var(--f-mono);text-align:center;opacity:.55;transition:left .9s linear}
 .lsc.cl{opacity:1}.lsc.rv{opacity:1;box-shadow:0 0 0 2px #FFD23F}.lsc.pit{top:6px;opacity:.35}
 .lsc.us{opacity:1;z-index:2;background:var(--c);color:#0B0C0F;transform:translateX(-50%) scale(1.2);box-shadow:0 0 14px var(--c)}
 td.l3{white-space:nowrap}.l3v{font:12px var(--f-mono)}.l3v em{font-style:normal;font-size:.68rem;color:var(--muted);margin-right:5px}
