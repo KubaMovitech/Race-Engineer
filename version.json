@@ -1,17 +1,16 @@
 {
- "version": "2.15.0",
+ "version": "2.16.0",
  "date": "2026-11-01",
  "notes": [
-  "Libreria: telemetrie e setup del gioco già pronti",
-  "Giro A blu e B arancione",
-  "Muretto disattivabile, niente overlay OBS"
+  "Pagine più ordinate con Mostra dettagli",
+  "Invita un amico"
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "babbf2e73a724f9562bfb7f10b580add94aa8b3ebd2c9afc16203b7060761040"
+  "sha256": "3c388a71d35d2b306e6b1830c9b8fc11c2671901bc6e7268374734f4990f0fd5"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "2f98236c3afdff9f539ffb3fd3d99923c266caec299494b0105c8e250ef3150c"
+  "sha256": "8e406dd4a849aba23faf7a328c687d6668083645edf4c775f2f17276d80ab30e"
  }
 }
