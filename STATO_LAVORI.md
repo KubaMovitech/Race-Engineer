@@ -1,8 +1,6 @@
 # Stato dei lavori: analisi MoTeC, setup, Libreria e Muretto (solo PC)
 
-Lavoro sui sorgenti, **non ancora pubblicato**: nessuna release, `Data_Engineer.html`, `DataEngineerBridge.exe` e
-`version.json` nella radice sono ancora quelli della 2.17.0. Il controllo automatico lo segnala come avviso
-(«sorgenti cambiati dopo la versione pubblicata»), non come errore: si allinea con la prossima versione fatta con `release.sh`.
+Pubblicato nella versione **2.18.0** (01/11/2026).
 
 ## Dove sta il codice nuovo
 

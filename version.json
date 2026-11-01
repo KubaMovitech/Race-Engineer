@@ -1,17 +1,19 @@
 {
- "version": "2.17.0",
+ "version": "2.18.0",
  "date": "2026-11-01",
  "notes": [
-  "Auto vista dall'alto ridisegnata e simmetrica",
-  "Niente testi sovrapposti, niente pagine che sbordano",
-  "Testi più leggibili, avvisi gialli"
+  "Nuova pagina Analisi tecnica: qualità della telemetria, ammortizzatori, molle e 3° elemento, piattaforma e aerodinamica, eventi e diagnosi in 10 punti",
+  "Prova di una modifica misurata nello stesso punto della pista, con esito migliorato, peggiorato o inconcludente",
+  "Setup della sessione salvato con una copia e controllato con la telemetria",
+  "Libreria: apri ultima sessione, setup compatibili, stato e scelta della cartella del gioco",
+  "Muretto: stato passo per passo, profili Pilota e Ingegnere, prova del server"
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "853388af985e471f7d59238a7194de00ed0ccbeb97fa98c97927f7349c601f04"
+  "sha256": "84e7f5c942cabe3c89ec76b38a30fab977906a04337f0c7f72a526c39b0609ad"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "fa9fa0b4b55abb5a839d64325a75bb8d9d42bc0a1a6574f318a6c14a9cba2012"
+  "sha256": "53fddbf37bb7acd9ddd8c44c69c547f62a09eb218f5519b0a484762b5f209762"
  }
 }
