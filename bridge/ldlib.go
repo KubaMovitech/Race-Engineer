@@ -39,7 +39,7 @@ func isLd(p string) bool {
 	return strings.HasSuffix(l, ".ld") || strings.HasSuffix(l, ".ld.gz")
 }
 
-// GET /ldlib → {"ok":true,"dir":"…\\Telemetry","files":[{"p":"2026-10-18 - 16-10-41 - Monza - P1.ld","s":30593710,"t":1760000000}]}
+// GET /ldlib → {"ok":true,"dir":"…\\Telemetry","files":[{"p":"2026-10-18 - 16-10-41 - Monza - P1.ld","s":30593710,"t":1760000000,"venue":"Monza","car":"…","driver":"…","date":"…","time":"…"}]}
 func handleLdLib(w http.ResponseWriter, r *http.Request) {
 	if !localOnly(w, r) {
 		return
@@ -51,7 +51,11 @@ func handleLdLib(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(M{"ok": false, "error": err.Error()})
 		return
 	}
-	files := []svmEntry{}
+	type ldEntry struct {
+		svmEntry
+		ldMeta
+	}
+	files := []ldEntry{}
 	filepath.WalkDir(base, func(p string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return nil
@@ -67,7 +71,8 @@ func handleLdLib(w http.ResponseWriter, r *http.Request) {
 			return nil
 		}
 		if fi, err := d.Info(); err == nil && fi.Size() > 0 && fi.Size() < 1<<30 {
-			files = append(files, svmEntry{filepath.ToSlash(rel), fi.Size(), fi.ModTime().Unix()})
+			// with the track, car, driver and date of the header, so the app can sort them without opening them
+			files = append(files, ldEntry{svmEntry{filepath.ToSlash(rel), fi.Size(), fi.ModTime().Unix()}, readLdMeta(p, fi.Size(), fi.ModTime().Unix())})
 		}
 		return nil
 	})

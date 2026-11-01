@@ -5,7 +5,7 @@
 html[data-look="pro"],html[data-look="pro"][data-skin]{
   --bg:#070708; --panel:#0F0F11; --panel2:#151518; --band:#0C0C0E; --line:#26262B; --grid:#18181C; --trackbed:#1E1E22;
   --ink:#ECEDEF; --muted:#8F9298; --faint:#5D6066; --hdr:#060607; --hdr-line:#1F1F23; --hdr-ink:#ECEDEF; --hdr-muted:#8F9298;
-  --pacc:#C9A54C; --pacc2:#E6C877; --accent2:#E6C877; --lapA:#E6C877; --lapB:#AEB4BD; --cyan:#22D3EE;
+  --pacc:#C9A54C; --pacc2:#E6C877; --accent2:#E6C877; --lapA:#4DA8FF; --lapB:#FF8A1F; --cyan:#22D3EE;
   --edge:#26262B; --edge2:#4A4231; --r:10px; --shadow:0 10px 30px rgba(0,0,0,.45);
   --pnw:236px; --ptop:64px; --f-display:"Titillium Web","Barlow Condensed",sans-serif;
   --psel:#2A2416; --psel2:#17140D; --pbtn1:#E2C46A; --pbtn2:#A8862F; --pbtnb:#E6C877; --pbtnt:#111111;
