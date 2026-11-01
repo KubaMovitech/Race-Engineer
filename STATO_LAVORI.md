@@ -70,12 +70,17 @@ Pubblicato nella versione **2.18.0** (01/11/2026).
 - Setup della sessione: *confermato*, *abbinamento suggerito* (es. aperto dalla Libreria) o *mancante*, con **copia del
   contenuto** salvata; se il file cambia resta la copia storica (apribile); avviso se l'auto non corrisponde.
 
-## Fase 6 — Grafica PC · in parte
+## Fase 6 — Grafica PC · fatto
 
-- Fatto: pagina tecnica a tutta larghezza, selettori in una riga, B affiancato, pannello ingrandibile (⤢), informazioni
-  secondarie richiudibili, mappa + segnali + evento coordinati. Verificata a 1366×768 e 1920×1080 senza sbordi.
-- Da fare: compattare la striscia in alto anche nelle altre pagine; Setup Builder con differenze dal riferimento e problemi
-  collegati per parametro; clic su una ruota dell'auto → analisi di quella ruota.
+- Pagina tecnica a tutta larghezza, selettori in una riga, B affiancato, pannello ingrandibile (⤢), informazioni
+  secondarie richiudibili, mappa + segnali + evento coordinati.
+- Riepilogo in alto compatto sulla pagina tecnica (resta la riga della sessione, spariscono i numeri grandi e gli obiettivi).
+- Setup Builder: valori attuali, **differenze rispetto a un setup di riferimento** scelto («Confronta con», evidenziate in
+  giallo con il valore di riferimento), **problemi collegati** (numero accanto al parametro = schede di Analisi tecnica che
+  propongono di cambiarlo; clic → la scheda).
+- Clic su una ruota (Setup Builder) → Analisi tecnica sugli ammortizzatori di quella ruota; clic su un problema
+  (Setup Builder o Race Engineer, pulsante «Analisi →») → la sua scheda in Analisi tecnica.
+- Verificata a 1366×768 e 1920×1080 senza sbordi.
 
 ## Fase 7 — Libreria · fatto
 
@@ -86,33 +91,17 @@ Pubblicato nella versione **2.18.0** (01/11/2026).
 - Lista aggiornata da sola ogni 15 s; file ancora in scrittura riconosciuti e non apribili; etichette nuovo, già importato,
   riferimento, setup associato/suggerito. Con il bridge «Aggiorna da LMU» è nascosto (la Libreria lo sostituisce).
 
-## Fase 8 — Muretto · in parte
+## Fase 8 — Muretto · fatto (collegamento tra due PC non provato)
 
-- Fatto: «Stato del Muretto» con i passi programma → gioco → squadra → compagni → freschezza dei dati e l'azione da fare;
-  spiegazione del link localhost; profili Pilota/Ingegnere (solo schermate e avvisi, dichiarati non come controllo accessi);
-  server nelle impostazioni avanzate e **provato da questo PC** prima di creare la squadra.
-- **Non verificato**: il collegamento tra due PC diversi non è stato provato in questo ambiente.
-- Da fare: vista gara compatta con prossima sosta e avvisi in ordine di priorità in un solo riquadro (oggi le informazioni
-  sono già nelle schede Panoramica e Strategia).
-
-## Prima prova con telemetrie reali (Bahrain, Genesis GMR001, 31/10–1/11/2026)
-
-File ricevuti solo per la prova (non nel repository): 8 `.ld` di Bahrain, 1 di Interlagos, 4 `.svm`.
-- Lettura: tutti i file letti; canali piatti riconosciuti (a Interlagos il carico gomme è sempre 0: niente analisi degli
-  scarichi, senza inventare risultati). Corretti due problemi trovati: nomi pista con accenti (UTF-8) e setup salvati
-  in italiano (`N/D`, `Separata` erano presi per valori).
-- Giri: i giri più lenti del 4% del migliore ora sono esclusi dal confronto (in un'uscita c'era un 2:00 tra gli 1:46).
-- Coerenza tra uscite: il livello del 3° elemento anteriore sul packer cambia tra le uscite (≈12 → ≈16 → ≈15 mm) in
-  modo stabile dentro ogni uscita: compatibile con modifiche al 3° elemento anteriore tra un'uscita e l'altra. **Da
-  confermare** sapendo quale setup è stato usato in ogni uscita.
-- Ammortizzatori: velocità al 95% molto simili tra le uscite (35–42 mm/s): le differenze sono dentro la variabilità.
-- Gli scarichi delle ruote sui cordoli sono ripetibili in quasi tutti i giri: gravità abbassata a «da controllare»
-  finché non è tarata (scarico breve sui cordoli è normale su queste auto).
-
-- Quale setup è stato usato (l'utente non lo ricordava): la ripartizione frenata letta in telemetria (46,3% post.) e la
-  campanatura misurata escludono i due setup GO in tutte le uscite; HYMO 1.4.1 e Test8h sono entrambi compatibili e non
-  si distinguono con i canali disponibili. Il controllo è ora nella pagina (box «Setup della sessione»): esclude un setup
-  solo con la ripartizione frenata, che però si può cambiare anche in macchina.
+- «Stato del Muretto» con i passi programma → gioco → squadra → compagni → freschezza dei dati e l'azione da fare; si apre
+  da solo solo quando qualcosa blocca.
+- Spiegazione del link localhost; profili Pilota/Ingegnere (solo schermate e avvisi, non controllo accessi); server nelle
+  impostazioni avanzate e provato da questo PC prima di creare la squadra.
+- **Vista gara** in una riga sopra tutte le schede: auto seguita, posizione, distacchi davanti/dietro, autonomia (limite
+  carburante o energia), prossima sosta (giro attuale + giri di autonomia), numero di avvisi e il più importante; avvisi
+  ordinati per priorità; dati più vecchi di 8 s segnalati e attenuati.
+- **Non verificato**: il collegamento tra due PC diversi non è stato provato in questo ambiente (serve una prova vera con
+  due PC e una squadra).
 
 ## Cosa resta da validare con dati reali
 
@@ -128,6 +117,5 @@ I test sintetici verificano gli algoritmi, non la correttezza delle diagnosi su 
 ## Prossimi passi consigliati
 
 1. Validazione con i file del punto 1 e taratura delle soglie.
-2. Fase 6: Setup Builder (valori, differenze dal riferimento, problemi collegati) e clic sulla ruota → analisi.
-3. Fase 8: riquadro vista gara e prova reale tra due PC.
-4. Release (versione nuova con `release.sh`) solo su richiesta.
+2. Prova reale del Muretto tra due PC.
+3. Release (versione nuova con `release.sh`) solo su richiesta.
