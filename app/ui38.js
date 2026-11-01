@@ -9,30 +9,23 @@
 const ENG_AREAS=[['gom','Gomme','◐'],['fre','Freni','◉'],['tra','Trazione','⟳'],['pia','Piattaforma e altezze','▭'],['sos','Molle, barre e ammortizzatori','⌇'],['aer','Aerodinamica e ala','◭'],['bil','Bilanciamento','⇄']];
 // order in which a track engineer works through the car (the plan follows it)
 const ENG_ORDER=['gom','fre','pia','aer','bil','sos','tra'];
-// channels in radians in some files and in degrees in others: decide from the size of the values
-function engDeg(a){if(!a)return null;let s=0,n=0;for(let i=0;i<a.length;i+=7){if(Number.isFinite(a[i])){s+=Math.abs(a[i]);n++;}}return n&&s/n>0.2?a:Float32Array.from(a,x=>x*180/Math.PI);}
 const q_=(a,p)=>{const s=[...a].filter(Number.isFinite).sort((x,y)=>x-y);return s.length?s[Math.floor(p*(s.length-1))]:NaN;};
 
 // ---------- the measurements the existing checks did not have ----------
 function engMeasure(S,laps){const key='eng|'+laps.map(l=>l.i).join(',');if(S.cache.has(key))return S.cache.get(key);
   const out={dynCam:{F:[],R:[]},lift:{F:0,R:0,n:0,where:{}},third:{},kerb:NaN,bp:NaN,corners:[]};const W=['FL','FR','RL','RR'];
   laps.slice(0,5).forEach((lap,li)=>{const g=lapGrid(S,lap,2);const n=g.n;const v=g.get('Ground Speed'),gl=g.get('G Force Lat'),br=g.get('Brake Pos'),th=g.get('Throttle Pos');if(!v||!gl)return;
-    const L=W.map(w=>g.get('Tyre Load '+w)),C=W.map(w=>engDeg(g.get('Camber '+w)));const cor=li===0?detectCorners(g):null;if(cor)out.corners=cor;
+    const L=W.map(w=>g.get('Tyre Load '+w)),C=W.map(w=>g.get('Camber '+w)) /* degrees: parseLD converts from the file's unit */;const cor=li===0?detectCorners(g):null;if(cor)out.corners=cor;
     const cornerAt=d=>{const c=(out.corners||[]).find(c=>d>=c.dS&&d<=c.dE);return c?'T'+c.k:tr('rettilineo');};
     for(let i=0;i<n;i++){
       // outside wheels at high lateral load: the most loaded of each axle
       if(Math.abs(gl[i])>1.2&&v[i]>60&&L[0]&&C[0]){const fo=L[0][i]>L[1][i]?0:1,ro=L[2][i]>L[3][i]?2:3;if(Number.isFinite(C[fo][i]))out.dynCam.F.push(C[fo][i]);if(Number.isFinite(C[ro][i]))out.dynCam.R.push(C[ro][i]);}
-      // a wheel off the ground (kerbs, crests) while the car is fast
-      if(v[i]>60&&L[0]){out.lift.n++;const f=L[0][i]<300||L[1][i]<300,r=L[2][i]<300||L[3][i]<300;if(f)out.lift.F++;if(r)out.lift.R++;if(f||r){const k=cornerAt(g.d[i]);out.lift.where[k]=(out.lift.where[k]||0)+1;}}}
-    // third elements: how often they sit at the top of their travel (on the packer), by phase
-    for(const [k,ax] of [['Front 3rd Pos','F'],['Rear 3rd Pos','R']]){const a=g.get(k);if(!a)continue;const top=q_(a,0.995);const T=out.third[ax]||(out.third[ax]={fast:[0,0],brake:[0,0],slow:[0,0],travel:q_(a,.99)-q_(a,.01)});
-      for(let i=0;i<n;i++){const on=a[i]>top-0.4;const ph=br[i]>30?'brake':v[i]>200?'fast':v[i]<150&&Math.abs(gl[i])>0.8?'slow':null;if(!ph)continue;T[ph][1]++;if(on)T[ph][0]++;}}
+      }
+    // third elements and packers: vdyn.js (vdAxles). The old test «within 0.4 mm of the 99.5th percentile = on the packer»
+    // is gone: a percentile of the travel observed is not a physical end of travel.
     const gv=g.get('G Force Vert');if(gv){const k=q_(gv,0.997);out.kerb=Number.isFinite(out.kerb)?Math.max(out.kerb,k):k;}
     const bp=g.get('Brake Pressure FL');if(bp){const k=q_(bp,0.99);out.bp=Number.isFinite(out.bp)?Math.max(out.bp,k):k;}});
   out.dynCamF=q_(out.dynCam.F,.5);out.dynCamR=q_(out.dynCam.R,.5);
-  for(const ax of ['F','R']){const T=out.third[ax];if(!T)continue;for(const ph of ['fast','brake','slow'])T[ph]=T[ph][1]>20?T[ph][0]/T[ph][1]:NaN;}
-  out.liftF=out.lift.n?out.lift.F/out.lift.n:NaN;out.liftR=out.lift.n?out.lift.R/out.lift.n:NaN;
-  out.liftWhere=Object.entries(out.lift.where).sort((a,b)=>b[1]-a[1]).slice(0,3).map(x=>x[0]);
   S.cache.set(key,out);return out;}
 
 // ---------- the findings ----------
@@ -72,40 +65,26 @@ function engFindings(D,S,su,laps){const F=[];const add=(a,s,t,ev,why,fx=[],o={})
   W.forEach(w=>{const b=T[w]?.bMax;if(!Number.isFinite(b))return;const bm=+c.bmax;
     if(bm&&b>bm)add('fre',b>bm+80?2:1,`${tr('Freno')} ${WN[w]} ${tr('troppo caldo')}`,[`${tr('picco')} ${fx(b,0)} °C (${tr('limite')} ${bm})`],tr('Freni troppo caldi perdono efficacia e si consumano.'),[{key:w[0]==='F'?'BrakeDuctSetting':'BrakeDuctRearSetting',sec:null,dir:tr('prese più aperte'),why:tr('più aria sui dischi')}]);
     else if(b<300)add('fre',1,`${tr('Freno')} ${WN[w]} ${tr('freddo')}`,[`${tr('picco')} ${fx(b,0)} °C`],tr('Dischi freddi mordono meno nelle prime staccate.'),[{key:w[0]==='F'?'BrakeDuctSetting':'BrakeDuctRearSetting',sec:null,dir:tr('prese più chiuse'),why:tr('il disco resta in temperatura')}]);});
-  // braking platform: the car dives onto the front packers
-  const tF=M.third.F;if(tF&&tF.brake>0.5)add('fre',SL&&SL.lockF>0.25?2:1,tr('In frenata l\'anteriore va sul packer'),[`${fx(tF.brake*100,0)}% ${tr('della frenata con il 3° elemento anteriore a fine corsa')}`,Number.isFinite(M.bp)?`${tr('pressione freno')} ${fx(M.bp,0)}`:''],tr('Sul packer la rigidezza sale di colpo: l\'anteriore perde aderenza e tende a bloccare.'),
-    [{key:'Front3rdSpringSetting',sec:null,dir:tr('3ª molla anteriore +1'),why:tr('meno beccheggio prima del packer')},{key:'Front3rdPackerSetting',sec:null,dir:tr('packer anteriore −1 mm'),why:tr('ci arriva più tardi')},{key:'SlowBumpSetting',sec:'FRONTLEFT',dir:tr('compressione lenta anteriore +1'),why:tr('controlla la velocità del beccheggio')}]);
   // ---- traction
   if(SL&&SL.spin>0.5){const e=Object.entries(SL.where||{}).sort((a,b)=>(b[1].sp||0)-(a[1].sp||0))[0];const w=e&&e[1].sp>0?e[0]:null;
     add('tra',SL.spin>1.5?2:1,tr('Pattinamento in uscita'),[`${fx(SL.spin,2)} s/${tr('giro')}`,w?`${tr('soprattutto a')} ${w}`:''],tr('Le ruote posteriori girano più dell\'auto: perdi uscita e scaldi le posteriori.'),
       [{key:'TractionControlMapSetting',sec:null,dir:tr('TC +1'),why:tr('taglia prima lo slittamento')},{key:'DiffPowerSetting',sec:null,dir:tr('differenziale in trazione più aperto'),why:tr('la ruota interna non trascina via la coda')},{key:'RearAntiSwaySetting',sec:null,dir:tr('barra posteriore più morbida'),why:tr('più carico sulla ruota interna in uscita')}],{d:cw(w)?.dApex});}
   if(SL&&SL.spin<=0.5)add('tra',0,tr('Trazione pulita'),[`${tr('pattinamento')} ${fx(SL.spin,2)} s/${tr('giro')}`],'');
-  // ---- platform and ride heights
-  const rhLow=Math.max(...W.map(w=>T[w]?.rhLow||0));const rhMin=Math.min(...W.map(w=>T[w]?.rhMin??Infinity));
-  if(rhLow>0.002){const fr=W.filter(w=>(T[w]?.rhLow||0)>0.002);const front=fr.some(w=>w[0]==='F'),rear=fr.some(w=>w[0]==='R');
-    add('pia',rhLow>0.01?2:1,tr('Il fondo tocca'),[`${fx(rhLow*100,1)}% ${tr('del giro sotto')} ${+c.rh||3} mm`,`${tr('altezza minima')} ${fx(rhMin,1)} mm`,`${tr('su')} ${fr.map(w=>WN[w]).join(', ')}`],tr('Quando il fondo tocca perdi carico di colpo e l\'auto diventa imprevedibile, specie nelle curve veloci.'),
-      [front?{key:'Front3rdPackerSetting',sec:null,dir:tr('packer anteriore +1 mm'),why:tr('ferma prima l\'abbassamento')}:null,rear?{key:'Rear3rdPackerSetting',sec:null,dir:tr('packer posteriore +1 mm'),why:tr('ferma prima l\'abbassamento')}:null,{key:'RideHeightSetting',sec:front?'FRONTLEFT':'REARLEFT',dir:tr('altezza +1 mm sull\'asse che tocca'),why:tr('più margine dal suolo')}].filter(Boolean));}
-  else if(Number.isFinite(rhMin))add('pia',0,tr('Il fondo non tocca'),[`${tr('altezza minima')} ${fx(rhMin,1)} mm`],'');
-  const tR=M.third.R;
-  [[tF,tr('anteriore'),'Front'],[tR,tr('posteriore'),'Rear']].forEach(([t,n,k])=>{if(!t)return;
-    if(t.slow>0.35)add('pia',1,`${tr('3° elemento')} ${n} ${tr('sul packer nelle curve lente')}`,[`${fx(t.slow*100,0)}% ${tr('del tempo nelle curve sotto 150 km/h')}`],tr('Nelle curve lente l\'auto non dovrebbe essere sul packer: la sospensione diventa rigida e perde grip meccanico.'),[{key:k+'3rdPackerSetting',sec:null,dir:tr('packer −1 mm'),why:tr('più corsa libera')}]);
-    else if(t.fast>0.6||t.fast>0.3)add('pia',0,`${tr('3° elemento')} ${n} ${tr('sul packer in rettilineo')}`,[`${fx(t.fast*100,0)}% ${tr('del tempo sopra 200 km/h')}`],tr('Normale sulle Hypercar: il packer tiene la piattaforma aerodinamica alle alte velocità. Va bene finché il fondo non tocca e l\'auto non saltella.'));});
-  if(M.liftF>0.02||M.liftR>0.02){const f=M.liftF>=M.liftR;add('pia',Math.max(M.liftF,M.liftR)>0.05?2:1,tr('Ruote che si alzano'),[`${tr('anteriore')} ${fx(M.liftF*100,1)}% · ${tr('posteriore')} ${fx(M.liftR*100,1)}% ${tr('del giro sopra 60 km/h')}`,M.liftWhere.length?`${tr('soprattutto a')} ${M.liftWhere.join(', ')}`:'',Number.isFinite(M.kerb)?`${tr('picco verticale')} ${fx(M.kerb,2)} g`:''],tr('Una ruota scarica non frena, non sterza e non spinge: succede sui cordoli o con barre troppo rigide.'),
-    [{key:f?'FrontAntiSwaySetting':'RearAntiSwaySetting',sec:null,dir:tr('barra più morbida su quell\'asse'),why:tr('la ruota interna resta a terra')},{key:'FastBumpSetting',sec:f?'FRONTLEFT':'REARLEFT',dir:tr('compressione veloce −1'),why:tr('la ruota assorbe il cordolo invece di saltare')}],{d:cw(M.liftWhere[0])?.dApex});}
-  // ---- springs, bars and dampers (from the suspension analysis)
-  let R=null;try{R=susAnalyse(S,laps);}catch(e){}
-  if(R){let H=[];try{H=susHints(R,su,D);}catch(e){}
-    H.forEach(h=>{if(h.k==='good'){add('sos',0,h.t,[h.d],'');return;}add('sos',h.k==='bad'?2:1,h.t,[h.d],'',(h.f||[]).map(x=>({key:LABEL2KEY?.[x.label]||null,label:x.label,sec:x.sec,dir:x.dir,now:x.now})));});
-    if(Number.isFinite(R.rollF)&&Number.isFinite(R.rollR)&&R.rollF>0&&R.rollR>0)add('sos',0,tr('Rollio'),[`${tr('anteriore')} ${fx(R.rollF,1)} mm/g · ${tr('posteriore')} ${fx(R.rollR,1)} mm/g`],R.rollF>R.rollR*1.15?tr('L\'anteriore rolla più del posteriore: tende al sovrasterzo in appoggio.'):R.rollR>R.rollF*1.15?tr('Il posteriore rolla più dell\'anteriore: tende al sottosterzo in appoggio.'):tr('Rollio simile davanti e dietro: bilanciamento meccanico neutro.'));
-    if(Number.isFinite(R.pitch)&&R.pitch>10&&!(tF&&tF.brake>0.5))add('sos',1,tr('Troppo beccheggio in frenata'),[`${tr('l\'anteriore scende di')} ${fx(R.pitch,1)} mm ${tr('in frenata')}`],tr('Un\'auto che si siede molto sul davanti scarica il posteriore: instabile in staccata.'),[{key:'SlowBumpSetting',sec:'FRONTLEFT',dir:tr('compressione lenta anteriore +1'),why:tr('rallenta il trasferimento di carico')},{key:'Front3rdSpringSetting',sec:null,dir:tr('3ª molla anteriore +1'),why:tr('meno escursione')}]);}
+  // ---- platform, springs, third element and dampers: the cards of «Analisi tecnica» (vdyn.js), each one from a
+  // phenomenon measured and repeatable at one place, with its cause, reliability, one change and how to check it
+  let C=[];try{C=techCards(S,laps,su,techData(S,laps));}catch(e){console.error(e);}
+  C.forEach(c=>add(c.a,c.s,c.t,[c.where.txt,...c.ev,c.rep.txt],c.expect,c.fx?[{key:c.fx.key,sec:c.fx.sec,dir:c.fx.dir,why:c.fx.why}]:[],{card:c,d:c.where.d}));
+  {const rhMin=Math.min(...W.map(w=>T[w]?.rhMin??Infinity));if(!C.some(c=>c.k==='low')&&Number.isFinite(rhMin))add('pia',0,tr('Altezza sempre sopra la soglia'),[`${tr('altezza minima')} ${fx(rhMin,1)} mm (${tr('soglia')} ${+c.rh||3} mm)`],'');}
+  if(!C.some(c=>c.a==='sos'))add('sos',0,tr('Nessun fenomeno ripetibile su sospensioni e ammortizzatori'),[tr('dettagli in Analisi tecnica')],'');
   // ---- aero and wing: balance by speed, top speed
   const bs=typeof balSpeed==='function'?balSpeed(D):null;
   if(bs){const v=bs.veloci,l=bs.lente;const ev=[`${tr('sterzo relativo')}: ${tr('lente')} ${fx(l,2)} · ${Number.isFinite(bs.medie)?tr('medie')+' '+fx(bs.medie,2)+' · ':''}${tr('veloci')} ${fx(v,2)} (${tr('oltre 1 = sottosterzo')})`];
-    if(v>1.08&&v-l>0.06)add('aer',v>1.15?2:1,tr('Sottosterzo nelle curve veloci'),ev,tr('Nelle curve veloci comanda l\'aerodinamica: manca carico davanti rispetto a dietro.'),[{key:'RWSetting',sec:null,dir:tr('ala posteriore −1'),why:tr('sposta il bilanciamento in avanti e guadagni velocità')},{key:'RideHeightSetting',sec:'REARLEFT',dir:tr('posteriore +1 mm (più rake)'),why:tr('più carico all\'anteriore')}]);
-    else if(v<0.93&&l-v>0.06)add('aer',v<0.88?2:1,tr('Sovrasterzo nelle curve veloci'),ev,tr('Il posteriore ha poco carico rispetto all\'anteriore alle alte velocità: pericoloso e lento.'),[{key:'RWSetting',sec:null,dir:tr('ala posteriore +1'),why:tr('più carico dietro')},{key:'RideHeightSetting',sec:'REARLEFT',dir:tr('posteriore −1 mm (meno rake)'),why:tr('sposta carico al posteriore')}]);
+    // a steering index says how the car behaves, not how much downforce each axle has: the advice is a test, not a fact
+    if(v>1.08&&v-l>0.06)add('aer',v>1.15?2:1,tr('Più sottosterzo nelle curve veloci che nelle lente'),ev,tr('Compatibile con un bilanciamento aerodinamico spostato verso il posteriore, ma è un indice di sterzo, non una misura del carico. Prima di cambiare, controlla in Analisi tecnica che la piattaforma sia stabile nei curvoni (gomme e cordoli possono dare lo stesso effetto).'),[{key:'RWSetting',sec:null,dir:tr('ala posteriore −1'),why:tr('di solito sposta il bilanciamento in avanti; verifica lo sterzo relativo nelle curve veloci')}]);
+    else if(v<0.93&&l-v>0.06)add('aer',v<0.88?2:1,tr('Più sovrasterzo nelle curve veloci che nelle lente'),ev,tr('Compatibile con poco carico al posteriore alle alte velocità, ma è un indice di sterzo, non una misura del carico. Controlla prima piattaforma e gomme posteriori.'),[{key:'RWSetting',sec:null,dir:tr('ala posteriore +1'),why:tr('di solito dà più stabilità al posteriore; verifica lo sterzo relativo nelle curve veloci')}]);
     else if(l>1.08&&l-v>0.06)add('bil',1,tr('Sottosterzo nelle curve lente'),ev,tr('Nelle curve lente comanda il grip meccanico: barre, molle e differenziale, non l\'ala.'),[{key:'FrontAntiSwaySetting',sec:null,dir:tr('barra anteriore più morbida'),why:tr('più grip meccanico davanti')},{key:'DiffPreloadSetting',sec:null,dir:tr('precarico differenziale più basso'),why:tr('l\'auto ruota di più a centro curva')}]);
     else if(l<0.93&&v-l>0.06)add('bil',1,tr('Sovrasterzo nelle curve lente'),ev,tr('Il posteriore perde grip meccanico nelle curve lente.'),[{key:'RearAntiSwaySetting',sec:null,dir:tr('barra posteriore più morbida'),why:tr('più grip meccanico dietro')},{key:'DiffPowerSetting',sec:null,dir:tr('differenziale in trazione più aperto'),why:tr('meno spinta laterale in uscita')}]);
-    else add('aer',0,tr('Bilanciamento aerodinamico'),ev,tr('Equilibrio simile tra curve lente e veloci: l\'ala è nella finestra giusta.'));}
+    else add('aer',0,tr('Sterzo simile tra curve lente e veloci'),ev,tr('Nessuna differenza evidente tra curve lente e veloci nell\'indice di sterzo.'));}
   const gc=D.raw?.gc;if(gc){if(gc.limPerLap>0.4)add('aer',1,tr('Limitatore sul rettilineo'),[`${fx(gc.limPerLap,1)} s/${tr('giro')} ${tr('al limitatore')}`],tr('Stai perdendo velocità di punta: rapporto finale troppo corto o troppo carico.'),[{key:'FinalDriveSetting',sec:null,dir:tr('rapporto finale più lungo'),why:tr('più velocità di punta')},{key:'RWSetting',sec:null,dir:tr('ala posteriore −1'),why:tr('meno resistenza')}]);}
   // ---- balance by phase, from the doctor's knowledge base (entry / mid / exit, counter-steers)
   const B=D.raw?.B;const kb=id=>typeof KB!=='undefined'?KB.find(k=>k.id===id):null;
@@ -124,7 +103,7 @@ function engFindings(D,S,su,laps){const F=[];const add=(a,s,t,ev,why,fx=[],o={})
 // ---------- the report ----------
 function engPlan(F){const used=new Set();const out=[];[...F].filter(f=>f.s>0&&f.fx.some(x=>!x.conflict)).sort((a,b)=>b.s-a.s||ENG_ORDER.indexOf(a.a)-ENG_ORDER.indexOf(b.a)).forEach(f=>{if(out.length>=3||used.has(f.a))return;used.add(f.a);out.push(f);});return out;}
 function engHTML(D,S,su,laps,mismatch){const F=engFindings(D,S,su,laps);const P=engPlan(F);const nb=F.filter(f=>f.s===2).length,nw=F.filter(f=>f.s===1).length;
-  const conf=laps.length>=3?tr('alta'):laps.length===2?tr('media'):tr('bassa');
+  const RL=chqReliability(S,laps,'bal',{});const conf=`<span title="${esc(RL.why.join(' · '))}">${tr(RL.label)}</span>`;
   const fxRow=x=>`<div class="efx"><span class="kv"><span>${esc(tr(x.label))}</span></span><b>${esc(x.dir)}</b>${x.now?`<span class="enow">${tr('ora')} <span class="mono">${esc(x.now)}</span></span>`:''}${x.why?`<small>${esc(x.why)}</small>`:''}${x.conflict?`<small class="ecf">⚠ ${tr('in contrasto con')} «${esc(x.conflict)}»: ${tr('risolvi prima quello più importante')}</small>`:''}</div>`;
   const card=f=>`<div class="ef s${f.s}"><div class="eft"><i></i><b>${esc(f.t)}</b>${f.d!=null?`<button class="btn icon etl" type="button" data-d="${Math.round(f.d)}" title="${esc(tr('Apri il punto in Telemetria'))}">⌖</button>`:''}</div>
     ${f.ev.length?`<div class="eev">${f.ev.map(e=>`<span>${esc(e)}</span>`).join('')}</div>`:''}${f.why?`<p>${esc(f.why)}</p>`:''}${f.fx.length?`<div class="efxs">${f.fx.map(fxRow).join('')}</div>`:''}</div>`;
@@ -144,7 +123,9 @@ function engHTML(D,S,su,laps,mismatch){const F=engFindings(D,S,su,laps);const P=
 // ---------- which laps the engineer reads: the 5 fastest flying laps (clean laps) or the last 5 (after a setup change) ----------
 const ENG_LAPN=5;
 function engLapMode(){return LS.get('eng:laps','best')==='last'?'last':'best';}
+// laps more than 4% slower than the fastest (traffic, cold tyres, a mistake) are not compared with the others
 function engLaps(S){let L=S.laps.filter(l=>l.complete&&l.type==='lanciato');if(!L.length)L=S.laps.filter(l=>l.complete);
+  const fast=Math.min(...L.filter(l=>!l.invalid).map(l=>l.time));if(Number.isFinite(fast)){const K=L.filter(l=>l.time<=fast*1.04);if(K.length)L=K;}
   return engLapMode()==='last'?L.slice(-ENG_LAPN).sort((a,b)=>a.time-b.time):[...L].sort((a,b)=>a.time-b.time).slice(0,ENG_LAPN);}
 // how the laps were chosen, said in words, with the lap numbers
 function engLapsText(laps){const m=engLapMode();const n=laps.length;
@@ -157,19 +138,19 @@ function renderEng(){const el=$('#suEng');if(!el)return;const S=active()?.S;cons
   el.querySelectorAll('.etl').forEach(b=>b.onclick=()=>{const d=+b.dataset.d;showView('tele');setTimeout(()=>{const D2=TW.D;if(!D2)return;const c=D2.corners.reduce((m,x)=>!m||Math.abs(x.dApex-d)<Math.abs(m.dApex-d)?x:m,null);if(c)twZoomCorner(c);},500);});}
 
 // ---------- the Setup page in tabs ----------
-const SU_TABS=[['eng','Ingegnere'],['det','Analisi dettagliata'],['set','Setup e confronto'],['gen','Generatore'],['gui','Guida']];
+const SU_TABS=[['eng','Ingegnere'],['dyn','Analisi tecnica'],['det','Analisi dettagliata'],['set','Setup e confronto'],['gen','Generatore'],['gui','Guida']];
 function suTabOf(p){const id=p.id;const has=s=>p.querySelector(s);
-  if(id==='suEngP'||id==='suAI'||id==='suNoTele')return 'eng';if(id==='genP')return 'gen';if(id==='guideP')return 'gui';
-  if(id==='suCmpP'||id==='suHistP'||has('#suSheet'))return 'set';if(has('#suDiag')||id==='suTyreP'||id==='doc'||id==='suSuspP')return 'det';return null;}
+  if(id==='suEngP'||id==='suAI'||id==='suNoTele')return 'eng';if(id==='techP')return 'dyn';if(id==='genP')return 'gen';if(id==='guideP')return 'gui';
+  if(id==='suCmpP'||id==='suHistP'||has('#suSheet'))return 'set';if(has('#suDiag')||id==='suTyreP'||id==='doc')return 'det';return null;}
 function suTabsApply(){const v=$('#v-setup');if(!v)return;let nav=$('#suTabs');const top=v.querySelector('.panel');
   if(!nav&&top){top.insertAdjacentHTML('afterend',`<nav id="suTabs" class="sutabs" role="tablist">${SU_TABS.map(([k,l])=>`<button type="button" role="tab" data-t="${k}">${tr(l)}</button>`).join('')}</nav>`);nav=$('#suTabs');
-    nav.querySelectorAll('button').forEach(b=>b.onclick=()=>{LS.set('su:tab',b.dataset.t);suTabsApply();window.scrollTo({top:0});});}
+    nav.querySelectorAll('button').forEach(b=>b.onclick=()=>{LS.set('su:tab',b.dataset.t);suTabsApply();if(b.dataset.t==='dyn')renderTech();window.scrollTo({top:0});});}
   const cur=LS.get('su:tab','eng');nav?.querySelectorAll('button').forEach(b=>b.setAttribute('aria-selected',b.dataset.t===cur));
   [...v.children].forEach(p=>{if(p===top||p===nav)return;const t=suTabOf(p);if(t)p.classList.toggle('sutab-off',t!==cur);});}
 setTimeout(()=>{const v=$('#v-setup');if(v&&!$('#suEngP')){const top=v.querySelector('.panel');top?.insertAdjacentHTML('afterend','<div id="suEngP" class="suengp"><div id="suEng"></div></div>');
     // the AI engineer goes with the track engineer
     const ai=$('#suAI');if(ai)$('#suEngP').after(ai);}
-  const base=RENDER.setup;RENDER.setup=()=>{base();try{renderEng();}catch(e){console.error(e);}suTabsApply();};if(curView()==='setup')RENDER.setup();},0);
+  const base=RENDER.setup;RENDER.setup=()=>{base();try{renderEng();}catch(e){console.error(e);}try{renderTech();}catch(e){console.error(e);}suTabsApply();};if(curView()==='setup')RENDER.setup();},0);
 
 (function(){const st=document.createElement('style');st.textContent=`
 .sutab-off{display:none!important}

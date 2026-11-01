@@ -24,8 +24,8 @@ function renderSheet(su){
   $('#suMeta').textContent=`${su.car}${su.head.Notes?' · '+su.head.Notes:''}`;
   const groups={},corner={};
   for(const [sec,items] of Object.entries(su.sec)){
-    if(/^(FRONT|REAR)(LEFT|RIGHT)$/.test(sec)){items.forEach(x=>{if(/N\/A|Detached/.test(x.disp)||!x.disp)return;(corner[x.label]??={})[sec]=x.disp;});continue;}
-    const gname=SETUP_GROUPS[sec]||sec;items.forEach(x=>{if(!x.disp||/N\/A|Non-adjustable|Detached/.test(x.disp))return;(groups[gname]??=[]).push([x.label,x.disp]);});
+    if(/^(FRONT|REAR)(LEFT|RIGHT)$/.test(sec)){items.forEach(x=>{if(/N\/A|N\/D|Non regolabile|Separat[ao]|Detached/.test(x.disp)||!x.disp)return;(corner[x.label]??={})[sec]=x.disp;});continue;}
+    const gname=SETUP_GROUPS[sec]||sec;items.forEach(x=>{if(!x.disp||/N\/A|N\/D|Non regolabile|Separat[ao]|Non-adjustable|Detached/.test(x.disp))return;(groups[gname]??=[]).push([x.label,x.disp]);});
   }
   $('#suSheet').innerHTML=Object.entries(groups).map(([g,rows])=>`<div class="grp"><h3>${esc(g)}</h3><div class="kv">${rows.map(([l,v])=>`<span>${esc(l)}</span><span>${esc(v)}</span>`).join('')}</div></div>`).join('')+
     (Object.keys(corner).length?`<div class="grp" style="grid-column:1/-1"><h3>Ruote e sospensioni</h3><div class="tw"><table><thead><tr><th>Parametro</th><th>Ant. sx</th><th>Ant. dx</th><th>Post. sx</th><th>Post. dx</th></tr></thead><tbody>${Object.entries(corner).map(([l,o])=>`<tr><td class="l" style="font-family:var(--f-body)">${esc(l)}</td>${['FRONTLEFT','FRONTRIGHT','REARLEFT','REARRIGHT'].map(k=>`<td>${esc(o[k]??'—')}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div>`:'');

@@ -5,7 +5,9 @@ function f16(h){const s=(h&0x8000)?-1:1,e=(h>>10)&0x1f,m=h&0x3ff;if(e===0)return
 
 function parseLD(buf){
   const dv=new DataView(buf),u8=new Uint8Array(buf),L=buf.byteLength,dec=new TextDecoder('latin1');
-  const str=(o,n)=>{if(o+n>L)return'';let e=o;while(e<o+n&&u8[e])e++;return dec.decode(u8.subarray(o,e)).trim();};
+  // header texts: UTF-8 when valid (LMU writes «Autódromo José Carlos Pace» in UTF-8), else Latin-1
+  const utf=new TextDecoder('utf-8',{fatal:true});
+  const str=(o,n)=>{if(o+n>L)return'';let e=o;while(e<o+n&&u8[e])e++;const b=u8.subarray(o,e);try{return utf.decode(b).trim();}catch(x){return dec.decode(b).trim();}};
   if(L<0x200) throw new Error('File .ld troppo piccolo');
   const meta={date:str(0x5e,16),time:str(0x7e,16),driver:str(0x9e,64),car:str(0xde,64),venue:str(0x15e,64)};
   let p=dv.getUint32(8,true);const ch={};let guard=0;
@@ -21,13 +23,14 @@ function parseLD(buf){
         if(dta!==7&&dp%size===0){const A=size===1?new Int8Array(buf,dp,n):size===2?new Int16Array(buf,dp,n):new Int32Array(buf,dp,n);for(let i=0;i<n;i++)v[i]=A[i]*k+sh;return v;}
         for(let i=0,o=dp;i<n;i++,o+=size){if(dta===7){v[i]=size===4?dv.getFloat32(o,true):f16(dv.getUint16(o,true));}else{const r=size===1?dv.getInt8(o):size===2?dv.getInt16(o,true):dv.getInt32(o,true);v[i]=r*k+sh;}}
         return v;};
-      // LMU writes camber, toe, pitch and roll in radians and no unit: shown in degrees
-      const rad=!unit&&/^(Camber|Toe) [FR][LR]$|^Body (Pitch|Roll)$/.test(name);
-      const c={f:f||1,u:unit||guessUnit(name),n,_v:null};Object.defineProperty(c,'v',{get(){if(!this._v){this._v=decode();if(rad)for(let i=0;i<this._v.length;i++)this._v[i]*=180/Math.PI;}return this._v;}});
+      // unit and conversion from the file's metadata (chq.js): radians → degrees, metres → mm, m/s² → G …, each one recorded in c.conv
+      const P=chqPrepare(name,unit,f||1,n,(dta===7?'float':'int')+size*8);
+      const c={f:f||1,u:P.u,n,_v:null,_k:P.k,_nil:P.nil,raw:P.raw,conv:P.conv,src:'misurato'};Object.defineProperty(c,'v',{get(){if(!this._v){this._v=decode();const k=this._k,z=this._nil;if(k!==1)for(let i=0;i<this._v.length;i++)this._v[i]*=k;if(z!=null)for(let i=0;i<this._v.length;i++)if(this._v[i]<=z)this._v[i]=NaN;}return this._v;}});
       ch[name]=c;
     }
     if(next===p)break;p=next;
   }
+  chqFinish(ch);
   if(!ch['Ground Speed']) throw new Error('Canale "Ground Speed" non trovato: il file non sembra una telemetria LMU');
   return {meta,ch};
 }
@@ -40,6 +43,8 @@ function buildSession(parsed,name){
   const ch=parsed.ch,sp=ch['Ground Speed'];
   const dur=sp.v.length/sp.f;
   const S={id:'ld:'+name,kind:'ld',name,meta:parsed.meta,ch,dur,laps:[],cache:new Map()};
+  // physical channels that never move carry no information: treated as missing, listed in «Qualità telemetria»
+  chqDead(S);
   const ln=ch['Lap Number'];
   const cuts=[0];const nums=[];
   if(ln){let prev=ln.v[0];nums.push(prev);for(let i=1;i<ln.v.length;i++){if(ln.v[i]!==prev){cuts.push(i/ln.f);prev=ln.v[i];nums.push(prev);}}}
@@ -141,7 +146,7 @@ function lapStats(S,lap){
   const key='st'+lap.i;if(S.cache.has(key))return S.cache.get(key);
   const g=lapGrid(S,lap,4),v=g.get('Ground Speed'),n=g.n;
   const fast=i=>v[i]>50;
-  const avgF=(name)=>{const a=g.get(name);if(!a)return NaN;let s=0,c=0;for(let i=0;i<n;i++)if(fast(i)){s+=a[i];c++;}return c?s/c:NaN;};
+  const avgF=(name)=>{const a=g.get(name);if(!a)return NaN;let s=0,c=0;for(let i=0;i<n;i++)if(fast(i)&&Number.isFinite(a[i])){s+=a[i];c++;}return c?s/c:NaN;};
   const at=(name,t)=>S.ch[name]?sampleAt(S.ch[name],t):NaN;
   const o={lap,time:lap.time,vmax:pct(v,1)};
   o.fuel=at('Fuel Level',lap.t0+0.5)-at('Fuel Level',lap.t1-0.5);
@@ -330,11 +335,12 @@ function parseSVM(text,name){
   }
   if(!Object.keys(out.sec).length)throw new Error('File setup non riconosciuto');
   out.car=(out.head.VehicleClassSetting||'').replace(/"/g,'');
+  out.text=text;  // the content as read: kept with the session it was used for (ui51 sesSetup)
   return out;
 }
 function setupText(su){
   const lines=[`Auto: ${su.car}`,su.head.Notes?`Note: ${su.head.Notes}`:''];
-  for(const [s,items] of Object.entries(su.sec)){const it=items.filter(x=>x.disp&&!/N\/A|Non-adjustable|Detached/.test(x.disp));if(!it.length)continue;lines.push(`[${s}]`);it.forEach(x=>lines.push(`${x.key} = ${x.disp} (indice ${x.raw})`));}
+  for(const [s,items] of Object.entries(su.sec)){const it=items.filter(x=>x.disp&&!/N\/A|N\/D|Non regolabile|Separat[ao]|Non-adjustable|Detached/.test(x.disp));if(!it.length)continue;lines.push(`[${s}]`);it.forEach(x=>lines.push(`${x.key} = ${x.disp} (indice ${x.raw})`));}
   return lines.filter(Boolean).join('\n');
 }
 
@@ -410,7 +416,7 @@ function gearingCheck(S,laps){
 }
 function steerCheck(S,laps){let mx=0,where=null;for(const lap of laps){const g=lapGrid(S,lap,2),st=g.get('Steering');if(!st)return null;const cr=detectCorners(g);for(let i=0;i<g.n;i++)if(Math.abs(st[i])>mx){mx=Math.abs(st[i]);const c=cr.find(c=>g.d[i]>=c.dS&&g.d[i]<=c.dE);where=c?'T'+c.k:null;}}return {max:mx,where};}
 function engineCheck(S){const g=n=>S.ch[n]?pct(S.ch[n].v,0.995):NaN;const oh=S.ch['Overheating State']?pct(S.ch['Overheating State'].v,1):0;return {water:g('Eng Water Temp'),oil:g('Eng Oil Temp'),overheat:oh>0};}
-function setupVal(su,key,sec){if(!su)return null;for(const [s,items] of Object.entries(su.sec)){if(sec&&s!==sec)continue;const x=items.find(i=>i.key===key);if(x&&x.disp&&!/N\/A|Non-adjustable/.test(x.disp))return x.disp;}return null;}
+function setupVal(su,key,sec){if(!su)return null;for(const [s,items] of Object.entries(su.sec)){if(sec&&s!==sec)continue;const x=items.find(i=>i.key===key);if(x&&x.disp&&!/N\/A|N\/D|Non regolabile|Separat[ao]|Non-adjustable/.test(x.disp))return x.disp;}return null;}
 
 // Lap-counter channels update at scoring rate (~0.1 s). Refine each start/finish crossing with the GPS trace:
 // average line position + direction, then find where the car crosses that plane (linear interpolation, 10 ms search).

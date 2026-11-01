@@ -27,6 +27,7 @@ func setUserData(shm []byte) {
 		}
 		if st, err := os.Stat(ud); err == nil && st.IsDir() {
 			userData.Store(ud)
+			udSource.Store("gioco")
 			rememberUserData(ud)
 		}
 	}

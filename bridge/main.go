@@ -117,6 +117,8 @@ func (h *Hub) serve(port int, id string) error {
 	mux.HandleFunc("/svmlib/file", handleSvmFile)
 	mux.HandleFunc("/ldlib", handleLdLib)
 	mux.HandleFunc("/ldlib/file", handleLdFile)
+	mux.HandleFunc("/libstatus", handleLibStatus)
+	mux.HandleFunc("/libdir", handleLibDir)
 	loadUserData()
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/" {

@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 )
 
 // The game's MoTeC telemetry folder (UserData\Telemetry) seen from the app, like the setup library:
@@ -54,7 +55,10 @@ func handleLdLib(w http.ResponseWriter, r *http.Request) {
 	type ldEntry struct {
 		svmEntry
 		ldMeta
+		// the game is still writing it (changed in the last 15 s): the app waits before opening it
+		W bool `json:"w,omitempty"`
 	}
+	now := time.Now()
 	files := []ldEntry{}
 	filepath.WalkDir(base, func(p string, d fs.DirEntry, err error) error {
 		if err != nil {
@@ -72,7 +76,7 @@ func handleLdLib(w http.ResponseWriter, r *http.Request) {
 		}
 		if fi, err := d.Info(); err == nil && fi.Size() > 0 && fi.Size() < 1<<30 {
 			// with the track, car, driver and date of the header, so the app can sort them without opening them
-			files = append(files, ldEntry{svmEntry{filepath.ToSlash(rel), fi.Size(), fi.ModTime().Unix()}, readLdMeta(p, fi.Size(), fi.ModTime().Unix())})
+			files = append(files, ldEntry{svmEntry{filepath.ToSlash(rel), fi.Size(), fi.ModTime().Unix()}, readLdMeta(p, fi.Size(), fi.ModTime().Unix()), now.Sub(fi.ModTime()) < 15*time.Second})
 		}
 		return nil
 	})

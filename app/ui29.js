@@ -204,7 +204,7 @@ function guideLib(key,car){if(!car||typeof libLearn!=='function')return'';const 
 function openGuide(key,ctx={}){const id=GUIDE_P[key]?key:guideId(key);const P=GUIDE_P[id];if(!P)return;
   let m=$('#mGuide');if(!m){m=document.createElement('div');m.className='modal';m.id='mGuide';m.hidden=true;m.innerHTML='<div class="mbox wide"><div class="panel-h"><h2 id="mGuideT"></h2><button class="btn" type="button" data-close>'+tr('Chiudi')+'</button></div><div id="mGuideB"></div></div>';document.body.appendChild(m);}
   const S=active()?.S;const su=($('#suFile')&&typeof byId==='function'&&byId($('#suFile').value))||active()?.su||null;const car=ctx.car||(typeof libCar==='function'&&su?.car?libCar(su.car):'')||'';const cls=guideCls(car||S?.meta?.car);
-  const settingKey=GUIDE_P[key]?null:key;const now=settingKey&&su?Object.entries(su.sec).flatMap(([sec,it])=>it.filter(x=>x.key===settingKey&&x.disp&&!/N\/A/.test(x.disp)).map(x=>`${SH_SEC[sec]?SH_SEC[sec]+' ':''}<span class="mono">${esc(x.disp)}</span>`)).slice(0,4).join(' · '):'';
+  const settingKey=GUIDE_P[key]?null:key;const now=settingKey&&su?Object.entries(su.sec).flatMap(([sec,it])=>it.filter(x=>x.key===settingKey&&x.disp&&!/N\/A|N\/D|Non regolabile|Separat[ao]/.test(x.disp)).map(x=>`${SH_SEC[sec]?SH_SEC[sec]+' ':''}<span class="mono">${esc(x.disp)}</span>`)).slice(0,4).join(' · '):'';
   const li=(lab,txt,c='')=>`<div class="gl ${c}"><b>${lab}</b><p>${esc(tr(txt))}</p></div>`;
   $('#mGuideT').textContent=tr(P.t);
   $('#mGuideB').innerHTML=`<p class="muted small" style="margin:0 0 10px">${esc(tr(P.g))}${now?` · ${tr('nel tuo setup')}: ${now}`:''}</p>

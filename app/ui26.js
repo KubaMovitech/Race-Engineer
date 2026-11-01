@@ -31,7 +31,7 @@ async function libImportDir(){if(!window.showDirectoryPicker){$('#genFiles').cli
 // what the library teaches for each car: values seen per setting, their labels, which way the clicks go
 let LIBLEARN=null;
 function libLearn(){if(LIBLEARN)return LIBLEARN;const L={};
-  SETLIB.forEach(e=>{const C=L[e.car]||(L[e.car]={n:0,keys:{}});C.n++;Object.entries(e.su.sec).forEach(([sec,items])=>items.forEach(x=>{const ix=parseInt(x.raw,10);if(!Number.isFinite(ix)||/N\/A|Non-adjustable/i.test(x.disp))return;
+  SETLIB.forEach(e=>{const C=L[e.car]||(L[e.car]={n:0,keys:{}});C.n++;Object.entries(e.su.sec).forEach(([sec,items])=>items.forEach(x=>{const ix=parseInt(x.raw,10);if(!Number.isFinite(ix)||/N\/A|N\/D|Non regolabile|Separat[ao]|Non-adjustable/i.test(x.disp))return;
     const k=sec+'|'+x.key;const K=C.keys[k]||(C.keys[k]={vals:new Set(),disp:new Map()});K.vals.add(ix);if(x.disp)K.disp.set(ix,x.disp);}));});
   Object.values(L).forEach(C=>Object.values(C.keys).forEach(K=>{const v=[...K.vals].sort((a,b)=>a-b);K.min=v[0];K.max=v[v.length-1];
     const pts=[...K.disp].map(([i,d])=>[i,libNum(d)]).filter(p=>Number.isFinite(p[1]));let s=0;for(let a=0;a<pts.length;a++)for(let b=a+1;b<pts.length;b++)s+=Math.sign((pts[b][0]-pts[a][0])*(pts[b][1]-pts[a][1]));K.sign=s<0?-1:1;}));
@@ -49,7 +49,7 @@ function libRank(car,track,type,style=''){const C=SETLIB.filter(e=>e.car===car);
 
 // what changes between a race setup and a rain (or qualifying) one, learned from the pairs in the library:
 // each rain setup is paired with the closest race setup of the same car and track, the clicks in between are kept
-function libDelta(car,from,to){const C=SETLIB.filter(e=>e.car===car);const idx=e=>{const m=new Map();Object.entries(e.su.sec).forEach(([sec,it])=>it.forEach(x=>{const i=parseInt(x.raw,10);if(Number.isFinite(i)&&!/N\/A|Non-adjustable/i.test(x.disp))m.set(sec+'|'+x.key,i);}));return m;};
+function libDelta(car,from,to){const C=SETLIB.filter(e=>e.car===car);const idx=e=>{const m=new Map();Object.entries(e.su.sec).forEach(([sec,it])=>it.forEach(x=>{const i=parseInt(x.raw,10);if(Number.isFinite(i)&&!/N\/A|N\/D|Non regolabile|Separat[ao]|Non-adjustable/i.test(x.disp))m.set(sec+'|'+x.key,i);}));return m;};
   const per=new Map();let pairs=0;
   C.filter(e=>e.type===to&&e.track&&!(to==='wet'&&e.wq)).forEach(w=>{const W=idx(w);let best=null,bd=1e9;const cand=C.filter(e=>e.type===from&&e.track===w.track),sameV=cand.filter(e=>libVer(e.name)===libVer(w.name));(sameV.length?sameV:cand).forEach(d=>{const D=idx(d);let s=0;W.forEach((v,k)=>{if(D.has(k))s+=Math.abs(v-D.get(k));});if(s<bd){bd=s;best=D;}});
     if(!best)return;pairs++;W.forEach((v,k)=>{if(!best.has(k))return;(per.get(k)||per.set(k,[]).get(k)).push(v-best.get(k));});});
@@ -69,7 +69,7 @@ const GEN_WET=[['RWSetting',null,1,'più ala'],['RWSetting',null,1,'più ala'],[
 const GEN_SECS=['FRONTLEFT','FRONTRIGHT','REARLEFT','REARRIGHT'];
 
 function genBuild(car,track,type,prefs,baseId,style,C){const cons=baseId==='__cons'&&C;const B=cons?C.shops[0].e:(baseId&&SETLIB.find(e=>e.id===baseId&&e.car===car))||libBase(car,track,type,style);if(!B)return null;const K=(libLearn()[car]||{}).keys||{};const ch=new Map();const notes=[];
-  const cur=(sec,key)=>{const k=sec+'|'+key;if(ch.has(k))return ch.get(k).ix;const it=(B.su.sec[sec]||[]).find(x=>x.key===key);const ix=it?parseInt(it.raw,10):NaN;return Number.isFinite(ix)&&!/N\/A|Non-adjustable/i.test(it.disp)?ix:NaN;};
+  const cur=(sec,key)=>{const k=sec+'|'+key;if(ch.has(k))return ch.get(k).ix;const it=(B.su.sec[sec]||[]).find(x=>x.key===key);const ix=it?parseInt(it.raw,10):NaN;return Number.isFinite(ix)&&!/N\/A|N\/D|Non regolabile|Separat[ao]|Non-adjustable/i.test(it.disp)?ix:NaN;};
   const secsOf=(key,s)=>Object.keys(B.su.sec).filter(sec=>(B.su.sec[sec]||[]).some(x=>x.key===key)&&(s==='*'?GEN_SECS.includes(sec):s?sec===s:true));
   const click=([key,s,dir,why],n)=>{let any=false;secsOf(key,s).forEach(sec=>{const k=sec+'|'+key;const ix=cur(sec,key);if(!Number.isFinite(ix))return;const L=K[k];const step=dir*(L?.sign||1)*n;let to=ix+step;
       if(L&&L.vals.size>=2)to=Math.max(L.min,Math.min(L.max,to));if(to===ix)return;const base=ch.get(k)?.from??ix;ch.set(k,{sec,key,from:base,ix:to,why,seen:!!L?.disp.has(to)});any=true;});return any;};

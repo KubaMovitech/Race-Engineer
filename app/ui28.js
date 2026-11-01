@@ -30,7 +30,7 @@ function libShop(e){const notes=((e.su.sec.GENERAL||[]).find(x=>x.key==='Notes')
 function libConsensus(car,track,type,style){const per=new Map();
   libRank(car,track,type,style).filter(e=>e.track===track&&e.type===type).forEach(e=>{const s=libShop(e)||'?';if(s!=='?'&&!per.has(s))per.set(s,e);});
   if(per.size<2)return null;const E=[...per.entries()];const K=(libLearn()[car]||{}).keys||{};const keys=new Map();
-  E.forEach(([shop,e])=>Object.entries(e.su.sec).forEach(([sec,it])=>it.forEach(x=>{const ix=parseInt(x.raw,10);if(!Number.isFinite(ix)||/N\/A|Non-adjustable/i.test(x.disp))return;
+  E.forEach(([shop,e])=>Object.entries(e.su.sec).forEach(([sec,it])=>it.forEach(x=>{const ix=parseInt(x.raw,10);if(!Number.isFinite(ix)||/N\/A|N\/D|Non regolabile|Separat[ao]|Non-adjustable/i.test(x.disp))return;
     const k=sec+'|'+x.key;(keys.get(k)||keys.set(k,[]).get(k)).push({shop,ix,disp:x.disp});})));
   const rows=[];keys.forEach((v,k)=>{if(v.length<2)return;const s=v.map(x=>x.ix).sort((a,b)=>a-b);const med=s[Math.floor((s.length-1)/2)];const spread=s[s.length-1]-s[0];const L=K[k];
     const range=L?Math.max(1,L.max-L.min):Math.max(1,spread);rows.push({k,sec:k.split('|')[0],key:k.split('|')[1],med,spread,rel:spread/range,v});});

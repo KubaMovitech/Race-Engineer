@@ -58,7 +58,7 @@ function proEngHTML(S,D,laps){const F=engFindings(D,S,D.su||null,laps);const P=e
   }catch(e){console.error(e);}};})();
 
 // ---------- Setup Builder: the car from above ----------
-function suFind(su,sec,re){const L=su?.sec?.[sec];const x=L&&L.find(i=>re.test(i.key));return x&&x.disp&&!/N\/A|Non-adjustable|Detached/.test(x.disp)?x.disp.replace(/\s*\(soft\)|\s*\(\d+\s*laps\)/g,''):null;}
+function suFind(su,sec,re){const L=su?.sec?.[sec];const x=L&&L.find(i=>re.test(i.key));return x&&x.disp&&!/N\/A|N\/D|Non regolabile|Separat[ao]|Non-adjustable|Detached/.test(x.disp)?x.disp.replace(/\s*\(soft\)|\s*\(\d+\s*laps\)/g,''):null;}
 function proCarHTML(su){const C={FL:'FRONTLEFT',FR:'FRONTRIGHT',RL:'REARLEFT',RR:'REARRIGHT'};const WN={FL:'Ant. sinistra',FR:'Ant. destra',RL:'Post. sinistra',RR:'Post. destra'};
   const corner=w=>{const s=C[w];const front=w[0]==='F';const rows=[['Campanatura',suFind(su,s,/^CamberSetting/)],['Convergenza',suFind(su,'SUSPENSION',front?/^FrontToeIn/:/^RearToeIn/)],['Pressione',suFind(su,s,/^PressureSetting/)],['Molla',suFind(su,s,/^SpringSetting/)],['Altezza',suFind(su,s,/^RideHeightSetting/)],['Packer',suFind(su,s,/^PackerSetting/)],['Comp. lenta',suFind(su,s,/^SlowBumpSetting/)],['Est. lenta',suFind(su,s,/^SlowReboundSetting/)],['Mescola',suFind(su,s,/^CompoundSetting/)]].filter(r=>r[1]);
     return `<div class="pcw pc${w}"><h4><span class="pwd"></span>${tr(WN[w])}</h4>${rows.map(([l,v])=>`<div><span>${tr(l)}</span><b>${esc(v)}</b></div>`).join('')}</div>`;};

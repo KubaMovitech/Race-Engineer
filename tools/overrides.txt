@@ -137,7 +137,6 @@ RENDER.prog
     ui10.js    define
 RENDER.setup
     ui18.js    wrap later
-    ui22.js    wrap later
     ui24.js    wrap later
     ui26.js    wrap later
     ui27.js    wrap later
