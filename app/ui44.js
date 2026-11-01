@@ -59,29 +59,46 @@ function proEngHTML(S,D,laps){const F=engFindings(D,S,D.su||null,laps);const P=e
 
 // ---------- Setup Builder: the car from above ----------
 function suFind(su,sec,re){const L=su?.sec?.[sec];const x=L&&L.find(i=>re.test(i.key));return x&&x.disp&&!/N\/A|N\/D|Non regolabile|Separat[ao]|Non-adjustable|Detached/.test(x.disp)?x.disp.replace(/\s*\(soft\)|\s*\(\d+\s*laps\)/g,''):null;}
-function proCarHTML(su){const C={FL:'FRONTLEFT',FR:'FRONTRIGHT',RL:'REARLEFT',RR:'REARRIGHT'};const WN={FL:'Ant. sinistra',FR:'Ant. destra',RL:'Post. sinistra',RR:'Post. destra'};
-  const corner=w=>{const s=C[w];const front=w[0]==='F';const rows=[['Campanatura',suFind(su,s,/^CamberSetting/)],['Convergenza',suFind(su,'SUSPENSION',front?/^FrontToeIn/:/^RearToeIn/)],['Pressione',suFind(su,s,/^PressureSetting/)],['Molla',suFind(su,s,/^SpringSetting/)],['Altezza',suFind(su,s,/^RideHeightSetting/)],['Packer',suFind(su,s,/^PackerSetting/)],['Comp. lenta',suFind(su,s,/^SlowBumpSetting/)],['Est. lenta',suFind(su,s,/^SlowReboundSetting/)],['Mescola',suFind(su,s,/^CompoundSetting/)]].filter(r=>r[1]);
-    return `<div class="pcw pc${w}"><h4><span class="pwd"></span>${tr(WN[w])}</h4>${rows.map(([l,v])=>`<div><span>${tr(l)}</span><b>${esc(v)}</b></div>`).join('')}</div>`;};
-  const box=(t,ic,rows)=>{rows=rows.filter(r=>r[1]);return rows.length?`<div class="pcb"><h4>${ic} ${tr(t)}</h4>${rows.map(([l,v])=>`<div><span>${tr(l)}</span><b>${esc(v)}</b></div>`).join('')}</div>`:'';};
-  const mid=[box('Aerodinamica','✈',[['Ala anteriore',suFind(su,'FRONTWING',/^FWSetting/)],['Ala posteriore',suFind(su,'REARWING',/^RWSetting/)]]),
-    box('Freni','◉',[['Ripartizione',suFind(su,'CONTROLS',/^RearBrakeSetting/)],['Pressione',suFind(su,'CONTROLS',/^BrakePressureSetting/)],['Migrazione',suFind(su,'CONTROLS',/^BrakeMigrationSetting/)]]),
-    box('Barre antirollio','⇄',[['Anteriore',suFind(su,'SUSPENSION',/^FrontAntiSway/)],['Posteriore',suFind(su,'SUSPENSION',/^RearAntiSway/)]]),
-    box('Terzo elemento','⌇',[['Molla ant.',suFind(su,'SUSPENSION',/^Front3rdSpring/)],['Packer ant.',suFind(su,'SUSPENSION',/^Front3rdPacker/)],['Molla post.',suFind(su,'SUSPENSION',/^Rear3rdSpring/)],['Packer post.',suFind(su,'SUSPENSION',/^Rear3rdPacker/)]]),
-    box('Differenziale','⚙',[['Precarico',suFind(su,'DRIVELINE',/^DiffPreload/)],['Trazione',suFind(su,'DRIVELINE',/^DiffPower/)],['Rilascio',suFind(su,'DRIVELINE',/^DiffCoast/)]]),
-    box('Elettronica e ibrido','ϟ',[['TC mappa',suFind(su,'CONTROLS',/^TractionControlMap/)],['TC taglio',suFind(su,'CONTROLS',/^TCPowerCut/)],['Rigenerazione',suFind(su,'ENGINE',/^RegenerationMap/)],['Motore elettrico',suFind(su,'ENGINE',/^ElectricMotorMap/)]])].join('');
-  const car=carTopSVG();
+// rows: [label, section, key pattern]; ref = another setup to compare with; links = setup cards (ui51) by setting
+const PCAR_CORNER=[['Campanatura',null,/^CamberSetting/],['Convergenza','toe',null],['Pressione',null,/^PressureSetting/],['Molla',null,/^SpringSetting/],['Altezza',null,/^RideHeightSetting/],['Packer',null,/^PackerSetting/],
+  ['Bump lento',null,/^SlowBumpSetting/],['Bump veloce',null,/^FastBumpSetting/],['Rebound lento',null,/^SlowReboundSetting/],['Rebound veloce',null,/^FastReboundSetting/]];
+const PCAR_BOX=[['Aerodinamica','✈',[['Ala anteriore','FRONTWING',/^FWSetting/],['Ala posteriore','REARWING',/^RWSetting/]]],
+  ['Freni','◉',[['Ripartizione','CONTROLS',/^RearBrakeSetting/],['Pressione','CONTROLS',/^BrakePressureSetting/],['Migrazione','CONTROLS',/^BrakeMigrationSetting/]]],
+  ['Barre antirollio','⇄',[['Anteriore','SUSPENSION',/^FrontAntiSway/],['Posteriore','SUSPENSION',/^RearAntiSway/]]],
+  ['Terzo elemento','⌇',[['Molla ant.','SUSPENSION',/^Front3rdSpring/],['Packer ant.','SUSPENSION',/^Front3rdPacker/],['Molla post.','SUSPENSION',/^Rear3rdSpring/],['Packer post.','SUSPENSION',/^Rear3rdPacker/]]],
+  ['Differenziale','⚙',[['Precarico','DRIVELINE',/^DiffPreload/],['Trazione','DRIVELINE',/^DiffPower/],['Rilascio','DRIVELINE',/^DiffCoast/]]],
+  ['Elettronica e ibrido','ϟ',[['TC mappa','CONTROLS',/^TractionControlMap/],['TC taglio','CONTROLS',/^TCPowerCut/],['Rigenerazione','ENGINE',/^RegenerationMap/],['Motore elettrico','ENGINE',/^ElectricMotorMap/]]]];
+function proCarHTML(su,ref,links=[]){const C={FL:'FRONTLEFT',FR:'FRONTRIGHT',RL:'REARLEFT',RR:'REARRIGHT'};const WN={FL:'Ant. sinistra',FR:'Ant. destra',RL:'Post. sinistra',RR:'Post. destra'};
+  // the value, the reference value when it differs, and the cards that propose to move this setting
+  const row=(l,sec,re,w)=>{const v=suFind(su,sec,re);if(!v)return '';const r=ref?suFind(ref,sec,re):null;const diff=ref&&r!=null&&r!==v;
+    const L=links.filter(c=>c.fx&&re.test(c.fx.key)&&(!c.fx.sec||c.fx.sec===sec||(w&&c.w===w)));
+    return `<div class="${diff?'pdiff':''}"><span>${tr(l)}</span><b>${esc(v)}${diff?`<small title="${esc(tr('nel setup di riferimento'))}">${tr('rif.')} ${esc(r)}</small>`:''}</b>${L.length?`<button type="button" class="plink" data-card="${esc(L[0].id)}" title="${esc(L.map(c=>c.t+' → '+c.fx.dir).join('\n'))}">${L.length}</button>`:''}</div>`;};
+  const corner=w=>{const s=C[w];const front=w[0]==='F';const rows=PCAR_CORNER.map(([l,sec,re])=>sec==='toe'?row(l,'SUSPENSION',front?/^FrontToeIn/:/^RearToeIn/,w):row(l,s,re,w)).join('');
+    const n=links.filter(c=>c.w===w).length;
+    return `<div class="pcw pc${w}"><h4><span class="pwd"></span>${tr(WN[w])}<button type="button" class="pwgo" data-w="${w}" title="${esc(tr('Apri l\'analisi di questa ruota'))}">${n?`<em>${n}</em>`:''}${tr('analisi')} →</button></h4>${rows}</div>`;};
+  const mid=PCAR_BOX.map(([t,ic,R])=>{const rows=R.map(([l,sec,re])=>row(l,sec,re)).join('');return rows?`<div class="pcb"><h4>${ic} ${tr(t)}</h4>${rows}</div>`:'';}).join('');
+  const car=carTopSVG({wheelFill:w=>links.some(c=>c.w===w)?'rgba(255,207,51,.35)':'#0A0A0C'});
   return `<div class="pcar2">${corner('FL')}${corner('FR')}<div class="pcc2">${car}</div>${corner('RL')}${corner('RR')}</div><div class="pcmid">${mid}</div>`;}
 function proVersions(su){const car=(su?.car||'').toLowerCase();const L=svms().filter(x=>!car||(x.car||'').toLowerCase()===car);
   const nd=(a,b)=>{let n=0;for(const [sec,it] of Object.entries(a.sec||{}))for(const i of it){const o=b.sec?.[sec]?.find(x=>x.key===i.key);if(o&&o.raw!==i.raw)n++;}return n;};
   return L.map(x=>`<button type="button" class="pvr${x===su?' cur':''}" data-id="${esc(x.id)}"><i></i><div><b>${esc(x.label||x.name)}</b><small>${x===su?tr('in uso'):nd(su,x)+' '+tr('differenze')}</small></div></button>`).join('')||`<p class="muted small">${tr('Carica altri .svm della stessa auto per vederli qui.')}</p>`;}
 function proSetupPanel(){const old=$('#pSetCar');const su=byId($('#suFile')?.value);const nav=$('#suTabs');if(!nav||!proLook()){old?.remove();return;}
   const S=active()?.S;const R=S?proFindings(S):null;const F=R?[...R.F].filter(f=>f.s>0).sort((a,b)=>b.s-a.s).slice(0,3):[];
-  const h=`<div id="pSetCar" class="pset">${su?`<div class="panel psc"><div class="panel-h"><h3>${tr('Assetto')} · <span class="muted">${esc(su.label||su.name)}</span></h3><span class="muted small">${esc(su.car||'')}</span></div>${proCarHTML(su)}</div>
+  const car=(su?.car||'').toLowerCase();const others=su?svms().filter(x=>x!==su&&(!car||(x.car||'').toLowerCase()===car)):[];const ref=others.find(x=>x.id===LS.get('setb:ref',''))||null;
+  // the setup cards of «Analisi tecnica», only when they are already computed (no slow work here)
+  let links=[];try{if(S&&typeof techCards==='function'){const laps=techLaps(S);const k=[...S.cache.keys()].find(k=>k.startsWith('tech|'+laps.map(l=>l.i).join(',')+'|'));if(k)links=techCards(S,laps,su,S.cache.get(k));}}catch(e){}
+  const h=`<div id="pSetCar" class="pset">${su?`<div class="panel psc"><div class="panel-h"><h3>${tr('Assetto')} · <span class="muted">${esc(su.label||su.name)}</span></h3>
+      <label class="f pref">${tr('Confronta con')}<select id="pRef"><option value="">${tr('nessun riferimento')}</option>${others.map(o=>`<option value="${esc(o.id)}"${o===ref?' selected':''}>${esc(o.label||o.name)}</option>`).join('')}</select></label></div>
+      ${ref?`<p class="muted small pdiffl">${tr('In giallo i valori diversi dal riferimento')} «${esc(ref.label||ref.name)}».</p>`:''}${links.length?`<p class="muted small">${tr('I numeri accanto ai valori sono le schede di Analisi tecnica che propongono di cambiarli.')}</p>`:''}${proCarHTML(su,ref,links)}</div>
      <div class="pset-r"><div class="panel"><div class="panel-h"><h3>${tr('Versioni setup')}</h3><span class="muted small">${tr('stessa auto')}</span></div><div class="pvl">${proVersions(su)}</div></div>
      ${S?`<div class="panel"><div class="panel-h"><h3>${tr('Problemi rilevati dai dati')}</h3><button type="button" class="btn" id="pToEng">${tr('Race Engineer')} →</button></div>${F.length?F.map(proFindRow).join(''):`<p class="muted small">${tr('Niente di urgente.')}</p>`}</div>`:''}</div>`
      :`<div class="panel"><div class="empty">${tr('Carica un file setup .svm (Documenti o cartella UserData/player/Settings di Le Mans Ultimate).')}</div></div>`}</div>`;
   if(old)old.outerHTML=h;else nav.insertAdjacentHTML('afterend',h);
   $$('#pSetCar .pvr').forEach(b=>b.onclick=()=>{const s=$('#suFile');s.value=b.dataset.id;s.onchange&&s.onchange();});
+  const pr=$('#pRef');if(pr)pr.onchange=()=>{LS.set('setb:ref',pr.value);proSetupPanel();};
+  // a wheel or a linked problem opens the analysis that matters
+  $$('#pSetCar .pwgo').forEach(b=>b.onclick=()=>techGo('damp',{w:b.dataset.w}));
+  $$('#pSetCar .plink').forEach(b=>b.onclick=()=>techGo('diag',{card:b.dataset.card}));
   const e=$('#pToEng');if(e)e.onclick=()=>$('#proNav .pn[data-n="eng"]')?.click();}
 (function(){const so=window.suTabOf;window.suTabOf=suTabOf=function(p){return p.id==='pSetCar'?'set':so(p);};})();
 setTimeout(()=>{const base=RENDER.setup;RENDER.setup=()=>{base();try{proSetupPanel();}catch(e){console.error(e);}suTabsApply();};},0);
@@ -117,7 +134,10 @@ html[data-look="pro"] .ecount span{border-radius:10px;background:var(--panel2);b
 .pcw,.pcb{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:rgba(255,255,255,.025)}
 .pcw h4,.pcb h4{margin:0 0 6px;font:600 .78rem "Titillium Web",sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#fff;display:flex;align-items:center;gap:8px}
 .pcw .pwd{width:8px;height:8px;border-radius:50%;background:#2BE38A}.pcRL .pwd,.pcRR .pwd{background:#FFC53D}
-.pcw>div,.pcb>div{display:flex;justify-content:space-between;gap:10px;font-size:.82rem;padding:2px 0}.pcw span,.pcb span{color:var(--muted)}.pcw b,.pcb b{font:600 .85rem "JetBrains Mono",monospace;color:#fff;white-space:nowrap}
+.pcw>div,.pcb>div{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:.82rem;padding:2px 0}.pcw b small,.pcb b small{display:block;font:500 .72rem var(--f-mono);color:var(--warn);text-align:right}.pdiff>span{color:var(--warn)!important}
+.plink{margin-left:6px;min-width:20px;height:20px;border-radius:10px;border:1px solid var(--warn);background:transparent;color:var(--warn);font:600 .72rem var(--f-mono);cursor:pointer}
+.pwgo{margin-left:auto;border:1px solid var(--line);border-radius:6px;background:transparent;color:var(--psil,#C9CDD3);font:600 .72rem var(--f-body);padding:2px 8px;cursor:pointer;text-transform:none;letter-spacing:0}.pwgo:hover{border-color:var(--pacc)}.pwgo em{font-style:normal;color:var(--warn);margin-right:6px}
+.pref{min-width:220px;margin-left:auto}.pref select{height:32px}.pcw span,.pcb span{color:var(--muted)}.pcw b,.pcb b{font:600 .85rem "JetBrains Mono",monospace;color:#fff;white-space:nowrap}
 .pcmid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px}
 .pvl{display:flex;flex-direction:column;gap:6px}
 .pvr{display:flex;gap:10px;align-items:center;text-align:left;border:1px solid var(--line);border-radius:8px;background:transparent;color:inherit;padding:8px 10px;cursor:pointer;font:inherit}

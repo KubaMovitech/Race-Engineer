@@ -91,7 +91,7 @@ function techDampHTML(S,X,XB){const R=X.sus,RB=XB?.sus;const ws=VD_W.filter(w=>R
   const o=X.opt;const signTxt=x=>{const s=x.sign;const ev=s.ev.map(e=>`${tr(e.lab)} ${e.r>0?'+':'−'}${fx(Math.abs(e.r),2)}`).join(', ');
     return s.sign?`${tr('compressione')} = ${tr('posizione che')} ${s.sign>0?tr('aumenta'):tr('diminuisce')} · <b class="${s.cert==='verificato'?'pos':'w'}">${tr(s.cert)}</b>${ev?` (${ev})`:''}`:`<b class="w">${tr('direzione di compressione non determinabile')}</b>: ${esc(tr(s.why||''))}`;};
   const cards=ws.map(w=>{const x=R.w[w],xb=RB?.w[w];const z=x.z;
-    return `<div class="tdc"><div class="tdh"><b>${tr(TECH_WN[w])}</b><span class="tst ${x.velSrc==='misurato'?'good':'muted'}">${tr(x.velSrc==='misurato'?'velocità misurata':'velocità derivata')}</span><span class="muted small">${fx(x.s,0)} s ${tr('di dati')}</span></div>
+    return `<div class="tdc" data-w="${w}"><div class="tdh"><b>${tr(TECH_WN[w])}</b><span class="tst ${x.velSrc==='misurato'?'good':'muted'}">${tr(x.velSrc==='misurato'?'velocità misurata':'velocità derivata')}</span><span class="muted small">${fx(x.s,0)} s ${tr('di dati')}</span></div>
       <div class="small tsg">${signTxt(x)}</div>${techHist(x.hist,o.knee,xb?.hist,x.sign.sign)}
       <table class="lbt tzt"><thead><tr><th class="l"></th><th>${tr('Estensione veloce')}</th><th>${tr('Estensione lenta')}</th><th>${tr('Compressione lenta')}</th><th>${tr('Compressione veloce')}</th></tr></thead><tbody>
        <tr><td class="l"><b class="ca">A</b> % ${tr('tempo')}</td><td>${fx(z.fr,1)}</td><td>${fx(z.sr,1)}</td><td>${fx(z.sb,1)}</td><td>${fx(z.fb,1)}</td></tr>
@@ -246,7 +246,7 @@ const TECH_CAT={regime:'Sostegno a regime: molle, 3° elemento, packer',transito
 function techCardHTML(c,S,laps){const t=typeof ptAll==='function'?[...ptAll()].reverse().find(x=>x.cardId===c.id&&x.venue===S.meta?.venue):null;
   let out=tr('nessuna prova ancora');if(t){if(t.res)out=`${tr(PT_R[t.res.r]?.[0]||'Inconcludente')} (${tr(t.closed==='keep'?'tenuta':t.closed==='back'?'tolta':'annullata')})`;
     else if(t.base.id!==S.id){const J=techJudge(t,S,laps);out=`${tr(PT_R[J.r][0])}: ${fx(vdMean(t.base.per||[]),c.pt.dec)} → ${fx(vdMean(J.now),c.pt.dec)} ${c.pt.unit}${J.why?' · '+J.why:''}`;}else out=tr('prova in corso: carica la telemetria dopo la modifica');}
-  return `<article class="tcard s${c.s}"><header><i></i><b>${esc(c.t)}</b><span class="muted small">${tr(TECH_CAT[c.cat]||'')}</span>${c.where.li!=null?`<button type="button" class="btn icon tcgo" data-li="${c.where.li}" data-t="${c.where.te}" data-w="${c.w}" data-k="${c.k}" title="${esc(tr('Apri nei grafici sincronizzati'))}">⌖</button>`:''}</header>
+  return `<article class="tcard s${c.s}" data-id="${esc(c.id)}"><header><i></i><b>${esc(c.t)}</b><span class="muted small">${tr(TECH_CAT[c.cat]||'')}</span>${c.where.li!=null?`<button type="button" class="btn icon tcgo" data-li="${c.where.li}" data-t="${c.where.te}" data-w="${c.w}" data-k="${c.k}" title="${esc(tr('Apri nei grafici sincronizzati'))}">⌖</button>`:''}</header>
     <ol class="t10">
      <li><span>${tr('Fenomeno')}</span><div>${esc(c.t)}</div></li>
      <li><span>${tr('Dove e quando')}</span><div>${esc(c.where.txt)}</div></li>
@@ -325,7 +325,7 @@ function techDraw(S,laps){const host=$('#techP');const X=techData(S,laps);const 
    ${XB?`<div class="${cond.length?'pcw2':'pcok'} tcond">${cond.length?`<b>⚠ ${tr('A e B non sono nelle stesse condizioni')}:</b> ${cond.map(c=>`<span>${esc(c)}</span>`).join('')}<small>${tr('Le differenze possono venire da qui e non dal setup.')}</small>`:`✓ ${tr('A e B in condizioni simili (pista, carburante, mescola, bagnato).')}`} <span class="muted small">A: ${X.laps.length} ${tr('giri')} · B: ${XB.laps.length} ${tr('giri')}</span></div>`:''}
    <nav class="ttabs" role="tablist">${TECH_TABS.map(([k,l])=>`<button type="button" role="tab" data-tt="${k}" aria-selected="${k===tab}">${tr(l)}</button>`).join('')}</nav>
    <div class="tbody">${body}</div></div>`;
-  techBind(S,X);sesSetupBind(S);}
+  techBind(S,X);sesSetupBind(S);setTimeout(techFocus,60);}
 function techBind(S,X){const host=$('#techP');const setSel=o=>{LS.set('vd:sel',{...techSel(),...o});renderTech();};
   host.querySelectorAll('[data-tt]').forEach(b=>b.onclick=()=>{TECH.tab=b.dataset.tt;LS.set('vd:tab',TECH.tab);TECH.ev=null;renderTech();});
   const on=(id,f)=>{const e=$('#'+id);if(e)e.onchange=()=>f(e.value);};
@@ -349,6 +349,12 @@ function techStartTest(S,laps,c,su){const L=ptAll().filter(t=>!(t.venue===S.meta
 function techJudge(t,S,laps){const p=t.loc;const now=techPerLapAt(S,laps,p.k,p.w,p.frac,p.field);const C=vdCompare(t.base.per||[],now,{better:p.better,minDiff:p.minDiff||0});
   const T=vdCompare(t.base.lapTimes||[],laps.map(l=>l.time),{better:-1,minDiff:0.05});
   return {r:C.verdict==='migliorato'?'ok':C.verdict==='peggiorato'?'ko':'inc',why:C.why,C,T,now};}
+
+// open «Analisi tecnica» on a tab, with a wheel or a card in view (from Setup Builder and Race Engineer)
+function techGo(tab,o={}){TECH.tab=tab;LS.set('vd:tab',tab);TECH.focus=o;LS.set('su:tab','dyn');$('#proNav .pn[data-n="tech"]')?.click();if(curView()!=='setup')showView('setup');renderTech();}
+function techFocus(){const o=TECH.focus;if(!o)return;const el=o.w?$(`#techP .tdc[data-w="${o.w}"]`):o.card?$(`#techP .tcard[data-id="${CSS.escape(o.card)}"]`):null;
+  if(!el){const more=$('#techP .tmore');if(o.card&&more&&!more.open){more.open=true;return techFocus();}return;}TECH.focus=null;
+  el.closest('details')?.setAttribute('open','');el.scrollIntoView({behavior:MOTION_OK()?'smooth':'auto',block:'center'});el.classList.add('tfocus');setTimeout(()=>el.classList.remove('tfocus'),1600);}
 
 // ---------- the menu entry and the tab ----------
 setTimeout(()=>{const v=$('#v-setup');if(v&&!$('#techP')){const anchor=$('#suEngP')||v.querySelector('.panel');anchor?.insertAdjacentHTML('afterend','<div id="techP"></div>');}
@@ -388,6 +394,11 @@ setTimeout(()=>{const v=$('#v-setup');if(v&&!$('#techP')){const anchor=$('#suEng
 .tetr{display:grid;grid-template-columns:150px 1fr;gap:8px;align-items:center}.tetr svg{width:100%;height:70px;cursor:crosshair}.tetl{display:flex;flex-direction:column;font-size:.8rem;color:var(--muted)}.tetl b{font:600 1rem var(--f-mono);color:#fff}
 .tcur{stroke:#fff;stroke-width:1}.tetx{display:flex;justify-content:space-between;margin-left:158px;font-size:.78rem;color:var(--muted)}
 .tcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(520px,1fr));gap:12px}
+.tfocus{outline:2px solid var(--pacc,#C9A54C);outline-offset:2px;transition:outline-color 300ms}
+/* compact top on the technical page: the session line stays, the big numbers and the setup goals go */
+html[data-look="pro"][data-pnav="tech"] .pstrip .pmain{display:none}
+html[data-pnav="tech"] #v-setup>.panel:first-child h2,html[data-pnav="tech"] #v-setup>.panel:first-child details.set{display:none}
+html[data-pnav="tech"] #v-setup>.panel:first-child{padding-top:8px;padding-bottom:8px}
 .tcard{border:1px solid var(--line);border-left:3px solid var(--good);border-radius:10px;padding:10px 14px}.tcard.s1{border-left-color:var(--warn)}.tcard.s2{border-left-color:var(--bad)}
 .tcard header{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.tcard header b{font-size:1rem}.tcard header .tcgo{margin-left:auto}
 .t10{margin:8px 0 0;padding:0;list-style:none;display:grid;gap:5px;counter-reset:t}.t10 li{display:grid;grid-template-columns:170px 1fr;gap:10px;font-size:.88rem;counter-increment:t}.t10 li>span{color:var(--muted)}.t10 li>span::before{content:counter(t) ". ";color:var(--faint,#777)}

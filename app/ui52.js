@@ -30,7 +30,7 @@ function muSteps(){const S=LIVE.status||{},team=teamParse(LS.get('live:team','')
   // 5. how fresh the data are
   if(age!=null)R.push(age<8?{k:'good',t:tr('Dati aggiornati'),d:`${tr('ultimo dato')} ${fx(age,0)} s ${tr('fa')}`}:age<60?{k:'warn',t:tr('Dati in ritardo'),d:`${tr('ultimo dato')} ${fx(age,0)} s ${tr('fa')}: ${tr('riconnessione automatica')}`}:{k:'bad',t:tr('Dati vecchi'),d:`${tr('ultimo dato')} ${fx(age/60,0)} min ${tr('fa')}: ${tr('quelli sotto non sono in diretta')}`});
   return R;}
-function muGuideHTML(){if(LIVE.rec)return '';const R=muSteps();const ok=R.every(r=>r.k==='good');const prof=LS.get('mu:prof','');const open=LS.get('mu:open',null);const isOpen=open==null?!ok:open;
+function muGuideHTML(){if(LIVE.rec)return '';const R=muSteps();const ok=R.every(r=>r.k==='good');const prof=LS.get('mu:prof','');const open=LS.get('mu:open',null);const isOpen=open==null?R.some(r=>r.k==='bad'):open;  // open by itself only when something blocks
   return `<details class="muguide"${isOpen?' open':''}><summary><b>${tr('Stato del Muretto')}</b>${R.map(r=>`<i class="mud ${r.k}" title="${esc(r.t)}"></i>`).join('')}<span class="muted small">${ok?tr('tutto collegato'):tr('apri per vedere cosa manca')}</span></summary>
     <ol class="musteps">${R.map(r=>`<li class="${r.k}"><b>${esc(r.t)}</b><span>${esc(r.d)}</span>${r.act==='team'?`<span class="mubt"><button type="button" class="btn" data-mu="join">${tr('Entra con codice')}</button><button type="button" class="btn" data-mu="new">${tr('Crea squadra')}</button></span>`:''}</li>`).join('')}</ol>
     <div class="muprof"><span>${tr('Profilo')}</span>${Object.entries(MU_PROF).map(([k,p])=>`<label class="chk"><input type="radio" name="muprof" value="${k}"${prof===k?' checked':''}> <b>${tr(p.l)}</b> <small class="muted">${tr(p.d)}</small></label>`).join('')}
@@ -40,6 +40,24 @@ function muBind(){const h=$('#lvHelp');if(!h||h.dataset.mu)return;h.dataset.mu=1
   h.addEventListener('toggle',e=>{if(e.target.classList?.contains('muguide'))LS.set('mu:open',e.target.open);},true);
   h.addEventListener('change',e=>{if(e.target.name!=='muprof')return;const p=MU_PROF[e.target.value];if(!p)return;LS.set('mu:prof',e.target.value);LS.set('live:notif',p.notif);const n=$('#lvNotif');if(n)n.value=p.notif;
     $(`#v-live .lvtabs [data-sub="${p.sub}"]`)?.click();toast(tr('Profilo')+': '+tr(p.l));});}
+
+// ---------- race view: the followed car in one line ----------
+// Uses what the Muretto already computes (liveRows, carStats, liveStrat): nothing new is estimated here. The next stop is
+// the current lap plus the laps the fuel or the virtual energy still allow, whichever ends first.
+function lvRaceBar(x,al){const {sc,kind,c,S2,me,rec,now}=x;if(rec||!sc||kind!=='race'||!me)return '';
+  const rows=x.rows;const cl=rows.filter(r=>r.cls===me.cls).sort((a,b)=>a.pos-b.pos);const i=cl.indexOf(me);const ah=cl[i-1],bh=cl[i+1];
+  const cs=typeof carStats==='function'?carStats(me.veh,me):null;const lt=cs?.pace5||me.estL;
+  const gap=o=>o&&Number.isFinite(lt)?Math.abs((me.gapL+me.lapsL*lt)-(o.gapL+o.lapsL*lt)):NaN;
+  const left=S2&&Number.isFinite(S2.left)?S2.left:NaN;const next=Number.isFinite(left)&&Number.isFinite(me.laps)?me.laps+Math.floor(left):NaN;
+  const age=LIVE.scAt?(now-LIVE.scAt)/1000:NaN;const old=age>8;
+  const cell=(l,v,s,cls='')=>`<div class="lrb ${cls}"><span>${l}</span><b>${v}</b>${s?`<small>${s}</small>`:''}</div>`;
+  return `<div class="panel lvrace${old?' lvold':''}">${cell(tr('Auto seguita'),esc((c?.drv||me.drv||'').split(' ').slice(-1)[0]||me.veh),esc(me.cls||''))}
+    ${cell(tr('Posizione'),'P'+me.pic,'P'+me.pos+' '+tr('assoluto'))}
+    ${cell(tr('Davanti'),ah?'+'+fx(gap(ah),1)+' s':'—',ah?esc(ah.drv):tr('in testa'))}${cell(tr('Dietro'),bh?'−'+fx(gap(bh),1)+' s':'—',bh?esc(bh.drv):'')}
+    ${cell(tr('Autonomia'),Number.isFinite(left)?fx(left,1)+' '+tr('giri'):'—',S2?.lim==='ve'?tr('limite: energia'):S2?.lim?tr('limite: carburante'):'',Number.isFinite(left)&&left<2.2?'bad':Number.isFinite(left)&&left<4?'warn':'')}
+    ${cell(tr('Prossima sosta'),Number.isFinite(next)?tr('giro')+' '+next:'—',Number.isFinite(left)?tr('se il consumo resta questo'):'')}
+    ${cell(tr('Avvisi'),al.length?String(al.length):'0',al[0]?esc(al[0][1]):tr('nessuno'),al.some(a=>a[0]==='bad')?'bad':al.length?'warn':'')}
+    ${old?`<div class="lrbold">${tr('Dati vecchi di')} ${fx(age,0)} s: ${tr('non sono in diretta')}</div>`:''}</div>`;}
 
 // ---------- the server of a new team: checked from this PC before using it ----------
 // connects with MQTT over WebSocket and waits for the server's answer (CONNACK); nothing is sent to any topic
@@ -70,5 +88,8 @@ setTimeout(()=>{const m=$('#mLive');if(!m||$('#lvProbe'))return;const sel=$('#lv
 .musteps li.good::marker{color:var(--good)}.musteps li.warn::marker{color:var(--warn)}.musteps li.bad::marker{color:var(--bad)}.musteps li.bad b{color:var(--bad)}.musteps li.warn b{color:var(--warn)}
 .mubt{display:flex!important;gap:6px;margin-top:4px}.mubt .btn{height:30px}
 .muprof{display:flex;gap:6px 14px;flex-wrap:wrap;align-items:center;border-top:1px solid var(--line);padding-top:8px;margin-top:6px}.muprof>span{color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.06em}.muprof>small{flex-basis:100%}
+.lvrace{display:flex;flex-wrap:wrap;gap:0;padding:0!important;margin-bottom:10px;overflow:hidden}.lrb{flex:1 1 130px;padding:10px 14px;border-right:1px solid var(--line);min-width:0}.lrb:last-of-type{border-right:0}
+.lrb span{display:block;font-size:.74rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}.lrb b{display:block;font:600 1.35rem var(--f-mono);color:#fff;white-space:nowrap}.lrb small{display:block;color:var(--psil,#C9CDD3);font-size:.8rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lrb.warn b{color:var(--warn)}.lrb.bad b{color:var(--bad)}.lvrace.lvold .lrb b{opacity:.55}.lrbold{flex-basis:100%;padding:6px 14px;background:color-mix(in srgb,var(--warn) 14%,transparent);color:var(--warn);font-size:.86rem}
 .muadv{margin:10px 0}.muadv summary{cursor:pointer;color:var(--psil,#C9CDD3)}#lvProbeR{align-self:center;margin:0 8px}
 `;document.head.appendChild(st);})();

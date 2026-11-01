@@ -93,7 +93,7 @@ function liveSkeleton(){const v=$('#v-live');if(v.dataset.ok)return;v.dataset.ok
         <label class="f">Avvisi a comparsa<select id="lvNotif"><option value="class">Noi e rivali (la classe nella campanella)</option><option value="all">Tutte le auto</option><option value="rivals">Solo rivali</option><option value="off">Spenti</option></select></label><div id="lvTeam" class="lvteam"></div></div></details></div></div>
     <div id="lvHelp"></div><div id="lvSess" class="lvsess"></div>
     <nav class="lvtabs" role="tablist">${LV_SUBS.map(([k,l])=>`<button type="button" role="tab" data-sub="${k}" aria-selected="${k===sub}">${l}</button>`).join('')}</nav></div>
-  <div id="lvAlerts"></div>
+  <div id="lvRace"></div><div id="lvAlerts"></div>
   <div class="lvsub" data-p="ov"${sub!=='ov'?' hidden':''}>
     <div class="lvgrid"><div class="panel"><div id="lvHead"></div><div id="lvKpi"></div></div>
       <div class="panel"><div class="panel-h"><h3>Pista</h3><span class="muted small" id="lvMapNote"></span></div><canvas id="lvMap" style="width:100%;height:300px"></canvas><div id="lvMapLeg" class="mapleg"></div></div></div>
@@ -183,7 +183,11 @@ function renderLive(force){
   const al=[];if(c&&stt.live){if(S2&&Number.isFinite(S2.left)&&S2.left<2.2&&!c.pit)al.push(['bad',`Rientra ai box: ${S2.lim==='ve'?'energia':'carburante'} per ${fx(S2.left,1)} giri`]);
     (c.w||[]).forEach((w,i)=>{if(w.flat)al.push(['bad','Foratura '+tr(WN[i])]);if(w.det)al.push(['bad','Ruota staccata: '+tr(WN[i])]);});if(c.ovh)al.push(['bad','Motore in surriscaldamento']);if(c.detached)al.push(['bad','Parti staccate dalla vettura']);
     if(c.pen>0)al.push(['warn',`Penalità da scontare: ${c.pen}`]);if(c.tl>0&&c.tlPen>0&&c.tl>=c.tlPen-1)al.push(['warn',`Limiti di pista: ${c.tl}/${c.tlPen} (prossimo = penalità)`]);}
+  // most important first: what forces a stop or damages the car, then penalties
+  al.sort((a,b)=>(a[0]==='bad'?0:1)-(b[0]==='bad'?0:1));
   $('#lvAlerts').innerHTML=al.map(([k,t])=>`<div class="lvalert ${k}">${esc(t)}</div>`).join('');
+  // one line for the race: car followed, position, gaps, range, next stop, alerts (ui52.js)
+  const rb=$('#lvRace');if(rb){const h=typeof lvRaceBar==='function'?lvRaceBar(ctx,al):'';if(rb._h!==h){rb.innerHTML=h;rb._h=h;}}
   const Ds=Object.values(LIVE.drivers).filter(D=>D.hi).sort((a,b)=>(a.hi.name||'').localeCompare(b.hi.name||''));
   $('#lvTeam').innerHTML=`<div class="muted small" style="margin-top:6px">${tr('Bridge della squadra')}</div>`+(Ds.length?Ds.map(D=>{const h=D.hi;const age=Math.round((now-D.seen)/1000);const on=h.on!==false&&age<75;
     return `<div class="lvrow"><span><span class="dot ${on?(h.drv?'good':'warn'):'bad'}"></span> ${esc(h.name||'pilota')}</span><b class="small">${!on?'offline':h.drv?'in auto':h.lmu?'LMU aperto':'LMU chiuso'}</b></div>`;}).join(''):`<div class="muted small">${tr('Nessun bridge collegato.')}</div>`);
