@@ -1,16 +1,17 @@
 {
- "version": "2.16.0",
+ "version": "2.17.0",
  "date": "2026-11-01",
  "notes": [
-  "Pagine più ordinate con Mostra dettagli",
-  "Invita un amico"
+  "Auto vista dall'alto ridisegnata e simmetrica",
+  "Niente testi sovrapposti, niente pagine che sbordano",
+  "Testi più leggibili, avvisi gialli"
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "3c388a71d35d2b306e6b1830c9b8fc11c2671901bc6e7268374734f4990f0fd5"
+  "sha256": "853388af985e471f7d59238a7194de00ed0ccbeb97fa98c97927f7349c601f04"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "8e406dd4a849aba23faf7a328c687d6668083645edf4c775f2f17276d80ab30e"
+  "sha256": "fa9fa0b4b55abb5a839d64325a75bb8d9d42bc0a1a6574f318a6c14a9cba2012"
  }
 }

@@ -1242,8 +1242,8 @@ html[data-look="pro"],html[data-look="pro"][data-skin]{
   --pg1:#121214; --pg2:#0B0B0C; --pside1:#0B0B0C; --pbody1:#0B0B0C; --pbody2:#050505;
   --pglow:rgba(201,165,76,.07); --pfocus:rgba(201,165,76,.28); --ptopbg:rgba(7,7,8,.92); --psideglow:rgba(201,165,76,.16);
   --psil:#C9CDD3; --psil2:#E3E6EA; --psil3:#A9ADB4; --pinput:#09090A; --pth:#111113; --pline2:#1D1D21; --pbrand:#C9A54C;
-  --pcar1:#1A1A1D; --pcar2:#3A3A40; --pcar3:#24242A; --pwarn:#FF9F43; --pwarnbg:rgba(255,159,67,.15);
-  --good:#2BE38A; --bad:#FF5A6A; --warn:#FF9F43; --best:#B57BFF;
+  --pcar1:#1A1A1D; --pcar2:#3A3A40; --pcar3:#24242A; --pwarn:#FFCF33; --pwarnbg:rgba(255,207,51,.14);
+  --good:#2BE38A; --bad:#FF5A6A; --warn:#FFCF33; --best:#B57BFF;
 }
 /* palette: night blue (Personalizza › Stile) */
 html[data-look="pro"][data-pal="blu"],html[data-look="pro"][data-pal="blu"][data-skin]{
@@ -1272,7 +1272,7 @@ html[data-look="pro"] .top::after{display:none}
 html[data-look="pro"] .top-in{max-width:none;min-height:var(--ptop);padding:0 18px 0 0;gap:10px 14px;flex-wrap:nowrap}
 html[data-look="pro"] .brand{width:var(--pnw);flex:0 0 var(--pnw);padding-left:20px;box-sizing:border-box;align-self:stretch;display:flex;align-items:center;border-right:1px solid var(--hdr-line)}
 html[data-look="pro"] .brand .logo{filter:none}
-html[data-look="pro"] .brand b{font-family:"Titillium Web",var(--f-display);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:1.3rem;color:#fff}
+html[data-look="pro"] .brand b{font-family:"Titillium Web",var(--f-display);font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:1.3rem;color:#fff}
 html[data-look="pro"] .brand b span{color:var(--pbrand)}
 html[data-look="pro"] .brand small{letter-spacing:.32em;color:var(--muted)}
 html[data-look="pro"] .mtabs{display:none!important}
@@ -1286,7 +1286,7 @@ html[data-look="pro"] .pf:focus-within{border-color:var(--pacc)}
 html[data-look="pro"] .hdr-tools{flex-wrap:nowrap;gap:8px}
 html[data-look="pro"] .hdr-tools .btn{border-radius:8px;height:38px;clip-path:none;background:var(--panel);border:1px solid var(--line);color:var(--psil2);font:600 .8rem var(--f-body);letter-spacing:.06em;text-transform:uppercase;box-shadow:none}
 html[data-look="pro"] .hdr-tools .btn:hover{border-color:var(--edge2);background:var(--panel2)}
-html[data-look="pro"] #btnLoad{background:linear-gradient(180deg,var(--pbtn1),var(--pbtn2));border-color:var(--pbtnb);color:var(--pbtnt);font-weight:700;display:inline-flex;gap:8px;align-items:center;padding:0 16px}
+html[data-look="pro"] #btnLoad{background:linear-gradient(180deg,var(--pbtn1),var(--pbtn2));border-color:var(--pbtnb);color:var(--pbtnt);font-weight:600;display:inline-flex;gap:8px;align-items:center;padding:0 16px}
 html[data-look="pro"] #btnLoad svg{width:17px;height:17px;fill:none;stroke:var(--pbtnt);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 html[data-look="pro"] .seg.lang{border-radius:8px;overflow:hidden;border:1px solid var(--line)}
 html[data-look="pro"] .seg.lang button{background:var(--panel);color:var(--muted);height:36px;min-width:36px;border:0;clip-path:none}
@@ -1330,12 +1330,12 @@ html[data-look="pro"] .pstrip .ps{padding:14px 18px;border-right:1px solid var(-
 html[data-look="pro"] .pstrip .ps:last-child{border-right:0}
 html[data-look="pro"] .pstrip .ps1{flex:1.5 1 260px}
 html[data-look="pro"] .pstrip .pl{font:600 .7rem var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
-html[data-look="pro"] .pstrip .pn1{font:700 1.45rem "Titillium Web",sans-serif;color:#fff;display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:2px}
+html[data-look="pro"] .pstrip .pn1{font:600 1.45rem "Titillium Web",sans-serif;color:#fff;display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:2px}
 html[data-look="pro"] .pstrip .pm{font-size:.8rem;color:var(--muted)}
 html[data-look="pro"] .plive{display:inline-flex;align-items:center;gap:6px;font:600 .78rem var(--f-body);color:#2BE38A}
 html[data-look="pro"] .plive i{width:8px;height:8px;border-radius:50%;background:#2BE38A;box-shadow:0 0 8px #2BE38A}
 html[data-look="pro"] .pstrip .ps2{flex-direction:row;align-items:center;gap:12px;flex:1 1 200px}
-html[data-look="pro"] .pstrip .ps2 b{display:block;font:700 .95rem "Titillium Web",sans-serif;color:#fff;line-height:1.2}
+html[data-look="pro"] .pstrip .ps2 b{display:block;font:600 .95rem "Titillium Web",sans-serif;color:#fff;line-height:1.2}
 html[data-look="pro"] .pstrip .ps2>div{min-width:0}
 html[data-look="pro"] .pstrip .ps2 small{color:var(--muted);font-size:.78rem}
 html[data-look="pro"] .pcar{width:92px;height:32px;flex:none}
@@ -1359,7 +1359,7 @@ html[data-look="pro"] .panel,html[data-look="pro"] .wcard,html[data-look="pro"] 
 html[data-look="pro"] .panel::before,html[data-look="pro"] .wcard::before{display:none}
 html[data-look="pro"] .panel:hover{border-color:var(--edge2)}
 html[data-look="pro"] .panel>.panel-h:first-child,html[data-look="pro"] .panel>h3:first-child{background:transparent;border-bottom:1px solid var(--line);border-radius:10px 10px 0 0}
-html[data-look="pro"] .panel-h h2,html[data-look="pro"] .panel-h h3,html[data-look="pro"] .panel>h3,html[data-look="pro"] .dt{font-family:"Titillium Web",var(--f-display);font-weight:700;font-size:.86rem;letter-spacing:.12em;text-transform:uppercase;color:#fff}
+html[data-look="pro"] .panel-h h2,html[data-look="pro"] .panel-h h3,html[data-look="pro"] .panel>h3,html[data-look="pro"] .dt{font-family:"Titillium Web",var(--f-display);font-weight:600;font-size:.86rem;letter-spacing:.12em;text-transform:uppercase;color:#fff}
 html[data-look="pro"] .panel-h h3::before,html[data-look="pro"] .panel-h h2::before,html[data-look="pro"] .panel>h3::before{display:none}
 html[data-look="pro"] .btn{clip-path:none;border-radius:8px;background:var(--panel2);border:1px solid var(--line);box-shadow:none}
 html[data-look="pro"] .btn:hover{border-color:var(--edge2);background:var(--psel)}
@@ -1467,7 +1467,7 @@ html[data-look="pro"] .pstrip .pmain .pk .pv{font-size:2.1rem}
 html[data-look="pro"] .pstrip .pv.warn{color:var(--pwarn)}html[data-look="pro"] .pstrip .pv.bad{color:#FF5A6A}
 html[data-look="pro"] .pstrip .pprob{cursor:pointer;border-right:0}
 html[data-look="pro"] .pstrip .pprob:hover{background:rgba(255,255,255,.025)}
-html[data-look="pro"] .pstrip .pt{font:700 1.15rem var(--f-body);color:#fff;line-height:1.25;margin:4px 0 2px}
+html[data-look="pro"] .pstrip .pt{font:600 1.15rem var(--f-body);color:#fff;line-height:1.25;margin:4px 0 2px}
 html[data-look="pro"] .pstrip .pt.s2{color:#FF5A6A}html[data-look="pro"] .pstrip .pt.s1{color:var(--pwarn)}html[data-look="pro"] .pstrip .pt.ok{color:#2BE38A}
 html[data-look="pro"] .pstrip .pprob small{white-space:normal;display:block}
 html[data-look="pro"] .pstrip .pline{display:flex;flex-wrap:wrap;align-items:center;gap:6px 16px;padding:8px 20px;border-top:1px solid var(--line);font-size:.86rem;color:var(--muted)}
@@ -1521,7 +1521,7 @@ html[data-look="pro"] .pehead .etyres{display:none}
 /* the last wide-spaced titles of the old looks */
 html[data-look="pro"] .eh1 .ey,html[data-look="pro"] .eplan h4,html[data-look="pro"] .ea .eah h3,html[data-look="pro"] .ecg h4,html[data-look="pro"] .twtitle .ey,
 html[data-look="pro"] .dash .dl,html[data-look="pro"] .lvtabs button,html[data-look="pro"] .sutabs button,html[data-look="pro"] .kpi .l,html[data-look="pro"] th{letter-spacing:.05em}
-html[data-look="pro"] .ea .eah h3{font:700 .92rem var(--f-body)}
+html[data-look="pro"] .ea .eah h3{font:600 .92rem var(--f-body)}
 html[data-look="pro"] .twtitle .ey{color:var(--muted)}
 /* Muretto: the timing-wall layout stays, the colours follow the look */
 html[data-look="pro"][data-skin="wall"] .lvtabs button[aria-selected="true"]{background:linear-gradient(0deg,color-mix(in srgb,var(--pacc) 16%,transparent),transparent 70%);border-bottom-color:var(--pacc)}
@@ -1589,7 +1589,7 @@ body.is-loading #btnLoad{opacity:.6;pointer-events:none}
 
 /* feedback: toasts say if it went well, badly, or just inform */
 html[data-look="pro"] #toastStack .toast{border-radius:10px;border:1px solid var(--line);border-left:3px solid var(--psil3,#A9ADB4);background:var(--panel2);font-family:var(--f-body);font-size:.88rem;display:flex;gap:10px;align-items:center;animation:mIn var(--m-200) var(--m-out)}
-html[data-look="pro"] #toastStack .toast .tk{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font:700 .75rem var(--f-body);font-style:normal;background:var(--panel);flex:none}
+html[data-look="pro"] #toastStack .toast .tk{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font:600 .75rem var(--f-body);font-style:normal;background:var(--panel);flex:none}
 html[data-look="pro"] #toastStack .toast[data-kind="ok"]{border-left-color:var(--good)}html[data-look="pro"] #toastStack .toast[data-kind="ok"] .tk{color:var(--good)}
 html[data-look="pro"] #toastStack .toast[data-kind="err"]{border-left-color:var(--bad)}html[data-look="pro"] #toastStack .toast[data-kind="err"] .tk{color:var(--bad)}
 html[data-look="pro"] #toastStack .toast[data-kind="info"] .tk{color:var(--pacc)}
@@ -1602,6 +1602,46 @@ html[data-look="pro"] #toastStack .toast[data-kind="info"] .tk{color:var(--pacc)
   html[data-look="pro"] .btn:active,html[data-look="pro"] .pn:active,html[data-look="pro"] .seg button:active{transform:none}
 }
 
+
+/* ================= 2.17: audit fixes ================= */
+/* top bar: the long session name shrinks with an ellipsis instead of pushing the buttons out of the window */
+html[data-look="pro"] .top-in{min-width:0}
+html[data-look="pro"] .psel{flex:1 1 0;min-width:0}
+html[data-look="pro"] .pf{flex:0 1 190px;min-width:110px}
+html[data-look="pro"] .pf.pfs{flex:1 1 260px;min-width:140px;max-width:420px}
+html[data-look="pro"] .pf select{width:100%;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}
+html[data-look="pro"] .hdr-tools{flex:0 0 auto;min-width:0}
+html[data-look="pro"] .hdr-tools>*{flex:none}
+html[data-look="pro"] .hdr-tools .psync{flex:0 1 auto;min-width:0;overflow:hidden}
+@media (max-width:1600px){html[data-look="pro"] .hdr-tools #btnSync{display:none}}
+@media (max-width:1360px){html[data-look="pro"] .verchip{display:none}html[data-look="pro"] .psync b{font-size:0;gap:0}html[data-look="pro"] .psync{min-width:12px;padding-left:4px}}
+/* type: three weights (400 / 500 / 600), nothing under 12 px */
+html[data-look="pro"] :where(b,strong,h1,h2,h3,h4,th,.dt){font-weight:600}
+html[data-look="pro"] .brand small{display:none}
+html[data-look="pro"] small,html[data-look="pro"] .small{font-size:max(12px,.8em)}
+html[data-look="pro"] .twlap small,html[data-look="pro"] .twlap i,html[data-look="pro"] .twlap em{font-size:12px}
+html[data-look="pro"] #v-live .lvhead .k,html[data-look="pro"] #v-live .cchip span{font-size:12px}
+html[data-look="pro"] .twlap .n,html[data-look="pro"] .twlap .ss i{font-size:12px}
+html[data-look="pro"] .cchip span,html[data-look="pro"] .badge{font-size:12px!important;letter-spacing:.04em}
+html[data-look="pro"] .twlaps .tag{font-weight:600}
+/* the last labels under 12 px */
+html[data-look="pro"] :is(.ebadge,.ecount span,.enow,.enow .mono,.tag,.q4 span,.twbest span,.sxc .sx,.bars i,.gwv i,.tt span,td.u,.dmiss){font-size:12px}
+html[data-look="pro"] :is(.pg text,text.pc){font-size:12px}
+html[data-look="pro"] .pevs .pbl{font-size:11px}
+/* phone: nothing wider than the screen */
+@media (max-width:760px){
+  html[data-look="pro"] main{overflow-x:clip}
+  html[data-look="pro"] .dash{grid-template-columns:minmax(0,1fr)!important}html[data-look="pro"] .dash>*,html[data-look="pro"] .dside>*{min-width:0}
+  html[data-look="pro"] .pcar2{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}html[data-look="pro"] .pcw>div,html[data-look="pro"] .pcb>div{flex-wrap:wrap}
+  html[data-look="pro"] #diRuns em{white-space:normal;overflow-wrap:anywhere}
+  html[data-look="pro"] .lbar{position:static}
+  /* the diagnosis table becomes one card per problem */
+  html[data-look="pro"] .pdt thead{display:none}
+  html[data-look="pro"] .pdt,html[data-look="pro"] .pdt tbody,html[data-look="pro"] .pdt tr,html[data-look="pro"] .pdt td{display:block;width:auto!important}
+  html[data-look="pro"] .pdt tr{padding:10px 0;border-bottom:1px solid var(--line)}html[data-look="pro"] .pdt td{border:0;padding:2px 0}
+  html[data-look="pro"] .pdt td:nth-child(3){position:absolute;right:0}html[data-look="pro"] .pdt tr{position:relative}
+  html[data-look="pro"] .pdt td:first-child{padding-right:80px}
+}
 </style>
 <header class="top">
   <div class="top-in">
@@ -4391,6 +4431,7 @@ function openDebrief(){let m=$('#mDeb');if(!m){m=document.createElement('div');m
   openModal('#mDeb');}
 // Italian → English phrases. '#' stands for any number (kept as-is). Longest entries are applied first.
 const I18N_EN=[
+["Auto vista dall'alto", "Car seen from above"],
 ["Nascondi i dettagli", "Hide details"],["Mostra dettagli", "Show details"],["pannello in più", "more panel"],["pannelli in più", "more panels"],["Ciao! Uso Data Engineer per la telemetria di Le Mans Ultimate. Per averlo:", "Hi! I use Data Engineer for Le Mans Ultimate telemetry. To get it:"],["Scarica il programma", "Download the program"],["Aprilo. Se Windows avvisa, premi «Ulteriori informazioni» e poi «Esegui comunque». Si aggiorna da solo: non devi fare altro.", "Open it. If Windows warns you, press «More info» and then «Run anyway». It updates itself: nothing else to do."],["Nelle opzioni del gioco attiva la telemetria MoTeC: le sessioni compaiono da sole nella Libreria.", "In the game options turn on MoTeC telemetry: sessions appear by themselves in the Library."],["Per entrare nel nostro Muretto, con il programma acceso apri questo link", "To join our Muretto, open this link with the program running"],["Invita un amico", "Invite a friend"],["Messaggio copiato: incollalo su WhatsApp, Discord o dove vuoi. Contiene il link per scaricare il programma", "Message copied: paste it on WhatsApp, Discord or anywhere. It has the link to download the program"],["e quello per entrare nella squadra: mandalo solo a chi corre con te.", "and the one to join the team: send it only to people who race with you."],["Condividi…", "Share…"],
 ["Libreria", "Library"],["La libreria legge le cartelle di Le Mans Ultimate", "The library reads the Le Mans Ultimate folders"],["Apri Data Engineer dal programma (bridge) su questo PC: qui compariranno da soli tutti i setup e tutte le telemetrie MoTeC del gioco.", "Open Data Engineer from the program (bridge) on this PC: every setup and MoTeC telemetry of the game will appear here by itself."],["Carica file a mano", "Load files by hand"],["Leggo le cartelle del gioco…", "Reading the game folders…"],["stessa pista", "same track"],["Cerca", "Search"],["pista, auto, nome del setup…", "track, car, setup name…"],["Rileggi le cartelle", "Read the folders again"],["telemetrie", "telemetry files"],["setup", "setups"],["nelle cartelle del gioco", "in the game folders"],["1. Telemetria", "1. Telemetry"],["le più recenti in alto", "newest first"],["Nessuna telemetria con questi filtri.", "No telemetry with these filters."],["Mostro le prime", "Showing the first"],["usa la ricerca per le altre.", "use search for the others."],["2. Setup", "2. Setup"],["prima quelli di questa pista", "this track's first"],["Nessun setup con questi filtri.", "No setup with these filters."],["Mostro i primi", "Showing the first"],["usa la ricerca per gli altri.", "use search for the others."],["Apri la telemetria", "Open the telemetry"],["Analizza con Race Engineer", "Analyse with Race Engineer"],["Apro…", "Opening…"],["Aperti telemetria e setup", "Telemetry and setup opened"],["Non riesco ad aprire il file", "Cannot open the file"],["Usa il Muretto (live con la squadra)", "Use the Muretto (live with the team)"],["Giro B tratteggiato nei grafici (utile se distingui male i colori)", "Dashed lap B in the charts (helpful if colours are hard to tell apart)"],["Setup e telemetrie del PC", "Setups and telemetry on this PC"],
 ["Carica una telemetria: qui comparirà il tuo giro.", "Load a telemetry file: your lap will appear here."],["Il tracciato dell'ultima sessione", "The track of the last session"],["Rivedi", "Watch again"],["Guarda il giro", "Watch the lap"],["Riprendi", "Resume"],["Pausa", "Pause"],
@@ -5118,9 +5159,10 @@ const tr=I18N.tr;
 })();
 const AI_LANG=()=>LANG==='en'?'\n\nIMPORTANT: write your whole answer in English (the instructions above are in Italian, but the driver reads English).':'';
 // ================= VERSIONE, NOVITÀ E AGGIORNAMENTI =================
-const APP_VERSION='2.16.0';
+const APP_VERSION='2.17.0';
 const DEFAULT_UPD='https://raw.githubusercontent.com/KubaMovitech/Race-Engineer/main/';   // update channel (folder with version.json), set when the team repository exists
 const CHANGELOG=[
+{v:'2.17.0',d:'01/11/2026',items:['Auto vista dall\'alto ridisegnata: un prototipo Le Mans perfettamente simmetrico (la metà destra è lo specchio della sinistra), con splitter, abitacolo, ala e ruote al posto giusto. È la stessa in Setup Builder e in Dashboard, dove ora sta tutta tra i riquadri delle gomme.','Niente più testi sovrapposti: le etichette dei grafici di Telemetria hanno un fondo scuro e non finiscono sotto le linee, la riga «linea B» della mappa non si accavalla, la tabella curva per curva non viene più tagliata, i numeri della striscia posizioni del Muretto vanno su più righe quando le auto sono vicine.','Barra in alto: con un nome di sessione lungo la pagina non scorre più di lato e i pulsanti IT/EN non vengono schiacciati; il nome si accorcia con «…».','Telefono: nessuna pagina più larga dello schermo; la diagnosi di Race Engineer diventa una scheda per problema; il grafico della Dashboard è disegnato alla larghezza vera e non ha più le scritte schiacciate.','Testi più leggibili: nessuna scritta sotto i 12 px e al massimo tre spessori di carattere. Gli avvisi «da controllare» sono gialli, così non si confondono con il giro B arancione.']},
 {v:'2.16.0',d:'01/11/2026',items:['Pagine più ordinate: Dashboard, Telemetria, Race Engineer e Setup Builder mostrano le cose principali; il resto (grafici dello stint, tabelle, eventi sul giro, schede delle aree, storico e scheda setup) si apre con «Mostra dettagli» in fondo e la scelta resta per ogni pagina.','«Invita un amico» (in basso nel menu e in Personalizza): copia un messaggio pronto per WhatsApp o Discord con il link per scaricare il programma, cosa fare se Windows avvisa, come attivare la telemetria e, se hai una squadra, il link per entrare nel Muretto. Il programma poi si aggiorna da solo.']},
 {v:'2.15.0',d:'01/11/2026',items:['Nuova pagina «Libreria»: tutte le telemetrie MoTeC e tutti i setup delle cartelle di LMU, già ordinati con pista, auto, pilota e data letti dai file. Scegli una telemetria e un setup (quelli della stessa pista vengono prima) e premi «Analizza con Race Engineer»: si aprono insieme, senza cercare niente a mano.','Confronto più facile: il giro A è blu e il giro B arancione, entrambi a linea piena, in grafici e mappe. Il tratteggio di B si può riattivare in Personalizza se distingui male i colori.','Il Muretto si può spegnere (Personalizza › Usa il Muretto): sparisce dal menu e non si collega più alla squadra.','Tolti l\'overlay OBS e la Regia TV dal Muretto.']},
 {v:'2.14.0',d:'30/10/2026',items:['Il giro, disegnato: nella pagina iniziale il tracciato della tua ultima sessione si disegna da solo e un punto oro lo percorre una volta («Rivedi» per ripeterlo); senza telemetria compare un circuito d\'esempio.','Dashboard › «Guarda il giro»: il miglior giro corre sulla mappa 8 volte più veloce del reale, con velocità e marcia vere accanto al punto (rosso in frenata), tempo trascorso, pausa e ripresa.','Animazioni più sobrie: al cambio pagina solo una dissolvenza di 150 ms, niente più pannelli a cascata né schede che si alzano al passaggio del mouse; durate 100/150/200/300 ms.','La sagoma di caricamento compare solo se i file impiegano più di 100 ms, così i file piccoli non la fanno lampeggiare. Con «riduci movimento» restano solo dissolvenze brevi e il tracciato iniziale è fermo.']},
@@ -7271,8 +7313,11 @@ class TWTraces{
         c.strokeStyle=s.col;c.lineWidth=s.w||1.5;c.setLineDash(s.dash||[]);c.stroke();c.setLineDash([]);}
       c.restore();
       // label and the values under the cursor
-      c.font='600 10px "Barlow Condensed",sans-serif';c.fillStyle='#AEB6C0';const lab=(p.label+(p.unit?' ['+p.unit+']':'')).toUpperCase();c.fillText(lab,L+6,top+18);
-      if(cur!=null){let xx=L+12+c.measureText(lab).width;c.font='600 11px "JetBrains Mono",monospace';for(const s of p.series){const t=(s.tag?s.tag+' ':'')+twFmt(s.a[cur],p.dec);c.fillStyle=s.col;c.fillText(t,xx,top+18);xx+=c.measureText(t).width+12;}}
+      // label and the values under the cursor, on a dark plate so the traces never run through the words
+      const fL='600 12px "Titillium Web",sans-serif',fV='600 12px "JetBrains Mono",monospace';const lab=p.label+(p.unit?' ('+p.unit+')':'');
+      c.font=fL;let wT=c.measureText(lab).width;const vals=cur!=null?p.series.map(s=>({t:(s.tag?s.tag+' ':'')+twFmt(s.a[cur],p.dec),col:s.col})):[];c.font=fV;vals.forEach(v=>{v.w=c.measureText(v.t).width;wT+=12+v.w;});
+      c.fillStyle='rgba(8,8,10,.86)';c.fillRect(L+2,top+5,wT+12,19);
+      c.font=fL;c.fillStyle='#C9CDD3';c.fillText(lab,L+8,top+19);let xx=L+8+c.measureText(lab).width+12;c.font=fV;vals.forEach(v=>{c.fillStyle=v.col;c.fillText(v.t,xx,top+19);xx+=v.w+12;});
       y+=h;}
     // distance axis
     c.fillStyle='#69737F';c.font=mono;const span=hi-lo;let st=100;while(span/st>12)st*=2;for(let v=Math.ceil(lo/st)*st;v<=hi;v+=st){const px=this.xPx(v);c.fillText(v+' m',px-12,H-6);}
@@ -7434,7 +7479,7 @@ document.addEventListener('keydown',e=>{const D=TW.D;if(!D||curView()!=='tele'||
 #twMap{position:absolute;inset:0;width:100%;height:100%;cursor:crosshair;touch-action:none}
 .twfoot{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;padding:8px 12px;border-top:1px solid var(--line);background:rgba(6,8,12,.6)}
 .twhud{display:flex;flex-wrap:wrap;gap:4px 18px;font:12px var(--f-mono);flex:1;min-width:0}
-.twhud .r{display:flex;align-items:center;gap:8px;margin:0}.twhud .r span{font:700 .78rem var(--f-display);width:16px}.twhud .r.a span{color:var(--lapA)}.twhud .r.b span{color:var(--lapB)}.twhud b{font-weight:600}.twhud small{color:var(--muted);margin-left:-4px}
+.twhud .r{display:flex;align-items:center;gap:8px;margin:0}.twhud .r span{font:600 .78rem var(--f-display);min-width:16px;white-space:nowrap}.twhud .r.a span{color:var(--lapA)}.twhud .r.b span{color:var(--lapB)}.twhud b{font-weight:600}.twhud small{color:var(--muted);margin-left:-4px}
 .twhud .hb{width:42px;height:6px;background:rgba(255,255,255,.08)}.twhud .hb i{display:block;height:100%}.twhud .up,.twih .up,.twit .up,.twsum .up{color:var(--bad)}.twhud .dn,.twih .dn,.twit .dn,.twsum .dn{color:var(--good)}
 .twleg{display:flex;flex-wrap:wrap;gap:10px;font:.72rem var(--f-mono);color:#C9D1DA}.twleg i{display:inline-block;width:14px;height:4px;margin-right:5px;vertical-align:middle}
 .twins{max-height:680px;overflow:auto}.twih{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}.twih div{background:var(--panel2);padding:6px 8px;border:1px solid var(--line)}.twih span{display:block;font:600 .64rem var(--f-display);letter-spacing:.14em;color:var(--muted);text-transform:uppercase}.twih b{font:600 1rem var(--f-mono)}
@@ -7447,7 +7492,7 @@ table.twit .a{color:var(--lapA)}table.twit .b{color:var(--lapB)}table.twit .u{co
 .twty .gb{height:4px;background:rgba(255,255,255,.08);margin:2px 0 3px}.twty .gb i{display:block;height:100%;background:linear-gradient(90deg,#35C46A,#E8B23A 80%,#E0403A)}
 .twtr{padding:0}#twTr{display:block;width:100%;cursor:crosshair;touch-action:none}.twov{display:block;width:100%;height:26px;border-top:1px solid var(--line);cursor:ew-resize}
 .twadd .menu-list{width:340px;max-height:420px;overflow:auto;padding:8px}.twadd .menu-list input[type=text]{width:100%;margin-bottom:6px}.twadd .chk{display:block;padding:3px 0;font-size:.82rem}
-.twlow{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(320px,1fr);gap:12px}.twside{display:flex;flex-direction:column;gap:12px}#twGG{width:100%;height:300px;display:block}
+.twlow{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(320px,1fr);gap:12px}.twlow .tw{overflow-x:auto}@media (max-width:1600px){.twlow{grid-template-columns:1fr}.twside{display:grid;grid-template-columns:1fr 1fr}}.twside{display:flex;flex-direction:column;gap:12px}#twGG{width:100%;height:300px;display:block}
 table.twct{width:100%;font:12px var(--f-mono)}table.twct td,table.twct th{padding:5px 7px;text-align:right;white-space:nowrap}table.twct td:first-child,table.twct th:first-child,table.twct .l{text-align:left}table.twct td.l{white-space:normal;min-width:220px;color:#C9D1DA}
 table.twct small{margin-left:4px;font-size:.7rem}table.twct small.up,table.twct b.dn{color:var(--good)}table.twct small.dn,table.twct b.up{color:var(--bad)}table.twct tr[data-c]{cursor:pointer}
 .twsum{display:grid;grid-template-columns:1fr;gap:0}.twsum div{display:grid;grid-template-columns:1fr auto auto 64px;gap:10px;align-items:baseline;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.04);font:12px var(--f-mono)}.twsum span{font-family:inherit;color:#C9D1DA}
@@ -7480,30 +7525,30 @@ function dashMap(d,W,H){if(!d.xy)return `<text x="20" y="40" fill="#8B9098">${tr
   const cx=P.reduce((s,q)=>s+q[0],0)/P.length,cy=P.reduce((s,q)=>s+q[1],0)/P.length;const placed=[];const bw=150,bh=52;
   const hit=(x,y)=>placed.some(([u,v])=>Math.abs(u-x)<bw+8&&Math.abs(v-y)<bh+6);
   if(W<600){d.cor.forEach(c=>{const p=P[c.apex];if(!p)return;let dx=p[0]-cx,dy=p[1]-cy;const L=Math.hypot(dx,dy)||1;const x=p[0]+dx/L*26,y=p[1]+dy/L*20;
-      m+=`<circle cx="${p[0]}" cy="${p[1]}" r="4" fill="#FF1A2D"/><text x="${x}" y="${y+4}" text-anchor="middle" font-size="12" font-weight="700" fill="#FF1A2D">T${c.k}<tspan fill="#fff" font-weight="600"> ${Math.round(c.vMin)}</tspan></text>`;});}
+      m+=`<circle cx="${p[0]}" cy="${p[1]}" r="4" fill="#FF1A2D"/><text x="${x}" y="${y+4}" text-anchor="middle" font-size="12" font-weight="600" fill="#FF1A2D">T${c.k}<tspan fill="#fff" font-weight="600"> ${Math.round(c.vMin)}</tspan></text>`;});}
   else d.cor.forEach(c=>{const p=P[c.apex];if(!p)return;let dx=p[0]-cx,dy=p[1]-cy;const L=Math.hypot(dx,dy)||1;dx/=L;dy/=L;
     let bx=Math.max(10,Math.min(W-bw-10,p[0]+dx*110-bw/2)),by=Math.max(36,Math.min(H-bh-40,p[1]+dy*80-bh/2));
     if(hit(bx,by)){const b0=[bx,by];out:for(const ox of [0,-170,170,-340,340])for(const oy of [0,-62,62,-124,124]){const x=Math.max(10,Math.min(W-bw-10,b0[0]+ox)),y=Math.max(36,Math.min(H-bh-40,b0[1]+oy));if(!hit(x,y)){bx=x;by=y;break out;}}}
     placed.push([bx,by]);
     m+=`<line x1="${p[0]}" y1="${p[1]}" x2="${bx+bw/2}" y2="${by+bh/2}" stroke="rgba(255,255,255,.45)"/><circle cx="${p[0]}" cy="${p[1]}" r="5" fill="#FF1A2D"/>
      <polygon points="${bx+8},${by} ${bx+bw},${by} ${bx+bw},${by+bh-8} ${bx+bw-8},${by+bh} ${bx},${by+bh} ${bx},${by+8}" fill="rgba(11,12,15,.92)" stroke="rgba(255,255,255,.35)"/>
-     <text x="${bx+10}" y="${by+20}" fill="#FF1A2D" font-weight="700" font-size="14">T${c.k}</text><text x="${bx+42}" y="${by+20}" fill="#fff" font-weight="600" font-size="15">${Math.round(c.vMin)} km/h</text>
+     <text x="${bx+10}" y="${by+20}" fill="#FF1A2D" font-weight="600" font-size="14">T${c.k}</text><text x="${bx+42}" y="${by+20}" fill="#fff" font-weight="600" font-size="15">${Math.round(c.vMin)} km/h</text>
      <text x="${bx+10}" y="${by+40}" fill="#8B9098" font-size="12">${c.brake!=null?tr('frenata')+' '+Math.round(c.brake)+' m':tr('senza frenata')}${c.gear>0?' · '+Math.round(c.gear)+'ª':''}</text>`;});
   const s0=P[0];m+=`<rect x="${s0[0]-11}" y="${s0[1]-4}" width="22" height="8" fill="url(#dck)"/>
     <g transform="translate(20,${H-18})" font-size="12" fill="#8B9098"><rect width="14" height="3" y="-4" fill="#F3F4F6"/><text x="20">${tr('gas pieno')}</text><rect x="110" width="14" height="3" y="-4" fill="#FF1A2D"/><text x="130">${tr('freno')}</text><rect x="190" width="14" height="3" y="-4" fill="#8B9098"/><text x="210">${tr('parziale')}</text></g>`;
   return m;}
-function dashCar(d){const w=d.st.w;const tyr={FL:[345,64],FR:[345,188],RL:[205,64],RR:[205,188]};
-  let c=`<g transform="translate(275 126) rotate(90) scale(.95)" fill="none" stroke="rgba(255,255,255,.8)" stroke-width="1.3">
-    <path d="M0 -220 C22 -220 30 -170 33 -120 L58 -104 L58 -70 L38 -60 L44 60 L62 74 L62 120 C62 136 46 146 0 146 C-46 146 -62 136 -62 120 L-62 74 L-44 60 L-38 -60 L-58 -70 L-58 -104 L-33 -120 C-30 -170 -22 -220 0 -220Z"/>
-    <path d="M0 -100 L18 -70 L16 10 L0 26 L-16 10 L-18 -70Z" stroke="rgba(255,255,255,.4)"/></g>`;
-  W.forEach(k=>{const [x,y]=tyr[k];c+=`<rect x="${x-26}" y="${y-13}" width="52" height="26" rx="4" fill="${dTc(w[k].C)}" opacity=".85"/>`;});
-  [['RL',10,6],['RR',10,134],['FL',408,6],['FR',408,134]].forEach(([k,x,y])=>{const t=w[k];const order=k.endsWith('L')?[t.O,t.C,t.I]:[t.I,t.C,t.O];
-    c+=`<g transform="translate(${x},${y})"><polygon points="8,0 130,0 130,108 122,116 0,116 0,8" fill="rgba(11,12,15,.92)" stroke="rgba(255,255,255,.3)"/>
-     <text x="10" y="20" fill="#fff" font-weight="700" font-size="15">${k}</text><text x="122" y="20" text-anchor="end" fill="#8B9098" font-size="12">${tr('usura')} ${fx(t.wear,2)}%</text>
-     ${order.map((v,j)=>`<rect x="${10+j*38}" y="30" width="34" height="22" fill="${dTc(v)}"/><text x="${27+j*38}" y="46" text-anchor="middle" fill="#0B0C0F" font-weight="700" font-size="13">${fx(v,0)}</text>`).join('')}
-     <text x="10" y="72" fill="#8B9098" font-size="12">${tr('carcassa')}</text><text x="122" y="72" text-anchor="end" fill="#fff" font-weight="600" font-size="13">${fx(t.carc,0)}°</text>
-     <text x="10" y="89" fill="#8B9098" font-size="12">${tr('pressione')}</text><text x="122" y="89" text-anchor="end" fill="#fff" font-weight="600" font-size="13">${fx(t.p,0)} kPa</text>
-     <text x="10" y="106" fill="#8B9098" font-size="12">${tr('freno max')}</text><text x="122" y="106" text-anchor="end" fill="${t.bMax>600?'#FF1A2D':'#FFD23F'}" font-weight="600" font-size="13">${fx(t.bMax,0)}°</text></g>`;});
+function dashCar(d){const w=d.st.w;const S=.58,CX=275,CY=126;
+  // the car of carTopG turned 90° (nose to the right): a point (x,y) of the 200 × 400 box goes to (CX-(y-200)·S, CY+(x-100)·S)
+  const at=(x,y)=>[CX-(y-200)*S,CY+(x-100)*S];const tyr={};CAR_WHEELS.forEach(([k,x,y])=>{tyr[k]=at(x,y);});
+  let c=`<g transform="translate(${CX} ${CY}) rotate(90) scale(${S}) translate(-100 -200)">${carTopG({wheels:false})}</g>`;
+  W.forEach(k=>{const [x,y]=tyr[k];c+=`<rect x="${(x-21).toFixed(1)}" y="${(y-9).toFixed(1)}" width="42" height="18" rx="5" fill="${dTc(w[k].C)}" stroke="rgba(0,0,0,.5)"/>`;});
+  [['RL',6,6],['RR',6,134],['FL',394,6],['FR',394,134]].forEach(([k,x,y])=>{const t=w[k];const order=k.endsWith('L')?[t.O,t.C,t.I]:[t.I,t.C,t.O];
+    c+=`<g transform="translate(${x},${y})"><rect width="150" height="116" rx="8" fill="rgba(11,12,15,.92)" stroke="rgba(255,255,255,.18)"/>
+     <text x="10" y="20" fill="#fff" font-weight="600" font-size="15">${k}</text><text x="140" y="20" text-anchor="end" fill="#8B9098" font-size="12">${tr('usura')} ${fx(t.wear,2)}%</text>
+     ${order.map((v,j)=>`<rect x="${10+j*38}" y="30" width="34" height="22" fill="${dTc(v)}"/><text x="${27+j*38}" y="46" text-anchor="middle" fill="#0B0C0F" font-weight="600" font-size="13">${fx(v,0)}</text>`).join('')}
+     <text x="10" y="72" fill="#8B9098" font-size="12">${tr('carcassa')}</text><text x="140" y="72" text-anchor="end" fill="#fff" font-weight="600" font-size="13">${fx(t.carc,0)}°</text>
+     <text x="10" y="89" fill="#8B9098" font-size="12">${tr('pressione')}</text><text x="140" y="89" text-anchor="end" fill="#fff" font-weight="600" font-size="13">${fx(t.p,0)} kPa</text>
+     <text x="10" y="106" fill="#8B9098" font-size="12">${tr('freno max')}</text><text x="140" y="106" text-anchor="end" fill="${t.bMax>600?'#FF1A2D':'#FFD23F'}" font-weight="600" font-size="13">${fx(t.bMax,0)}°</text></g>`;});
   return c;}
 function dashStrip(d,Wt){const n=d.speed.length;const tr_=(a,h,lo,hi,dy)=>Array.from(a,(v,i)=>`${(i/(n-1)*Wt).toFixed(1)},${(dy+h-(v-lo)/(hi-lo)*h).toFixed(1)}`).join(' ');
   let lo=Infinity,hi=-Infinity;for(const v of d.speed){lo=Math.min(lo,v);hi=Math.max(hi,v);}
@@ -7583,8 +7628,11 @@ function teamInvite(){const url=teamInviteUrl();if(!url){toast(tr('Nessuna squad
 // ---------- 2. every car on the lap, in one strip ----------
 function lvStripHTML(){const sc=LIVE.sc;const I=sc?.i||{};const len=I.lapDist;if(!sc||!(len>0))return '';const rows=liveRows(sc);const riv=typeof liveRivals==='function'?liveRivals():[];
   const me=rows.find(r=>r.veh===LIVE.focus);
-  return `<div class="lsbar"><i class="sf" title="${esc(tr('Traguardo'))}"></i>${rows.filter(r=>!r.gar).map(r=>{const f=Math.max(0,Math.min(1,(r.ld||0)/len));const us=r.veh===LIVE.focus,rv=riv.includes(r.veh);
-    return `<span class="lsc${us?' us':''}${rv?' rv':''}${r.inPit?' pit':''}${me&&r.cls===me.cls?' cl':''}" style="left:${(f*100).toFixed(2)}%;--c:${LV_CLS(r.cls)}" title="${esc(`P${r.pos} · ${r.drv} · ${r.label||r.veh}`)}">${r.pos}</span>`;}).join('')}</div>`;}
+  // cars closer than a bubble's width go on the next line down, so their numbers never sit on top of each other
+  const R=rows.filter(r=>!r.gar).map(r=>({r,f:Math.max(0,Math.min(1,(r.ld||0)/len))})).sort((a,b)=>a.f-b.f);const lane=[];let nl=1;const th=Math.max(0.03,36/Math.max(200,($('#lvStrip')?.clientWidth||900)-20));
+  R.forEach(o=>{let k=0;while(k<3&&lane[k]!=null&&o.f-lane[k]<th)k++;if(k>=3)k=2;lane[k]=o.f;o.k=k;nl=Math.max(nl,k+1);});
+  return `<div class="lsbar" style="height:${30+(nl-1)*24}px"><i class="sf" title="${esc(tr('Traguardo'))}"></i>${R.map(({r,f,k})=>{const us=r.veh===LIVE.focus,rv=riv.includes(r.veh);
+    return `<span class="lsc${us?' us':''}${rv?' rv':''}${r.inPit?' pit':''}${me&&r.cls===me.cls?' cl':''}" style="left:${(f*100).toFixed(2)}%;--c:${LV_CLS(r.cls)};--k:${k}" title="${esc(`P${r.pos} · ${r.drv} · ${r.label||r.veh}`)}">${r.pos}</span>`;}).join('')}</div>`;}
 (function(){const rl=renderLive;window.renderLive=renderLive=function(force){rl(force);const el=$('#lvStrip');if(!el||curView()!=='live')return;try{const h=lvStripHTML();if(el.dataset.h!==h){el.innerHTML=h;el.dataset.h=h;}}catch(e){}};})();
 
 // ---------- 3. the leaderboard: last 3 laps of energy, trend, incidents ----------
@@ -7607,7 +7655,7 @@ function incidents(){const n={};const rows=liveRows(LIVE.sc);const byDrv=d=>rows
 .lvstrip:empty{display:none}.lvstrip{margin:10px 0 2px;padding:14px 10px 8px}
 .lsbar{position:relative;height:30px;border-top:2px solid rgba(255,255,255,.18);margin:0 10px}
 .lsbar .sf{position:absolute;left:0;top:-8px;width:3px;height:14px;background:repeating-linear-gradient(0deg,#fff 0 3px,#000 3px 6px)}
-.lsc{position:absolute;top:-12px;transform:translateX(-50%);min-width:22px;height:22px;padding:0 4px;border-radius:11px;background:#0B0C0F;border:2px solid var(--c);color:#fff;font:700 11px/18px var(--f-mono);text-align:center;opacity:.55;transition:left .9s linear}
+.lsc{position:absolute;top:calc(-12px + var(--k,0) * 24px);transform:translateX(-50%);min-width:24px;height:22px;padding:0 4px;border-radius:11px;background:#0B0C0F;border:2px solid var(--c);color:#fff;font:600 12px/18px var(--f-mono);text-align:center;opacity:.55;transition:left .9s linear}
 .lsc.cl{opacity:1}.lsc.rv{opacity:1;box-shadow:0 0 0 2px #FFD23F}.lsc.pit{top:6px;opacity:.35}
 .lsc.us{opacity:1;z-index:2;background:var(--c);color:#0B0C0F;transform:translateX(-50%) scale(1.2);box-shadow:0 0 14px var(--c)}
 td.l3{white-space:nowrap}.l3v{font:12px var(--f-mono)}.l3v em{font-style:normal;font-size:.68rem;color:var(--muted);margin-right:5px}
@@ -8124,7 +8172,7 @@ function proTelSVG(S,lap,W=900,H=230){const g=lapGrid(S,lap,5);const v=g.get('Gr
   let z='';let s=-1;for(let i=0;i<=n;i++){const on=i<n&&br&&br[i]>5;if(on&&s<0)s=i;if(!on&&s>=0){z+=`<rect x="${X(s)}" y="8" width="${(X(i-1)-X(s)).toFixed(1)}" height="${H-34}" fill="rgba(229,53,75,.10)"/>`;s=-1;}}
   const len=g.d[n-1]||S.trackLen||0;const tick=len>4000?1000:500;let ax='';for(let m=0;m<=len;m+=tick)ax+=`<text x="${X(Math.round(m/len*(n-1)))}" y="${H-6}" text-anchor="middle">${m.toLocaleString()}</text>`;
   const cor=detectCorners(g);
-  return `<g class="pg">${[0,.5,1].map(f=>`<line x1="46" x2="${W-10}" y1="${10+f*120}" y2="${10+f*120}"/><text x="40" y="${14+f*120}" text-anchor="end">${Math.round(hi*(1-f))}</text>`).join('')}<text x="4" y="22" class="pu">km/h</text>
+  return `<g class="pg">${[0,.5,1].map(f=>`<line x1="46" x2="${W-10}" y1="${10+f*120}" y2="${10+f*120}"/><text x="40" y="${14+f*120}" text-anchor="end">${Math.round(hi*(1-f))}</text>`).join('')}
     <line x1="46" x2="${W-10}" y1="${yp(0,140)}" y2="${yp(0,140)}"/><line x1="46" x2="${W-10}" y1="${yp(0,176)}" y2="${yp(0,176)}"/><text x="40" y="${+yp(50,140)+4}" text-anchor="end">${tr('Gas')}</text><text x="40" y="${+yp(50,176)+4}" text-anchor="end">${tr('Freno')}</text></g>
     ${z}${cor.map(c=>`<text x="${X(c.apex)}" y="8" text-anchor="middle" class="pc">T${c.k}</text>`).join('')}
     <polyline points="${line(v,yv)}" fill="none" stroke="#fff" stroke-width="1.7"/>
@@ -8133,7 +8181,8 @@ function proTelSVG(S,lap,W=900,H=230){const g=lapGrid(S,lap,5);const v=g.get('Gr
     <g class="pg pax">${ax}</g>`;}
 
 function proTelDraw(S){const t=$('#stBody .dtel.ptel');if(!t)return;const L=S.laps.filter(l=>l.complete);const lap=L.find(l=>l.i===LS.get('pdl:'+S.id,S.best?.i))||S.best||L[0];if(!lap)return;
-  const sv=t.querySelector('svg');sv.setAttribute('viewBox','0 0 900 230');sv.innerHTML=proTelSVG(S,lap);}
+  // drawn at the real width of the box, so the numbers keep their shape on every screen
+  const sv=t.querySelector('svg');const W=Math.max(320,Math.round(sv.getBoundingClientRect().width)||900);sv.setAttribute('viewBox',`0 0 ${W} 230`);sv.innerHTML=proTelSVG(S,lap,W);}
 (function(){const dd=dashDraw;window.dashDraw=dashDraw=function(S){dd(S);try{proTelDraw(S);}catch(e){console.error(e);}};})();
 (function(){const rs=RENDER.stint;RENDER.stint=()=>{rs();const S=active()?.S;const dash=$('#stBody .dash');if(!S||!dash||!proLook())return;
   try{
@@ -8161,7 +8210,7 @@ function proTelDraw(S){const t=$('#stBody .dtel.ptel');if(!t)return;const L=S.la
 
 (function(){const st=document.createElement('style');st.textContent=`
 html[data-look="pro"] .dash{font-family:"Titillium Web",sans-serif}
-html[data-look="pro"] .dash .dt{font:700 .92rem "Titillium Web",sans-serif;letter-spacing:.06em;color:#fff}html[data-look="pro"] .dash .dt b{color:#fff}
+html[data-look="pro"] .dash .dt{font:600 .92rem "Titillium Web",sans-serif;letter-spacing:.06em;color:#fff}html[data-look="pro"] .dash .dt b{color:#fff}
 html[data-look="pro"] .dbig{font:600 clamp(2.6rem,4.6vw,4.4rem)/1 "JetBrains Mono",monospace;color:#fff;letter-spacing:-.03em}
 html[data-look="pro"] .dl{font:600 .78rem "Titillium Web",sans-serif;letter-spacing:.05em}html[data-look="pro"] .dv{font:600 1.5rem "JetBrains Mono",monospace}
 html[data-look="pro"] .dideal{font:500 .9rem "Titillium Web",sans-serif}html[data-look="pro"] .dideal b{font:600 1.05rem "JetBrains Mono",monospace}
@@ -8172,14 +8221,14 @@ html[data-look="pro"] .dmap.pmapx svg{height:540px}
 .pinfo span{display:block;font:600 .78rem "Titillium Web",sans-serif;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}.pinfo b{display:block;font:600 1.15rem "JetBrains Mono",monospace;color:#fff;margin-top:2px}.pinfo small{color:var(--muted);font-size:.75rem}
 html[data-look="pro"] .dash.pdash .dlaps,html[data-look="pro"] .dash.pdash .den{display:none}
 @media (min-width:1101px){html[data-look="pro"] .dash.pdash{grid-template-columns:minmax(0,1.45fr) minmax(0,1fr)}html[data-look="pro"] .dash.pdash .dside{grid-column:2}html[data-look="pro"] .dash.pdash .pai{grid-column:2}}
-.ptel .plap{position:absolute;right:14px;top:9px;display:flex;gap:6px;align-items:center}.ptel .plap b{font:600 .85rem "JetBrains Mono",monospace;color:#fff;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:6px 12px;white-space:nowrap}
+.ptel .dt{right:auto}.ptel .plap{position:absolute;right:14px;top:9px;display:flex;gap:6px;align-items:center}.ptel .plap b{font:600 .85rem "JetBrains Mono",monospace;color:#fff;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:6px 12px;white-space:nowrap}
 .ptel .plap .btn{height:32px}.ptel svg{height:230px!important}
-.ptel .pg line{stroke:rgba(255,255,255,.07)}.ptel .pg text{fill:var(--muted);font:11px "JetBrains Mono",monospace}.ptel .pu{fill:var(--muted);font-size:10px}.ptel .pc{fill:var(--psil);font:600 11px "Titillium Web",sans-serif}
+.ptel .pg line{stroke:rgba(255,255,255,.07)}.ptel .pg text{fill:var(--muted);font:12px "JetBrains Mono",monospace}.ptel .pu{fill:var(--muted);font-size:10px}.ptel .pc{fill:var(--psil);font:600 11px "Titillium Web",sans-serif}
 .plg{display:flex;gap:18px;flex-wrap:wrap;margin-top:8px;font-size:.8rem;color:var(--psil)}.plg i{display:inline-block;width:16px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle}
 .pai{padding:50px 18px 14px!important}.pai .psp{color:var(--pacc2)}.pai-r{position:absolute;right:0;font-size:.72rem;color:var(--muted);letter-spacing:.14em}.pai-r b{color:var(--pacc2)}
 .pai-h{display:flex;justify-content:space-between;align-items:center;gap:10px;font:600 1.05rem "Titillium Web",sans-serif;color:var(--pacc2);margin-bottom:10px}.pai-h .btn{height:30px;font-size:.78rem;color:var(--pacc2)}
 .pfr{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:12px;align-items:start;padding:12px;border:1px solid var(--line);border-radius:8px;background:rgba(255,255,255,.02);margin-bottom:8px}
-.pfr .pfi{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;font-weight:700;font-size:1.05rem}
+.pfr .pfi{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;font-weight:600;font-size:1.05rem}
 .pfr.s2 .pfi{background:rgba(255,59,78,.15);color:#FF3B4E}.pfr.s1 .pfi{background:var(--pwarnbg);color:var(--pwarn)}.pfr.s0 .pfi{background:rgba(43,227,138,.12);color:#2BE38A}
 .pfr b{display:block;color:#fff;font-size:.92rem}.pfr.s2 b{color:#FF5A6A}.pfr.s1 b{color:var(--pwarn)}
 .pfr small{display:block;color:var(--psil3);font-size:.86rem;margin-top:2px}.pfr .pfx{color:var(--pacc2)}
@@ -8189,7 +8238,7 @@ html[data-look="pro"] .dash.pdash .dlaps,html[data-look="pro"] .dash.pdash .den{
 html[data-look="pro"] #stBody .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr))}
 .pvmax .v small{font-size:.8rem;color:var(--muted)}
 @media (max-width:1100px){html[data-look="pro"] .dmap.pmapx{grid-template-columns:1fr}html[data-look="pro"] .dmap.pmapx svg{height:400px}.pinfo{display:grid;grid-template-columns:repeat(4,1fr)}}
-@media (max-width:760px){.pinfo{grid-template-columns:repeat(2,1fr)}html[data-look="pro"] .dmap.pmapx svg{height:300px}.ptel .plap{position:static;margin:-6px 0 8px}.ptel .plap b{flex:1;text-align:center}}
+@media (max-width:760px){.pinfo{grid-template-columns:repeat(2,1fr)}html[data-look="pro"] .dmap.pmapx svg{height:300px}.ptel .plap{position:static;margin:8px 0;flex-wrap:wrap}.ptel .plap b{flex:1 1 auto;text-align:center}}
 `;document.head.appendChild(st);})();
 // ================= PRO TELEMETRIA: events along the lap, sector comparison, three insights, corner cards =================
 // All of it comes from the two laps already chosen in Telemetria (A and, if set, B).
@@ -8244,7 +8293,7 @@ function proCornerCards(D){return `<div class="pcc">${D.corners.map(c=>{const b=
 .pcc{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(170px,1fr);gap:10px;overflow-x:auto;padding-bottom:4px}
 .pcard{text-align:left;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.02);color:inherit;padding:10px 12px;cursor:pointer;font:inherit;display:flex;flex-direction:column;gap:8px}
 .pcard:hover{border-color:var(--edge2);background:rgba(255,255,255,.04)}
-.pch{display:flex;justify-content:space-between;align-items:center}.pch b{font:700 1rem "Titillium Web",sans-serif;color:#fff}.pch em{font:600 .85rem "JetBrains Mono",monospace;font-style:normal}
+.pch{display:flex;justify-content:space-between;align-items:center}.pch b{font:600 1rem "Titillium Web",sans-serif;color:#fff}.pch em{font:600 .85rem "JetBrains Mono",monospace;font-style:normal}
 .pcard.hi .pch em{color:#FF5A6A}.pcard.ok .pch em{color:#2BE38A}.pcard.eq .pch em{color:var(--psil)}.pch em.n{color:var(--psil)}
 .pcv{display:grid;grid-template-columns:1fr 1fr;gap:6px}.pcv span{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}.pcv b{display:block;font:600 .95rem "JetBrains Mono",monospace;color:#fff;text-transform:none;letter-spacing:0}.pcv small{font-size:.7rem;color:var(--muted)}
 .pcn{font-size:.84rem;color:var(--psil3);display:flex;gap:6px;align-items:flex-start;line-height:1.3}.pcn i{width:8px;height:8px;border-radius:50%;flex:none;margin-top:4px;background:var(--psil)}
@@ -8323,12 +8372,7 @@ function proCarHTML(su){const C={FL:'FRONTLEFT',FR:'FRONTRIGHT',RL:'REARLEFT',RR
     box('Terzo elemento','⌇',[['Molla ant.',suFind(su,'SUSPENSION',/^Front3rdSpring/)],['Packer ant.',suFind(su,'SUSPENSION',/^Front3rdPacker/)],['Molla post.',suFind(su,'SUSPENSION',/^Rear3rdSpring/)],['Packer post.',suFind(su,'SUSPENSION',/^Rear3rdPacker/)]]),
     box('Differenziale','⚙',[['Precarico',suFind(su,'DRIVELINE',/^DiffPreload/)],['Trazione',suFind(su,'DRIVELINE',/^DiffPower/)],['Rilascio',suFind(su,'DRIVELINE',/^DiffCoast/)]]),
     box('Elettronica e ibrido','ϟ',[['TC mappa',suFind(su,'CONTROLS',/^TractionControlMap/)],['TC taglio',suFind(su,'CONTROLS',/^TCPowerCut/)],['Rigenerazione',suFind(su,'ENGINE',/^RegenerationMap/)],['Motore elettrico',suFind(su,'ENGINE',/^ElectricMotorMap/)]])].join('');
-  const car=`<svg viewBox="0 0 160 300" class="pcarv" aria-hidden="true"><defs><linearGradient id="pcb" x1="0" x2="1"><stop offset="0" style="stop-color:var(--pcar1)"/><stop offset=".5" style="stop-color:var(--pcar2)"/><stop offset="1" style="stop-color:var(--pcar1)"/></linearGradient></defs>
-    <path d="M60 18h40l8 30 14 6v40l-8 10 4 60 12 10v60l-10 30H54l-10-30v-60l12-10 4-60-8-10V54l14-6z" fill="url(#pcb)" style="stroke:var(--pacc)" stroke-width="1.2" opacity=".95"/>
-    <path d="M30 16h100v10H30z" style="fill:var(--pcar3);stroke:var(--pacc)"/><path d="M26 276h108v12H26z" style="fill:var(--pcar3);stroke:var(--pacc)"/>
-    <rect x="14" y="58" width="22" height="46" rx="5" style="fill:var(--panel)" stroke="#2BE38A" stroke-width="2"/><rect x="124" y="58" width="22" height="46" rx="5" style="fill:var(--panel)" stroke="#2BE38A" stroke-width="2"/>
-    <rect x="12" y="196" width="26" height="52" rx="5" style="fill:var(--panel)" stroke="#FFC53D" stroke-width="2"/><rect x="122" y="196" width="26" height="52" rx="5" style="fill:var(--panel)" stroke="#FFC53D" stroke-width="2"/>
-    <ellipse cx="80" cy="132" rx="14" ry="22" style="fill:var(--bg);stroke:var(--pacc2)"/><path d="M80 40v230" style="stroke:var(--pline2)" stroke-dasharray="3 5"/></svg>`;
+  const car=carTopSVG();
   return `<div class="pcar2">${corner('FL')}${corner('FR')}<div class="pcc2">${car}</div>${corner('RL')}${corner('RR')}</div><div class="pcmid">${mid}</div>`;}
 function proVersions(su){const car=(su?.car||'').toLowerCase();const L=svms().filter(x=>!car||(x.car||'').toLowerCase()===car);
   const nd=(a,b)=>{let n=0;for(const [sec,it] of Object.entries(a.sec||{}))for(const i of it){const o=b.sec?.[sec]?.find(x=>x.key===i.key);if(o&&o.raw!==i.raw)n++;}return n;};
@@ -8347,7 +8391,7 @@ setTimeout(()=>{const base=RENDER.setup;RENDER.setup=()=>{base();try{proSetupPan
 
 (function(){const st=document.createElement('style');st.textContent=`
 html[data-look="pro"] .pehead .eplan{display:none}
-html[data-look="pro"] .ehead .ey{color:var(--pacc2);font:600 .72rem "Titillium Web",sans-serif;letter-spacing:.14em}html[data-look="pro"] .ehead h2{font:700 1.4rem "Titillium Web",sans-serif;color:#fff;text-transform:none}
+html[data-look="pro"] .ehead .ey{color:var(--pacc2);font:600 .72rem "Titillium Web",sans-serif;letter-spacing:.14em}html[data-look="pro"] .ehead h2{font:600 1.4rem "Titillium Web",sans-serif;color:#fff;text-transform:none}
 html[data-look="pro"] .ecount span{border-radius:10px;background:var(--panel2);border:1px solid var(--line)}
 .pre1,.pre2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:16px;margin-bottom:16px}
 .pactg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
@@ -8356,11 +8400,11 @@ html[data-look="pro"] .ecount span{border-radius:10px;background:var(--panel2);b
 .pab:hover{border-color:var(--c)}.pab[aria-pressed="true"]{border-color:var(--c);background:color-mix(in srgb,var(--c) 12%,transparent)}
 .pactb{margin-top:12px;border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:rgba(255,255,255,.02)}.pactb ol{margin:8px 0;padding-left:20px}.pactb li{margin:3px 0}
 .pdlm{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end}.pdlm .seg button{padding:4px 10px;font-size:.8rem}
-.pdt{table-layout:fixed;width:100%}.pdt th:nth-child(1){width:34%}.pdt th:nth-child(2){width:18%}.pdt th:nth-child(3){width:12%}.pdt td{vertical-align:top;white-space:normal!important;overflow-wrap:anywhere}.pdt td b{color:#fff}.pdt .pdi{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:6px;margin-right:8px;font-weight:700;font-size:.8rem}
+.pdt{table-layout:fixed;width:100%}.pdt th:nth-child(1){width:34%}.pdt th:nth-child(2){width:18%}.pdt th:nth-child(3){width:12%}.pdt td{vertical-align:top;white-space:normal!important;overflow-wrap:anywhere}.pdt td b{color:#fff}.pdt .pdi{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:6px;margin-right:8px;font-weight:600;font-size:.8rem}
 .pdt tr.s2 .pdi{background:rgba(255,59,78,.15);color:#FF3B4E}.pdt tr.s1 .pdi{background:var(--pwarnbg);color:var(--pwarn)}.pdt tr.s0 .pdi{background:rgba(43,227,138,.12);color:#2BE38A}
 .pdt em{font-style:normal;font:600 .72rem "Titillium Web",sans-serif;padding:4px 10px;border-radius:6px;white-space:nowrap}.pdt em.hi{background:rgba(255,59,78,.15);color:#FF5A6A}.pdt em.mid{background:var(--pwarnbg);color:var(--pwarn)}.pdt em.ok{background:rgba(43,227,138,.12);color:#2BE38A}
 .ppl{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
-.ppn{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--psel);color:#fff;font-weight:700}
+.ppn{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--psel);color:#fff;font-weight:600}
 .ppl b{color:#fff}.ppl small{display:block;color:var(--muted);margin-top:2px;font-size:.86rem}.ppl.done{opacity:.6}.ppl.done .ppn{background:#14532D}
 .ppd[aria-pressed="true"]{color:#2BE38A;border-color:#2BE38A}
 .ppb{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
@@ -8374,7 +8418,7 @@ html[data-look="pro"] .ecount span{border-radius:10px;background:var(--panel2);b
 .pcc2{grid-row:1/3;grid-column:2}.pcarv{width:100%;height:auto;max-height:340px}
 .pcFL{grid-column:1;grid-row:1}.pcFR{grid-column:3;grid-row:1}.pcRL{grid-column:1;grid-row:2}.pcRR{grid-column:3;grid-row:2}
 .pcw,.pcb{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:rgba(255,255,255,.025)}
-.pcw h4,.pcb h4{margin:0 0 6px;font:700 .78rem "Titillium Web",sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#fff;display:flex;align-items:center;gap:8px}
+.pcw h4,.pcb h4{margin:0 0 6px;font:600 .78rem "Titillium Web",sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#fff;display:flex;align-items:center;gap:8px}
 .pcw .pwd{width:8px;height:8px;border-radius:50%;background:#2BE38A}.pcRL .pwd,.pcRR .pwd{background:#FFC53D}
 .pcw>div,.pcb>div{display:flex;justify-content:space-between;gap:10px;font-size:.82rem;padding:2px 0}.pcw span,.pcb span{color:var(--muted)}.pcw b,.pcb b{font:600 .85rem "JetBrains Mono",monospace;color:#fff;white-space:nowrap}
 .pcmid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px}
@@ -8610,7 +8654,7 @@ html[data-look="pro"] .hero.welcome .wtop .ey{grid-column:1;align-self:end}html[
 .drep .btn{height:32px}.drep-r{font:600 .82rem var(--f-mono);color:var(--muted)}
 #dRep .dr-halo{fill:color-mix(in srgb,var(--pacc,#C9A54C) 25%,transparent)}#dRep .dr-dot{fill:#fff;stroke:var(--pacc,#C9A54C);stroke-width:3}
 #dRep.brk .dr-dot{stroke:#FF3B4E}#dRep.brk .dr-halo{fill:rgba(255,59,78,.25)}
-#dRep .dr-lbl{font:700 13px "JetBrains Mono",monospace;fill:#fff;paint-order:stroke;stroke:#000;stroke-width:4px}
+#dRep .dr-lbl{font:600 13px "JetBrains Mono",monospace;fill:#fff;paint-order:stroke;stroke:#000;stroke-width:4px}
 @media (max-width:1100px){.drep{position:static;margin:6px 8px 0}}
 @media (prefers-reduced-motion:reduce){.whero.wh-go .wh-line{animation:none}.whero .wh-dot{transition:none}}
 `;document.head.appendChild(st);})();
@@ -8786,6 +8830,28 @@ html[data-look="pro"] #proNav .pinv{margin-top:auto}html[data-look="pro"] #proNa
 @media (max-width:1100px){html[data-look="pro"] .pinv span{display:none}html[data-look="pro"] .pinv{justify-content:center}}
 @media (max-width:760px){html[data-look="pro"] #proNav .pinv{display:none}}
 `;document.head.appendChild(st);})();
+// ================= 2.17: the car seen from above, drawn once and used everywhere =================
+// A Le Mans prototype seen from above, in a 200 × 400 box, nose up. Only the left half is drawn: the right half is
+// the same shape mirrored on x = 100, so the car is always perfectly symmetric.
+// Wheel centres (for whoever places data on the wheels): front (35,113) / (165,113), rear (35,319) / (165,319).
+const CAR_HALF='M100.5 10 L80 11 C71 12 66 19 64 30 L61 58 C50 60 43 69 41 82 L40 142 C41 151 48 157 58 159 L62 174 C55 182 51 194 51 210 L51 266 C51 276 47 283 43 289 L42 348 C43 357 50 362 60 364 L70 377 L100.5 379 Z';
+const CAR_WHEELS=[['FL',35,113],['FR',165,113],['RL',35,319],['RR',165,319]];
+let carTopN=0;
+// the drawing as SVG elements in the 200 × 400 box; wheel colours by position (front, rear) or by data
+function carTopG({wheels=true,wheelFill=null,front='#2BE38A',rear='#FFC53D'}={}){const id='ctg'+(++carTopN);
+  const half=`<path d="${CAR_HALF}"/>`;
+  const wh=wheels?CAR_WHEELS.map(([k,x,y])=>{const f=k[0]==='F';const w=f?22:26,h=f?54:60;
+    return `<rect x="${x-w/2}" y="${y-h/2}" width="${w}" height="${h}" rx="6" fill="${wheelFill?wheelFill(k):'#0A0A0C'}" stroke="${f?front:rear}" stroke-width="2.2"/>`;}).join(''):'';
+  return `<defs><linearGradient id="${id}" x1="0" x2="1"><stop offset="0" stop-color="#16161A"/><stop offset=".5" stop-color="#2E2E35"/><stop offset="1" stop-color="#16161A"/></linearGradient></defs>
+    ${wh}
+    <g fill="url(#${id})" stroke="rgba(226,230,236,.55)" stroke-width="1.3" stroke-linejoin="round">${half}<g transform="matrix(-1 0 0 1 200 0)">${half}</g></g>
+    <rect x="33" y="5" width="134" height="7" rx="2" fill="#24242A" stroke="rgba(226,230,236,.45)"/>
+    <rect x="30" y="378" width="140" height="13" rx="2" fill="#24242A" stroke="rgba(226,230,236,.45)"/><rect x="27" y="370" width="5" height="26" rx="1.5" fill="#24242A" stroke="rgba(226,230,236,.45)"/><rect x="168" y="370" width="5" height="26" rx="1.5" fill="#24242A" stroke="rgba(226,230,236,.45)"/>
+    <rect x="98.5" y="14" width="3" height="356" fill="var(--pacc,#C9A54C)" opacity=".55"/>
+    <ellipse cx="100" cy="182" rx="17" ry="34" fill="#0B0B0E" stroke="rgba(226,230,236,.35)"/><ellipse cx="96" cy="172" rx="6" ry="14" fill="rgba(255,255,255,.06)"/>
+    <path d="M100 218 L100 362" stroke="rgba(226,230,236,.18)" stroke-width="5" stroke-linecap="round"/>
+    <rect x="68" y="24" width="12" height="4" rx="1" fill="var(--pacc2,#E6C877)" transform="rotate(-8 74 26)"/><rect x="120" y="24" width="12" height="4" rx="1" fill="var(--pacc2,#E6C877)" transform="rotate(8 126 26)"/>`;}
+function carTopSVG(o={}){return `<svg viewBox="0 0 200 400" class="${o.cls||'pcarv'}" role="img" aria-label="${esc(tr('Auto vista dall\'alto'))}">${carTopG(o)}</svg>`;}
 // ================= SETUP =================
 let DIAG=null;
 RENDER.setup=()=>{

@@ -63,7 +63,7 @@ html[data-look="pro"] .hero.welcome .wtop .ey{grid-column:1;align-self:end}html[
 .drep .btn{height:32px}.drep-r{font:600 .82rem var(--f-mono);color:var(--muted)}
 #dRep .dr-halo{fill:color-mix(in srgb,var(--pacc,#C9A54C) 25%,transparent)}#dRep .dr-dot{fill:#fff;stroke:var(--pacc,#C9A54C);stroke-width:3}
 #dRep.brk .dr-dot{stroke:#FF3B4E}#dRep.brk .dr-halo{fill:rgba(255,59,78,.25)}
-#dRep .dr-lbl{font:700 13px "JetBrains Mono",monospace;fill:#fff;paint-order:stroke;stroke:#000;stroke-width:4px}
+#dRep .dr-lbl{font:600 13px "JetBrains Mono",monospace;fill:#fff;paint-order:stroke;stroke:#000;stroke-width:4px}
 @media (max-width:1100px){.drep{position:static;margin:6px 8px 0}}
 @media (prefers-reduced-motion:reduce){.whero.wh-go .wh-line{animation:none}.whero .wh-dot{transition:none}}
 `;document.head.appendChild(st);})();

@@ -30,7 +30,7 @@ function proTelSVG(S,lap,W=900,H=230){const g=lapGrid(S,lap,5);const v=g.get('Gr
   let z='';let s=-1;for(let i=0;i<=n;i++){const on=i<n&&br&&br[i]>5;if(on&&s<0)s=i;if(!on&&s>=0){z+=`<rect x="${X(s)}" y="8" width="${(X(i-1)-X(s)).toFixed(1)}" height="${H-34}" fill="rgba(229,53,75,.10)"/>`;s=-1;}}
   const len=g.d[n-1]||S.trackLen||0;const tick=len>4000?1000:500;let ax='';for(let m=0;m<=len;m+=tick)ax+=`<text x="${X(Math.round(m/len*(n-1)))}" y="${H-6}" text-anchor="middle">${m.toLocaleString()}</text>`;
   const cor=detectCorners(g);
-  return `<g class="pg">${[0,.5,1].map(f=>`<line x1="46" x2="${W-10}" y1="${10+f*120}" y2="${10+f*120}"/><text x="40" y="${14+f*120}" text-anchor="end">${Math.round(hi*(1-f))}</text>`).join('')}<text x="4" y="22" class="pu">km/h</text>
+  return `<g class="pg">${[0,.5,1].map(f=>`<line x1="46" x2="${W-10}" y1="${10+f*120}" y2="${10+f*120}"/><text x="40" y="${14+f*120}" text-anchor="end">${Math.round(hi*(1-f))}</text>`).join('')}
     <line x1="46" x2="${W-10}" y1="${yp(0,140)}" y2="${yp(0,140)}"/><line x1="46" x2="${W-10}" y1="${yp(0,176)}" y2="${yp(0,176)}"/><text x="40" y="${+yp(50,140)+4}" text-anchor="end">${tr('Gas')}</text><text x="40" y="${+yp(50,176)+4}" text-anchor="end">${tr('Freno')}</text></g>
     ${z}${cor.map(c=>`<text x="${X(c.apex)}" y="8" text-anchor="middle" class="pc">T${c.k}</text>`).join('')}
     <polyline points="${line(v,yv)}" fill="none" stroke="#fff" stroke-width="1.7"/>
@@ -39,7 +39,8 @@ function proTelSVG(S,lap,W=900,H=230){const g=lapGrid(S,lap,5);const v=g.get('Gr
     <g class="pg pax">${ax}</g>`;}
 
 function proTelDraw(S){const t=$('#stBody .dtel.ptel');if(!t)return;const L=S.laps.filter(l=>l.complete);const lap=L.find(l=>l.i===LS.get('pdl:'+S.id,S.best?.i))||S.best||L[0];if(!lap)return;
-  const sv=t.querySelector('svg');sv.setAttribute('viewBox','0 0 900 230');sv.innerHTML=proTelSVG(S,lap);}
+  // drawn at the real width of the box, so the numbers keep their shape on every screen
+  const sv=t.querySelector('svg');const W=Math.max(320,Math.round(sv.getBoundingClientRect().width)||900);sv.setAttribute('viewBox',`0 0 ${W} 230`);sv.innerHTML=proTelSVG(S,lap,W);}
 (function(){const dd=dashDraw;window.dashDraw=dashDraw=function(S){dd(S);try{proTelDraw(S);}catch(e){console.error(e);}};})();
 (function(){const rs=RENDER.stint;RENDER.stint=()=>{rs();const S=active()?.S;const dash=$('#stBody .dash');if(!S||!dash||!proLook())return;
   try{
@@ -67,7 +68,7 @@ function proTelDraw(S){const t=$('#stBody .dtel.ptel');if(!t)return;const L=S.la
 
 (function(){const st=document.createElement('style');st.textContent=`
 html[data-look="pro"] .dash{font-family:"Titillium Web",sans-serif}
-html[data-look="pro"] .dash .dt{font:700 .92rem "Titillium Web",sans-serif;letter-spacing:.06em;color:#fff}html[data-look="pro"] .dash .dt b{color:#fff}
+html[data-look="pro"] .dash .dt{font:600 .92rem "Titillium Web",sans-serif;letter-spacing:.06em;color:#fff}html[data-look="pro"] .dash .dt b{color:#fff}
 html[data-look="pro"] .dbig{font:600 clamp(2.6rem,4.6vw,4.4rem)/1 "JetBrains Mono",monospace;color:#fff;letter-spacing:-.03em}
 html[data-look="pro"] .dl{font:600 .78rem "Titillium Web",sans-serif;letter-spacing:.05em}html[data-look="pro"] .dv{font:600 1.5rem "JetBrains Mono",monospace}
 html[data-look="pro"] .dideal{font:500 .9rem "Titillium Web",sans-serif}html[data-look="pro"] .dideal b{font:600 1.05rem "JetBrains Mono",monospace}
@@ -78,14 +79,14 @@ html[data-look="pro"] .dmap.pmapx svg{height:540px}
 .pinfo span{display:block;font:600 .78rem "Titillium Web",sans-serif;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}.pinfo b{display:block;font:600 1.15rem "JetBrains Mono",monospace;color:#fff;margin-top:2px}.pinfo small{color:var(--muted);font-size:.75rem}
 html[data-look="pro"] .dash.pdash .dlaps,html[data-look="pro"] .dash.pdash .den{display:none}
 @media (min-width:1101px){html[data-look="pro"] .dash.pdash{grid-template-columns:minmax(0,1.45fr) minmax(0,1fr)}html[data-look="pro"] .dash.pdash .dside{grid-column:2}html[data-look="pro"] .dash.pdash .pai{grid-column:2}}
-.ptel .plap{position:absolute;right:14px;top:9px;display:flex;gap:6px;align-items:center}.ptel .plap b{font:600 .85rem "JetBrains Mono",monospace;color:#fff;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:6px 12px;white-space:nowrap}
+.ptel .dt{right:auto}.ptel .plap{position:absolute;right:14px;top:9px;display:flex;gap:6px;align-items:center}.ptel .plap b{font:600 .85rem "JetBrains Mono",monospace;color:#fff;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:6px 12px;white-space:nowrap}
 .ptel .plap .btn{height:32px}.ptel svg{height:230px!important}
-.ptel .pg line{stroke:rgba(255,255,255,.07)}.ptel .pg text{fill:var(--muted);font:11px "JetBrains Mono",monospace}.ptel .pu{fill:var(--muted);font-size:10px}.ptel .pc{fill:var(--psil);font:600 11px "Titillium Web",sans-serif}
+.ptel .pg line{stroke:rgba(255,255,255,.07)}.ptel .pg text{fill:var(--muted);font:12px "JetBrains Mono",monospace}.ptel .pu{fill:var(--muted);font-size:10px}.ptel .pc{fill:var(--psil);font:600 11px "Titillium Web",sans-serif}
 .plg{display:flex;gap:18px;flex-wrap:wrap;margin-top:8px;font-size:.8rem;color:var(--psil)}.plg i{display:inline-block;width:16px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle}
 .pai{padding:50px 18px 14px!important}.pai .psp{color:var(--pacc2)}.pai-r{position:absolute;right:0;font-size:.72rem;color:var(--muted);letter-spacing:.14em}.pai-r b{color:var(--pacc2)}
 .pai-h{display:flex;justify-content:space-between;align-items:center;gap:10px;font:600 1.05rem "Titillium Web",sans-serif;color:var(--pacc2);margin-bottom:10px}.pai-h .btn{height:30px;font-size:.78rem;color:var(--pacc2)}
 .pfr{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:12px;align-items:start;padding:12px;border:1px solid var(--line);border-radius:8px;background:rgba(255,255,255,.02);margin-bottom:8px}
-.pfr .pfi{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;font-weight:700;font-size:1.05rem}
+.pfr .pfi{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;font-weight:600;font-size:1.05rem}
 .pfr.s2 .pfi{background:rgba(255,59,78,.15);color:#FF3B4E}.pfr.s1 .pfi{background:var(--pwarnbg);color:var(--pwarn)}.pfr.s0 .pfi{background:rgba(43,227,138,.12);color:#2BE38A}
 .pfr b{display:block;color:#fff;font-size:.92rem}.pfr.s2 b{color:#FF5A6A}.pfr.s1 b{color:var(--pwarn)}
 .pfr small{display:block;color:var(--psil3);font-size:.86rem;margin-top:2px}.pfr .pfx{color:var(--pacc2)}
@@ -95,5 +96,5 @@ html[data-look="pro"] .dash.pdash .dlaps,html[data-look="pro"] .dash.pdash .den{
 html[data-look="pro"] #stBody .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr))}
 .pvmax .v small{font-size:.8rem;color:var(--muted)}
 @media (max-width:1100px){html[data-look="pro"] .dmap.pmapx{grid-template-columns:1fr}html[data-look="pro"] .dmap.pmapx svg{height:400px}.pinfo{display:grid;grid-template-columns:repeat(4,1fr)}}
-@media (max-width:760px){.pinfo{grid-template-columns:repeat(2,1fr)}html[data-look="pro"] .dmap.pmapx svg{height:300px}.ptel .plap{position:static;margin:-6px 0 8px}.ptel .plap b{flex:1;text-align:center}}
+@media (max-width:760px){.pinfo{grid-template-columns:repeat(2,1fr)}html[data-look="pro"] .dmap.pmapx svg{height:300px}.ptel .plap{position:static;margin:8px 0;flex-wrap:wrap}.ptel .plap b{flex:1 1 auto;text-align:center}}
 `;document.head.appendChild(st);})();
