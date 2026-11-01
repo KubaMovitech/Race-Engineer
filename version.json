@@ -1,17 +1,17 @@
 {
- "version": "2.14.0",
- "date": "2026-10-30",
+ "version": "2.15.0",
+ "date": "2026-11-01",
  "notes": [
-  "Il giro disegnato nella pagina iniziale",
-  "Guarda il giro sulla mappa della Dashboard",
-  "Animazioni più sobrie"
+  "Libreria: telemetrie e setup del gioco già pronti",
+  "Giro A blu e B arancione",
+  "Muretto disattivabile, niente overlay OBS"
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "4059ebcdc9ad9a5767fecf9471153396cc9f367ba156775a312c59b69a159797"
+  "sha256": "babbf2e73a724f9562bfb7f10b580add94aa8b3ebd2c9afc16203b7060761040"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "f481e7d63e779c3c037c11c842fc0a2070e2cd7581c20e777880c7df8fdd979e"
+  "sha256": "2f98236c3afdff9f539ffb3fd3d99923c266caec299494b0105c8e250ef3150c"
  }
 }

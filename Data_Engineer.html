@@ -1235,7 +1235,7 @@ html[data-look="carbon"] .panel:has(details.menu),html[data-look="carbon"] .pane
 html[data-look="pro"],html[data-look="pro"][data-skin]{
   --bg:#070708; --panel:#0F0F11; --panel2:#151518; --band:#0C0C0E; --line:#26262B; --grid:#18181C; --trackbed:#1E1E22;
   --ink:#ECEDEF; --muted:#8F9298; --faint:#5D6066; --hdr:#060607; --hdr-line:#1F1F23; --hdr-ink:#ECEDEF; --hdr-muted:#8F9298;
-  --pacc:#C9A54C; --pacc2:#E6C877; --accent2:#E6C877; --lapA:#E6C877; --lapB:#AEB4BD; --cyan:#22D3EE;
+  --pacc:#C9A54C; --pacc2:#E6C877; --accent2:#E6C877; --lapA:#4DA8FF; --lapB:#FF8A1F; --cyan:#22D3EE;
   --edge:#26262B; --edge2:#4A4231; --r:10px; --shadow:0 10px 30px rgba(0,0,0,.45);
   --pnw:236px; --ptop:64px; --f-display:"Titillium Web","Barlow Condensed",sans-serif;
   --psel:#2A2416; --psel2:#17140D; --pbtn1:#E2C46A; --pbtn2:#A8862F; --pbtnb:#E6C877; --pbtnt:#111111;
@@ -2314,7 +2314,7 @@ class Stack{
       if(p.zero){c.strokeStyle=faint;c.beginPath();c.moveTo(this.padL,Math.round(Y(0))+.5);c.lineTo(w-this.padR,Math.round(Y(0))+.5);c.stroke();}
       c.save();c.beginPath();c.rect(this.padL,top-4,w-this.padL-this.padR,bot-top+6);c.clip();
       this.marks.forEach(m=>{if(m.x<this.lo||m.x>this.hi)return;const xx=Math.round(this.xToPx(m.x))+.5;c.strokeStyle=line;c.setLineDash([2,4]);c.beginPath();c.moveTo(xx,top);c.lineTo(xx,bot);c.stroke();c.setLineDash([]);});
-      p.series.forEach(s=>{if(!s.data)return;c.strokeStyle=s.color;c.lineWidth=s.w||1.6;c.setLineDash(s.dash||(s.name==='B'?[6,4]:[]));c.globalAlpha=s.alpha||1;c.shadowColor=s.color;c.shadowBlur=(s.alpha||1)>=.9?6*GL():0;c.beginPath();let started=false,prevY=null;
+      p.series.forEach(s=>{if(!s.data)return;c.strokeStyle=s.color;c.lineWidth=s.w||1.6;c.setLineDash(s.dash||(s.name==='B'&&typeof bDash==='function'&&bDash()?[6,4]:[]));c.globalAlpha=s.alpha||1;c.shadowColor=s.color;c.shadowBlur=(s.alpha||1)>=.9?6*GL():0;c.beginPath();let started=false,prevY=null;
         const stepN=Math.max(1,Math.floor((i1-i0)/(w*1.5)));
         for(let i=i0;i<=i1;i+=stepN){const v=s.data[i];if(!Number.isFinite(v)){started=false;continue;}const xx=this.xToPx(this.x[i]),yy=Y(v);
           if(!started){c.moveTo(xx,yy);started=true;}else{if(s.step&&prevY!=null)c.lineTo(xx,prevY);c.lineTo(xx,yy);}prevY=yy;}
@@ -2416,11 +2416,11 @@ class TrackMap{
     const bed=Math.max(zoom?26:12,13*scale);path(P,bed+4,'rgba(255,255,255,.06)');path(P,bed,tok('trackbed'));
     const lines=P2&&(zoom||v.k>=2.5||scale>1.5);
     if(lines){const lw=Math.max(2.5,Math.min(5,scale*1.2));
-      c.save();c.shadowBlur=10*GL();c.shadowColor=tok('lapB');path(P2,lw,tok('lapB'),1,[8,5]);c.shadowColor=tok('lapA');path(P,lw,tok('lapA'));c.restore();
+      c.save();c.shadowBlur=10*GL();c.shadowColor=tok('lapB');path(P2,lw,tok('lapB'),1,typeof bDash==='function'&&bDash()?[8,5]:null);c.shadowColor=tok('lapA');path(P,lw,tok('lapA'));c.restore();
       c.fillStyle=tok('muted');c.font='11px "JetBrains Mono",monospace';c.textAlign='left';c.textBaseline='top';}
     else{const W0=this.win?this.win[0]:-1,W1=this.win?this.win[1]:n;const lw=Math.max(4,Math.min(8,scale*1.4));c.lineWidth=lw;
       for(let i=1;i<n;i++){const p0=P[i-1],p1=P[i];if(!p0||!p1)continue;c.globalAlpha=(i<W0||i>W1)?0.18:1;c.strokeStyle=this.colors[i]||tok('muted');c.beginPath();c.moveTo(p0[0],p0[1]);c.lineTo(p1[0],p1[1]);c.stroke();}c.globalAlpha=1;
-      if(P2)path(P2,1.2,tok('lapB'),.55,[5,4]);}
+      if(P2)path(P2,1.2,tok('lapB'),.55,typeof bDash==='function'&&bDash()?[5,4]:null);}
     // start / finish: chequered block
     const p0=P.find(Boolean);if(p0){const q=6;for(let a=0;a<2;a++)for(let b=0;b<2;b++){c.fillStyle=(a+b)%2?'#000':'#fff';c.fillRect(p0[0]-q+a*q,p0[1]-q+b*q,q,q);}}
     c.font='700 11px "Barlow Condensed",sans-serif';c.textAlign='center';c.textBaseline='middle';
@@ -4391,6 +4391,7 @@ function openDebrief(){let m=$('#mDeb');if(!m){m=document.createElement('div');m
   openModal('#mDeb');}
 // Italian → English phrases. '#' stands for any number (kept as-is). Longest entries are applied first.
 const I18N_EN=[
+["Libreria", "Library"],["La libreria legge le cartelle di Le Mans Ultimate", "The library reads the Le Mans Ultimate folders"],["Apri Data Engineer dal programma (bridge) su questo PC: qui compariranno da soli tutti i setup e tutte le telemetrie MoTeC del gioco.", "Open Data Engineer from the program (bridge) on this PC: every setup and MoTeC telemetry of the game will appear here by itself."],["Carica file a mano", "Load files by hand"],["Leggo le cartelle del gioco…", "Reading the game folders…"],["stessa pista", "same track"],["Cerca", "Search"],["pista, auto, nome del setup…", "track, car, setup name…"],["Rileggi le cartelle", "Read the folders again"],["telemetrie", "telemetry files"],["setup", "setups"],["nelle cartelle del gioco", "in the game folders"],["1. Telemetria", "1. Telemetry"],["le più recenti in alto", "newest first"],["Nessuna telemetria con questi filtri.", "No telemetry with these filters."],["Mostro le prime", "Showing the first"],["usa la ricerca per le altre.", "use search for the others."],["2. Setup", "2. Setup"],["prima quelli di questa pista", "this track's first"],["Nessun setup con questi filtri.", "No setup with these filters."],["Mostro i primi", "Showing the first"],["usa la ricerca per gli altri.", "use search for the others."],["Apri la telemetria", "Open the telemetry"],["Analizza con Race Engineer", "Analyse with Race Engineer"],["Apro…", "Opening…"],["Aperti telemetria e setup", "Telemetry and setup opened"],["Non riesco ad aprire il file", "Cannot open the file"],["Usa il Muretto (live con la squadra)", "Use the Muretto (live with the team)"],["Giro B tratteggiato nei grafici (utile se distingui male i colori)", "Dashed lap B in the charts (helpful if colours are hard to tell apart)"],["Setup e telemetrie del PC", "Setups and telemetry on this PC"],
 ["Carica una telemetria: qui comparirà il tuo giro.", "Load a telemetry file: your lap will appear here."],["Il tracciato dell'ultima sessione", "The track of the last session"],["Rivedi", "Watch again"],["Guarda il giro", "Watch the lap"],["Riprendi", "Resume"],["Pausa", "Pause"],
 ["Carico i file…", "Loading the files…"],
 ["Filtri auto e pista", "Car and track filters"],
@@ -5116,9 +5117,10 @@ const tr=I18N.tr;
 })();
 const AI_LANG=()=>LANG==='en'?'\n\nIMPORTANT: write your whole answer in English (the instructions above are in Italian, but the driver reads English).':'';
 // ================= VERSIONE, NOVITÀ E AGGIORNAMENTI =================
-const APP_VERSION='2.14.0';
+const APP_VERSION='2.15.0';
 const DEFAULT_UPD='https://raw.githubusercontent.com/KubaMovitech/Race-Engineer/main/';   // update channel (folder with version.json), set when the team repository exists
 const CHANGELOG=[
+{v:'2.15.0',d:'01/11/2026',items:['Nuova pagina «Libreria»: tutte le telemetrie MoTeC e tutti i setup delle cartelle di LMU, già ordinati con pista, auto, pilota e data letti dai file. Scegli una telemetria e un setup (quelli della stessa pista vengono prima) e premi «Analizza con Race Engineer»: si aprono insieme, senza cercare niente a mano.','Confronto più facile: il giro A è blu e il giro B arancione, entrambi a linea piena, in grafici e mappe. Il tratteggio di B si può riattivare in Personalizza se distingui male i colori.','Il Muretto si può spegnere (Personalizza › Usa il Muretto): sparisce dal menu e non si collega più alla squadra.','Tolti l\'overlay OBS e la Regia TV dal Muretto.']},
 {v:'2.14.0',d:'30/10/2026',items:['Il giro, disegnato: nella pagina iniziale il tracciato della tua ultima sessione si disegna da solo e un punto oro lo percorre una volta («Rivedi» per ripeterlo); senza telemetria compare un circuito d\'esempio.','Dashboard › «Guarda il giro»: il miglior giro corre sulla mappa 8 volte più veloce del reale, con velocità e marcia vere accanto al punto (rosso in frenata), tempo trascorso, pausa e ripresa.','Animazioni più sobrie: al cambio pagina solo una dissolvenza di 150 ms, niente più pannelli a cascata né schede che si alzano al passaggio del mouse; durate 100/150/200/300 ms.','La sagoma di caricamento compare solo se i file impiegano più di 100 ms, così i file piccoli non la fanno lampeggiare. Con «riduci movimento» restano solo dissolvenze brevi e il tracciato iniziale è fermo.']},
 {v:'2.13.0',d:'30/10/2026',items:['Animazioni leggere: entrando in una pagina i pannelli arrivano uno dopo l\'altro, quelli più in basso compaiono quando ci scorri; finestre e menu «Altro» si aprono con una breve dissolvenza. Sul Muretto niente animazioni, per non far tremolare i numeri live.','Pulsanti e schede reagiscono al mouse (si alzano di poco, si abbassano al clic); con la tastiera c\'è un bordo oro su ciò che è selezionato; i pulsanti non disponibili sono attenuati.','Mentre i file si caricano compare una sagoma della fascia al posto dello spazio vuoto.','Gli avvisi in basso dicono se è andata bene (verde ✓), male (rosso !) o se è solo un\'informazione.','Se nel sistema è attivo «riduci movimento», tutto appare subito senza animazioni.']},
 {v:'2.12.0',d:'30/10/2026',items:['Rifinitura grafica: niente più doppioni (il pannello del miglior giro in Dashboard mostra solo settori e ideale, in Telemetria non si ripetono pilota e data, in BOP e Muretto non c\'è la fascia della sessione), titoli senza le spaziature dei vecchi stili, mini-gomme dell\'Ingegnere tolte (sono nella Dashboard).','Muretto nei colori dell\'app: scheda attiva e «Direzione gara» in oro, nessun rosso decorativo.','Colori uguali ovunque: verde meglio, rosso peggio, arancione da controllare, viola tempi migliori; «Progresso dal primo» a zero non è più rosso.','Telefono: barra in alto su due righe, filtri Auto e Pista dietro il pulsante a imbuto. Su schermi bassi il menu laterale toglie lo slogan e rimpicciolisce il logo.','Personalizza: una sola impostazione per la dimensione dei testi («Densità»), che ora ingrandisce anche la grafica Pro; con la grafica Pro il colore principale è sempre quello dello stile (oro o blu).']},
@@ -7205,7 +7207,7 @@ class TWMap{
       if(kind==='inputs'){const th=g.get('Throttle Pos'),br=g.get('Brake Pos');return Array.from(th,(t,i)=>br[i]>5?(br[i]>60?'#FF2D55':'#FF8A9B'):t>95?'#22E58B':t>30?'#9BE8B9':'#8A93A3');}
       if(kind==='gear'){const ge=g.get('Gear');return Array.from(ge,x=>TWGEAR[Math.max(0,Math.min(8,Math.round(x)))]);}
       if(kind==='delta'){const d=D.delta;const out=new Array(D.n);const W=12;for(let i=0;i<D.n;i++){const a=d[Math.max(0,i-W)],b=d[Math.min(D.n-1,i+W)];const r=(b-a)/(2*W*D.step)*1000;out[i]=r>0.15?'#22E58B':r<-0.15?'#FF2D55':r>0.04?'#7FD8A6':r<-0.04?'#E88A9A':'#6B7585';}return out;}return null;};
-    if(D.B){const cb=m==='inputs'?cols(D.gB,'inputs'):null;if(cb)this.colored(c,D.B,cb,lw*0.75,[6,4]);else this.line(c,D.B,0,n-1,tB,lw*0.8,[6,4]);}
+    if(D.B){const cb=m==='inputs'?cols(D.gB,'inputs'):null;if(cb)this.colored(c,D.B,cb,lw*0.75,[6,4]);else this.line(c,D.B,0,n-1,tB,lw*0.8,typeof bDash==='function'&&bDash()?[6,4]:null);}
     const ca=m==='line'?null:cols(D.gA,m);if(ca)this.colored(c,D.A,ca,lw);else this.line(c,D.A,0,n-1,tA,lw);
     // brake and throttle points of each corner
     this.lbl=[];const dot=(S,i,col,shape,lab)=>{if(i==null||i<0)return;const [x,y]=this.P(S.x[i],S.y[i]);c.fillStyle=col;c.strokeStyle='#05070A';c.lineWidth=1.5;c.beginPath();
@@ -7288,7 +7290,7 @@ function twPanels(D,list){const tA=tok('lapA'),tB=tok('lapB');const out=[];
     if(id.startsWith('4:')){const k=id.slice(2);const m=TWW[k];const ss=TW4.map((w,j)=>({a:twArr(D.gA,k.replace('#',w)),col:TW4C[j],tag:w,w:1.3})).filter(s=>s.a);if(ss.length)out.push({label:tr(m[0])+' · A',unit:m[1],dec:m[2],h:104,series:ss});continue;}
     const m=twMeta(id);const a=twArr(D.gA,id);if(!a)continue;const b=D.gB?twArr(D.gB,id):null;const step=STEP_CH.test(id);
     out.push({label:tr(m[0]),unit:m[1],dec:m[2],h:id==='Ground Speed'?130:id==='Gear'?60:84,step,zero:id==='Path Lateral'||id==='Steering'||/G Force (Lat|Long)/.test(id),fix:/Throttle|Brake Pos/.test(id)?[0,100]:null,
-      series:[...(b?[{a:b,col:tB,w:1.3,tag:'B',dash:[6,4]}]:[]),{a,col:tA,w:1.7,tag:'A'}]});}
+      series:[...(b?[{a:b,col:tB,w:1.4,tag:'B',dash:typeof bDash==='function'&&bDash()?[6,4]:null}]:[]),{a,col:tA,w:1.7,tag:'A'}]});}
   return out;}
 
 // ---------- inspector: every value under the cursor ----------
@@ -7389,7 +7391,7 @@ RENDER.tele=()=>{const el=$('#twBody');const SS=twSessions();
     let t=D.gA.t[TW.cur||0],last=performance.now();const tick=now=>{t+=(now-last)/1000*+$('#twSpd').value;last=now;let i=TW.cur||0;while(i<D.n-1&&D.gA.t[i]<t)i++;if(i>=D.n-1){t=0;i=0;}
       if(D.gB){let j=0;const tb=D.gB.t;let lo=0,hi=D.n-1;while(hi-lo>1){const m=(lo+hi)>>1;if(tb[m]<t)lo=m;else hi=m;}j=lo;map.ghost=j;}twCursor(i,'play');play=requestAnimationFrame(tick);};play=requestAnimationFrame(tick);};
 };
-function twLegend(m,hasB){const A=`<span><i style="background:var(--lapA)"></i>A</span>`,B=hasB?`<span><i style="background:repeating-linear-gradient(90deg,var(--lapB) 0 5px,transparent 5px 8px)"></i>B ${tr('tratteggiato')}</span>`:'';
+function twLegend(m,hasB){const A=`<span><i style="background:var(--lapA)"></i>A</span>`,B=hasB?`<span><i style="background:${typeof bDash==='function'&&bDash()?'repeating-linear-gradient(90deg,var(--lapB) 0 5px,transparent 5px 8px)':'var(--lapB)'}"></i>B</span>`:'';
   const pts=`<span>● ${tr('frenata')}</span><span>▲ ${tr('gas pieno')}</span>`;
   if(m==='inputs')return `<span><i style="background:#FF2D55"></i>${tr('freno')}</span><span><i style="background:#22E58B"></i>${tr('gas pieno')}</span><span><i style="background:#9BE8B9"></i>${tr('gas parziale')}</span><span><i style="background:#8A93A3"></i>${tr('senza pedali')}</span>${hasB?`<span>- - B</span>`:''}`;
   if(m==='delta')return hasB?`<span><i style="background:#22E58B"></i>${tr('A guadagna')}</span><span><i style="background:#FF2D55"></i>${tr('A perde')}</span>${B}`:`<span>${tr('Scegli un giro B per il delta.')}</span>`;
@@ -8271,8 +8273,8 @@ function proTestChart(S,P){const B=S.best,PB=P?.best;if(!B||!PB)return '';const 
   const X=i=>(34+i/(n-1)*(W-40)).toFixed(1),Y=v=>(8+(1-v/hi)*(H-28)).toFixed(1);const pl=(s,c,dash)=>`<polyline points="${Array.from({length:n},(_,i)=>X(i)+','+Y(s[i])).join(' ')}" fill="none" style="stroke:${c}" stroke-width="1.4"${dash?' stroke-dasharray="6 4"':''}/>`;
   const sa=twLapSectors(P,PB),sb=twLapSectors(S,B);
   const secs=sa&&sb?`<div class="ptsec">${[0,1,2].map(k=>{const d=sb[k]-sa[k];const z=Math.abs(d)<5e-4;return `<span>S${k+1} <b class="${z?'muted':d<0?'pos':'neg'}">${z?'':d>0?'+':'−'}${Math.abs(d).toFixed(3)}</b></span>`;}).join('')}</div>`:'';
-  return `<div class="ptc"><div class="ptl"><span><i class="pdash" style="background:var(--lapB)"></i>${tr('Prima')} · ${fmtLap(PB.time)}</span><span><i style="background:var(--lapA)"></i>${tr('Ora')} · ${fmtLap(B.time)}</span></div>${secs}
-    <svg viewBox="0 0 ${W} ${H}"><g class="pg">${[0,.5,1].map(f=>`<line x1="34" x2="${W-6}" y1="${8+f*(H-28)}" y2="${8+f*(H-28)}"/><text x="30" y="${12+f*(H-28)}" text-anchor="end">${Math.round(hi*(1-f))}</text>`).join('')}</g>${pl(a,'var(--lapB)',1)}${pl(b,'var(--lapA)')}</svg></div>`;}
+  return `<div class="ptc"><div class="ptl"><span><i class="${typeof bDash==='function'&&bDash()?'pdash':''}" style="background:var(--lapB)"></i>${tr('Prima')} · ${fmtLap(PB.time)}</span><span><i style="background:var(--lapA)"></i>${tr('Ora')} · ${fmtLap(B.time)}</span></div>${secs}
+    <svg viewBox="0 0 ${W} ${H}"><g class="pg">${[0,.5,1].map(f=>`<line x1="34" x2="${W-6}" y1="${8+f*(H-28)}" y2="${8+f*(H-28)}"/><text x="30" y="${12+f*(H-28)}" text-anchor="end">${Math.round(hi*(1-f))}</text>`).join('')}</g>${pl(a,'var(--lapB)',typeof bDash==='function'&&bDash())}${pl(b,'var(--lapA)')}</svg></div>`;}
 
 function proEngHTML(S,D,laps){const F=engFindings(D,S,D.su||null,laps);const P=engPlan(F);const done=LS.get('pdone',{});
   const diag=[...F].sort((a,b)=>b.s-a.s||ENG_ORDER.indexOf(a.a)-ENG_ORDER.indexOf(b.a)).filter((f,i)=>f.s>0||i<4).slice(0,6);
@@ -8539,7 +8541,7 @@ function pvEnter(v){const sec=$('#v-'+v);if(!sec||v==='live')return;clearTimeout
 
 // ---------- toasts: success, error or plain information, from the words of the message ----------
 (function(){const t0=window.toast;if(typeof t0!=='function')return;window.toast=toast=function(m,...a){t0(m,...a);const el=$('#toastStack')?.lastElementChild;if(!el||el.dataset.kind)return;const s=String(m);
-  const kind=/errore|non riesco|impossibile|non valid|fallit|non trovat|rifiutat|error|failed|invalid|not found/i.test(s)?'err':/^(caricat|salvat|copiat|inviat|aggiornat|fatto|✓|loaded|saved|copied|sent|updated|done)/i.test(s)?'ok':'info';
+  const kind=/errore|non riesco|impossibile|non valid|fallit|non trovat|rifiutat|error|failed|invalid|not found/i.test(s)?'err':/^(caricat|salvat|copiat|inviat|aggiornat|apert|fatto|✓|loaded|saved|copied|sent|updated|opened|done)/i.test(s)?'ok':'info';
   el.dataset.kind=kind;el.insertAdjacentHTML('afterbegin',`<i class="tk" aria-hidden="true">${kind==='ok'?'✓':kind==='err'?'!':'i'}</i>`);if(kind==='err')el.setAttribute('role','alert');};})();
 // ================= THE LAP, DRAWN: the one animated moment of the app =================
 // Welcome page: the track of your last session draws itself and a dot runs it once.
@@ -8609,6 +8611,123 @@ html[data-look="pro"] .hero.welcome .wtop .ey{grid-column:1;align-self:end}html[
 #dRep .dr-lbl{font:700 13px "JetBrains Mono",monospace;fill:#fff;paint-order:stroke;stroke:#000;stroke-width:4px}
 @media (max-width:1100px){.drep{position:static;margin:6px 8px 0}}
 @media (prefers-reduced-motion:reduce){.whero.wh-go .wh-line{animation:none}.whero .wh-dot{transition:none}}
+`;document.head.appendChild(st);})();
+// ================= 2.15: LIBRERIA, Muretto on/off, no OBS, A/B colours =================
+// Libreria: every MoTeC telemetry and every setup the game keeps on this PC, read by the bridge, sorted by track
+// and car. Pick a telemetry and a setup and open them together: nothing to look for in the folders by hand.
+
+// ---------- A and B: two clearly different colours; dashes only if asked for in Personalizza ----------
+function bDash(){return LS.get('bdash',false)===true;}
+
+// ---------- the Muretto can be switched off (Personalizza): no menu entry and no live connections ----------
+const liveOff=()=>LS.get('live:off',false)===true;
+(function(){const ls=window.liveStart;if(typeof ls!=='function')return;window.liveStart=liveStart=function(...a){if(liveOff()){try{LIVE.conns.forEach(c=>c.close());LIVE.conns=[];}catch(e){}return;}return ls.apply(this,a);};})();
+function liveApplyOff(){const off=liveOff();document.documentElement.classList.toggle('no-live',off);
+  if(off){try{LIVE.conns.forEach(c=>c.close());LIVE.conns=[];}catch(e){}if(curView()==='live')showView('stint');}}
+setTimeout(liveApplyOff,0);
+
+// ---------- no OBS overlay and no TV direction in the Muretto ----------
+if(LS.get('live:sub','ov')==='tv')LS.set('live:sub','ov');
+
+// ---------- the Libreria page ----------
+PRO_ICONS.libr='<path d="M4 4h4v16H4zM10 4h4v16h-4z"/><path d="M16.5 4.5l3.8 1 -3.9 15 -3.8-1z"/>';
+PRO_NAV.splice(1,0,['libr','Libreria','Setup e telemetrie del PC',['lib']]);
+PRO_GROUPS[0][1].splice(1,0,'libr');
+(function(){const tabs=$('.tabs');if(tabs&&!$('#t-lib')){const b=document.createElement('button');b.className='tab';b.setAttribute('role','tab');b.id='t-lib';b.dataset.view='lib';b.setAttribute('aria-selected','false');b.textContent=tr('Libreria');b.onclick=()=>showView('lib');tabs.appendChild(b);}
+  const m=$('main');if(m&&!$('#v-lib')){const s=document.createElement('section');s.className='view';s.id='v-lib';s.hidden=true;s.innerHTML='<div id="libBody"></div>';m.appendChild(s);}})();
+
+const LIBV={ld:null,svm:null,at:0,err:'',q:'',track:'',car:''};
+const libNorm=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
+// a setup folder (e.g. «Monza») belongs to a track name (e.g. «Autodromo Nazionale Monza») when they share a word
+function libSameTrack(folder,venue){const a=libNorm(folder),b=libNorm(venue);if(!a||!b)return false;if(a.includes(b)||b.includes(a))return true;const B=new Set(b.split(' ').filter(w=>w.length>=4));return a.split(' ').some(w=>w.length>=4&&B.has(w));}
+const libCarShort=c=>String(c||'').replace(/_/g,' ').replace(/\s+(Hypercar|LMGT3|LMP2|LMP3|GTE)\b.*$/i,'').replace(/\bWEC\d{4}\b/,'').trim()||String(c||'');
+const libShopOf=n=>{for(const [s,re] of (typeof SHOPS!=='undefined'?SHOPS:[]))if(re.test(n))return s;return '';};
+async function libLoad(force){if(!isBridgeHost()){LIBV.err='nobridge';return;}if(!force&&LIBV.ld&&Date.now()-LIBV.at<30000)return;
+  try{const [a,b]=await Promise.all([fetch('/ldlib',{cache:'no-store'}).then(r=>r.json()),fetch('/svmlib',{cache:'no-store'}).then(r=>r.json())]);
+    LIBV.ld=a.ok?a.files:[];LIBV.svm=b.ok?b.files:[];LIBV.err=!a.ok&&!b.ok?(a.error||b.error||''):'';LIBV.ldErr=a.ok?'':a.error;LIBV.svmErr=b.ok?'':b.error;LIBV.at=Date.now();}
+  catch(e){LIBV.err=e.message;}}
+function libSel(){return LS.get('libsel',{ld:'',svm:''});}
+function libSetSel(o){LS.set('libsel',{...libSel(),...o});}
+function libRows(){const q=libNorm(LIBV.q);const T=LIBV.track,C=LIBV.car;
+  const L=(LIBV.ld||[]).map(f=>({...f,venue:f.venue||'',ref:/^riferimenti\//i.test(f.p),name:f.p.split('/').pop()}))
+    .filter(f=>(!T||libSameTrack(T,f.venue)||libNorm(f.venue)===libNorm(T))&&(!C||libNorm(f.car).includes(libNorm(C)))&&(!q||libNorm(f.name+' '+f.venue+' '+f.car+' '+f.driver).includes(q)))
+    .sort((a,b)=>b.t-a.t);
+  const S=(LIBV.svm||[]).map(f=>{const parts=f.p.split('/');return {...f,folder:parts.length>1?parts[0]:'',name:parts.pop().replace(/\.svm$/i,'')};})
+    .filter(f=>(!T||libSameTrack(f.folder,T))&&(!C||libNorm(f.car).includes(libNorm(C)))&&(!q||libNorm(f.name+' '+f.folder+' '+f.car).includes(q)))
+    .sort((a,b)=>b.t-a.t);
+  return {L,S};}
+const libDate=t=>{const d=new Date(t*1000);return d.toLocaleDateString(undefined,{day:'2-digit',month:'2-digit',year:'2-digit'})+' '+d.toTimeString().slice(0,5);};
+function libHTML(){if(LIBV.err==='nobridge')return `<div class="panel lempty"><h2>${tr('La libreria legge le cartelle di Le Mans Ultimate')}</h2><p>${tr('Apri Data Engineer dal programma (bridge) su questo PC: qui compariranno da soli tutti i setup e tutte le telemetrie MoTeC del gioco.')}</p><button type="button" class="btn primary" id="libHand">${tr('Carica file a mano')}</button></div>`;
+  if(!LIBV.ld)return `<div class="panel"><p class="muted">${tr('Leggo le cartelle del gioco…')}</p></div>`;
+  const {L,S}=libRows();const sel=libSel();const selLd=(LIBV.ld||[]).find(f=>f.p===sel.ld);const venue=selLd?.venue||'';
+  const tracks=[...new Set([...(LIBV.ld||[]).map(f=>f.venue).filter(Boolean),...(LIBV.svm||[]).map(f=>f.p.includes('/')?f.p.split('/')[0]:'').filter(Boolean)])].sort((a,b)=>a.localeCompare(b));
+  const cars=[...new Set([...(LIBV.ld||[]).map(f=>f.car),...(LIBV.svm||[]).map(f=>libCarShort(f.car))].filter(Boolean))].sort();
+  const ldRow=f=>{const on=sel.ld===f.p;const open=!!byId('ld:'+f.name);return `<label class="lrow${on?' on':''}"><input type="radio" name="libld" value="${esc(f.p)}"${on?' checked':''}>
+      <span class="lmain"><b>${esc(f.venue||f.name)}</b><small>${esc([f.date&&f.time?f.date+' '+f.time.slice(0,5):libDate(f.t),f.car,f.driver].filter(Boolean).join(' · '))}</small></span>
+      <span class="ltags">${f.ref?`<em class="lref">${tr('Riferimento')}</em>`:''}${open?`<em>${tr('aperta')}</em>`:''}<small>${(f.s/1048576).toFixed(0)} MB</small></span></label>`;};
+  const svmRow=f=>{const on=sel.svm===f.p;const near=venue&&libSameTrack(f.folder,venue);const shop=libShopOf(f.name);return `<label class="lrow${on?' on':''}${near?' near':''}"><input type="radio" name="libsvm" value="${esc(f.p)}"${on?' checked':''}>
+      <span class="lmain"><b>${esc(f.name)}</b><small>${esc([f.folder,libCarShort(f.car),libDate(f.t)].filter(Boolean).join(' · '))}</small></span>
+      <span class="ltags">${shop?`<em>${esc(shop)}</em>`:''}${near?`<em class="lnear">${tr('stessa pista')}</em>`:''}</span></label>`;};
+  // setups of the chosen telemetry's track first
+  const S2=venue?[...S.filter(f=>libSameTrack(f.folder,venue)),...S.filter(f=>!libSameTrack(f.folder,venue))]:S;
+  const N=120;
+  return `<div class="panel lhead"><div class="lfil"><label class="f lq">${tr('Cerca')}<input type="search" id="libQ" value="${esc(LIBV.q)}" placeholder="${esc(tr('pista, auto, nome del setup…'))}"></label>
+      <label class="f">${tr('Pista')}<select id="libT"><option value="">${tr('Tutte le piste')}</option>${tracks.map(t=>`<option${t===LIBV.track?' selected':''}>${esc(t)}</option>`).join('')}</select></label>
+      <label class="f">${tr('Auto')}<select id="libC"><option value="">${tr('Tutte le auto')}</option>${cars.map(c=>`<option${c===LIBV.car?' selected':''}>${esc(c)}</option>`).join('')}</select></label>
+      <button type="button" class="btn" id="libRe">${tr('Rileggi le cartelle')}</button></div>
+      <p class="muted small">${(LIBV.ld||[]).length} ${tr('telemetrie')} · ${(LIBV.svm||[]).length} ${tr('setup')} ${tr('nelle cartelle del gioco')}</p></div>
+    <div class="lcols"><div class="panel lcol"><div class="panel-h"><h3>${tr('1. Telemetria')}</h3><span class="muted small">${L.length} · ${tr('le più recenti in alto')}</span></div>
+        ${LIBV.ldErr?`<p class="warnbar">${esc(LIBV.ldErr)}</p>`:''}<div class="llist" role="radiogroup" aria-label="${esc(tr('Telemetria'))}">${L.slice(0,N).map(ldRow).join('')||`<p class="muted">${tr('Nessuna telemetria con questi filtri.')}</p>`}</div>${L.length>N?`<p class="muted small">${tr('Mostro le prime')} ${N}: ${tr('usa la ricerca per le altre.')}</p>`:''}</div>
+      <div class="panel lcol"><div class="panel-h"><h3>${tr('2. Setup')}</h3><span class="muted small">${venue?tr('prima quelli di questa pista'):S.length}</span></div>
+        ${LIBV.svmErr?`<p class="warnbar">${esc(LIBV.svmErr)}</p>`:''}<div class="llist" role="radiogroup" aria-label="${esc(tr('Setup'))}">${S2.slice(0,N).map(svmRow).join('')||`<p class="muted">${tr('Nessun setup con questi filtri.')}</p>`}</div>${S2.length>N?`<p class="muted small">${tr('Mostro i primi')} ${N}: ${tr('usa la ricerca per gli altri.')}</p>`:''}</div></div>
+    <div class="lbar"><div><span>${tr('Telemetria')}</span><b>${selLd?esc((selLd.venue||selLd.p)+' · '+(selLd.date||'')):'—'}</b></div><div><span>${tr('Setup')}</span><b>${sel.svm?esc(sel.svm.split('/').pop().replace(/\.svm$/i,'')):'—'}</b></div>
+      <button type="button" class="btn" id="libOpenT"${sel.ld?'':' disabled'}>${tr('Apri la telemetria')}</button><button type="button" class="btn primary" id="libGo"${sel.ld&&sel.svm?'':' disabled'}>${tr('Analizza con Race Engineer')}</button></div>`;}
+async function libOpenSetup(p){const r=await fetch('/svmlib/file?p='+encodeURIComponent(p),{cache:'no-store'});if(!r.ok)throw new Error(await r.text());
+  const name=p.split('/').pop();const it=await addFile(name,await r.arrayBuffer(),{persist:true});relink();refreshAll();const s=$('#suFile');if(s&&it?.id){s.value=it.id;}return it;}
+async function libGo(withSetup){const sel=libSel();if(!sel.ld)return;const b=$(withSetup?'#libGo':'#libOpenT');if(b){b.disabled=true;b.setAttribute('aria-busy','true');b.textContent=tr('Apro…');}
+  try{const S=await ldOpen(sel.ld,{select:true});if(!S)return;
+    if(withSetup&&sel.svm){await libOpenSetup(sel.svm);LS.set('su:tab','eng');$('#proNav .pn[data-n="eng"]')?.click();toast(tr('Aperti telemetria e setup'));}
+    else showView('stint');}
+  catch(e){toast(tr('Non riesco ad aprire il file')+': '+e.message);}finally{RENDER.lib&&curView()==='lib'&&RENDER.lib();}}
+RENDER.lib=async()=>{const el=$('#libBody');if(!el)return;if(!LIBV.ld&&LIBV.err!=='nobridge'){el.innerHTML=libHTML();await libLoad();}
+  el.innerHTML=libHTML();
+  const q=$('#libQ');if(q){q.oninput=()=>{LIBV.q=q.value;const pos=q.selectionStart;RENDER.lib();const n=$('#libQ');n.focus();n.setSelectionRange(pos,pos);};}
+  const t=$('#libT');if(t)t.onchange=()=>{LIBV.track=t.value;RENDER.lib();};const c=$('#libC');if(c)c.onchange=()=>{LIBV.car=c.value;RENDER.lib();};
+  $('#libRe')?.addEventListener('click',async()=>{await libLoad(true);RENDER.lib();});
+  el.querySelectorAll('input[name="libld"]').forEach(i=>i.onchange=()=>{libSetSel({ld:i.value});RENDER.lib();});
+  el.querySelectorAll('input[name="libsvm"]').forEach(i=>i.onchange=()=>{libSetSel({svm:i.value});RENDER.lib();});
+  $('#libOpenT')?.addEventListener('click',()=>libGo(false));$('#libGo')?.addEventListener('click',()=>libGo(true));
+  $('#libHand')?.addEventListener('click',()=>$('#fileIn').click());};
+
+// ---------- Personalizza: Muretto on/off and dashed B ----------
+setTimeout(()=>{const row=$('#mSettings .lookrow');if(!row||$('#liveOn'))return;
+  row.insertAdjacentHTML('beforeend',`<label class="chk"><input type="checkbox" id="liveOn"> ${tr('Usa il Muretto (live con la squadra)')}</label><label class="chk"><input type="checkbox" id="bDashOn"> ${tr('Giro B tratteggiato nei grafici (utile se distingui male i colori)')}</label>`);
+  const l=$('#liveOn');l.checked=!liveOff();l.onchange=()=>{LS.set('live:off',!l.checked);liveApplyOff();if(l.checked)liveStart();if(typeof proSync==="function")proSync();};
+  const d=$('#bDashOn');d.checked=bDash();d.onchange=()=>{LS.set('bdash',d.checked);RENDER[curView()]?.();};},0);
+
+(function(){const st=document.createElement('style');st.textContent=`
+/* Muretto off: no menu entry, no Gara group, no Muretto card on the welcome page */
+html.no-live #proNav .pn[data-n="live"],html.no-live #proNav .pgh:nth-last-of-type(1),html.no-live .wcard.w2,html.no-live #t-live,html.no-live .mtab[data-group="live"]{display:none!important}
+/* no OBS overlay and no TV direction */
+#lvObs,.lvtabs [data-sub="tv"]{display:none!important}
+html[data-look="pro"][data-pnav="libr"] .hero{display:none}
+html[data-look="pro"] input[type=search]{background:#09090A!important;border:1px solid var(--line)!important;border-radius:8px!important;color:var(--ink);height:38px;padding:0 12px;font:inherit}
+/* Libreria */
+.lhead .lfil{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end}.lhead .lq{flex:1 1 260px}.lhead .lq input{width:100%}
+.lcols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;margin:16px 0 90px}
+.llist{display:flex;flex-direction:column;gap:4px;max-height:58vh;overflow:auto;padding-right:4px}
+.lrow{display:grid;grid-template-columns:20px minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px 10px;border:1px solid var(--line);border-radius:8px;cursor:pointer;background:transparent}
+.lrow:hover{border-color:var(--edge2);background:rgba(255,255,255,.03)}.lrow.on{border-color:var(--pacc,#C9A54C);background:var(--psel,#2A2416)}
+.lrow input{accent-color:var(--pacc,#C9A54C);width:16px;height:16px;margin:0}
+.lmain{min-width:0}.lmain b{display:block;color:var(--ink);font-size:.92rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.lmain small{display:block;color:var(--muted);font-size:.8rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ltags{display:flex;gap:6px;align-items:center;white-space:nowrap}.ltags em{font-style:normal;font-size:.74rem;color:var(--psil,#C9CDD3);border:1px solid var(--line);border-radius:6px;padding:1px 6px}.ltags small{color:var(--faint);font-size:.74rem}
+.ltags .lnear{color:#2BE38A;border-color:rgba(43,227,138,.4)}.ltags .lref{color:var(--pacc,#C9A54C);border-color:var(--pacc,#C9A54C)}
+.lrow.near:not(.on){border-left:3px solid rgba(43,227,138,.6)}
+.lbar{position:sticky;bottom:12px;display:flex;gap:16px;align-items:center;flex-wrap:wrap;padding:12px 16px;border:1px solid var(--pacc,#C9A54C);border-radius:12px;background:var(--panel);box-shadow:0 12px 40px rgba(0,0,0,.6);z-index:5}
+.lbar>div{display:flex;flex-direction:column;min-width:0;flex:1 1 200px}.lbar span{font-size:.74rem;color:var(--muted)}.lbar b{font-size:.92rem;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lempty{text-align:left}.lempty h2{margin:0 0 6px}.lempty p{max-width:62ch}
+@media (max-width:900px){.lcols{grid-template-columns:1fr}.llist{max-height:none}}
+#mSettings .lookrow .chk{display:flex;gap:8px;align-items:center;margin-top:6px;flex-basis:100%}
 `;document.head.appendChild(st);})();
 // ================= SETUP =================
 let DIAG=null;

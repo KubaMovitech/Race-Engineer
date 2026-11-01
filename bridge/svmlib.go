@@ -68,7 +68,7 @@ type svmEntry struct {
 	T int64  `json:"t"`
 }
 
-// GET /svmlib → {"ok":true,"files":[{"p":"Monza/GO ... R Esport.svm","s":5354,"t":1760000000}]}
+// GET /svmlib → {"ok":true,"files":[{"p":"Monza/GO ... R Esport.svm","s":5354,"t":1760000000,"car":"BMW_M_Hybrid Hypercar WEC2026"}]}
 func handleSvmLib(w http.ResponseWriter, r *http.Request) {
 	if !localOnly(w, r) {
 		return
@@ -80,7 +80,11 @@ func handleSvmLib(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(M{"ok": false, "error": err.Error()})
 		return
 	}
-	files := []svmEntry{}
+	type svmLibEntry struct {
+		svmEntry
+		Car string `json:"car,omitempty"`
+	}
+	files := []svmLibEntry{}
 	filepath.WalkDir(base, func(p string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return nil
@@ -96,7 +100,7 @@ func handleSvmLib(w http.ResponseWriter, r *http.Request) {
 			return nil
 		}
 		if fi, err := d.Info(); err == nil && fi.Size() < 256<<10 {
-			files = append(files, svmEntry{filepath.ToSlash(rel), fi.Size(), fi.ModTime().Unix()})
+			files = append(files, svmLibEntry{svmEntry{filepath.ToSlash(rel), fi.Size(), fi.ModTime().Unix()}, readSvmCar(p, fi.Size(), fi.ModTime().Unix())})
 		}
 		return nil
 	})

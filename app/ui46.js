@@ -19,5 +19,5 @@ function pvEnter(v){const sec=$('#v-'+v);if(!sec||v==='live')return;clearTimeout
 
 // ---------- toasts: success, error or plain information, from the words of the message ----------
 (function(){const t0=window.toast;if(typeof t0!=='function')return;window.toast=toast=function(m,...a){t0(m,...a);const el=$('#toastStack')?.lastElementChild;if(!el||el.dataset.kind)return;const s=String(m);
-  const kind=/errore|non riesco|impossibile|non valid|fallit|non trovat|rifiutat|error|failed|invalid|not found/i.test(s)?'err':/^(caricat|salvat|copiat|inviat|aggiornat|fatto|✓|loaded|saved|copied|sent|updated|done)/i.test(s)?'ok':'info';
+  const kind=/errore|non riesco|impossibile|non valid|fallit|non trovat|rifiutat|error|failed|invalid|not found/i.test(s)?'err':/^(caricat|salvat|copiat|inviat|aggiornat|apert|fatto|✓|loaded|saved|copied|sent|updated|opened|done)/i.test(s)?'ok':'info';
   el.dataset.kind=kind;el.insertAdjacentHTML('afterbegin',`<i class="tk" aria-hidden="true">${kind==='ok'?'✓':kind==='err'?'!':'i'}</i>`);if(kind==='err')el.setAttribute('role','alert');};})();

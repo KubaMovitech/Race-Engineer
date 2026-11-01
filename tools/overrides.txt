@@ -45,6 +45,8 @@ liveSkeleton
     ui30.js    wrap
     ui34.js    wrap
     ui37.js    wrap
+liveStart
+    ui48.js    wrap
 lvBoard
     ui37.js    wrap
 lvCar
@@ -127,6 +129,8 @@ RENDER.diary
     ui4.js     define
 RENDER.lap
     ui1.js     define
+RENDER.lib
+    ui48.js    define
 RENDER.live
     ui12.js    define
 RENDER.prog
