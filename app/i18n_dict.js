@@ -1,5 +1,16 @@
 // Italian → English phrases. '#' stands for any number (kept as-is). Longest entries are applied first.
 const I18N_EN=[
+["la telemetria non corrisponde a questo setup (a meno che la ripartizione non sia stata cambiata in macchina)", "the telemetry does not match this setup (unless the brake balance was changed in the car)"],
+["ripartizione frenata post.", "rear brake balance"],
+["in telemetria", "in the telemetry"],
+["nel setup", "in the setup"],
+["campanatura ant.", "front camber"],
+["campanatura post.", "rear camber"],
+["misurata in rettilineo", "measured on the straights"],
+["indicativo", "indicative"],
+["la telemetria non corrisponde a questo setup", "the telemetry does not match this setup"],
+["telemetria compatibile con questo setup", "telemetry compatible with this setup"],
+["compatibilità non verificabile", "compatibility not checkable"],
 ["rigidezza che cala vicino alla massima corsa: relazione forza/posizione non leggibile", "stiffness dropping near maximum travel: force/position relation not readable"],
 ["più lento del 4%", "more than 4% slower"],
 ["Qualità telemetria", "Telemetry quality"],

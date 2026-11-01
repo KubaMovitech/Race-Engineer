@@ -111,6 +111,11 @@ File ricevuti solo per la prova (non nel repository): 8 `.ld` di Bahrain, 1 di I
 - Gli scarichi delle ruote sui cordoli sono ripetibili in quasi tutti i giri: gravità abbassata a «da controllare»
   finché non è tarata (scarico breve sui cordoli è normale su queste auto).
 
+- Quale setup è stato usato (l'utente non lo ricordava): la ripartizione frenata letta in telemetria (46,3% post.) e la
+  campanatura misurata escludono i due setup GO in tutte le uscite; HYMO 1.4.1 e Test8h sono entrambi compatibili e non
+  si distinguono con i canali disponibili. Il controllo è ora nella pagina (box «Setup della sessione»): esclude un setup
+  solo con la ripartizione frenata, che però si può cambiare anche in macchina.
+
 ## Cosa resta da validare con dati reali
 
 I test sintetici verificano gli algoritmi, non la correttezza delle diagnosi su un'auto vera. Per tarare servono:

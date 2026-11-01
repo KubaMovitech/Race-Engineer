@@ -273,10 +273,24 @@ function sesSetupSet(S,su,st){const A=sesSetupAll();const k=sesKey(S);if(!su){de
   A[k]={st,name:su.name,car:su.car||'',hash:svmHash(text),text,at:Date.now()};const keys=Object.keys(A).sort((a,b)=>A[a].at-A[b].at);while(keys.length>60)delete A[keys.shift()];LS.set('sesSetup',A);}
 // is the car of the setup the car of the telemetry?
 function suCarMatch(S,su){const car=(S.meta?.car||S.merged?.d.car||'').toLowerCase(),sc=(su?.car||'').toLowerCase();if(!car||!sc)return null;return sc.includes(car)||(car.startsWith('hyper')&&/hypercar/.test(sc))||car.split(/\s+/).some(t=>t.length>3&&sc.includes(t));}
+// does the telemetry agree with this setup? Only settings the car reports back are compared: the brake balance
+// (channel Brake Bias Rear against RearBrakeSetting, a direct reading) and the camber on the straights (indicative:
+// the measured camber also depends on ride height and load). A mismatch of the brake balance rules a setup out;
+// agreement only makes it compatible, never certain (the brake balance can also be moved from the cockpit).
+function suTeleCheck(S,su){if(!S||!su)return null;const ev=[];let bad=false,ok=0;
+  const bb=S.ch['Brake Bias Rear'];const rb=setupVal(su,'RearBrakeSetting');const m=rb&&/([\d.]+)\s*:\s*([\d.]+)/.exec(rb);
+  if(bb&&m){const meas=vdMed(Array.from(bb.v.filter((_,i)=>i%10===0)));const set=+m[2];if(Number.isFinite(meas)){const same=Math.abs(meas-set)<=0.15;same?ok++:bad=true;
+    ev.push(`${tr('ripartizione frenata post.')} ${fx(meas,1)}% ${tr('in telemetria')}, ${fx(set,1)}% ${tr('nel setup')} ${same?'✓':'✗'}`);}}
+  const cam=(w,sec)=>{const c=S.ch['Camber '+w],sp=S.ch['Ground Speed'],la=S.ch['G Force Lat'];const v=setupVal(su,'CamberSetting',sec);if(!c||!sp||!la||!v)return;const o=[];
+    for(let i=0;i<c.v.length;i+=5){const t=i/c.f,s=sampleAt(sp,t);if(s>80&&s<140&&Math.abs(sampleAt(la,t))<0.1)o.push(c.v[i]);}const meas=vdMed(o),set=parseFloat(v);if(!Number.isFinite(meas)||!Number.isFinite(set))return;
+    ev.push(`${tr(w[0]==='F'?'campanatura ant.':'campanatura post.')} ${fx(meas,2)}° ${tr('misurata in rettilineo')}, ${fx(set,1)}° ${tr('nel setup')} (${tr('indicativo')})`);};
+  cam('FL','FRONTLEFT');cam('RL','REARLEFT');
+  return {st:bad?'no':ok?'compatibile':'non verificabile',ev};}
 function sesSetupHTML(S){const a=sesSetupGet(S);const su=byId($('#suFile')?.value);const loaded=a?lds().find(x=>x.kind==='svm'&&x.name===a.name):null;const changed=a&&loaded&&loaded.text&&svmHash(loaded.text)!==a.hash;
   const st=a?a.st:'mancante';const cls={confermato:'good',suggerito:'warn',mancante:'muted'}[st];const mm=su?suCarMatch(S,su):null;
   return `<div class="tses"><span>${tr('Setup della sessione')}</span><span class="tst ${cls}">${tr(st==='confermato'?'setup confermato':st==='suggerito'?'abbinamento suggerito':'setup mancante')}</span>${a?`<b>${esc(a.name)}</b> <small class="muted">${tr('copia salvata il')} ${new Date(a.at).toLocaleDateString()}</small>`:''}
     ${changed?`<span class="w small">${tr('il file è cambiato dopo: uso la copia salvata con la sessione')}</span>`:''}${mm===false?`<span class="w small">${tr('auto del setup diversa da quella della telemetria')}</span>`:''}
+    ${(()=>{const K=su?suTeleCheck(S,su):null;if(!K||!K.ev.length)return '';return `<span class="tsck ${K.st==='no'?'w':K.st==='compatibile'?'pos':'muted'} small" title="${esc(K.ev.join(' · '))}">${K.st==='no'?'✗ '+tr('la telemetria non corrisponde a questo setup (a meno che la ripartizione non sia stata cambiata in macchina)'):K.st==='compatibile'?'✓ '+tr('telemetria compatibile con questo setup'):tr('compatibilità non verificabile')}: ${esc(K.ev[0])}</span>`;})()}
     <span class="tsesb">${su&&(!a||a.name!==su.name||a.st!=='confermato')?`<button type="button" class="btn" data-ses="ok">${tr('Conferma')}: ${esc(su.name)}</button>`:''}${a&&(!su||su.name!==a.name||changed)?`<button type="button" class="btn" data-ses="old">${tr('Apri la copia salvata')}</button>`:''}${a?`<button type="button" class="btn" data-ses="rm">${tr('Togli')}</button>`:''}</span></div>`;}
 function sesSetupBind(S){$$('[data-ses]').forEach(b=>b.onclick=async()=>{const k=b.dataset.ses;const su=byId($('#suFile').value);
   if(k==='ok'&&su){if(suCarMatch(S,su)===false&&!confirm(tr('Il setup sembra di un\'altra auto. Confermare lo stesso?')))return;sesSetupSet(S,su,'confermato');toast(tr('Setup confermato per questa sessione'));}

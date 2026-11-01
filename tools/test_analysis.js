@@ -152,4 +152,10 @@ console.log('13. File reali: nomi con accenti e setup salvati in italiano');
   const su=C.parseSVM('[FRONTLEFT]\nTenderSpringSetting=0//Separata\nCamberSetting=5//-1.2 deg\n[GENERAL]\nPitstop1Setting=0//N/D\n','it.svm');
   ok(C.setupVal(su,'TenderSpringSetting')==null&&C.setupVal(su,'Pitstop1Setting')==null&&C.setupVal(su,'CamberSetting')==='-1.2 deg','setup in italiano: «Separata» e «N/D» non sono valori regolabili');}
 
+console.log('14. Quale setup è compatibile con la telemetria');
+{const S=session({extra:[{name:'Brake Bias Rear',unit:'%',f:100,v:gen(420,100,()=>46.3)}]});
+  const A=C.parseSVM('[CONTROLS]\nRearBrakeSetting=10//53.7:46.3\n','A.svm'),B=C.parseSVM('[CONTROLS]\nRearBrakeSetting=12//53.2:46.8\n','B.svm');
+  ok(C.suTeleCheck(S,A).st==='compatibile'&&C.suTeleCheck(S,B).st==='no','ripartizione frenata: un setup compatibile, l\'altro escluso');
+  ok(C.suTeleCheck(S,C.parseSVM('[GENERAL]\nFuelSetting=1//10 L\n','C.svm')).st==='non verificabile','senza valori confrontabili: non verificabile, non «compatibile»');}
+
 console.log(`\n${n-fails}/${n} controlli superati`);process.exit(fails?1:0);
