@@ -50,15 +50,15 @@ function techChart(series,{w=700,h=230,xl='',yl='',x0,x1,y0,y1,mark}={}){const P
   return `<figure class="tch"><svg viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(yl)}">${grid}${lines}${mk}<text x="${w-P.r}" y="${h-4}" text-anchor="end" class="tal">${esc(xl)}</text><text x="${P.l}" y="${P.t-2}" class="tal">${esc(yl)}</text></svg>${leg?`<figcaption>${leg}</figcaption>`:''}</figure>`;}
 
 // ---------- damper histogram with units, knee and samples out of range ----------
-function techHist(H,knee,HB,sign){const W=760,Hh=140,P={l:8,r:8,t:8,b:30};const nb=H.h.length,bw=(W-P.l-P.r)/nb;const tot=H.n||1,totB=HB?.n||1;
+function techHist(H,knee,HB,sign){const W=Math.max(360,Math.min(760,(($('#techP')?.clientWidth||1560)-64)/2)),Hh=154,P={l:8,r:8,t:8,b:42};const nb=H.h.length,bw=(W-P.l-P.r)/nb;const tot=H.n||1,totB=HB?.n||1;
   const mx=Math.max(...H.h.map(x=>x/tot),...(HB?HB.h.map(x=>x/totB):[0]),1e-6);const x=v=>P.l+(v+H.range)/(2*H.range)*(W-P.l-P.r);const y=p=>Hh-P.b-p/mx*(Hh-P.t-P.b);
   const bars=H.h.map((c,i)=>{const v=-H.range+i*H.bin;const fast=Math.abs(v+H.bin/2)>=knee;return `<rect x="${(P.l+i*bw+0.4).toFixed(1)}" y="${y(c/tot).toFixed(1)}" width="${Math.max(0.5,bw-0.8).toFixed(1)}" height="${(Hh-P.b-y(c/tot)).toFixed(1)}" fill="var(--lapA)" opacity="${fast?0.5:0.95}"/>`;}).join('');
   const bl=HB?`<polyline fill="none" stroke="var(--lapB)" stroke-width="2" points="${HB.h.map((c,i)=>`${(P.l+(i+0.5)*bw).toFixed(1)},${y(c/totB).toFixed(1)}`).join(' ')}"/>`:'';
-  const ticks=[-H.range,-H.range/2,0,H.range/2,H.range].map((v,i)=>`<text x="${x(v)}" y="${Hh-P.b+14}" text-anchor="${i===0?'start':i===4?'end':'middle'}">${v}</text>`).join('');
+  const ticks=[-H.range,-H.range/2,0,H.range/2,H.range].map((v,i)=>`<text x="${x(v)}" y="${Hh-P.b+18}" text-anchor="${i===0?'start':i===4?'end':'middle'}">${v}</text>`).join('');
   const lo=H.lo/tot*100,hi=H.hi/tot*100;const neg=sign?tr('estensione'):tr('verso −'),pos=sign?tr('compressione'):tr('verso +');
   return `<svg class="thist" viewBox="0 0 ${W} ${Hh}" role="img" aria-label="${esc(tr('Istogramma velocità ammortizzatore'))}">${bars}${bl}
     <line x1="${x(-knee)}" x2="${x(-knee)}" y1="${P.t}" y2="${Hh-P.b}" class="tmk"/><line x1="${x(knee)}" x2="${x(knee)}" y1="${P.t}" y2="${Hh-P.b}" class="tmk"/><line x1="${x(0)}" x2="${x(0)}" y1="${P.t}" y2="${Hh-P.b}" class="tz"/>
-    ${ticks}<text x="${W/2}" y="${Hh-2}" text-anchor="middle" class="tal">mm/s · ← ${esc(neg)} · ${esc(pos)} →</text></svg>
+    ${ticks}<text x="${W/2}" y="${Hh-8}" text-anchor="middle" class="tal">mm/s · ← ${esc(neg)} · ${esc(pos)} →</text></svg>
     <div class="thx"><span class="${lo>0.5?'w':''}">${fx(lo,1)}% ${tr('sotto')} −${H.range}</span><span>${tr('soglia lento/veloce')} ±${knee} mm/s</span><span class="${hi>0.5?'w':''}">${fx(hi,1)}% ${tr('sopra')} +${H.range}</span></div>`;}
 
 // ---------- 1. quality ----------
@@ -72,7 +72,7 @@ function techQualityHTML(S,X){const rows=ANA.map(a=>{const A=chqAnalysis(S,a);co
     const conv=(c.conv||[]).filter(x=>x.k!==1||x.cert!=='certa').map(x=>`${x.from||'—'} → ${x.to}${x.k!==1?` (×${+x.k.toFixed(4)})`:''} · <span class="${x.cert==='incerta'?'w':''}">${tr(certN[x.cert]||x.cert)}</span>`).join('<br>');
     return `<tr><td class="l mono">${esc(c.name)}${c.alias?`<div class="muted">${tr('nel file')}: ${esc(c.alias)}</div>`:''}</td><td><span class="tst ${st[0]}">${tr(st[1])}</span></td><td class="mono">${c.raw?esc(c.raw.unit||'—'):'—'} → ${esc(c.u||'—')}</td><td class="l small">${conv||'—'}</td><td class="mono">${c.f?c.f+' Hz':'—'}${c.effHz&&c.f&&c.effHz<c.f*0.9?` <span class="w">(~${fx(c.effHz,0)})</span>`:''}</td><td class="l small">${esc(c.why||'')}</td></tr>`;}).join('');
   const sw=Object.values(X.sus.w);const vs=sw[0];
-  const der=[[tr('Velocità ammortizzatore'),vs?(vs.velSrc==='misurato'?tr('misurata (canale Damper Vel)'):`${tr('derivata dalla posizione')}: Savitzky–Golay ${2*vs.filt.m+1} ${tr('campioni')} (${vs.filt.ms} ms) ${tr('su ogni giro separato, con 1 s di margine')}`):tr('non disponibile')],
+  const der=[[tr('Velocità ammortizzatore'),vs?.velSrc==='misurato'?tr('misurata (canale Damper Vel)'):vs?.filt?`${tr('derivata dalla posizione')}: Savitzky–Golay ${2*vs.filt.m+1} ${tr('campioni')} (${vs.filt.ms} ms) ${tr('su ogni giro separato, con 1 s di margine')}`:tr('non disponibile')],
     [tr('Segno compressione'),sw.length?VD_W.filter(w=>X.sus.w[w]).map(w=>`${w}: ${tr(X.sus.w[w].sign.cert)}`).join(' · '):tr('non disponibile')],
     [tr('Movimento comune e differenziale degli assi, indice di beccheggio'),X.ax.have?tr('derivati dalle quattro posizioni (indicatori, non la corsa delle molle)'):tr('non disponibile')],
     [tr('Rake'),X.pl.none?tr('non disponibile'):tr('derivato: altezza posteriore − anteriore in mm (non è un angolo: il passo non è nel file)')],
@@ -91,9 +91,10 @@ function techDampHTML(S,X,XB){const R=X.sus,RB=XB?.sus;const ws=VD_W.filter(w=>R
   const o=X.opt;const signTxt=x=>{const s=x.sign;const ev=s.ev.map(e=>`${tr(e.lab)} ${e.r>0?'+':'−'}${fx(Math.abs(e.r),2)}`).join(', ');
     return s.sign?`${tr('compressione')} = ${tr('posizione che')} ${s.sign>0?tr('aumenta'):tr('diminuisce')} · <b class="${s.cert==='verificato'?'pos':'w'}">${tr(s.cert)}</b>${ev?` (${ev})`:''}`:`<b class="w">${tr('direzione di compressione non determinabile')}</b>: ${esc(tr(s.why||''))}`;};
   const cards=ws.map(w=>{const x=R.w[w],xb=RB?.w[w];const z=x.z;
+    if(!x.hist.n)return `<div class="tdc"><div class="tdh"><b>${tr(TECH_WN[w])}</b><span class="tst bad">${tr('non analizzabile')}</span></div><p>${esc(x.velWhy||tr('Dati insufficienti'))}</p><p class="muted small">${tr('Nessun consiglio ammortizzatori da questo segnale.')}</p></div>`;
     return `<div class="tdc" data-w="${w}"><div class="tdh"><b>${tr(TECH_WN[w])}</b><span class="tst ${x.velSrc==='misurato'?'good':'muted'}">${tr(x.velSrc==='misurato'?'velocità misurata':'velocità derivata')}</span><span class="muted small">${fx(x.s,0)} s ${tr('di dati')}</span></div>
       <div class="small tsg">${signTxt(x)}</div>${techHist(x.hist,o.knee,xb?.hist,x.sign.sign)}
-      <table class="lbt tzt"><thead><tr><th class="l"></th><th>${tr('Estensione veloce')}</th><th>${tr('Estensione lenta')}</th><th>${tr('Compressione lenta')}</th><th>${tr('Compressione veloce')}</th></tr></thead><tbody>
+      <table class="lbt tzt"><thead><tr><th class="l"></th><th>${tr(x.sign.sign?'Estensione veloce':'Verso − veloce')}</th><th>${tr(x.sign.sign?'Estensione lenta':'Verso − lento')}</th><th>${tr(x.sign.sign?'Compressione lenta':'Verso + lento')}</th><th>${tr(x.sign.sign?'Compressione veloce':'Verso + veloce')}</th></tr></thead><tbody>
        <tr><td class="l"><b class="ca">A</b> % ${tr('tempo')}</td><td>${fx(z.fr,1)}</td><td>${fx(z.sr,1)}</td><td>${fx(z.sb,1)}</td><td>${fx(z.fb,1)}</td></tr>
        ${xb?`<tr><td class="l"><b class="cb">B</b> % ${tr('tempo')}</td><td>${fx(xb.z.fr,1)}</td><td>${fx(xb.z.sr,1)}</td><td>${fx(xb.z.sb,1)}</td><td>${fx(xb.z.fb,1)}</td></tr>`:''}</tbody></table>
       <div class="tkv small"><span>${tr('Velocità al 95%')}</span><span>${tr('compressione')} ${fx(x.bump95,0)} · ${tr('estensione')} ${fx(Math.abs(x.reb95),0)} mm/s${xb?` · <span class="cb">B ${fx(xb.bump95,0)} · ${fx(Math.abs(xb.reb95),0)}</span>`:''}</span>
@@ -200,7 +201,10 @@ function techCards(S,laps,su,X){X=X||techData(S,laps);const C=[];const n=laps.le
   const mk=(g,o)=>{const e=g.ev[0];const L=lenOf(e.li);const W=techWhere(S,g.d,L);
     if(g.others?.length)o.ev=[...o.ev,`${tr('stesso fenomeno anche in')} ${g.others.length} ${g.others.length===1?tr('altro punto'):tr('altri punti')}: ${g.others.slice(0,5).map(x=>techWhere(S,x.d,lenOf(x.ev[0].li)).txt).join(', ')}${g.others.length>5?'…':''}`];const frac=g.d/L;const M=TECH_METRIC[g.k];const per=techPerLapAt(S,laps,g.k,g.w,frac,M[0]);
     const rel=chqReliability(S,laps,g.k==='low'?'plat':g.k==='unload'?'load':'damp',{perLap:per,tol:o.tol,unit:M[2],dec:M[3]});
-    const fx0=o.fx?{...o.fx,label:SETUP_LABELS[o.fx.key]||o.fx.key,now:o.fx.key?val(o.fx.key,o.fx.sec):null}:null;
+    // Observations may remain visible, but unusable signals must never generate setup changes.
+    const directionOK=!['rec','pack','osc'].includes(g.k)||X.sus.w[g.w]?.sign.sign;
+    const available=!su||!o.fx?.key||val(o.fx.key,o.fx.sec)!=null;
+    const fx0=o.fx&&rel.lv>0&&directionOK&&available?{...o.fx,label:SETUP_LABELS[o.fx.key]||o.fx.key,now:o.fx.key?val(o.fx.key,o.fx.sec):null}:null;
     C.push({id:g.k+':'+g.w+':'+Math.round(frac*1000),k:g.k,w:g.w,s:o.s,a:o.a,cat:o.cat,t:o.t,where:{txt:`${W.txt} · ${techPhN(g.ph)}${g.kerb>0.5&&g.ph!=='kerb'?' · '+tr('cordolo'):''}`,d:W.d,li:e.li,te:e.t},
       ev:o.ev.filter(Boolean),rep:{n:g.n,of:n,txt:`${g.n} ${tr('giri su')} ${n}${g.rep?' · '+tr('ripetibile'):' · '+tr('non ripetibile')}`,per},causes:o.causes,rel,fx:fx0,expect:o.expect,
       pt:{loc:1,k:g.k,w:g.w,frac,field:M[0],label:M[1],unit:M[2],dec:M[3],better:g.k==='low'?1:-1,minDiff:o.minDiff||0}});};
@@ -245,9 +249,12 @@ const TECH_SUP={'sì':'pos','compatibile':'pos','possibile':'w','no':'muted','no
 const TECH_CAT={regime:'Sostegno a regime: molle, 3° elemento, packer',transitori:'Transitori: ammortizzatori',rollio:'Rollio: barre e molle'};
 function techCardHTML(c,S,laps){const t=typeof ptAll==='function'?[...ptAll()].reverse().find(x=>x.cardId===c.id&&x.venue===S.meta?.venue):null;
   let out=tr('nessuna prova ancora');if(t){if(t.res)out=`${tr(PT_R[t.res.r]?.[0]||'Inconcludente')} (${tr(t.closed==='keep'?'tenuta':t.closed==='back'?'tolta':'annullata')})`;
-    else if(t.base.id!==S.id){const J=techJudge(t,S,laps);out=`${tr(PT_R[J.r][0])}: ${fx(vdMean(t.base.per||[]),c.pt.dec)} → ${fx(vdMean(J.now),c.pt.dec)} ${c.pt.unit}${J.why?' · '+J.why:''}`;}else out=tr('prova in corso: carica la telemetria dopo la modifica');}
+    else if(t.base.id!==S.id){const J=techJudge(t,S,laps,analysisSetup(S));out=`${tr(PT_R[J.r][0])}: ${fx(vdMean(t.base.per||[]),c.pt.dec)} → ${fx(vdMean(J.now),c.pt.dec)} ${c.pt.unit}${J.why?' · '+J.why:''}`;}else out=tr('prova in corso: carica la telemetria dopo la modifica');}
   return `<article class="tcard s${c.s}" data-id="${esc(c.id)}"><header><i></i><b>${esc(c.t)}</b><span class="muted small">${tr(TECH_CAT[c.cat]||'')}</span>${c.where.li!=null?`<button type="button" class="btn icon tcgo" data-li="${c.where.li}" data-t="${c.where.te}" data-w="${c.w}" data-k="${c.k}" title="${esc(tr('Apri nei grafici sincronizzati'))}">⌖</button>`:''}</header>
-    <ol class="t10">
+    <div class="tbrief"><span>${esc(c.where.txt)}</span><span class="${REL_CLS[c.rel?.label]||'muted'}">${tr('affidabilità')} ${tr(c.rel?.label||'non analizzabile')}</span><span>${esc(c.rep.txt)}</span></div>
+    <p class="tproposal">${c.fx?`<b>${esc(tr(c.fx.label))}</b> · ${esc(c.fx.dir)}${c.fx.now?` <small>(${tr('ora')} ${esc(c.fx.now)})</small>`:''}`:tr('Nessuna modifica proposta: verifica prima i dati e le evidenze.')}</p>
+    ${c.fx&&c.fx.now&&c.pt&&!t?`<button type="button" class="btn tcpt" data-id="${esc(c.id)}">${tr('Prova questa modifica')}</button>`:''}
+    <details class="tproof"><summary>${tr('Evidenze, cause e verifica')}</summary><ol class="t10">
      <li><span>${tr('Fenomeno')}</span><div>${esc(c.t)}</div></li>
      <li><span>${tr('Dove e quando')}</span><div>${esc(c.where.txt)}</div></li>
      <li><span>${tr('Evidenze')}</span><div class="eev">${c.ev.map(e=>`<span>${esc(e)}</span>`).join('')}</div></li>
@@ -257,11 +264,21 @@ function techCardHTML(c,S,laps){const t=typeof ptAll==='function'?[...ptAll()].r
      <li><span>${tr('Modifica da provare')}</span><div>${c.fx?`<b>${esc(tr(c.fx.label))}</b>: ${esc(c.fx.dir)} <small class="muted">${esc(c.fx.why)}</small>`:tr('nessuna')}</div></li>
      <li><span>${tr('Valore nel .svm')}</span><div class="mono">${c.fx?(c.fx.now?esc(c.fx.now):`<span class="muted">${tr('carica o conferma il setup della sessione')}</span>`):'—'}</div></li>
      <li><span>${tr('Risultato atteso e verifica')}</span><div>${esc(c.expect)}${c.pt?` <small class="muted">(${tr('metrica')}: ${tr(c.pt.label)}${c.rep.per?` · ${tr('ora')} ${c.rep.per.map(v=>fx(v,c.pt.dec)).join(' / ')} ${c.pt.unit}`:''})</small>`:''}</div></li>
-     <li><span>${tr('Esito prima/dopo')}</span><div>${esc(out)}${c.fx&&c.pt&&!t?` <button type="button" class="btn tcpt" data-id="${esc(c.id)}">${tr('Prova questa modifica')}</button>`:''}</div></li></ol></article>`;}
+     <li><span>${tr('Esito prima/dopo')}</span><div>${esc(out)}</div></li></ol></details></article>`;}
 function techDiagHTML(S,X,su){const C=techCards(S,X.laps,su,X);
   const top=C.slice(0,6),rest=C.slice(6);
   return C.length?`<p class="small muted">${tr('Ogni scheda parte da un fenomeno misurato e ripetibile. Una modifica alla volta; un tempo migliore non dimostra da solo che il problema è risolto: guarda la metrica della scheda.')}</p><div class="tcards">${top.map(c=>techCardHTML(c,S,X.laps)).join('')}</div>${rest.length?`<details class="tmore"><summary>${tr('Altre schede')} (${rest.length})</summary><div class="tcards">${rest.map(c=>techCardHTML(c,S,X.laps)).join('')}</div></details>`:''}`
     :`<p>${tr('Nessun fenomeno ripetibile da collegare al setup nei giri scelti.')}</p><p class="muted small">${tr('Con meno di 2 giri lo stesso fenomeno non può risultare ripetibile.')}</p>`;}
+
+function techOverviewHTML(S,X){
+  const usable=Object.values(X.rel).filter(r=>r.lv>0).length;
+  const events=X.sus.groups.filter(g=>g.rep&&g.k!=='max').length+(X.pl.lowG||[]).filter(g=>g.rep).length;
+  const cards=techCards(S,X.laps,analysisSetup(S),X).filter(c=>c.fx).length;
+  const steps=[['q','01','Controlla i dati',usable+' / '+ANA.length+' '+tr('analisi disponibili'),'Canali, unità e frequenze prima dei consigli.'],
+    ['damp','02','Leggi la macchina',events+' '+tr('eventi ripetibili'),'Ammortizzatori, terzo elemento e piattaforma.'],
+    ['diag','03','Verifica una modifica',cards+' '+tr('prove suggerite'),'Una modifica, una metrica, un confronto prima e dopo.']];
+  return `<div class="tworkflow">${steps.map(([tab,n,t,v,d])=>`<button type="button" data-tt="${tab}" class="tstep"><span class="tstepn">${n}</span><span><b>${tr(t)}</b><strong>${v}</strong><small>${tr(d)}</small></span><span aria-hidden="true">→</span></button>`).join('')}</div>`;
+}
 
 // ---------- the setup each session was run with ----------
 // stored by session: {st: 'confermato' | 'suggerito', name, car, hash, text (copy of the .svm), at}. «Mancante» = nothing stored.
@@ -269,8 +286,16 @@ function sesKey(S){const m=S.meta||{};return ['ses',m.venue,m.date,m.time,(m.dri
 function svmHash(t){let h=0x811c9dc5;for(let i=0;i<t.length;i++){h^=t.charCodeAt(i);h=Math.imul(h,0x01000193)>>>0;}return h.toString(16);}
 function sesSetupAll(){return LS.get('sesSetup',{})||{};}
 function sesSetupGet(S){return sesSetupAll()[sesKey(S)]||null;}
+// The confirmed copy is the default analysis input. Exploring another setup is an explicit choice per session.
+function sesSetupResolve(S,selected){
+  if(!S)return selected;
+  const a=sesSetupGet(S);if(!a||a.st!=='confermato'||LS.get('sesMode:'+sesKey(S),'saved')==='selected')return selected;
+  if(S._setupCopy?.hash!==a.hash){const su=parseSVM(a.text,a.name);su.label=a.name.replace(/\.svm$/i,'');su.snapshot=true;S._setupCopy={hash:a.hash,su};}
+  return S._setupCopy.su;
+}
+function analysisSetup(S=active()?.S){return sesSetupResolve(S,byId($('#suFile')?.value));}
 function sesSetupSet(S,su,st){const A=sesSetupAll();const k=sesKey(S);if(!su){delete A[k];LS.set('sesSetup',A);return;}const text=su.text||setupText(su);
-  A[k]={st,name:su.name,car:su.car||'',hash:svmHash(text),text,at:Date.now()};const keys=Object.keys(A).sort((a,b)=>A[a].at-A[b].at);while(keys.length>60)delete A[keys.shift()];LS.set('sesSetup',A);}
+  A[k]={st,name:su.name,car:su.car||'',hash:svmHash(text),text,at:Date.now()};const keys=Object.keys(A).sort((a,b)=>A[a].at-A[b].at);while(keys.length>60)delete A[keys.shift()];LS.set('sesSetup',A);LS.set('sesMode:'+k,'saved');}
 // is the car of the setup the car of the telemetry?
 function suCarMatch(S,su){const car=(S.meta?.car||S.merged?.d.car||'').toLowerCase(),sc=(su?.car||'').toLowerCase();if(!car||!sc)return null;return sc.includes(car)||(car.startsWith('hyper')&&/hypercar/.test(sc))||car.split(/\s+/).some(t=>t.length>3&&sc.includes(t));}
 // does the telemetry agree with this setup? Only settings the car reports back are compared: the brake balance
@@ -286,13 +311,16 @@ function suTeleCheck(S,su){if(!S||!su)return null;const ev=[];let bad=false,ok=0
     ev.push(`${tr(w[0]==='F'?'campanatura ant.':'campanatura post.')} ${fx(meas,2)}° ${tr('misurata in rettilineo')}, ${fx(set,1)}° ${tr('nel setup')} (${tr('indicativo')})`);};
   cam('FL','FRONTLEFT');cam('RL','REARLEFT');
   return {st:bad?'no':ok?'compatibile':'non verificabile',ev};}
-function sesSetupHTML(S){const a=sesSetupGet(S);const su=byId($('#suFile')?.value);const loaded=a?lds().find(x=>x.kind==='svm'&&x.name===a.name):null;const changed=a&&loaded&&loaded.text&&svmHash(loaded.text)!==a.hash;
+function sesSetupHTML(S){const a=sesSetupGet(S);const su=byId($('#suFile')?.value);const loaded=a?svms().find(x=>x.name===a.name):null;const changed=!!(a&&loaded&&svmHash(loaded.text||setupText(loaded))!==a.hash);
+  const saved=a?.st==='confermato'&&LS.get('sesMode:'+sesKey(S),'saved')!=='selected';const used=sesSetupResolve(S,su);const different=a&&su&&(a.name!==su.name||svmHash(su.text||setupText(su))!==a.hash);
   const st=a?a.st:'mancante';const cls={confermato:'good',suggerito:'warn',mancante:'muted'}[st];const mm=su?suCarMatch(S,su):null;
   return `<div class="tses"><span>${tr('Setup della sessione')}</span><span class="tst ${cls}">${tr(st==='confermato'?'setup confermato':st==='suggerito'?'abbinamento suggerito':'setup mancante')}</span>${a?`<b>${esc(a.name)}</b> <small class="muted">${tr('copia salvata il')} ${new Date(a.at).toLocaleDateString()}</small>`:''}
-    ${changed?`<span class="w small">${tr('il file è cambiato dopo: uso la copia salvata con la sessione')}</span>`:''}${mm===false?`<span class="w small">${tr('auto del setup diversa da quella della telemetria')}</span>`:''}
+    <span class="tused">${tr('Analisi con')}: <b>${esc(used?.name||tr('setup mancante'))}</b> · ${tr(saved?'copia confermata':'setup selezionato')}</span>
+    ${changed?`<span class="w small">${tr('Il file originale è cambiato. La copia storica è conservata.')}</span>`:''}${mm===false?`<span class="w small">${tr('auto del setup diversa da quella della telemetria')}</span>`:''}
     ${(()=>{const K=su?suTeleCheck(S,su):null;if(!K||!K.ev.length)return '';return `<span class="tsck ${K.st==='no'?'w':K.st==='compatibile'?'pos':'muted'} small" title="${esc(K.ev.join(' · '))}">${K.st==='no'?'✗ '+tr('la telemetria non corrisponde a questo setup (a meno che la ripartizione non sia stata cambiata in macchina)'):K.st==='compatibile'?'✓ '+tr('telemetria compatibile con questo setup'):tr('compatibilità non verificabile')}: ${esc(K.ev[0])}</span>`;})()}
-    <span class="tsesb">${su&&(!a||a.name!==su.name||a.st!=='confermato')?`<button type="button" class="btn" data-ses="ok">${tr('Conferma')}: ${esc(su.name)}</button>`:''}${a&&(!su||su.name!==a.name||changed)?`<button type="button" class="btn" data-ses="old">${tr('Apri la copia salvata')}</button>`:''}${a?`<button type="button" class="btn" data-ses="rm">${tr('Togli')}</button>`:''}</span></div>`;}
-function sesSetupBind(S){$$('[data-ses]').forEach(b=>b.onclick=async()=>{const k=b.dataset.ses;const su=byId($('#suFile').value);
+    <span class="tsesb">${saved&&different?`<button type="button" class="btn" data-ses="selected">${tr('Prova il setup selezionato')}</button>`:''}${a?.st==='confermato'&&!saved?`<button type="button" class="btn" data-ses="saved">${tr('Torna al setup confermato')}</button>`:''}${su&&(!a||different||a.st!=='confermato')?`<button type="button" class="btn" data-ses="ok">${tr('Conferma')}: ${esc(su.name)}</button>`:''}${a?`<button type="button" class="btn" data-ses="rm">${tr('Togli')}</button>`:''}</span></div>`;}
+function sesSetupBind(S,root=document){$$('[data-ses]',root).forEach(b=>b.onclick=async()=>{const k=b.dataset.ses;const su=byId($('#suFile').value);
+  if(k==='selected'||k==='saved')LS.set('sesMode:'+sesKey(S),k);
   if(k==='ok'&&su){if(suCarMatch(S,su)===false&&!confirm(tr('Il setup sembra di un\'altra auto. Confermare lo stesso?')))return;sesSetupSet(S,su,'confermato');toast(tr('Setup confermato per questa sessione'));}
   if(k==='rm')sesSetupSet(S,null);
   if(k==='old'){const a=sesSetupGet(S);if(a){const name=a.name.replace(/\.svm$/i,'')+` (${tr('copia')} ${new Date(a.at).toLocaleDateString().replace(/\//g,'-')}).svm`;const it=await addFile(name,new TextEncoder().encode(a.text).buffer,{persist:false});relink();refreshAll();if(it?.id)$('#suFile').value=it.id;}}
@@ -307,13 +335,14 @@ function renderTech(){const host=$('#techP');if(!host)return;const S=active()?.S
   if(!host.querySelector('.tech')||host.dataset.s!==S.id){host.dataset.s=S.id;host.innerHTML=`<div class="panel tech"><div class="empty">${tr('Calcolo…')}</div></div>`;}
   clearTimeout(TECH._t);TECH._t=setTimeout(()=>{try{techDraw(S,laps);}catch(e){console.error(e);host.innerHTML=`<div class="warnbar">${esc(e.message)}</div>`;}},30);}
 function techDraw(S,laps){const host=$('#techP');const X=techData(S,laps);const SB=techB(S);const XB=SB?techData(SB,techLaps(SB)):null;const sel=techSel();
-  const su=typeof DIAG!=='undefined'&&DIAG&&DIAG.S===S?DIAG.su:byId($('#suFile')?.value);
+  const su=typeof DIAG!=='undefined'&&DIAG&&DIAG.S===S?DIAG.su:analysisSetup(S);
   const others=lds().filter(x=>x!==S&&x.kind==='ld'&&!x.sample&&x.meta?.venue===S.meta?.venue);
-  const cond=XB?vdCondDiffs(vdConditions(S,laps,su),vdConditions(SB,XB.laps,null)):[];
+  const cond=XB?vdCondDiffs(vdConditions(S,laps,su),vdConditions(SB,XB.laps,sesSetupResolve(SB,null))):[];
   const cor=techCorners(S);const tab=TECH_TABS.find(t=>t[0]===TECH.tab)?TECH.tab:'q';
   const body=tab==='q'?techQualityHTML(S,X):tab==='damp'?techDampHTML(S,X,XB):tab==='axle'?techAxleHTML(S,X,XB):tab==='plat'?techPlatHTML(S,X,XB):tab==='ev'?techEvHTML(S,X):techDiagHTML(S,X,su);
-  host.innerHTML=`<div class="panel tech${TECH.full?' tfull':''}">
+  host.innerHTML=`<div class="panel tech${TECH.full?' tfull':''}" data-tech-tab="${tab}">
    <div class="ttop"><div class="ttl"><div class="ey">${tr('Analisi tecnica')}</div><b>${esc(S.meta?.venue||'')}</b><span class="muted small">${esc(engLapsText(laps))}</span></div>
+    <label class="f tsetup">${tr('Setup da confrontare')}<select id="techSetup"><option value="">${tr('setup mancante')}</option>${svms().map(x=>`<option value="${esc(x.id)}"${$('#suFile').value===x.id?' selected':''}>${esc(x.label||x.name)}</option>`).join('')}</select></label>
     <div class="tsel"><label class="f">${tr('Giri')}<select id="vdLaps"><option value="eng"${LS.get('vd:laps','eng')!=='all'?' selected':''}>${tr('come Race Engineer')}</option><option value="all"${LS.get('vd:laps','eng')==='all'?' selected':''}>${tr('tutti i giri lanciati validi')}</option></select></label>
      <label class="f">${tr('Giro')}<select id="vdLap"><option value="">${tr('tutti')}</option>${laps.map(l=>`<option value="${l.i}"${sel.lap===l.i?' selected':''}>${tr('G')}${l.num} · ${fmtLap(l.time)}</option>`).join('')}</select></label>
      <label class="f">${tr('Tratto')}<select id="vdCor"><option value="">${tr('tutto il giro')}</option>${cor.map(c=>`<option value="${c.k}"${sel.c==String(c.k)?' selected':''}>T${c.k} · ${Math.round(c.dS)}–${Math.round(c.dE)} m</option>`).join('')}<option value="r"${sel.c==='r'?' selected':''}>${tr('intervallo…')}</option></select></label>
@@ -322,11 +351,14 @@ function techDraw(S,laps){const host=$('#techP');const X=techData(S,laps);const 
      <label class="f tsb">${tr('Confronta con (B)')}<select id="vdB"><option value="">${tr('nessuna')}</option>${others.map(o=>`<option value="${esc(o.id)}"${SB===o?' selected':''}>${esc((o.meta?.date||'')+' '+(o.meta?.time||'').slice(0,5)+' · '+(o.label||o.name))}</option>`).join('')}</select></label>
      <button type="button" class="btn icon" id="vdFull" title="${esc(tr(TECH.full?'Riduci':'Ingrandisci il pannello'))}" aria-pressed="${TECH.full}">${TECH.full?'⤡':'⤢'}</button></div></div>
    ${sesSetupHTML(S)}
-   ${XB?`<div class="${cond.length?'pcw2':'pcok'} tcond">${cond.length?`<b>⚠ ${tr('A e B non sono nelle stesse condizioni')}:</b> ${cond.map(c=>`<span>${esc(c)}</span>`).join('')}<small>${tr('Le differenze possono venire da qui e non dal setup.')}</small>`:`✓ ${tr('A e B in condizioni simili (pista, carburante, mescola, bagnato).')}`} <span class="muted small">A: ${X.laps.length} ${tr('giri')} · B: ${XB.laps.length} ${tr('giri')}</span></div>`:''}
+   ${techOverviewHTML(S,X)}
+   ${XB?`<div class="${cond.length?'pcw2':'pcok'} tcond">${cond.length?`<b>⚠ ${tr('A e B non sono nelle stesse condizioni')}:</b> ${cond.map(c=>`<span>${esc(c)}</span>`).join('')}<small>${tr('Le differenze possono venire da qui e non dal setup.')}</small>`:`✓ ${tr('Nessuna differenza rilevata nei dati disponibili. Controlla anche le condizioni non registrate.')}`} <span class="muted small">A: ${X.laps.length} ${tr('giri')} · B: ${XB.laps.length} ${tr('giri')}</span></div>`:''}
    <nav class="ttabs" role="tablist">${TECH_TABS.map(([k,l])=>`<button type="button" role="tab" data-tt="${k}" aria-selected="${k===tab}">${tr(l)}</button>`).join('')}</nav>
    <div class="tbody">${body}</div></div>`;
+  host.querySelectorAll('.tbody table').forEach(t=>{const wrap=document.createElement('div');wrap.className='ttable';t.before(wrap);wrap.append(t);});
   techBind(S,X);sesSetupBind(S);setTimeout(techFocus,60);}
 function techBind(S,X){const host=$('#techP');const setSel=o=>{LS.set('vd:sel',{...techSel(),...o});renderTech();};
+  const setup=$('#techSetup');if(setup)setup.onchange=()=>{const original=$('#suFile');original.value=setup.value;original.dispatchEvent(new Event('change'));};
   host.querySelectorAll('[data-tt]').forEach(b=>b.onclick=()=>{TECH.tab=b.dataset.tt;LS.set('vd:tab',TECH.tab);TECH.ev=null;renderTech();});
   const on=(id,f)=>{const e=$('#'+id);if(e)e.onchange=()=>f(e.value);};
   on('vdLaps',v=>{LS.set('vd:laps',v);LS.set('vd:sel',{});renderTech();});on('vdLap',v=>setSel({lap:v===''?null:+v}));
@@ -337,18 +369,23 @@ function techBind(S,X){const host=$('#techP');const setSel=o=>{LS.set('vd:sel',{
   const openEv=d=>{TECH.ev=d;if(TECH.tab!=='ev'){TECH.tab='ev';LS.set('vd:tab','ev');techDraw(S,X.laps);}techEvDetail(S,d);host.querySelectorAll('.tevr').forEach(r=>r.classList.toggle('on',r.dataset.li==d.li&&r.dataset.t==d.t&&r.dataset.w===d.w));};
   host.querySelectorAll('.tevr').forEach(r=>r.onclick=()=>openEv({...r.dataset}));
   host.querySelectorAll('.tcgo').forEach(b=>b.onclick=()=>openEv({...b.dataset}));
-  host.querySelectorAll('.tcpt').forEach(b=>b.onclick=()=>{const su=typeof DIAG!=='undefined'&&DIAG&&DIAG.S===S?DIAG.su:byId($('#suFile')?.value);const c=techCards(S,X.laps,su,X).find(x=>x.id===b.dataset.id);if(!c)return;techStartTest(S,X.laps,c,su);renderTech();toast(tr('Prova iniziata: cambia solo questo nel gioco, poi carica la nuova telemetria'));});
+  host.querySelectorAll('.tcpt').forEach(b=>b.onclick=()=>{const su=typeof DIAG!=='undefined'&&DIAG&&DIAG.S===S?DIAG.su:analysisSetup(S);const c=techCards(S,X.laps,su,X).find(x=>x.id===b.dataset.id);if(!c)return;techStartTest(S,X.laps,c,su);renderTech();toast(tr('Prova iniziata: cambia solo questo nel gioco, poi carica la nuova telemetria'));});
   if(TECH.ev&&TECH.tab==='ev')techEvDetail(S,TECH.ev);}
 // the guided test of ui45 (ptests), with a metric measured at the place of the card
 function techStartTest(S,laps,c,su){const L=ptAll().filter(t=>!(t.venue===S.meta?.venue&&!t.closed&&(t.car||'').toLowerCase()===(proCarOf(S)||'').toLowerCase()));
   const P=typeof proPace==='function'?proPace(S):null;
-  L.push({id:'pt'+Date.now(),at:Date.now(),venue:S.meta?.venue||'',car:proCarOf(S),cardId:c.id,problem:c.t,change:{label:c.fx?.label||'',dir:c.fx?.dir||'',key:c.fx?.key||'',now:c.fx?.now||''},metric:'loc',loc:c.pt,
-    hyp:`${tr(c.fx?.label||'')}: ${c.fx?.dir||''} → ${c.t}`,base:{id:S.id,when:`${S.meta?.date||''} ${(S.meta?.time||'').slice(0,5)}`,per:c.rep.per,lapTimes:laps.map(l=>l.time),pace:P?.t,best:S.best?.time,n:laps.length,lm:engLapMode(),
-      track:S.cond?.track?.avg,cond:S.cond?.label,su:su?.name||'',val:c.fx?.key&&su?suValAny(su,c.fx.key):null,fuel:su?suFind(su,'GENERAL',/^FuelCapacity/)||suFind(su,'GENERAL',/^FuelSetting/):null,cmp:su?suFind(su,'FRONTLEFT',/^CompoundSetting/):null}});ptSave(L);}
+  L.push({id:'pt'+Date.now(),at:Date.now(),venue:S.meta?.venue||'',car:proCarOf(S),cardId:c.id,problem:c.t,change:{label:c.fx?.label||'',dir:c.fx?.dir||'',key:c.fx?.key||'',sec:c.fx?.sec||null,now:c.fx?.now||''},metric:'loc',loc:c.pt,
+    hyp:`${tr(c.fx?.label||'')}: ${c.fx?.dir||''} → ${c.t}`,base:{conditions:vdConditions(S,laps,su),id:S.id,when:`${S.meta?.date||''} ${(S.meta?.time||'').slice(0,5)}`,per:c.rep.per,lapTimes:laps.map(l=>l.time),pace:P?.t,best:S.best?.time,n:laps.length,lm:engLapMode(),
+      track:S.cond?.track?.avg,cond:S.cond?.label,su:su?.name||'',val:c.fx?.key&&su?setupVal(su,c.fx.key,c.fx.sec||undefined):null,fuel:su?suFind(su,'GENERAL',/^FuelCapacity/)||suFind(su,'GENERAL',/^FuelSetting/):null,cmp:su?suFind(su,'FRONTLEFT',/^CompoundSetting/):null}});ptSave(L);}
 // before / after for a test with a place metric: the same metric at the same place in the new session, lap by lap
-function techJudge(t,S,laps){const p=t.loc;const now=techPerLapAt(S,laps,p.k,p.w,p.frac,p.field);const C=vdCompare(t.base.per||[],now,{better:p.better,minDiff:p.minDiff||0});
+function techJudge(t,S,laps,su){const p=t.loc;const now=techPerLapAt(S,laps,p.k,p.w,p.frac,p.field);const C=vdCompare(t.base.per||[],now,{better:p.better,minDiff:p.minDiff||0});
   const T=vdCompare(t.base.lapTimes||[],laps.map(l=>l.time),{better:-1,minDiff:0.05});
-  return {r:C.verdict==='migliorato'?'ok':C.verdict==='peggiorato'?'ko':'inc',why:C.why,C,T,now};}
+  const limits=t.base.conditions?vdCondDiffs(t.base.conditions,vdConditions(S,laps,su)):[];
+  if(t.venue&&t.venue!==S.meta?.venue)limits.push(tr('pista diversa'));
+  if(t.change?.key&&su&&t.base.val!=null&&setupVal(su,t.change.key,t.change.sec||undefined)===t.base.val)limits.push(tr('la modifica non risulta nel setup scelto'));
+  const a=chqAnalysis(S,ANA.find(x=>x.id===(p.k==='low'?'plat':p.k==='unload'?'load':'damp')));
+  if(a.st==='no')limits.push(tr('dati insufficienti per questa metrica'));
+  return {r:limits.length?'inc':C.verdict==='migliorato'?'ok':C.verdict==='peggiorato'?'ko':'inc',why:limits.length?limits.join(' · '):C.why,C,T,now};}
 
 // open «Analisi tecnica» on a tab, with a wheel or a card in view (from Setup Builder and Race Engineer)
 function techGo(tab,o={}){TECH.tab=tab;LS.set('vd:tab',tab);TECH.focus=o;LS.set('su:tab','dyn');$('#proNav .pn[data-n="tech"]')?.click();if(curView()!=='setup')showView('setup');renderTech();}

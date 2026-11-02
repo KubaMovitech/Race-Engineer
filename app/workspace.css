@@ -1,0 +1,59 @@
+/* Desktop analysis workspace: compact context, clear next action, readable evidence. */
+@media(min-width:1000px){
+ html[data-look="pro"][data-pnav="tech"] #v-setup>.panel:first-child{display:none}
+ html[data-look="pro"] #techP .ttop{display:grid;grid-template-columns:minmax(220px,1fr) minmax(240px,340px);gap:12px;align-items:center}
+ html[data-look="pro"] #techP .tsel{grid-column:1/-1;display:flex;width:100%;margin:0;gap:8px;flex-wrap:wrap}
+ html[data-look="pro"] #techP .tsel .f{flex:1 1 120px;min-width:100px}
+ html[data-look="pro"] #techP .tsel .tsb{flex:1.4 1 180px;min-width:140px}
+ html[data-look="pro"] #techP .tsetup select{width:100%;height:36px}
+ html[data-look="pro"] #techP .tdg{grid-template-columns:repeat(2,minmax(0,1fr))}
+ html[data-look="pro"] #techP .tdh{flex-wrap:wrap}
+ html[data-look="pro"] #techP .tsg{min-height:38px;font-size:13px;line-height:1.45}
+ html[data-look="pro"] #techP .thist{max-height:150px}
+ html[data-look="pro"][data-pnav="tel"] .pstrip .pmain{display:none}
+ html[data-look="pro"] .twhead{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:12px}
+ html[data-look="pro"] .twhead .twtitle{grid-column:1/-1;min-height:0}
+ html[data-look="pro"] .twbest{display:flex;align-items:baseline;gap:10px}
+ html[data-look="pro"] .twbest b{font-size:1.1rem}
+ html[data-look="pro"] .twlaps{display:grid;grid-template-columns:26px minmax(0,1fr);align-content:start;margin:0;padding:10px;border:1px solid var(--line);border-radius:8px}
+ html[data-look="pro"] .twlaps .f{min-width:0;width:100%;max-width:none}
+ html[data-look="pro"] .twlaps select{width:100%;max-width:100%}
+ html[data-look="pro"] .twlaprow{grid-column:1/-1;display:flex;flex-wrap:nowrap;overflow-x:auto;max-height:88px;gap:5px;padding-bottom:4px}
+ html[data-look="pro"] .twlap{flex-shrink:0}
+ html[data-look="pro"] .pcomp{padding:10px 14px}
+ html[data-look="pro"] .pcomp .panel-h{margin-bottom:6px;padding-bottom:6px}
+ html[data-look="pro"] .pcomp .psug{margin-top:6px}
+ html[data-look="pro"] .pcomp .psb{padding:4px 8px}
+ html[data-look="pro"] #techP .tcards{grid-template-columns:repeat(auto-fit,minmax(min(100%,430px),1fr))}
+}
+.tworkflow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:12px 0}
+.tstep{display:flex;gap:10px;text-align:left;align-items:flex-start;padding:12px;border:1px solid var(--line);border-radius:10px;background:linear-gradient(135deg,var(--panel2),transparent);color:var(--ink);cursor:pointer;font:inherit;min-width:0}
+.tstep:hover,.tstep:focus-visible{border-color:var(--pacc);outline-offset:3px}
+.tstep>span:nth-child(2){flex:1;min-width:0}.tstepn{font:600 12px var(--f-mono);color:var(--pacc);padding-top:2px}
+.tstep b,.tstep strong,.tstep small{display:block}.tstep b{font-size:14px}.tstep strong{font:500 13px var(--f-mono);margin:6px 0;color:var(--psil)}.tstep small{font-size:12px;color:var(--muted);line-height:1.4}
+.tused{flex:1 1 260px;font-size:13px;color:var(--psil)}.tused b{color:var(--ink)}
+.tbrief{display:flex;gap:6px 14px;flex-wrap:wrap;font-size:13px;margin-top:8px;color:var(--psil)}.tbrief .bad{color:var(--bad)}.tbrief .good{color:var(--good)}
+.tproposal{padding:10px 12px;border-radius:6px;background:var(--panel2);font-size:14px;line-height:1.5}.tproposal small{color:var(--muted)}
+.tproof{margin-top:12px;border-top:1px solid var(--line);padding-top:10px}.tproof summary{cursor:pointer;font-size:13px;color:var(--psil)}
+.invitebox{max-width:820px!important;width:min(820px,95vw);border:1px solid var(--line);border-top:2px solid var(--pacc);border-radius:14px!important}
+.invitebox .ey{font:600 11px var(--f-body);letter-spacing:.18em;color:var(--pacc);margin-bottom:5px}.invitebox h2{margin:0;font-size:24px}
+.inviteintro{color:var(--psil);font-size:15px;margin:12px 0 18px}
+.invitesteps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;list-style:none;margin:0 0 18px;padding:0}
+.invitesteps li{border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;gap:10px;font-size:14px;line-height:1.4}.invitesteps li>b{color:var(--pacc);font:600 12px var(--f-mono)}.invitesteps small{display:block;color:var(--muted);font-size:12px;margin-top:7px}
+.invitelink,.invitenote{padding:16px;border:1px solid var(--line);border-radius:10px;background:var(--panel2);margin:14px 0}
+.inviteheading{display:flex;justify-content:space-between;gap:12px;margin-bottom:12px}.invitelink label,.invitemessage{display:block;font-size:13px;color:var(--psil)}
+.invitecopy{display:flex;gap:8px;margin-top:7px}.invitecopy input{flex:1;min-width:0;padding:10px;font-size:13px}.invitemessage textarea{display:block;resize:vertical;width:100%;box-sizing:border-box;margin-top:8px;min-height:145px;padding:12px;background:var(--bg);color:var(--psil);font:13px/1.6 var(--f-body);border:1px solid var(--line);border-radius:8px}
+.inviteactions{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px}.invitenote p{font-size:14px;color:var(--muted)}.invitenote .btn{margin-right:8px}
+@media(max-width:999px){.tworkflow,.invitesteps{grid-template-columns:1fr}.invitecopy,.inviteactions{flex-wrap:wrap}}
+/* Wide tables keep their own horizontal navigation without widening the page. */
+.ttable{max-width:100%;overflow-x:auto;min-width:0}
+html[data-look="pro"] #techP .tdc{min-width:0}
+html[data-look="pro"] #techP .tzt{table-layout:fixed}
+html[data-look="pro"] #techP .tzt th{white-space:normal;overflow-wrap:anywhere;font-size:12px}
+html[data-look="pro"] #techP .tzt td{font-size:12px}
+html[data-look="pro"] #techP .tzt th:first-child{width:65px}
+@media(min-width:1000px){
+ html[data-look="pro"][data-pnav="tech"] #hero{display:none}
+ html[data-look="pro"] #techP .tech:not([data-tech-tab="q"]):not([data-tech-tab="diag"]) .tworkflow{display:none}
+}
+.invitebox .panel-h{display:flex;align-items:center;justify-content:space-between;gap:16px}

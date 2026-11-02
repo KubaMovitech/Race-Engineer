@@ -59,8 +59,8 @@ function ptAll(){return LS.get('ptests',[]);}
 function ptSave(L){LS.set('ptests',L.slice(-40));}
 function ptActive(S){const car=(proCarOf(S)||'').toLowerCase();return ptAll().find(t=>!t.closed&&t.venue===S.meta?.venue&&(t.car||'').toLowerCase()===car)||null;}
 function ptStart(S,D,laps,f){const x=f.fx.find(x=>!x.conflict)||{};const k=ptMetric(f);const L=ptAll().filter(t=>!(t.venue===S.meta?.venue&&!t.closed&&(t.car||'').toLowerCase()===(proCarOf(S)||'').toLowerCase()));
-  const base=ptSnap(S,D,laps);if(x.key&&D.su)base.val=suValAny(D.su,x.key);
-  L.push({id:'pt'+Date.now(),at:Date.now(),venue:S.meta?.venue||'',car:proCarOf(S),problem:f.t,change:{label:x.label||'',dir:x.dir||'',key:x.key||'',now:x.now||''},metric:k,
+  const base=ptSnap(S,D,laps);if(x.key&&D.su)base.val=setupVal(D.su,x.key,x.sec||undefined);
+  L.push({id:'pt'+Date.now(),at:Date.now(),venue:S.meta?.venue||'',car:proCarOf(S),problem:f.t,change:{label:x.label||'',dir:x.dir||'',key:x.key||'',sec:x.sec||null,now:x.now||''},metric:k,
     hyp:`${tr(x.label||'')}: ${x.dir||''} → ${f.t}: ${ptGoal(k)}`,base});ptSave(L);}
 function suValAny(su,key){for(const it of Object.values(su?.sec||{})){const x=it.find(i=>i.key===key);if(x)return x.disp;}return null;}
 function ptHTML(t,S,D,laps){if(t.metric==='loc')return ptLocHTML(t,S,D,laps);const K=ptKpi(t.metric);const lab=tr(K?.[1]||t.metric),u=K?.[2]||'',dp=K?.[3]??2;const same=t.base.id===S.id;
@@ -71,7 +71,7 @@ function ptHTML(t,S,D,laps){if(t.metric==='loc')return ptLocHTML(t,S,D,laps);con
     if(t.base.cond&&cur.cond&&t.base.cond!==cur.cond)W.push(`${tr('meteo diverso')} (${esc(tr(t.base.cond))} → ${esc(tr(cur.cond))})`);
     if(Number.isFinite(t.base.track)&&Number.isFinite(cur.track)&&Math.abs(cur.track-t.base.track)>3)W.push(`${tr('pista')} ${cur.track>t.base.track?'+':'−'}${fx(Math.abs(cur.track-t.base.track),0)} °C`);
     if(t.base.n<3||cur.n<3)W.push(`${tr('pochi giri buoni')} (${t.base.n} → ${cur.n})`);
-    const nowVal=t.change.key&&D.su?suValAny(D.su,t.change.key):null;const changed=t.base.val==null||nowVal==null?null:nowVal!==t.base.val;
+    const nowVal=t.change.key&&D.su?setupVal(D.su,t.change.key,t.change.sec||undefined):null;const changed=t.base.val==null||nowVal==null?null:nowVal!==t.base.val;
     const r=W.length&&J.r!=='inc'?{r:'inc',why:tr('le condizioni sono cambiate: ripeti la prova con carburante, gomme e pista simili')}:changed===false?{r:'inc',why:tr('la modifica non risulta nel setup scelto')}:J;
     res=`<div class="ptres ${PT_R[r.r][1]}"><b>${tr(PT_R[r.r][0])}</b>${r.why?` · <span>${esc(r.why)}</span>`:''}</div>
       <table class="lbt ptt"><thead><tr><th class="l"></th><th>${tr('Prima')}</th><th>${tr('Ora')}</th></tr></thead><tbody>
@@ -90,13 +90,13 @@ function ptHTML(t,S,D,laps){if(t.metric==='loc')return ptLocHTML(t,S,D,laps);con
 // a test started from a card of «Analisi tecnica»: the metric is measured at the place of the card, lap by lap, and judged
 // against the spread between laps (vdCompare); the lap time is judged apart, because a faster lap does not prove the fix
 function ptLocHTML(t,S,D,laps){const p=t.loc;const same=t.base.id===S.id;const f=v=>fx(v,p.dec);const ms=(a)=>{const v=a.filter(Number.isFinite);return v.length?`${f(vdMean(v))} ± ${f(vdSd(v))} ${p.unit}`:'—';};
-  let res='';if(!same){const J=techJudge(t,S,laps);const W=[];const cur={fuel:null,cmp:null,cond:S.cond?.label,track:S.cond?.track?.avg};const su=D&&D.S===S?D.su:null;
+  let res='';if(!same){const J=techJudge(t,S,laps,D?.su||analysisSetup(S));const W=[];const cur={fuel:null,cmp:null,cond:S.cond?.label,track:S.cond?.track?.avg};const su=D&&D.S===S?D.su:null;
     if(su){cur.fuel=suFind(su,'GENERAL',/^FuelCapacity/)||suFind(su,'GENERAL',/^FuelSetting/);cur.cmp=suFind(su,'FRONTLEFT',/^CompoundSetting/);}
     if(t.base.fuel&&cur.fuel&&t.base.fuel!==cur.fuel)W.push(`${tr('carburante diverso')} (${esc(t.base.fuel)} → ${esc(cur.fuel)})`);
     if(t.base.cmp&&cur.cmp&&t.base.cmp!==cur.cmp)W.push(`${tr('mescola diversa')} (${esc(t.base.cmp)} → ${esc(cur.cmp)})`);
     if(t.base.cond&&cur.cond&&t.base.cond!==cur.cond)W.push(`${tr('meteo diverso')} (${esc(tr(t.base.cond))} → ${esc(tr(cur.cond))})`);
     if(Number.isFinite(t.base.track)&&Number.isFinite(cur.track)&&Math.abs(cur.track-t.base.track)>3)W.push(`${tr('pista')} ${cur.track>t.base.track?'+':'−'}${fx(Math.abs(cur.track-t.base.track),0)} °C`);
-    const nowVal=t.change.key&&su?suValAny(su,t.change.key):null;const changed=t.base.val==null||nowVal==null?null:nowVal!==t.base.val;
+    const nowVal=t.change.key&&su?setupVal(su,t.change.key,t.change.sec||undefined):null;const changed=t.base.val==null||nowVal==null?null:nowVal!==t.base.val;
     const r=W.length&&J.r!=='inc'?{r:'inc',why:tr('le condizioni sono cambiate: ripeti la prova con carburante, gomme e pista simili')}:changed===false?{r:'inc',why:tr('la modifica non risulta nel setup scelto')}:J;
     const TV={migliorato:tr('più veloce'),peggiorato:tr('più lento'),inconcludente:tr('differenza nel rumore')}[J.T.verdict]||'';
     res=`<div class="ptres ${PT_R[r.r][1]}"><b>${tr(PT_R[r.r][0])}</b>${r.why?` · <span>${esc(r.why)}</span>`:''}</div>

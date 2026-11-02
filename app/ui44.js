@@ -80,9 +80,10 @@ function proCarHTML(su,ref,links=[]){const C={FL:'FRONTLEFT',FR:'FRONTRIGHT',RL:
   const car=carTopSVG({wheelFill:w=>links.some(c=>c.w===w)?'rgba(255,207,51,.35)':'#0A0A0C'});
   return `<div class="pcar2">${corner('FL')}${corner('FR')}<div class="pcc2">${car}</div>${corner('RL')}${corner('RR')}</div><div class="pcmid">${mid}</div>`;}
 function proVersions(su){const car=(su?.car||'').toLowerCase();const L=svms().filter(x=>!car||(x.car||'').toLowerCase()===car);
+  const current=x=>x===su||(x.id===su.id&&svmHash(x.text||setupText(x))===svmHash(su.text||setupText(su)));
   const nd=(a,b)=>{let n=0;for(const [sec,it] of Object.entries(a.sec||{}))for(const i of it){const o=b.sec?.[sec]?.find(x=>x.key===i.key);if(o&&o.raw!==i.raw)n++;}return n;};
-  return L.map(x=>`<button type="button" class="pvr${x===su?' cur':''}" data-id="${esc(x.id)}"><i></i><div><b>${esc(x.label||x.name)}</b><small>${x===su?tr('in uso'):nd(su,x)+' '+tr('differenze')}</small></div></button>`).join('')||`<p class="muted small">${tr('Carica altri .svm della stessa auto per vederli qui.')}</p>`;}
-function proSetupPanel(){const old=$('#pSetCar');const su=byId($('#suFile')?.value);const nav=$('#suTabs');if(!nav||!proLook()){old?.remove();return;}
+  return L.map(x=>`<button type="button" class="pvr${current(x)?' cur':''}" data-id="${esc(x.id)}"><i></i><div><b>${esc(x.label||x.name)}</b><small>${current(x)?tr('in uso'):nd(su,x)+' '+tr('differenze')}</small></div></button>`).join('')||`<p class="muted small">${tr('Carica altri .svm della stessa auto per vederli qui.')}</p>`;}
+function proSetupPanel(){const old=$('#pSetCar');const su=analysisSetup();const nav=$('#suTabs');if(!nav||!proLook()){old?.remove();return;}
   const S=active()?.S;const R=S?proFindings(S):null;const F=R?[...R.F].filter(f=>f.s>0).sort((a,b)=>b.s-a.s).slice(0,3):[];
   const car=(su?.car||'').toLowerCase();const others=su?svms().filter(x=>x!==su&&(!car||(x.car||'').toLowerCase()===car)):[];const ref=others.find(x=>x.id===LS.get('setb:ref',''))||null;
   // the setup cards of «Analisi tecnica», only when they are already computed (no slow work here)
@@ -94,7 +95,7 @@ function proSetupPanel(){const old=$('#pSetCar');const su=byId($('#suFile')?.val
      ${S?`<div class="panel"><div class="panel-h"><h3>${tr('Problemi rilevati dai dati')}</h3><button type="button" class="btn" id="pToEng">${tr('Race Engineer')} →</button></div>${F.length?F.map(proFindRow).join(''):`<p class="muted small">${tr('Niente di urgente.')}</p>`}</div>`:''}</div>`
      :`<div class="panel"><div class="empty">${tr('Carica un file setup .svm (Documenti o cartella UserData/player/Settings di Le Mans Ultimate).')}</div></div>`}</div>`;
   if(old)old.outerHTML=h;else nav.insertAdjacentHTML('afterend',h);
-  $$('#pSetCar .pvr').forEach(b=>b.onclick=()=>{const s=$('#suFile');s.value=b.dataset.id;s.onchange&&s.onchange();});
+  $$('#pSetCar .pvr').forEach(b=>b.onclick=()=>{if(S)LS.set('sesMode:'+sesKey(S),'selected');const s=$('#suFile');s.value=b.dataset.id;s.onchange&&s.onchange();});
   const pr=$('#pRef');if(pr)pr.onchange=()=>{LS.set('setb:ref',pr.value);proSetupPanel();};
   // a wheel or a linked problem opens the analysis that matters
   $$('#pSetCar .pwgo').forEach(b=>b.onclick=()=>techGo('damp',{w:b.dataset.w}));

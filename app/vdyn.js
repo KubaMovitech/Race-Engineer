@@ -71,25 +71,31 @@ function vdSign(S,laps,w){const key='vdsign:'+w+':'+laps.map(l=>l.i).join(',');i
   const r={sign,cert,ev,why:sign?'':(pos&&neg?'evidenze in contrasto':'nessuna evidenza abbastanza forte')};S.cache.set(key,r);return r;}
 
 // one lap of one wheel on the native samples of its position: everything the analyses need
-function vdLap(S,lap,w,sgn){const key='vdlap:'+lap.i+':'+w;if(S.cache.has(key))return S.cache.get(key);
-  const P=vdChan(S,'Susp Pos '+w),V=vdChan(S,'Damper Vel '+w);const main=P||V;if(!main){S.cache.set(key,null);return null;}
-  const sg=P?P:V;const seg=vdSeg(sg,lap.t0,lap.t1);const f=seg.f,N=seg.v.length;
+function vdLap(S,lap,w,sgn){const key='vdlap:'+lap.i+':'+w+':'+(sgn||1);if(S.cache.has(key))return S.cache.get(key);
+  const input=chqDamperInput(S,w);
+  const rawP=vdChan(S,'Susp Pos '+w),P=rawP&&!rawP.conv?.some(x=>x.bad)?rawP:null;
+  const V=input.c&&!input.derived?input.c:null;
+  const main=V||P;if(!main){S.cache.set(key,null);return null;}
+  // The measured velocity sets its own resolution, even if position is slower.
+  const sg=main;const seg=vdSeg(sg,lap.t0,lap.t1);const f=seg.f,N=seg.v.length;
+  const position=P?(P===sg?seg.v:vdAt(P,seg.ts,f,N)):null;
   let vel,velSrc;
   if(V){const s=vdSeg(V,lap.t0,lap.t1);vel=V===sg?Float32Array.from(s.v):vdAt(V,seg.ts,f,N);velSrc='misurato';
     // a measured velocity can use the opposite sign of the position: align it to the position's derivative
-    if(P){const dp=vdDeriv(seg.v,f,vdSGm(f));if(vdCorr(dp,vel)<0)for(let i=0;i<N;i++)vel[i]=-vel[i];}}
-  else{vel=vdDeriv(seg.v,f,vdSGm(f));velSrc='derivato';}
+    if(P){const dp=vdDeriv(position,f,vdSGm(f));if(vdCorr(dp,vel)<-0.5)for(let i=0;i<N;i++)vel[i]=-vel[i];}}
+  else if(input.c){vel=vdDeriv(seg.v,f,vdSGm(f));velSrc='derivato';}
+  else{vel=new Float32Array(N);vel.fill(NaN);velSrc='non disponibile';}
   const sp=vdAt(vdChan(S,'Ground Speed'),seg.ts,f,N),br=vdAt(vdChan(S,'Brake Pos'),seg.ts,f,N),th=vdAt(vdChan(S,'Throttle Pos'),seg.ts,f,N),la=vdAt(vdChan(S,'G Force Lat'),seg.ts,f,N);
   const ld=vdAt(vdChan(S,'Tyre Load '+w),seg.ts,f,N),gv=vdAt(vdChan(S,'G Force Vert'),seg.ts,f,N),su=vdChan(S,'Surface Type '+w)?vdAt(vdChan(S,'Surface Type '+w),seg.ts,f,N,true):null;
   const dla=vdDeriv(Float32Array.from(la,Math.abs),f,Math.max(2,Math.round(0.1*f)));
   // trimmed to the lap
   const a=seg.a,b=seg.b,n=Math.max(0,b-a);const cut=x=>x?x.subarray(a,b):null;
-  const pos=P?seg.v.subarray(a,b):null;const s=sgn||1;
+  const pos=position?position.subarray(a,b):null;const s=sgn||1;
   // compression-positive views (when the sign is unknown, s = 1 and the page says «direzione non determinata»)
   const cv=new Float32Array(n);for(let i=0;i<n;i++)cv[i]=vel[a+i]*s;
   const ph=new Array(n);for(let i=0;i<n;i++){ph[i]=su&&su[a+i]===VD_KERB&&sp[a+i]>=VD_TH.spd?'kerb':vdPhase(sp[a+i],br[a+i],th[a+i],la[a+i],dla[a+i]);}
   const tr=lapTrace(S,lap);const t0=seg.ts+a/f-lap.t0;const d=new Float32Array(n);for(let i=0;i<n;i++)d[i]=vdDist(tr,t0+i/f);
-  const o={lap,w,f,n,t0,d,pos,comp:pos?Float32Array.from(pos,x=>x*s):null,vel:cut(vel),cv,velSrc,sp:cut(sp),br:cut(br),th:cut(th),la:cut(la),ld:cut(ld),gv:cut(gv),su:cut(su),ph,
+  const o={lap,w,f,n,t0,d,pos,comp:pos?Float32Array.from(pos,x=>x*s):null,vel:cut(vel),cv,velSrc,velWhy:input.why,sp:cut(sp),br:cut(br),th:cut(th),la:cut(la),ld:cut(ld),gv:cut(gv),su:cut(su),ph,
     filt:velSrc==='derivato'?{m:vdSGm(f),ms:Math.round((2*vdSGm(f)+1)/f*1000)}:null};
   S.cache.set(key,o);return o;}
 
@@ -113,14 +119,16 @@ function vdSusp(S,laps,opt={}){const knee=opt.knee||50,range=opt.range||250,bin=
     for(const L of Ls){const lp=[],lv=[];for(let i=0;i<L.n;i++){if(!vdPick(L,i,sel))continue;const v=L.cv[i];cv.push(v);lv.push(v);if(L.comp){pos.push(L.comp[i]);lp.push(L.comp[i]);}
         const P=byPh[L.ph[i]]||(byPh[L.ph[i]]={v:[],p:[]});P.v.push(v);if(L.comp)P.p.push(L.comp[i]);}
       perLap.travel.push(lp.length?vdQ(lp,0.99)-vdQ(lp,0.01):NaN);perLap.bump95.push(vdQ(lv.filter(x=>x>0),0.95));perLap.reb95.push(-vdQ(lv.filter(x=>x<0).map(x=>-x),0.95));}
-    const f=Ls[0].f;R.resHz=R.resHz?Math.min(R.resHz,f):f;
+    const f=Ls[0].f;R.resHz=R.resHz?Math.min(R.resHz,f):f;const hist=vdHist(cv,range,bin);
     const ph={};for(const [k] of VD_PH){const P=byPh[k];if(!P||P.v.length<f*0.5)continue;
       const sp=vdSorted(P.p);ph[k]={n:P.v.length,s:P.v.length/f,bump95:vdQ(P.v.filter(x=>x>0),0.95),reb95:-vdQ(P.v.filter(x=>x<0).map(x=>-x),0.95),p1:vdQs(sp,0.01),p50:vdQs(sp,0.5),p99:vdQs(sp,0.99),z:vdZones(P.v,knee)};}
-    R.w[w]={sign:sg,velSrc:Ls[0].velSrc,filt:Ls[0].filt,f,hist:vdHist(cv,range,bin),z:vdZones(cv,knee),n:cv.length,s:cv.length/f,
+    R.w[w]={sign:sg,velSrc:Ls[0].velSrc,velWhy:Ls[0].velWhy,filt:Ls[0].filt,f,hist,z:vdZones(cv,knee),n:hist.n,s:hist.n/f,
       bump95:vdQ(cv.filter(x=>x>0),0.95),reb95:-vdQ(cv.filter(x=>x<0).map(x=>-x),0.95),
       travel:pos.length?(sp=>({p1:vdQs(sp,0.01),p50:vdQs(sp,0.5),p99:vdQs(sp,0.99),min:vdQs(sp,0),max:vdQs(sp,1)}))(vdSorted(pos)):null,ph,perLap};
     // events always on all the chosen laps: the page filters them by lap and place
-    R.ev.push(...vdEvents(S,laps.map(l=>vdLap(S,l,w,sg.sign||1)).filter(Boolean),w,sg));}
+    const ek='vdev:'+laps.map(l=>l.i).join(',')+':'+w+':'+sg.sign;
+    if(!S.cache.has(ek))S.cache.set(ek,vdEvents(S,laps.map(l=>vdLap(S,l,w,sg.sign||1)).filter(Boolean),w,sg));
+    R.ev.push(...S.cache.get(ek));}
   R.groups=vdGroup(R.ev,laps.length);return R;}
 
 // ---------- events of one wheel ----------
@@ -182,9 +190,11 @@ function vdAxles(S,laps){const key='vdax:'+laps.map(l=>l.i).join(',');if(S.cache
   for(const lap of laps){const Ls={};VD_W.forEach(w=>{Ls[w]=vdLap(S,lap,w,sg[w].sign||1);});const L0=Ls.FL||Ls.RL;if(!L0)continue;const n=L0.n,f=L0.f,ts=lap.t0+L0.t0;
     const g=k=>{const c=ch(k);return c?vdAt(c,ts,f,n):null;};const t3F=g('Front 3rd Pos'),t3R=g('Rear 3rd Pos'),pi=g('Body Pitch'),ro=g('Body Roll'),gl=g('G Force Long');
     const rh={};VD_W.forEach(w=>rh[w]=g('Ride Height '+w));const ld={};VD_W.forEach(w=>ld[w]=g('Tyre Load '+w));
+    // Align wheel positions by time; array indices differ at different native rates.
+    const cp={};VD_W.forEach(w=>{const L=Ls[w];cp[w]=L?.comp?vdAt({v:L.comp,f:L.f},ts-lap.t0-L.t0,f,n):null;});
     const pl={heaveF:[],heaveR:[]};
     for(let i=0;i<n;i++){const ph=L0.ph[i];const v=L0.sp[i];if(!(v>=VD_TH.spd))continue;
-      const c=w=>Ls[w]?.comp?.[i];const hF=(c('FL')+c('FR'))/2,hR=(c('RL')+c('RR'))/2;const rF=c('FL')-c('FR'),rR=c('RL')-c('RR');
+      const c=w=>cp[w]?.[i]??NaN;const hF=(c('FL')+c('FR'))/2,hR=(c('RL')+c('RR'))/2;const rF=c('FL')-c('FR'),rR=c('RL')-c('RR');
       const rf=rh.FL&&rh.FR?(rh.FL[i]+rh.FR[i])/2:NaN,rr=rh.RL&&rh.RR?(rh.RL[i]+rh.RR[i])/2:NaN;
       const vals={heaveF:hF,heaveR:hR,pitchI:hF-hR,rollF:rF,rollR:rR,rhF:rf,rhR:rr,rake:rr-rf,t3F:t3F?.[i],t3R:t3R?.[i],pitch:pi?.[i],roll:ro?.[i]};
       for(const [k,x] of Object.entries(vals))push(ph,k,x);

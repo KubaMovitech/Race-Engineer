@@ -41,3 +41,14 @@ pezzo di comportamento che dipende dall'ordine.
   Non sostituisce la taratura su telemetrie reali: vedi `STATO_LAVORI.md`.
 - `python3 tools/check_release.py --allow-unreleased` (controllo automatico) segnala come avviso, non come errore, i sorgenti
   cambiati dopo l'ultima versione pubblicata; senza l'opzione (prima di pubblicare) resta un errore.
+
+### Verifica desktop e setup storico
+- `node tools/smoke_desktop.js <url-bridge> <fixture.ld> [cartella-schermate]` verifica italiano/inglese a
+  1366×768 e 1920×1080: copia confermata del setup, esplorazione esplicita di un altro setup, aggiornamento
+  dell'originale, schede tecniche, posizione dei grafici e invito via link (anche con appunti negati).
+  Usa il Chromium installato da Playwright come gli altri smoke test. Non crea squadre reali né invia inviti.
+- Il setup confermato è la base dei calcoli. «Prova il setup selezionato» permette di esplorare un altro
+  `.svm` senza modificare la copia storica; «Torna al setup confermato» ripristina la base della sessione.
+- Le analisi ammortizzatori richiedono una frequenza effettiva di almeno 50 Hz. La velocità misurata mantiene
+  la propria frequenza; se manca una sorgente utilizzabile non si deriva la velocità e non si propongono
+  modifiche fondate su quella metrica. La corsa sospensioni resta consultabile quando disponibile.

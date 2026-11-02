@@ -1,7 +1,7 @@
 // ================= DEBRIEF AUTOMATICO DELLA SESSIONE (offline, niente AI) =================
 // One page from the .ld (+ .svm + .xml): the 3 setup changes that matter most, the 3 corners where time
 // is lost and why, the stint (pace, consistency, degradation, fuel), and what to try in the next run.
-function sessDebrief(S){const su=byId($('#suFile').value);const all=S.laps.filter(l=>l.complete);
+function sessDebrief(S){const su=analysisSetup(S);const all=S.laps.filter(l=>l.complete);
   const fl=S.laps.filter(l=>l.complete&&l.type==='lanciato'&&!l.invalid);const use=fl.length?fl:all;const b=bestValid(S);
   if(!use.length||!b)return null;const out={S,b,setup:[],drive:[],stint:{},next:[]};
   // ---- setup: problems the doctor confirms in the data, balance first, then suspension, then tyres

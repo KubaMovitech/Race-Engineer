@@ -48,7 +48,7 @@ function balSpeed(D){const x=D.raw.B?.speedIdx;if(!x)return null;const l=x.lente
 KB.forEach(k=>k.fixes.forEach(f=>f.label=SETUP_LABELS[f.key]||f.key));
 function renderDoctor(){
   const out=$('#docOut');if(!out)return;
-  const S=active()?.S,D=DIAG&&DIAG.S===S?DIAG:null,su=D?D.su:byId($('#suFile').value);
+  const S=active()?.S,D=DIAG&&DIAG.S===S?DIAG:null,su=D?D.su:analysisSetup();
   // mark problems detected by telemetry
   $$('#suChips .pchip').forEach(b=>{const k=KB.find(x=>x.id===b.dataset.k);let e=null;try{e=D&&k.ev(D);}catch(_){}b.dataset.label=k.label;b.innerHTML=esc(k.label)+(e&&e.hit?' <span style="color:var(--bad)">●</span>':'');b.title=e?e.txt:'';});
   const sel=$$('#suChips .pchip[aria-pressed="true"]').map(b=>KB.find(x=>x.id===b.dataset.k));

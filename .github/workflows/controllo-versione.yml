@@ -40,3 +40,4 @@ jobs:
           npx playwright install --with-deps chromium
           sleep 3
           node tools/smoke.js http://localhost:8790/ /tmp/fixture.ld
+          node tools/smoke_desktop.js http://localhost:8790/ /tmp/fixture.ld

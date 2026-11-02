@@ -158,4 +158,41 @@ console.log('14. Quale setup è compatibile con la telemetria');
   ok(C.suTeleCheck(S,A).st==='compatibile'&&C.suTeleCheck(S,B).st==='no','ripartizione frenata: un setup compatibile, l\'altro escluso');
   ok(C.suTeleCheck(S,C.parseSVM('[GENERAL]\nFuelSetting=1//10 L\n','C.svm')).st==='non verificabile','senza valori confrontabili: non verificabile, non «compatibile»');}
 
+
+console.log('15. Frequenza effettiva e diagnosi bloccate');
+{const S=session({fPos:20});const l=flying(S);const R=C.vdSusp(S,l,{});
+  ok(R.w.FL.hist.n===0&&R.w.FL.velSrc==='non disponibile','posizione a 20 Hz: nessuna derivata o istogramma inventato');
+  const held=session({pos:t=>10+3*Math.sin(2*Math.PI*0.5*Math.floor(t*20)/20)});
+  ok(C.chqDamperInput(held,'FL').c===null,'posizione registrata a 100 Hz ma aggiornata a 20 Hz: esclusa');
+  const ev=l.map(x=>({lap:x.num,li:x.i,w:'FL',t:5,d:300,ph:'str',cycles:3,hz:6,amp:5,decay:0.8}));
+  const X={sus:{groups:[{k:'osc',w:'FL',d:300,rep:true,n:l.length,ev,ph:'str',kerb:0}],w:{FL:{sign:{sign:1}}}},pl:{lowG:[]},ax:{third:{}},opt:{knee:50}};
+  const cards=C.techCards(S,l,null,X);
+  ok(cards.length===1&&cards[0].rel.lv===0&&!cards[0].fx,'un fenomeno non analizzabile non propone modifiche al setup');
+  const bad=session({posUnit:'furlong'});
+  ok(C.vdSusp(bad,flying(bad),{}).w.FL===undefined,'unità sconosciuta: non interpretata come millimetri');}
+console.log('16. Velocità misurata e frequenze diverse fra ruote');
+{const extra=['FL','FR','RL','RR'].map(w=>({name:'Damper Vel '+w,unit:'mm/s',f:w==='FR'?200:100,v:gen(420,w==='FR'?200:100,t=>200*Math.sin(2*Math.PI*15*t))}));
+  const S=session({fPos:20,extra});const l=flying(S);const R=C.vdSusp(S,l,{});
+  ok(R.w.FL.f===100&&R.w.FR.f===200&&R.w.FL.velSrc==='misurato','la velocità mantiene i suoi 100/200 Hz anche con la posizione a 20 Hz');
+  const A=C.vdAxles(S,l);ok(Math.abs(A.ph.str.rollF.p50)<0.01,'ruote con frequenze diverse allineate nel tempo: nessun rollio finto');}
+console.log('17. Setup storico usato nei calcoli');
+{const S=session({name:'history.ld',meta:{venue:'History Track'}}),l=flying(S);
+  const a=C.parseSVM('[FRONTLEFT]\nPressureSetting=1//150 kPa\n','A.svm'),b=C.parseSVM('[FRONTLEFT]\nPressureSetting=2//180 kPa\n','B.svm');
+  C.sesSetupSet(S,a,'confermato');
+  ok(C.setupVal(C.sesSetupResolve(S,b),'PressureSetting','FRONTLEFT')==='150 kPa','selezionare B non sostituisce il setup A confermato nei calcoli');
+  a.text='[FRONTLEFT]\nPressureSetting=9//220 kPa\n';
+  ok(C.setupVal(C.sesSetupResolve(S,a),'PressureSetting','FRONTLEFT')==='150 kPa','il file originale modificato non altera la copia analizzata');
+  C.LS.set('sesMode:'+C.sesKey(S),'selected');ok(C.sesSetupResolve(S,b)===b,'esplorare il setup selezionato richiede una scelta esplicita');
+  C.LS.set('sesMode:'+C.sesKey(S),'saved');ok(C.sesSetupResolve(S,b).snapshot,'si può tornare alla copia confermata');}
+
+console.log('18. Prova locale: parametro della ruota e condizioni');
+{const S=session({name:'local-test.ld',meta:{venue:'Test Local'}}),l=flying(S);
+  const su=C.parseSVM('[FRONTLEFT]\nSlowReboundSetting=1//3\n[REARLEFT]\nSlowReboundSetting=5//9\n','Axles.svm');
+  let saved;C.engLapMode=()=>C.LS.get('eng:laps','best');C.suFind=()=>null;C.ptAll=()=>[];C.ptSave=a=>{saved=a;};C.proCarOf=s=>s.meta.car||'';
+  const card={id:'osc:RL',t:'osc',fx:{key:'SlowReboundSetting',sec:'REARLEFT',label:'Rebound',dir:'-1'},pt:{k:'osc',w:'RL',frac:0.2,field:'cycles',better:-1},rep:{per:[3,3,3,3,3]}};
+  C.techStartTest(S,l,card,su);const test=saved[0];
+  ok(test.change.sec==='REARLEFT'&&test.base.val==='9','la prova posteriore salva il valore posteriore, non quello anteriore');
+  const hotter=session({name:'hotter.ld',meta:{venue:'Test Local'},extra:[{name:'Track Temperature',unit:'C',f:1,v:gen(420,1,()=>40)}]});
+  const J=C.techJudge(test,hotter,flying(hotter),su);
+  ok(J.r==='inc'&&J.why.includes('pista'),'la scheda non dichiara migliorato un confronto a temperatura diversa');}
 console.log(`\n${n-fails}/${n} controlli superati`);process.exit(fails?1:0);

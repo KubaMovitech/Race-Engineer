@@ -81,14 +81,16 @@ function chqFinish(ch){const out=[];
 // cheap pass over a channel: finite count, range, how often it really changes, the longest hold and NaN run while the car moves
 // A value held at the channel's own minimum or maximum is saturation (full throttle, pedal released), not a stuck signal:
 // those samples are left out of the update rate and of the longest hold.
-function chqStats(c,moving){const v=c.v,n=v.length;let nf=0,lo=Infinity,hi=-Infinity,ch=0,hold=0,maxHold=0,nanRun=0,maxNan=0,mv=0;let prev=NaN;
+function chqStats(c,moving){const v=c.v,n=v.length;let nf=0,lo=Infinity,hi=-Infinity,ch=0,hold=0,maxHold=0,nanRun=0,maxNan=0,mv=0;let prev=NaN,lastChange=-1;const intervals=[];
   for(let i=0;i<n;i++){const x=v[i];if(Number.isFinite(x)){if(x<lo)lo=x;if(x>hi)hi=x;}}const eps=(hi-lo)*0.002;const sat=x=>x<=lo+eps||x>=hi-eps;
   const mvAt=new Uint8Array(n);for(let i=0;i<n;i++)mvAt[i]=moving?(moving(i/c.f)?1:0):1;
   for(let i=0;i<n;i++){const x=v[i];const m=mvAt[i];
-    if(!Number.isFinite(x)){nf++;if(m){nanRun++;if(nanRun>maxNan)maxNan=nanRun;}prev=NaN;continue;}nanRun=0;
-    if(m&&!sat(x)){mv++;if(x===prev){hold++;if(hold>maxHold)maxHold=hold;}else{hold=0;if(Number.isFinite(prev))ch++;}}else hold=0;prev=x;}
+    if(!Number.isFinite(x)){nf++;if(m){nanRun++;if(nanRun>maxNan)maxNan=nanRun;}prev=NaN;lastChange=-1;continue;}nanRun=0;
+    if(m&&!sat(x)){mv++;if(x===prev){hold++;if(hold>maxHold)maxHold=hold;}else{hold=0;if(Number.isFinite(prev)){ch++;if(lastChange>=0)intervals.push(i-lastChange);lastChange=i;}}}else hold=0;prev=x;}
   const dur=n/c.f,mvDur=mv/c.f;
-  return {n,f:c.f,dur,nonFinite:nf,min:lo,max:hi,range:hi-lo,effHz:mvDur>1?ch/mvDur:NaN,maxHoldS:maxHold/c.f,maxNanS:maxNan/c.f};}
+  // Typical update spacing distinguishes sample-and-hold from a genuinely quiet stretch of track.
+  const spacing=intervals.length>=10?median(intervals):NaN;
+  return {n,f:c.f,dur,nonFinite:nf,min:lo,max:hi,range:hi-lo,effHz:spacing>0?Math.min(c.f,c.f/spacing):NaN,maxHoldS:maxHold/c.f,maxNanS:maxNan/c.f};}
 
 // a physical signal that never moves while the car does: it carries no information (exported as a constant)
 function chqDead(S){const ch=S.ch,sp=ch['Ground Speed'];S.deadCh=S.deadCh||{};if(!sp)return S.deadCh;
@@ -140,7 +142,24 @@ function chqChannel(S,name){const key='chq:'+name;if(S.cache?.has(key))return S.
   S.cache?.set(key,r);return r;}
 
 // is this analysis possible on this file, and what limits it (channels only; laps and repeatability come with chqReliability)
+function chqDamperInput(S,w){
+  const rejected=[];
+  for(const name of ['Damper Vel '+w,'Susp Pos '+w]){const c=S.ch[name];if(!c)continue;
+    const q=chqChannel(S,name),hz=q.effHz??c.f;
+    if(c.conv?.some(x=>x.bad)){rejected.push(name+': '+tr('unità non riconosciuta'));continue;}
+    if(!(hz>=50)){rejected.push(name+': '+tr('frequenza insufficiente')+' ('+fx(hz,0)+' Hz; ≥ 50 Hz)');continue;}
+    return {name,c,q,derived:name.startsWith('Susp Pos'),why:''};
+  }
+  return {name:null,c:null,derived:false,why:rejected.join(' · ')||tr('canali mancanti')};
+}
 function chqAnalysis(S,a){const miss=[],lim=[],ok=[],optMiss=[];let effHz=Infinity;
+  if(a.id==='damp'){
+    const inputs=CHQ_W.map(w=>({w,...chqDamperInput(S,w)}));
+    for(const x of inputs){const r={n:x.name||x.w,L:x.q?[x.q]:[],why:x.why};
+      (!x.c?miss:x.q.st==='limitato'?lim:ok).push(r);}
+    return {a,st:miss.length?'no':lim.length?'lim':'ok',miss,lim,ok,optMiss,inputs,
+      derived:inputs.some(x=>x.derived),why:inputs.filter(x=>!x.c).map(x=>x.w+': '+x.why).join(' · ')};
+  }
   const one=n=>{const L=chqExpand(n).map(x=>chqChannel(S,x));const bad=L.filter(x=>x.st==='mancante'||x.st==='piatto');
     if(bad.length)return {n,st:'mancante',L,why:bad.map(x=>`${x.name}: ${tr(x.st)}${x.why?' ('+tr(x.why)+')':''}`).join(' · ')};
     const l=L.filter(x=>x.st==='limitato');L.forEach(x=>{if(x.effHz<effHz)effHz=x.effHz;});

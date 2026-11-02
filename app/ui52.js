@@ -11,7 +11,7 @@ const muLocal=()=>/^(localhost|127\.0\.0\.1)$/.test(location.hostname)&&!!locati
 function muAge(){let t=0;Object.values(LIVE.drivers||{}).forEach(D=>{if(D.carAt>t)t=D.carAt;});return t?(Date.now()-t)/1000:null;}
 function muSteps(){const S=LIVE.status||{},team=teamParse(LS.get('live:team','')),local=muLocal();const me=LIVE.drivers?.[LIVE.myId||'local'];const age=muAge();const R=[];
   // 1. the program
-  R.push(local?{k:'good',t:tr('Programma avviato su questo PC'),d:S.local==='on'?tr('il bridge risponde'):tr('il bridge non risponde: chiudi e riapri DataEngineerBridge.exe')}
+  R.push(local?{k:S.local==='on'?'good':'bad',t:tr('Programma avviato su questo PC'),d:S.local==='on'?tr('il bridge risponde'):tr('il bridge non risponde: chiudi e riapri DataEngineerBridge.exe')}
     :{k:'bad',t:tr('Programma non avviato da qui'),d:tr('Apri DataEngineerBridge.exe sul PC con cui corri: la pagina giusta è http://localhost:8790. I link di invito funzionano solo con il programma avviato sul PC di chi li apre.')});
   // 2. the game
   const myFresh=me&&me.carAt&&Date.now()-me.carAt<8000;

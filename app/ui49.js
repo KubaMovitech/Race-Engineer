@@ -33,9 +33,29 @@ function friendMessage(){const base=(typeof UPD!=='undefined'&&UPD.base)||(typeo
     `3) ${tr('Nelle opzioni del gioco attiva la telemetria MoTeC: le sessioni compaiono da sole nella Libreria.')}`];
   if(team)L.push(`4) ${tr('Per entrare nel nostro Muretto, con il programma acceso apri questo link')}: ${team}`);
   return L.join('\n');}
-function inviteFriend(){const txt=friendMessage();navigator.clipboard?.writeText(txt).catch(()=>{});
-  openCode({title:tr('Invita un amico'),help:tr('Messaggio copiato: incollalo su WhatsApp, Discord o dove vuoi. Contiene il link per scaricare il programma')+(txt.includes('#join')?' '+tr('e quello per entrare nella squadra: mandalo solo a chi corre con te.'):'.'),text:txt});
-  if(navigator.share)try{const b=document.createElement('button');b.type='button';b.className='btn';b.textContent=tr('Condividi…');b.onclick=()=>navigator.share({text:txt}).catch(()=>{});const box=$('.modal:not([hidden]) .mbox');box?.querySelector('.panel-h')?.append(b);}catch(e){}}
+// One invitation surface for both the sidebar and the Pit wall. Clipboard failure never reports success.
+async function inviteCopy(text,field){
+  try{if(!navigator.clipboard?.writeText)throw new Error();await navigator.clipboard.writeText(text);toast(tr('Copiato. Incollalo nella chat della squadra.'));return true;}
+  catch(e){field.focus();field.select();toast(tr('Copia manualmente il testo selezionato con Ctrl+C.'));return false;}
+}
+function inviteFriend(){
+  let m=$('#mInvite');if(!m){m=document.createElement('div');m.id='mInvite';m.className='modal';m.hidden=true;document.body.append(m);}
+  const code=LS.get('live:team','');const team=!liveOff()&&teamParse(code);const url=team?teamInviteUrl():'';const txt=friendMessage();
+  m.innerHTML=`<div class="mbox invitebox" role="dialog" aria-modal="true" aria-labelledby="inviteTitle">
+    <div class="panel-h"><div><div class="ey">${tr('CORRI IN SQUADRA')}</div><h2 id="inviteTitle">${tr('Invita un compagno')}</h2></div><button type="button" class="btn" data-close>${tr('Chiudi')}</button></div>
+    <p class="inviteintro">${tr('Un messaggio pronto, poi siete nello stesso Muretto.')}</p>
+    <ol class="invitesteps"><li><b>01</b><span>${tr('Scarica Data Engineer')}<small>${tr('Il programma va avviato sul PC del compagno.')}</small></span></li><li><b>02</b><span>${tr('Apri il link squadra')}<small>${tr('Con Data Engineer acceso, il link apre il suo Muretto locale.')}</small></span></li><li><b>03</b><span>${tr('Controlla il collegamento')}<small>${tr('Stato del Muretto mostra quando arrivano i dati dei compagni.')}</small></span></li></ol>
+    ${team?`<div class="invitelink"><div class="inviteheading"><b>${esc(team.n||tr('Squadra'))}</b><span class="tst good">${tr('Link pronto')}</span></div><label for="inviteUrl">${tr('Link squadra')}</label><div class="invitecopy"><input id="inviteUrl" type="text" readonly value="${esc(url)}"><button type="button" class="btn primary" id="inviteLinkCopy">${tr('Copia link squadra')}</button></div><p class="muted small">${tr('Il link funziona sul PC di chi lo apre, con Data Engineer avviato. Condividilo solo con la squadra.')}</p></div>`:`<div class="invitenote"><b>${tr('Prima collega una squadra')}</b><p>${tr('Puoi già condividere il programma. Per aggiungere il link al messaggio, crea una squadra o entra con un invito.')}</p><button type="button" class="btn" id="inviteCreate">${tr('Crea squadra')}</button><button type="button" class="btn" id="inviteJoin">${tr('Ho già un invito')}</button></div>`}
+    <label class="invitemessage" for="inviteMessage">${tr('Messaggio per Discord o WhatsApp')}<textarea id="inviteMessage" readonly rows="7"></textarea></label>
+    <div class="inviteactions"><span class="muted small">${tr('Include download e istruzioni di avvio.')}</span><button type="button" class="btn primary" id="inviteMessageCopy">${tr('Copia messaggio completo')}</button></div></div>`;
+  $('#inviteMessage').value=txt;
+  $('#inviteMessageCopy').onclick=()=>inviteCopy(txt,$('#inviteMessage'));
+  const link=$('#inviteLinkCopy');if(link)link.onclick=()=>inviteCopy(url,$('#inviteUrl'));
+  const create=$('#inviteCreate');if(create)create.onclick=()=>{m.hidden=true;liveNewTeam();};
+  const join=$('#inviteJoin');if(join)join.onclick=()=>{m.hidden=true;showView('live');$('#lvJoin')?.click();};
+  openModal('#mInvite');m.querySelector('[data-close]').focus();
+  m.onkeydown=e=>{if(e.key==='Escape'){m.hidden=true;$('#proInvite')?.focus();}if(e.key==='Tab'){const els=[...m.querySelectorAll('button,input,textarea')].filter(x=>!x.disabled);const first=els[0],last=els[els.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}};
+}
 setTimeout(()=>{const nav=$('#proNav');if(nav&&!$('#proInvite')){const b=document.createElement('button');b.type='button';b.id='proInvite';b.className='pinv';b.innerHTML=`<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M3 20c0-3.5 2.7-6 6-6s6 2.5 6 6"/><path d="M18 8v6M15 11h6"/></svg><span>${tr('Invita un amico')}</span>`;b.onclick=inviteFriend;
     const before=nav.querySelector('#proLogo')||nav.querySelector('.pfoot');before?before.before(b):nav.append(b);}
   const row=$('#mSettings .lookrow');if(row&&!$('#setInvite')){row.insertAdjacentHTML('beforeend',`<button type="button" class="btn" id="setInvite">${tr('Invita un amico')}</button>`);$('#setInvite').onclick=()=>{$('#mSettings').hidden=true;inviteFriend();};}},50);

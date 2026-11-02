@@ -4,9 +4,7 @@
 // The code still exists (it is what links the bridges of the team), but nobody has to see it: the engineer sends a
 // link, the teammate opens it on his PC with Data Engineer running, and both the page and his bridge join the team.
 function teamInviteUrl(){const c=LS.get('live:team','');return c?'http://localhost:8790/#join&t='+encodeURIComponent(c):'';}
-function teamInvite(){const url=teamInviteUrl();if(!url){toast(tr('Nessuna squadra: creane una o entra in una squadra'));return;}
-  try{navigator.clipboard?.writeText(url)?.catch(()=>{});}catch(e){}
-  openCode({title:tr('Invita un compagno'),help:tr('Link copiato. Il compagno avvia Data Engineer sul suo PC e apre questo link: entra nella squadra da solo, anche il suo bridge. Chi ha il link vede i dati della squadra: mandalo solo al team.'),text:url});}
+function teamInvite(){inviteFriend();}
 // opening an invite link
 (function(){const m=/^#join&t=(.+)$/.exec(location.hash);if(!m)return;let code='';try{code=decodeURIComponent(m[1]).trim();}catch(e){}history.replaceState(null,'',location.pathname);
   if(!teamParse(code)){setTimeout(()=>toast(tr('Link della squadra non valido')),900);return;}
@@ -19,6 +17,7 @@ function teamInvite(){const url=teamInviteUrl();if(!url){toast(tr('Nessuna squad
 // the Squadra menu: shows the team instead of a generic label; simpler words
 (function(){const sk=liveSkeleton;window.liveSkeleton=liveSkeleton=function(){const fresh=!$('#v-live')?.dataset.ok;sk();if(!fresh)return;
   const t=teamParse(LS.get('live:team',''));const sum=$('#v-live details.menu>summary');if(sum){sum.innerHTML=t?`<span class="tmdot"></span>${esc(t.n||tr('Squadra'))} ▾`:`${tr('Collega squadra')} ▾`;sum.classList.toggle('on',!!t);}
+  const menu=$('#v-live details.menu');if(menu&&!$('#lvInviteLink')){const b=document.createElement('button');b.type='button';b.id='lvInviteLink';b.className='btn primary';b.textContent=tr('Invita con link');b.onclick=inviteFriend;menu.before(b);}
   const j=$('#lvJoin');if(j)j.textContent=tr('Entra in una squadra');
   const c=$('#lvCode');if(c){c.textContent=tr('Invita un compagno');c.onclick=teamInvite;}
   const n=$('#lvNew');if(n&&t)n.textContent=tr('Crea un\'altra squadra');

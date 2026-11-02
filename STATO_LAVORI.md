@@ -11,7 +11,7 @@ Pubblicato nelle versioni **2.18.0** (fasi 1–5 e 7) e **2.19.0** (fasi 6 e 8),
 | `app/ui51.js` | Pagina «Analisi tecnica» (menu Prepara), schede di diagnosi, setup associato alla sessione |
 | `app/ui52.js` | Muretto: stato guidato, profili, prova del server |
 | `bridge/libdir.go` | `GET /libstatus`, `POST /libdir` (cartella scelta a mano) |
-| `tools/test_analysis.js` | 44 controlli su segnali sintetici (anche nel controllo automatico su GitHub) |
+| `tools/test_analysis.js` | 60 controlli su segnali sintetici (anche nel controllo automatico su GitHub) |
 
 ## Fase 1 — Lettura e qualità dei dati MoTeC · fatto
 
@@ -119,3 +119,18 @@ I test sintetici verificano gli algoritmi, non la correttezza delle diagnosi su 
 1. Validazione con i file del punto 1 e taratura delle soglie.
 2. Prova reale del Muretto tra due PC.
 3. Release (versione nuova con `release.sh`) solo su richiesta.
+
+## Interventi successivi alla 2.19.0 (sorgenti, non pubblicati)
+
+- Frequenza nativa della velocità ammortizzatore preservata; ruote a frequenze diverse allineate nel tempo.
+- Velocità non derivata da posizioni sotto 50 Hz effettivi o con unità non convertibili; niente consigli da
+  metriche non analizzabili. La frequenza effettiva usa l'intervallo tipico di aggiornamento, distinguendo
+  il sample-and-hold da un tratto realmente quieto. Eventi riutilizzati dalla cache nei cambi di filtro.
+- La diagnosi usa la copia confermata del setup; l'esplorazione di un altro file è esplicita. Rilevamento
+  dell'originale modificato corretto. Le prove mantengono anche la ruota/sezione del parametro, e il giudizio
+  della scheda considera condizioni diverse e dati insufficienti.
+- Frontend desktop: selezione A/B affiancata, contesto tecnico compatto, percorso dati/macchina/prova,
+  schede di diagnosi sintetiche con evidenze espandibili e tabelle che non allargano la pagina.
+- Invito unificato nel Muretto e nel menu: link squadra, messaggio completo con download/avvio, stato
+  senza squadra e copia manuale quando gli appunti non sono disponibili. Nessun invito viene inviato dall'app.
+- Restano necessari la taratura con coppie `.ld`/`.svm` reali e il collaudo del Muretto fra due PC.

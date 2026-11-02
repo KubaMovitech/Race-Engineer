@@ -1,7 +1,7 @@
 // ================= SETUP =================
 let DIAG=null;
 RENDER.setup=()=>{
-  const su=byId($('#suFile').value),S=active()?.S;
+  const S=active()?.S,su=analysisSetup(S);
   const c=cfg();[['#cfgPmin','pmin'],['#cfgPmax','pmax'],['#cfgIOmin','iomin'],['#cfgIOmax','iomax'],['#cfgBmax','bmax'],['#cfgRH','rh'],['#cfgTmin','tmin'],['#cfgTmax','tmax']].forEach(([id,k])=>{const el=$(id);if(document.activeElement!==el)el.value=c[k];});
   renderSheet(su);
   const w=[];let mismatch=false;if(su&&S){const car=(S.meta.car||S.merged?.d.car||'').toLowerCase(),sc=su.car.toLowerCase();
@@ -9,6 +9,8 @@ RENDER.setup=()=>{
     if(car&&!same){mismatch=true;w.push(`Il setup è per «${su.car}», la telemetria è di «${S.meta.car||S.merged?.d.car}». I controlli sotto usano solo la telemetria e non mostrano i valori «ora» del setup: carica il .svm di questa auto.`);}
     else if(!car)w.push(`Il file .ld non indica l'auto: verifica che telemetria e setup (${su.car}) siano della stessa vettura.`);}
   $('#suWarn').innerHTML=w.map(x=>`<div class="warnbar" style="margin-bottom:10px">${esc(x)}</div>`).join('');
+  const context=$('#setupContext');context.innerHTML=S&&LS.get('su:tab','eng')!=='dyn'?sesSetupHTML(S):'';
+  if(S)sesSetupBind(S,context);
   if(!S){$('#suDiag').innerHTML='<div class="empty">Scegli una telemetria .ld in alto: i controlli partono da lì.</div>';DIAG=null;renderDoctor();return;}
   const use=engLaps(S);
   if(!use.length){$('#suDiag').innerHTML='<div class="empty">Servono giri completi.</div>';return;}
@@ -127,7 +129,7 @@ async function runAI(turns,outEl,tier='complex'){
 }
 let suTurns=[];
 function setupPrompt(){
-  const su=byId($('#suFile').value),S=active()?.S;
+  const S=active()?.S,su=analysisSetup(S);
   const probs=$$('#suChips .pchip[aria-pressed="true"]').map(b=>b.dataset.label||b.textContent),txt=$('#suText').value.trim();
   const tele=DIAG&&S?`TELEMETRIA (${S.label}, pilota ${S.meta.driver}, auto ${S.meta.car||S.merged?.d.car||'n.d.'}):\n- `+DIAG.summary.join('\n- '):'Nessuna telemetria.';
   return `Sei un ingegnere di pista esperto di Le Mans Ultimate (simulatore, fisica rFactor 2). Aiuti un pilota sim racing a risolvere problemi di guida modificando il setup. Rispondi in italiano, concreto.
