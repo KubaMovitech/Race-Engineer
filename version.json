@@ -1,17 +1,17 @@
 {
- "version": "2.21.0",
+ "version": "2.22.0",
  "date": "2026-11-05",
  "notes": [
-  "Muretto in una schermata: classifica vicina, la tua auto, gomme, energia, mappa ed eventi",
-  "Classifica: energia virtuale a pillola con giri che restano, senza benzina",
-  "Solo italiano"
+  "Menu a 4 sezioni: Sessione, Setup, Muretto, Libreria",
+  "Risultati .xml più semplici",
+  "Analisi tecnica con meno testo"
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "bc05cfe73b09097891d5d86c60c2cc7515487049ed61bf877111cf68688c1c6d"
+  "sha256": "94a9734b6d099072ebfbb42121afa42980b9ae50a58f7ba5d4559550be2ab3f4"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "632cc361b60dbff042635d06325ef349f0d58aa5d24078cdafd0667179364fd5"
+  "sha256": "4d48d87e523c6a2e76f2d60928f6f526c0f9307c6a62df15444ea6f5b6ac1f8f"
  }
 }
