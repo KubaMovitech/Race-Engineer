@@ -278,7 +278,7 @@ function techOverviewHTML(S,X){
   const events=X.sus.groups.filter(g=>g.rep&&g.k!=='max').length+(X.pl.lowG||[]).filter(g=>g.rep).length;
   const cards=techCards(S,X.laps,analysisSetup(S),X).filter(c=>c.fx).length;
   const steps=[['q','01','Controlla i dati',usable+' / '+ANA.length+' '+tr('analisi disponibili'),'Canali, unità e frequenze prima dei consigli.'],
-    ['damp','02','Leggi la macchina',events+' '+tr('eventi ripetibili'),'Ammortizzatori, terzo elemento e piattaforma.'],
+    ['damp','02','Trova i problemi',events+' '+tr('eventi ripetibili'),'Ammortizzatori, terzo elemento e piattaforma.'],
     ['diag','03','Verifica una modifica',cards+' '+tr('prove suggerite'),'Una modifica, una metrica, un confronto prima e dopo.']];
   return `<div class="tworkflow">${steps.map(([tab,n,t,v,d])=>`<button type="button" data-tt="${tab}" class="tstep"><span class="tstepn">${n}</span><span><b>${tr(t)}</b><strong>${v}</strong><small>${tr(d)}</small></span><span aria-hidden="true">→</span></button>`).join('')}</div>`;
 }

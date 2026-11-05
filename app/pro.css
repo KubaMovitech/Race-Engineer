@@ -30,11 +30,11 @@ html[data-look="pro"][data-pal="blu"],html[data-look="pro"][data-pal="blu"][data
 }
 html[data-look="pro"] body{background:linear-gradient(180deg,var(--pbody1),var(--pbody2) 60%) fixed;}
 /* gold: metallic text for the brand and the selected item, silver for the rest */
-html[data-look="pro"]:not([data-pal="blu"]) .brand b span{color:var(--pacc)}
-html[data-look="pro"]:not([data-pal="blu"]) .brand .logo stop:first-child{stop-color:#E6C877}html[data-look="pro"]:not([data-pal="blu"]) .brand .logo stop:last-child{stop-color:#8C6D24}
+html[data-look="pro"][data-pal="oro"] .brand b span{color:var(--pacc)}
+html[data-look="pro"][data-pal="oro"] .brand .logo stop:first-child{stop-color:#E6C877}html[data-look="pro"][data-pal="oro"] .brand .logo stop:last-child{stop-color:#8C6D24}
 
-html[data-look="pro"]:not([data-pal="blu"]) .pn[aria-current="page"] svg{stroke:var(--pacc2)}
-html[data-look="pro"]:not([data-pal="blu"]) .pstrip .pv.best{color:#E6C877}
+html[data-look="pro"][data-pal="oro"] .pn[aria-current="page"] svg{stroke:var(--pacc2)}
+html[data-look="pro"][data-pal="oro"] .pstrip .pv.best{color:#E6C877}
 
 /* ---------- top bar ---------- */
 html[data-look="pro"] .top{position:sticky;top:0;background:var(--ptopbg);backdrop-filter:blur(10px);border-bottom:1px solid var(--hdr-line);box-shadow:none}

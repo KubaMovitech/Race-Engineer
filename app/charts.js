@@ -1,6 +1,7 @@
 // ================= CHARTS =================
 // the workstation skin draws clean lines, the Muretto keeps the glow
-function GL(){return document.documentElement.dataset.skin==='ws'?0:1;}
+// no glow on the lines in Workspace and in Grafite
+function GL(){const d=document.documentElement.dataset;return d.skin==='ws'||d.pal==='grafite'?0:1;}
 function tok(n){return getComputedStyle(document.documentElement).getPropertyValue('--'+n).trim()||'#888';}
 function fitCanvas(cv,h){const dpr=window.devicePixelRatio||1,w=cv.clientWidth||cv.parentElement.clientWidth;if(h)cv.style.height=h+'px';const hh=cv.clientHeight||h;cv.width=Math.round(w*dpr);cv.height=Math.round(hh*dpr);const c=cv.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);return {c,w,h:hh};}
 function niceTicks(lo,hi,n=4){const r=hi-lo||1,raw=r/n,p=Math.pow(10,Math.floor(Math.log10(raw))),m=raw/p,st=(m<1.5?1:m<3?2:m<7?5:10)*p;const out=[];for(let v=Math.ceil(lo/st)*st;v<=hi+1e-9;v+=st)out.push(+v.toFixed(6));return out;}

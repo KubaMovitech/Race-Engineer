@@ -1,0 +1,136 @@
+/* ================= GRAFITE (2.23, default look: html[data-look="pro"][data-pal="grafite"]) =================
+   Graphite background, thin lines, flat panels with small corners. One rule for colour everywhere:
+   blue = reference (giro A), orange = what you analyse / your car / what is selected,
+   yellow and red only for warnings, purple and green only for lap and sector times.
+   Menu: the four sections in a row under the top bar, the pages of the open section as tabs on top of the page.
+   Only looks change here. */
+html[data-look="pro"][data-pal="grafite"],html[data-look="pro"][data-pal="grafite"][data-skin]{
+  --bg:#15181C; --panel:#1B1F24; --panel2:#21262C; --band:#181B20; --line:#2B3038; --grid:#23272D; --trackbed:#2A2F36;
+  --ink:#ECEEF1; --muted:#8D949E; --faint:#5F6670; --hdr:#15181C; --hdr-line:#2B3038; --hdr-ink:#ECEEF1; --hdr-muted:#8D949E;
+  --pacc:#F2722B; --pacc2:#FF9A5C; --accent2:#FF9A5C; --lapA:#7196DA; --lapB:#F2722B; --cyan:#5BB8E8;
+  --edge:#2B3038; --edge2:#3E454F; --r:3px; --shadow:none;
+  --pnw:0px; --ptop:64px;
+  --psel:#262B32; --psel2:#21262C; --pbtn1:#F2722B; --pbtn2:#E4631C; --pbtnb:#F2722B; --pbtnt:#FFFFFF;
+  --pg1:#1B1F24; --pg2:#1B1F24; --pside1:#15181C; --pbody1:#15181C; --pbody2:#15181C;
+  --pglow:transparent; --pfocus:rgba(242,114,43,.28); --ptopbg:#15181C; --psideglow:transparent;
+  --psil:#C3C8CF; --psil2:#E3E6EA; --psil3:#A0A7B0; --pinput:#121519; --pth:#1B1F24; --pline2:#23272D; --pbrand:#ECEEF1;
+  --pcar1:#23272D; --pcar2:#3A4049; --pcar3:#2C3138; --pwarn:#F2C230; --pwarnbg:rgba(242,194,48,.13);
+  --good:#3DBE7C; --bad:#E5484D; --warn:#F2C230; --best:#A673F0;
+}
+html[data-look="pro"][data-pal="grafite"] body{background:var(--bg)}
+
+/* ---------- top bar ---------- */
+html[data-look="pro"][data-pal="grafite"] .top{background:var(--bg);backdrop-filter:none}
+html[data-look="pro"][data-pal="grafite"] .brand{width:auto;flex:0 0 auto;padding:0 22px;border-right:1px solid var(--hdr-line)}
+html[data-look="pro"][data-pal="grafite"] .brand b{font-weight:700;font-size:1.2rem;letter-spacing:.06em}
+html[data-look="pro"][data-pal="grafite"] .brand .teamlogo{display:block}
+html[data-look="pro"][data-pal="grafite"] .pf{border-radius:3px;background:var(--panel)}
+html[data-look="pro"][data-pal="grafite"] .hdr-tools .btn{border-radius:3px;background:transparent;border-color:#4A515B}
+html[data-look="pro"][data-pal="grafite"] #btnLoad{background:var(--pacc);border-color:var(--pacc);color:#fff}
+html[data-look="pro"][data-pal="grafite"] #btnLoad svg{stroke:#fff}
+html[data-look="pro"][data-pal="grafite"] .psync.on b{color:var(--good)}html[data-look="pro"][data-pal="grafite"] .psync.on b i{background:var(--good);box-shadow:none}
+
+/* ---------- the four sections in a row ---------- */
+html[data-look="pro"][data-pal="grafite"] #proNav{position:sticky;top:var(--ptop);left:auto;bottom:auto;width:auto;height:52px;flex-direction:row;align-items:stretch;
+  padding:0 22px;background:var(--bg);border-right:0;border-bottom:1px solid var(--line);overflow:visible;z-index:25}
+html[data-look="pro"][data-pal="grafite"] #proNav::after,html[data-look="pro"][data-pal="grafite"] #proNav .pfoot,html[data-look="pro"][data-pal="grafite"] #proNav #proLogo{display:none}
+html[data-look="pro"][data-pal="grafite"] #proNav nav{flex-direction:row;gap:4px;height:100%;width:auto}
+html[data-look="pro"][data-pal="grafite"] #proNav .psec{display:flex;flex-direction:row}
+html[data-look="pro"][data-pal="grafite"] #proNav .psub{display:none!important}
+html[data-look="pro"][data-pal="grafite"] #proNav .pmain{display:flex!important;flex:none;flex-direction:row;align-items:center;gap:8px;height:100%;min-width:0;padding:0 18px;border:0;border-bottom:3px solid transparent;border-radius:0;background:none!important;color:#B8BEC6}
+html[data-look="pro"][data-pal="grafite"] #proNav .pmain svg{display:none}
+html[data-look="pro"][data-pal="grafite"] #proNav .pmain span{display:block}
+html[data-look="pro"][data-pal="grafite"] #proNav .pmain small{display:none}
+html[data-look="pro"][data-pal="grafite"] #proNav .pmain b{font:400 1.08rem var(--f-body);color:#B8BEC6;white-space:nowrap}
+html[data-look="pro"][data-pal="grafite"] #proNav .pmain:hover b{color:#fff}
+html[data-look="pro"][data-pal="grafite"] #proNav .pmain[aria-current="true"]{border-bottom-color:var(--pacc)}
+html[data-look="pro"][data-pal="grafite"] #proNav .pmain[aria-current="true"] b{color:#fff;font-weight:600}
+html[data-look="pro"][data-pal="grafite"] #proNav .livedot{background:var(--bad)}
+html[data-look="pro"][data-pal="grafite"] #proNav .pinv{margin:9px 0 9px auto;padding:0 14px;border:1px solid #4A515B;border-radius:3px;font-size:.9rem}
+html[data-look="pro"][data-pal="grafite"] #proNav .pinv span{display:inline}
+/* the pages of the open section: in the same row, after a thin line */
+html[data-look="pro"][data-pal="grafite"] #proNav .psectabs:not([hidden]){display:flex;flex-wrap:nowrap;align-items:stretch;gap:0;margin:0 0 0 14px;padding:0 0 0 14px;border:0;position:relative;min-width:0}
+html[data-look="pro"][data-pal="grafite"] #proNav .psectabs::before{content:"";position:absolute;left:0;top:15px;bottom:15px;width:1px;background:#3E454F}
+html[data-look="pro"][data-pal="grafite"] #proNav .psectabs .pst{display:flex;align-items:center;padding:3px 13px 0;font-size:.95rem;white-space:nowrap;border-bottom:3px solid transparent}
+html[data-look="pro"][data-pal="grafite"] #proNav .psectabs .pst[aria-current="page"]{border-bottom-color:#C3C8CF}
+/* (older placement, on top of the page) */
+html[data-look="pro"][data-pal="grafite"] .psectabs:not([hidden]){display:flex;gap:2px;flex-wrap:wrap;margin:-18px -22px 18px;padding:0 22px;border-bottom:1px solid var(--line)}
+html[data-look="pro"][data-pal="grafite"] .psectabs .pst{border:0;border-bottom:3px solid transparent;border-radius:0;background:none;color:#B8BEC6;padding:12px 16px 9px;cursor:pointer;font:400 1rem var(--f-body)}
+html[data-look="pro"][data-pal="grafite"] .psectabs .pst:hover{color:#fff}
+html[data-look="pro"][data-pal="grafite"] .psectabs .pst[aria-current="page"]{border-bottom-color:var(--pacc);color:#fff;font-weight:600;background:none}
+html[data-look="pro"][data-pal="grafite"] main{margin:0;padding:18px 22px 64px}
+html[data-look="pro"][data-pal="grafite"] main>.tabs.subtabs .tab{border-radius:3px}
+html[data-look="pro"][data-pal="grafite"] #rcBar{left:0}
+
+/* ---------- flat panels, small corners, no glow ---------- */
+html[data-look="pro"][data-pal="grafite"] .panel,html[data-look="pro"][data-pal="grafite"] .wcard,html[data-look="pro"][data-pal="grafite"] .lbcard,html[data-look="pro"][data-pal="grafite"] .suscard,
+html[data-look="pro"][data-pal="grafite"] .kpi,html[data-look="pro"][data-pal="grafite"] .hero,html[data-look="pro"][data-pal="grafite"] .hero.pstrip,html[data-look="pro"][data-pal="grafite"] .modal .mbox{background:var(--panel);border-radius:3px;box-shadow:none}
+html[data-look="pro"][data-pal="grafite"] .hero.pstrip{border-left:1px solid var(--line)}
+html[data-look="pro"][data-pal="grafite"] .panel:hover{border-color:var(--line)}
+html[data-look="pro"][data-pal="grafite"] .panel>.panel-h:first-child,html[data-look="pro"][data-pal="grafite"] .panel>h3:first-child{border-radius:3px 3px 0 0}
+/* titles in plain case, labels small and grey */
+html[data-look="pro"][data-pal="grafite"] .panel-h h2,html[data-look="pro"][data-pal="grafite"] .panel-h h3,html[data-look="pro"][data-pal="grafite"] .panel>h3,html[data-look="pro"][data-pal="grafite"] .dt,html[data-look="pro"][data-pal="grafite"] .dash .dt{text-transform:none;letter-spacing:0;font-size:1.02rem;font-weight:600;color:#fff}
+html[data-look="pro"][data-pal="grafite"] .btn,html[data-look="pro"][data-pal="grafite"] .seg button,html[data-look="pro"][data-pal="grafite"] .tog,html[data-look="pro"][data-pal="grafite"] .sutabs button,html[data-look="pro"][data-pal="grafite"] .pstrip .pbtn .btn{border-radius:3px}
+html[data-look="pro"][data-pal="grafite"] .btn{background:transparent;border-color:#4A515B}
+html[data-look="pro"][data-pal="grafite"] .btn:hover{background:var(--panel2);border-color:#6B727C}
+html[data-look="pro"][data-pal="grafite"] .btn.primary{background:var(--pacc);border-color:var(--pacc);color:#fff}
+html[data-look="pro"][data-pal="grafite"] .btn.primary:hover{background:var(--pbtn2)}
+html[data-look="pro"][data-pal="grafite"] select,html[data-look="pro"][data-pal="grafite"] input[type=number],html[data-look="pro"][data-pal="grafite"] input[type=text],html[data-look="pro"][data-pal="grafite"] input:not([type]),html[data-look="pro"][data-pal="grafite"] textarea{border-radius:3px!important}
+html[data-look="pro"][data-pal="grafite"] .seg button[aria-pressed="true"],html[data-look="pro"][data-pal="grafite"] .tog[aria-pressed="true"],html[data-look="pro"][data-pal="grafite"] .sutabs button[aria-selected="true"],html[data-look="pro"][data-pal="grafite"] main>.tabs.subtabs .tab[aria-selected="true"]{background:var(--psel);border-color:var(--pacc);color:#fff}
+html[data-look="pro"][data-pal="grafite"] th{background:transparent!important}
+html[data-look="pro"][data-pal="grafite"] .pstrip .pv.best{color:var(--best)}
+html[data-look="pro"][data-pal="grafite"] .pstrip .pv.good,html[data-look="pro"][data-pal="grafite"] .pq.q2{color:var(--good)!important}
+html[data-look="pro"][data-pal="grafite"] .pstrip .pt.s2,html[data-look="pro"][data-pal="grafite"] .pstrip .pv.bad,html[data-look="pro"][data-pal="grafite"] .pq.q0{color:var(--bad)!important}
+html[data-look="pro"][data-pal="grafite"] .pstrip .pt.ok{color:var(--good)}
+
+/* ---------- narrow screens ---------- */
+@media (max-width:1100px){html[data-look="pro"][data-pal="grafite"] #proNav .pinv span{display:none}}
+@media (max-width:760px){
+  html[data-look="pro"][data-pal="grafite"] .brand{padding:0;border:0}
+  html[data-look="pro"][data-pal="grafite"] #proNav{position:relative;top:0;padding:0 6px;height:auto;flex-wrap:wrap}
+  html[data-look="pro"][data-pal="grafite"] #proNav nav{height:48px}
+  html[data-look="pro"][data-pal="grafite"] #proNav .psectabs:not([hidden]){flex:1 1 100%;margin:0 -6px;padding:0 6px;height:44px;border-top:1px solid var(--line);overflow-x:auto}
+  html[data-look="pro"][data-pal="grafite"] #proNav .psectabs::before{display:none}
+  html[data-look="pro"][data-pal="grafite"] #proNav nav{width:100%;justify-content:space-between}
+  html[data-look="pro"][data-pal="grafite"] #proNav .psec{display:contents}
+  html[data-look="pro"][data-pal="grafite"] #proNav .pmain{flex:1 1 0;justify-content:center;padding:0 6px}
+  html[data-look="pro"][data-pal="grafite"] #proNav .pmain b{font-size:.95rem}
+  html[data-look="pro"][data-pal="grafite"] .psectabs:not([hidden]){margin:-12px -10px 12px;padding:0 6px;flex-wrap:nowrap;overflow-x:auto}
+  html[data-look="pro"][data-pal="grafite"] .psectabs .pst{white-space:nowrap;padding:10px 12px 8px}
+}
+
+/* ---------- one orange action per place: the rest are plain outlined buttons ---------- */
+html[data-look="pro"][data-pal="grafite"] .btn{text-transform:none;letter-spacing:0;font-family:var(--f-body)}
+html[data-look="pro"][data-pal="grafite"] main .btn.primary,html[data-look="pro"][data-pal="grafite"] .modal .btn.primary{background:transparent;color:var(--pacc2);border-color:var(--pacc)}
+html[data-look="pro"][data-pal="grafite"] main .btn.primary:hover,html[data-look="pro"][data-pal="grafite"] .modal .btn.primary:hover{background:color-mix(in srgb,var(--pacc) 14%,transparent);color:#fff}
+html[data-look="pro"][data-pal="grafite"] .pstrip .pbtn .btn,html[data-look="pro"][data-pal="grafite"] .pstrip .pbtn .btn.primary{background:transparent;color:var(--psil2);border-color:#4A515B;text-transform:none;letter-spacing:0;font-size:.86rem}
+html[data-look="pro"][data-pal="grafite"] .sb.race{background:transparent;color:var(--pacc2);border:1px solid var(--pacc);border-radius:3px}
+html[data-look="pro"][data-pal="grafite"] #rcBar{background:var(--bg);border-top-color:var(--line)}
+html[data-look="pro"][data-pal="grafite"] #rcBar .rcl{background:var(--panel2);color:var(--pacc2)}
+html[data-look="pro"][data-pal="grafite"] .tabs.subtabs .tab,html[data-look="pro"][data-pal="grafite"] main>.tabs.subtabs .tab{text-transform:none;letter-spacing:0;font:600 .92rem var(--f-body)}
+
+/* ---------- words in the text font, numbers in the mono font ---------- */
+html[data-look="pro"][data-pal="grafite"] td.l,html[data-look="pro"][data-pal="grafite"] .kpi .s,html[data-look="pro"][data-pal="grafite"] .kpi .l{font-family:var(--f-body)}
+html[data-look="pro"][data-pal="grafite"] .kpi .l,html[data-look="pro"][data-pal="grafite"] .cchip span,html[data-look="pro"][data-pal="grafite"] .pstrip .pl{font:600 .76rem var(--f-body)!important;letter-spacing:.1em!important;text-transform:uppercase;color:var(--muted)}
+html[data-look="pro"][data-pal="grafite"] .lvsess .cchip b{font-size:1.1rem}
+html[data-look="pro"][data-pal="grafite"] .lvtabs{border-top:0;border-bottom:1px solid var(--line);gap:2px}
+html[data-look="pro"][data-pal="grafite"] .lvtabs button{font:400 1rem var(--f-body)!important;text-transform:none!important;letter-spacing:0!important;padding:10px 16px 8px;border:0;border-bottom:3px solid transparent;border-radius:0;background:none!important;color:#B8BEC6}
+html[data-look="pro"][data-pal="grafite"] .lvtabs button:hover{color:#fff}
+html[data-look="pro"][data-pal="grafite"] .lvtabs button[aria-selected="true"]{color:#fff!important;font-weight:600!important;border-bottom-color:var(--pacc);background:none!important;box-shadow:none}
+html[data-look="pro"][data-pal="grafite"] table.lbt tbody tr:nth-child(even) td{background:transparent}
+html[data-look="pro"][data-pal="grafite"] table.lbt tbody tr:hover td{background:var(--panel2)}
+html[data-look="pro"][data-pal="grafite"] table.lbt tr.ours td,html[data-look="pro"][data-pal="grafite"] tr.ours td{background:#262B32!important}
+html[data-look="pro"][data-pal="grafite"] table.lbt tr.ours td:first-child,html[data-look="pro"][data-pal="grafite"] tr.ours td:first-child{box-shadow:inset 3px 0 var(--pacc)}
+html[data-look="pro"][data-pal="grafite"] .lvlb table.lbt td.l{font-family:var(--f-body);text-transform:none;letter-spacing:0;font-weight:600}
+html[data-look="pro"][data-pal="grafite"] .lbar{box-shadow:none;border-color:var(--line);border-top:2px solid var(--pacc);border-radius:3px;background:var(--panel)}
+html[data-look="pro"][data-pal="grafite"] .btn.primary{box-shadow:none}
+/* Setup Builder tabs: underlined like the other tabs */
+html[data-look="pro"][data-pal="grafite"] .sutabs{gap:2px;border-bottom:1px solid var(--line)}
+html[data-look="pro"][data-pal="grafite"] .sutabs button{border:0;border-bottom:3px solid transparent;border-radius:0;background:none;color:#B8BEC6;font:400 1rem var(--f-body);letter-spacing:0;text-transform:none;padding:10px 16px 8px}
+html[data-look="pro"][data-pal="grafite"] .sutabs button:hover{color:#fff}
+html[data-look="pro"][data-pal="grafite"] .sutabs button[aria-selected="true"]{background:none;border-color:transparent;border-bottom-color:var(--pacc);color:#fff;font-weight:600}
+/* race mode: same graphite, clock in plain white */
+html[data-look="pro"][data-pal="grafite"] #raceMode{background:var(--bg)}
+html[data-look="pro"][data-pal="grafite"] #raceMode .rmtop{border-bottom-color:var(--line)}
+html[data-look="pro"][data-pal="grafite"] #raceMode .rmclock{color:var(--ink);text-shadow:none}
+html[data-look="pro"][data-pal="grafite"] #raceMode .kpi{background:var(--panel)}
