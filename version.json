@@ -1,17 +1,17 @@
 {
- "version": "2.19.0",
- "date": "2026-11-01",
+ "version": "2.20.0",
+ "date": "2026-11-05",
  "notes": [
-  "Setup Builder: confronto con un setup di riferimento e problemi collegati ai parametri",
-  "Clic su una ruota o su un problema: si apre l'analisi giusta",
-  "Muretto: vista gara in una riga con posizione, distacchi, autonomia, prossima sosta e avvisi"
+  "Muretto dal browser: link per chi fa l'ingegnere, senza installare niente",
+  "Analisi tecnica basata sul setup confermato della sessione, schede più corte",
+  "Invita un compagno più semplice: link per chi guida e per l'ingegnere"
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "cca49405ad84b12af18b7ee27b0b821be18401af4b3388c603857d88e3c7d203"
+  "sha256": "4ab046f22566a1c47cf5332c5d2ba9625fda1b2e8e78d7777c2c74babdb5ce84"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "e47205a24a48206d9705c8dcbe6a5f42bb9af20590ddaf0e01a8557759f4c86c"
+  "sha256": "1826d5fdd133064a772fc12e596b00a0c3651e1ad87ae64a7ae199b8b708fa74"
  }
 }
