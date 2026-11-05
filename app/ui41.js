@@ -22,29 +22,42 @@ const PRO_NAV=[['dash','Dashboard','Analisi e panoramica',['stint']],
   ['setb','Setup Builder','Setup, confronto e generatore',['setup'],'set'],
   ['bop','BOP','Bilanciamento prestazioni',['bop']],
   ['live','Muretto','Live con la squadra',['live']]];
-// grouped by what you are doing; on the phone only the first four, the rest under «Altro»
-const PRO_GROUPS=[['Analizza',['dash','tel','coach','ses','prog']],['Prepara',['eng','tech','setb','bop']],['Gara',['live']]];
-const PRO_PHONE=['dash','tel','eng','live'];
+// four sections in the side menu (2.22); the pages of the open section are listed under it, and on narrow screens
+// in a row of tabs at the top of the page. Every page keeps its own button (data-n), so code that opens a page by
+// clicking it keeps working.
+const PRO_SEC=[['sess','Sessione','Dati, telemetria e coach',['dash','tel','coach','ses','prog']],
+  ['setup','Setup','Ingegnere, analisi e builder',['eng','tech','setb','bop']],
+  ['live','Muretto','Live con la squadra',['live']],
+  ['libr','Libreria','Setup e telemetrie del PC',['libr']]];
+const proSecOf=id=>PRO_SEC.find(s=>s[3].includes(id))||PRO_SEC[0];
+// open a page by its id (dash, tel, eng, tech, setb, live, libr …)
+function proGo(id){const b=$(`#proNav .pn[data-n="${id}"]`);if(b)b.click();}
 const proLook=()=>/^pro/.test(LS.get('look','pro'));
 function proNavOf(v){if(v==='setup'){const t=LS.get('su:tab','eng');return t==='eng'?'eng':t==='dyn'?'tech':'setb';}return (PRO_NAV.find(n=>n[3].includes(v))||PRO_NAV[0])[0];}
 function proSync(){if(!proLook())return;const v=curView(),id=proNavOf(v);const g=PRO_NAV.find(n=>n[0]===id);
-  $$('#proNav .pn[data-n]').forEach(b=>b.setAttribute('aria-current',b.dataset.n===id?'page':'false'));$('#proNav .pmore')?.classList.toggle('pon',!PRO_PHONE.includes(id));
+  $$('#proNav .pn[data-n]').forEach(b=>b.setAttribute('aria-current',b.dataset.n===id?'page':'false'));
+  const sec=proSecOf(id);$$('#proNav .psec').forEach(e=>{const on=e.dataset.s===sec[0];e.classList.toggle('on',on);e.querySelector('.pmain')?.setAttribute('aria-current',on?'true':'false');});
+  // the pages of this section as tabs at the top of the page (shown when the side menu is narrow)
+  const st=$('#proSecTabs');if(st){const h=sec[3].length>1?sec[3].map(n=>{const g=PRO_NAV.find(x=>x[0]===n);return g?`<button type="button" class="pst" data-go="${n}" aria-current="${n===id?'page':'false'}">${tr(g[1])}</button>`:'';}).join(''):'';if(st._h!==h){st.innerHTML=h;st._h=h;st.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>proGo(b.dataset.go));}st.hidden=!h;}
   const nav=$('.tabs.subtabs');if(nav){$$('.tabs .tab').forEach(t=>t.hidden=!g[3].includes(t.dataset.view));nav.hidden=g[3].length<2;}
   const su=$('#suTabs');if(su){su.hidden=id==='eng'||id==='tech';su.querySelectorAll('button').forEach(b=>b.hidden=b.dataset.t==='eng'||b.dataset.t==='dyn');}
   document.documentElement.dataset.pnav=id;}
 function proBuild(){if($('#proNav'))return;
   const side=document.createElement('aside');side.id='proNav';side.setAttribute('aria-label',tr('Sezioni'));
-  const btn=([id,t,s])=>`<button type="button" class="pn${PRO_PHONE.includes(id)?' pph':''}" data-n="${id}"><svg viewBox="0 0 24 24" aria-hidden="true">${PRO_ICONS[id]}</svg><span><b>${id==='live'?'<i class="livedot"></i>':''}${tr(t)}</b><small>${tr(s)}</small></span></button>`;
-  side.innerHTML=`<nav>${PRO_GROUPS.map(([g,ids])=>`<div class="pgh">${tr(g)}</div>${ids.map(id=>btn(PRO_NAV.find(n=>n[0]===id))).join('')}`).join('')}
-    <button type="button" class="pn pmore" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg><span><b>${tr('Altro')}</b></span></button></nav>
+  const page=id=>{const n=PRO_NAV.find(x=>x[0]===id);return n?`<button type="button" class="pn psb" data-n="${id}"><span><b>${tr(n[1])}</b></span></button>`:'';};
+  const icon={sess:PRO_ICONS.dash,setup:PRO_ICONS.setb,live:PRO_ICONS.live,libr:PRO_ICONS.libr};
+  side.innerHTML=`<nav>${PRO_SEC.map(([s,t,d,ids])=>`<div class="psec" data-s="${s}"><button type="button" class="pn pmain" data-s="${s}"><svg viewBox="0 0 24 24" aria-hidden="true">${icon[s]||''}</svg><span><b>${s==='live'?'<i class="livedot"></i>':''}${tr(t)}</b><small>${tr(d)}</small></span></button>
+      <div class="psub"${ids.length>1?'':' hidden'}>${ids.map(page).join('')}</div></div>`).join('')}</nav>
     <div class="pfoot" data-noi18n>DATA<br>DRIVES<br>PERFORMANCE</div>`;
   $('header.top').after(side);
-  const more=side.querySelector('.pmore');more.onclick=()=>{const o=!side.classList.contains('pmopen');side.classList.toggle('pmopen',o);more.setAttribute('aria-expanded',o);};
-  side.querySelectorAll('.pn[data-n]').forEach(b=>b.onclick=()=>{side.classList.remove('pmopen');more.setAttribute('aria-expanded','false');const g=PRO_NAV.find(n=>n[0]===b.dataset.n);
+  // a section opens on the page used last in it
+  side.querySelectorAll('.pmain').forEach(b=>b.onclick=()=>{const S=PRO_SEC.find(x=>x[0]===b.dataset.s);const last=LS.get('psec:'+S[0],S[3][0]);proGo(S[3].includes(last)?last:S[3][0]);});
+  side.querySelectorAll('.pn[data-n]').forEach(b=>b.onclick=()=>{const g=PRO_NAV.find(n=>n[0]===b.dataset.n);LS.set('psec:'+proSecOf(g[0])[0],g[0]);
     if(g[4]){const cur=LS.get('su:tab','eng');if(g[4]==='eng'||g[4]==='dyn')LS.set('su:tab',g[4]);else if(cur==='eng'||cur==='dyn')LS.set('su:tab','set');}
     const last=LS.get('pgrp:'+g[0],g[3][0]);showView(g[3].includes(last)?last:g[3][0]);if(g[4]&&typeof suTabsApply==='function')suTabsApply();proSync();window.scrollTo({top:0});});
   // the second row of tabs goes on top of the page
   const sub=$('.tabs.subtabs');if(sub)$('main').prepend(sub);
+  if(!$('#proSecTabs')){const t=document.createElement('nav');t.id='proSecTabs';t.className='psectabs';t.setAttribute('aria-label',tr('Pagine della sezione'));t.hidden=true;$('main').prepend(t);}
   // car and track filters next to the session menu
   const g=$('#gSess');if(g&&!$('#proCar')){const w=document.createElement('div');w.className='psel';
     w.innerHTML=`<label class="pf"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 16l2-5 4-2h6l4 3 2 1v3H3z"/><circle cx="7.5" cy="16.5" r="1.8"/><circle cx="17" cy="16.5" r="1.8"/></svg><select id="proCar" aria-label="${tr('Auto')}"></select></label>

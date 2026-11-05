@@ -35,6 +35,9 @@ function techRelOpts(id,X){const W=Object.values(X.sus.w||{});const avgLap=k=>{c
 function techPerLapMean(arr,k){const by={};arr.forEach(o=>(by[o.lap]??=[]).push(o[k]));return Object.values(by).map(a=>vdMean(a));}
 
 // ---------- small drawing helpers ----------
+// a long explanation: closed by default, so the page shows numbers first
+const techInfo=t=>`<details class="tinfo"><summary>ⓘ ${tr('Come leggere')}</summary><p class="muted small">${t}</p></details>`;
+
 function techRel(r,lab){if(!r)return '';return `<span class="trel ${REL_CLS[r.label]||''}" title="${esc(r.why.join(' · '))}">${lab?esc(tr(lab))+' · ':''}${tr('affidabilità')} <b>${tr(r.label)}</b></span>`;}
 function techRelWhy(r){return r?`<details class="trelw"><summary>${tr('Perché questa affidabilità')}</summary><ul>${r.why.map(w=>`<li>${esc(w)}</li>`).join('')}</ul></details>`:'';}
 // a line chart: series [{x:[],y:[],col,lab,w}], axes labels; numbers on the axes, no decoration
@@ -83,7 +86,7 @@ function techQualityHTML(S,X){const rows=ANA.map(a=>{const A=chqAnalysis(S,a);co
     <table class="lbt tqt"><thead><tr><th class="l">${tr('Analisi')}</th><th>${tr('Canali')}</th><th>${tr('Affidabilità')}</th><th class="l">${tr('Limiti')}</th></tr></thead><tbody>${rows}</tbody></table>
     <h4>${tr('Grandezze calcolate')}</h4><div class="tkv">${der.map(([a,b])=>`<span>${esc(a)}</span><span>${esc(b)}</span>`).join('')}</div>
     <details class="tqd"><summary>${tr('Canali, unità, conversioni e frequenze')} (${ch.length})</summary><table class="lbt tqt"><thead><tr><th class="l">${tr('Canale')}</th><th>${tr('Stato')}</th><th>${tr('Unità')}</th><th class="l">${tr('Conversione')}</th><th>${tr('Frequenza')}</th><th class="l">${tr('Problemi')}</th></tr></thead><tbody>${chRows}</tbody></table>
-      <p class="muted small">${tr('«Certa»: unità scritta nel file. «Convenzione LMU»: il gioco scrive gli angoli in radianti senza unità. «Incerta»: unità mancante, dedotta dal nome. Un canale piatto (sempre uguale con l\'auto in movimento) non contiene informazioni e viene trattato come mancante, non come zero.')}</p></details></div>`;}
+      ${techInfo(tr('«Certa»: unità scritta nel file. «Convenzione LMU»: il gioco scrive gli angoli in radianti senza unità. «Incerta»: unità mancante, dedotta dal nome. Un canale piatto (sempre uguale con l\'auto in movimento) non contiene informazioni e viene trattato come mancante, non come zero.'))}</details></div>`;}
 
 // ---------- 2. dampers ----------
 function techDampHTML(S,X,XB){const R=X.sus,RB=XB?.sus;const ws=VD_W.filter(w=>R.w[w]);
@@ -104,7 +107,7 @@ function techDampHTML(S,X,XB){const R=X.sus,RB=XB?.sus;const ws=VD_W.filter(w=>R
     ${phs.map(k=>`<tr><td class="l">${techPhN(k)} <span class="muted">${fx(Math.max(...ws.map(w=>R.w[w].ph[k]?.s||0)),0)} s</span></td>${ws.map(w=>{const p=R.w[w].ph[k];return p?`<td>${fx(p.bump95,0)} / ${fx(Math.abs(p.reb95),0)}</td><td>${fx(p.p1,1)} … ${fx(p.p99,1)}</td>`:'<td>—</td><td>—</td>';}).join('')}</tr>`).join('')}</tbody></table>`;
   return `<div class="tctl"><label class="f">${tr('Soglia lento / veloce')} (mm/s)<input type="number" id="vdKnee" min="10" step="5" value="${o.knee}"></label><label class="f">${tr('Scala')} ± (mm/s)<input type="number" id="vdRange" min="100" step="50" value="${o.range}"></label><label class="f">${tr('Classe')} (mm/s)<input type="number" id="vdBin" min="5" step="5" value="${o.bin}"></label>${techRel(X.rel.damp)}</div>
     <div class="tdg">${cards}</div><h4>${tr('Per fase del giro')}</h4>${ptab}
-    <p class="muted small">${tr('Gli istogrammi descrivono come lavorano gli ammortizzatori; la loro forma o simmetria, da sola, non dice se una regolazione è giusta. Le barre chiare sono oltre la soglia lento/veloce; le percentuali fuori scala sono contate a parte. Fasi: frenata (freno > 5% e g laterale < 0,5), inserimento (freno con g laterale, o g laterale in aumento), appoggio, uscita (gas ≥ 30% con g laterale), rettilineo (g laterale < 0,3 sopra 100 km/h), cordolo (Surface Type della ruota).')}</p>${techRelWhy(X.rel.damp)}`;}
+    ${techInfo(tr('Gli istogrammi descrivono come lavorano gli ammortizzatori; la loro forma o simmetria, da sola, non dice se una regolazione è giusta. Le barre chiare sono oltre la soglia lento/veloce; le percentuali fuori scala sono contate a parte. Fasi: frenata (freno > 5% e g laterale < 0,5), inserimento (freno con g laterale, o g laterale in aumento), appoggio, uscita (gas ≥ 30% con g laterale), rettilineo (g laterale < 0,3 sopra 100 km/h), cordolo (Surface Type della ruota).'))}${techRelWhy(X.rel.damp)}`;}
 
 // ---------- 3. springs, axles, third element ----------
 function techAxleHTML(S,X,XB){const A=X.ax,AB=XB?.ax;if(!A.have)return `<div class="warnbar">${tr('Servono le quattro posizioni delle sospensioni per l\'analisi degli assi.')}</div>`;
@@ -128,11 +131,11 @@ function techAxleHTML(S,X,XB){const A=X.ax,AB=XB?.ax;if(!A.have)return `<div cla
   const br=A.brake,rl=A.roll;
   const extra=`<div class="tkv small">${br?`<span>${tr('Frenata: movimento comune per % di freno')}</span><span>${tr('ant.')} ${fx(br.F?.b,3)} · ${tr('post.')} ${fx(br.R?.b,3)} mm/%${Number.isFinite(br.diveF)?` · ${tr('con freno > 60% rispetto al rettilineo')}: ${tr('ant.')} ${br.diveF>0?'+':''}${fx(br.diveF,1)} · ${tr('post.')} ${br.diveR>0?'+':''}${fx(br.diveR,1)} mm`:''}</span>`:''}
     ${rl?`<span>${tr('Rollio per g laterale')}</span><span>${tr('ant.')} ${fx(Math.abs(rl.F?.b),2)} · ${tr('post.')} ${fx(Math.abs(rl.R?.b),2)} mm/g${rl.body?` · ${tr('scocca')} ${fx(Math.abs(rl.body.b),2)} °/g (${tr('misurato')})`:''}</span>`:''}</div>
-    <p class="muted small">${tr('Il rollio per g di anteriore e posteriore dipende da molle, barre, rapporti di installazione e geometria: il loro rapporto da solo non dice il bilanciamento meccanico. Sostegno a regime (molle, 3° elemento, packer) e controllo dei transitori (ammortizzatori) si leggono separatamente: il primo nelle mediane per fase e con la velocità, il secondo negli istogrammi e negli eventi.')}</p>`;
+    ${techInfo(tr('Il rollio per g di anteriore e posteriore dipende da molle, barre, rapporti di installazione e geometria: il loro rapporto da solo non dice il bilanciamento meccanico. Sostegno a regime (molle, 3° elemento, packer) e controllo dei transitori (ammortizzatori) si leggono separatamente: il primo nelle mediane per fase e con la velocità, il secondo negli istogrammi e negli eventi.'))}`;
   return `<div class="tctl">${techRel(X.rel.axle,'Assi')}${techRel(X.rel.third,'3° elemento')}</div>${tab}<h4>${tr('Con la velocità (rettilinei)')}</h4>${ch}
     <h4>${tr('Terzo elemento e packer')}</h4><div class="tcg">${th}</div>
     <h4>${tr('Tamponi alle ruote')}</h4><table class="lbt tpt"><thead><tr><th class="l"></th><th>${tr('Massima corsa osservata')}</th><th>${tr('Contatto')}</th><th>${tr('Dove')}</th><th>${tr('Margine dal contatto stimato')}</th><th class="l"></th></tr></thead><tbody>${st}</tbody></table>
-    <p class="muted small">${tr('La massima corsa osservata non è il fine corsa: un percentile non identifica un tampone. Il contatto è «misurato» solo con un canale dedicato, «stimato» quando la rigidezza (forza della sospensione rispetto alla posizione, a bassa velocità dell\'ammortizzatore) sale di colpo, altrimenti non determinabile.')}</p>${extra}${techRelWhy(X.rel.axle)}`;}
+    ${techInfo(tr('La massima corsa osservata non è il fine corsa: un percentile non identifica un tampone. Il contatto è «misurato» solo con un canale dedicato, «stimato» quando la rigidezza (forza della sospensione rispetto alla posizione, a bassa velocità dell\'ammortizzatore) sale di colpo, altrimenti non determinabile.'))}${extra}${techRelWhy(X.rel.axle)}`;}
 
 // ---------- 4. platform and aero ----------
 function techPlatHTML(S,X,XB){const P=X.pl,PB=XB?.pl;if(P.none)return `<div class="warnbar">${tr('In questo file non ci sono le altezze da terra: niente analisi della piattaforma.')}</div>`;
@@ -147,10 +150,10 @@ function techPlatHTML(S,X,XB){const P=X.pl,PB=XB?.pl;if(P.none)return `<div clas
   const low=P.lowG.slice(0,8).map(g=>{const e=g.ev[0];const W=techWhere(S,g.d,lapTrace(S,S.laps[e.li]).len);const gv=vdMed(g.ev.map(x=>x.gv));
     return `<tr class="tevr" data-k="low" data-w="${g.w}" data-d="${Math.round(g.d)}" data-li="${e.li}" data-t="${e.t}"><td class="l">${esc(W.txt)}</td><td>${g.w}</td><td>${techPhN(g.ph)}</td><td>${g.n}/${X.laps.length}${g.rep?' ✓':''}</td><td>${fx(vdMed(g.ev.map(x=>x.min)),1)} mm</td><td>${g.kerb>0.5?tr('su cordolo'):Number.isFinite(gv)&&gv>2?tr('possibile contatto col suolo (picco')+' '+fx(gv,1)+' g)':'—'}</td></tr>`;}).join('');
   return `<div class="tctl">${techRel(X.rel.plat,'Piattaforma')}${techRel(X.rel.aero,'Aerodinamica')}</div>${charts}
-    <p class="muted small">${tr('Rake = altezza posteriore − anteriore, in mm: non è un angolo (servirebbe il passo dell\'auto). Più rake non vuol dire sempre più carico anteriore: dipende dalla vettura. Per capire l\'effetto sulla tua auto: prova controllata, cambia solo l\'altezza posteriore di 1 mm e confronta le curve veloci a parità di carburante e gomme.')}</p>
+    ${techInfo(tr('Rake = altezza posteriore − anteriore, in mm: non è un angolo (servirebbe il passo dell\'auto). Più rake non vuol dire sempre più carico anteriore: dipende dalla vettura. Per capire l\'effetto sulla tua auto: prova controllata, cambia solo l\'altezza posteriore di 1 mm e confronta le curve veloci a parità di carburante e gomme.'))}
     <h4>${tr('Per fase')}</h4>${tab}<div class="tkv small">${osc}</div>
     <h4>${tr('Altezze sotto')} ${P.rhMin} mm <span class="muted small">(${tr('soglia in Obiettivi di riferimento')})</span></h4>${low?`<table class="lbt tpt tev"><thead><tr><th class="l">${tr('Dove')}</th><th>${tr('Ruota')}</th><th>${tr('Fase')}</th><th>${tr('Giri')}</th><th>${tr('Minima')}</th><th>${tr('Indizi')}</th></tr></thead><tbody>${low}</tbody></table>`:`<p class="small">${tr('Nessun punto sotto la soglia.')}</p>`}
-    <p class="muted small">${tr('Come distinguere: su cordolo = cordolo (non è la piattaforma); in frenata = beccheggio e sostegno anteriore; in rettilineo o curva veloce = carico aerodinamico e sostegno a regime; se capita in un solo giro è più probabilmente guida o traffico.')}</p>${aero}${techRelWhy(X.rel.plat)}`;}
+    ${techInfo(tr('Come distinguere: su cordolo = cordolo (non è la piattaforma); in frenata = beccheggio e sostegno anteriore; in rettilineo o curva veloce = carico aerodinamico e sostegno a regime; se capita in un solo giro è più probabilmente guida o traffico.'))}${aero}${techRelWhy(X.rel.plat)}`;}
 
 // ---------- 5. events: list, map and synchronised traces ----------
 function techEvRows(S,X){const R=X.sus;const n=X.laps.length;const lenOf=li=>lapTrace(S,S.laps[li]).len;
@@ -431,6 +434,7 @@ setTimeout(()=>{const v=$('#v-setup');if(v&&!$('#techP')){const anchor=$('#suEng
 .tetr{display:grid;grid-template-columns:150px 1fr;gap:8px;align-items:center}.tetr svg{width:100%;height:70px;cursor:crosshair}.tetl{display:flex;flex-direction:column;font-size:.8rem;color:var(--muted)}.tetl b{font:600 1rem var(--f-mono);color:#fff}
 .tcur{stroke:#fff;stroke-width:1}.tetx{display:flex;justify-content:space-between;margin-left:158px;font-size:.78rem;color:var(--muted)}
 .tcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(520px,1fr));gap:12px}
+.tinfo{margin:10px 0}.tinfo summary{cursor:pointer;color:var(--muted);font-size:.86rem}.tinfo p{margin:6px 0 0;max-width:110ch}
 .tfocus{outline:2px solid var(--pacc,#C9A54C);outline-offset:2px;transition:outline-color 300ms}
 /* compact top on the technical page: the session line stays, the big numbers and the setup goals go */
 html[data-look="pro"][data-pnav="tech"] .pstrip .pmain{display:none}
