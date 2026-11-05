@@ -1,5 +1,14 @@
 // Italian → English phrases. '#' stands for any number (kept as-is). Longest entries are applied first.
 const I18N_EN=[
+["Link per chi guida (con il programma acceso)", "Link for the driver (with the program running)"],
+["Pagina web del Muretto", "Pit wall web page"],
+["per seguire la squadra non serve installare niente: il programma serve solo a chi guida", "to follow the team nothing needs installing: only the driver runs the program"],
+["Sei nel Muretto della squadra", "You are on the team's pit wall"],
+["Per chi fa l'ingegnere", "For the engineer"],
+["niente da installare", "nothing to install"],
+["Link del Muretto (browser)", "Pit wall link (browser)"],
+["Copia link ingegnere", "Copy engineer link"],
+["Si apre da PC, tablet o telefono e mostra il Muretto della squadra. Il programma serve solo a chi guida. Chi ha il link vede i dati: mandalo solo alla squadra.", "Opens on PC, tablet or phone and shows the team's pit wall. Only the driver needs the program. Whoever has the link sees the data: send it only to the team."],
 ["Verso − veloce", "Fast − direction"],
 ["Verso − lento", "Slow − direction"],
 ["Verso + lento", "Slow + direction"],
