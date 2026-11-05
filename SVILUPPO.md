@@ -43,7 +43,7 @@ pezzo di comportamento che dipende dall'ordine.
   cambiati dopo l'ultima versione pubblicata; senza l'opzione (prima di pubblicare) resta un errore.
 
 ### Verifica desktop e setup storico
-- `node tools/smoke_desktop.js <url-bridge> <fixture.ld> [cartella-schermate]` verifica italiano/inglese a
+- `node tools/smoke_desktop.js <url-bridge> <fixture.ld> [cartella-schermate]` verifica a
   1366×768 e 1920×1080: copia confermata del setup, esplorazione esplicita di un altro setup, aggiornamento
   dell'originale, schede tecniche, posizione dei grafici e invito via link (anche con appunti negati).
   Usa il Chromium installato da Playwright come gli altri smoke test. Non crea squadre reali né invia inviti.
@@ -60,3 +60,7 @@ pezzo di comportamento che dipende dall'ordine.
   profilo Ingegnere, senza programma. Il codice resta dopo «#» e non arriva al server. `#join&t=` resta il link per chi
   guida (il bridge del suo PC entra nella squadra).
 - Chi guida ha sempre bisogno del bridge: il browser non può leggere la memoria condivisa del gioco.
+
+## Solo italiano (dalla 2.21)
+- L'inglese è stato tolto: niente dizionario (`i18n_dict.js`) né pulsante IT/EN. `tr()` resta e restituisce il testo
+  com'è, così il codice esistente non cambia; i testi nuovi si scrivono direttamente in italiano.

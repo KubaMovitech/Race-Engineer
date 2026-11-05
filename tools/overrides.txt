@@ -19,8 +19,6 @@ drawLap
 drawLiveMap
     ui14.js    wrap
     ui18.js    wrap
-energyCell
-    ui32.js    wrap
 extOf
     ui13.js    wrap
 fillSelects

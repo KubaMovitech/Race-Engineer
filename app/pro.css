@@ -58,9 +58,6 @@ html[data-look="pro"] .hdr-tools .btn{border-radius:8px;height:38px;clip-path:no
 html[data-look="pro"] .hdr-tools .btn:hover{border-color:var(--edge2);background:var(--panel2)}
 html[data-look="pro"] #btnLoad{background:linear-gradient(180deg,var(--pbtn1),var(--pbtn2));border-color:var(--pbtnb);color:var(--pbtnt);font-weight:600;display:inline-flex;gap:8px;align-items:center;padding:0 16px}
 html[data-look="pro"] #btnLoad svg{width:17px;height:17px;fill:none;stroke:var(--pbtnt);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-html[data-look="pro"] .seg.lang{border-radius:8px;overflow:hidden;border:1px solid var(--line)}
-html[data-look="pro"] .seg.lang button{background:var(--panel);color:var(--muted);height:36px;min-width:36px;border:0;clip-path:none}
-html[data-look="pro"] .seg.lang button[aria-pressed="true"]{background:var(--psil2);color:#0B0B0C}
 html[data-look="pro"] .verchip{background:transparent;border:0;color:var(--psil);font:600 .85rem var(--f-mono)}
 html[data-look="pro"] .psync{display:flex;flex-direction:column;line-height:1.15;padding-left:10px;min-width:150px}
 html[data-look="pro"] .psync b{font:600 .78rem var(--f-body);display:flex;align-items:center;gap:6px;color:var(--psil);white-space:nowrap}

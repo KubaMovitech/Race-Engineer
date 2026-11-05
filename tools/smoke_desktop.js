@@ -9,7 +9,7 @@ const version=/const APP_VERSION='([^']+)'/.exec(fs.readFileSync(path.join(__dir
 if(!url||!fixture)throw new Error('Usage: node tools/smoke_desktop.js <bridge URL> <fixture.ld> [screenshots]');
 const setup=(name,p)=>({name,mimeType:'text/plain',buffer:Buffer.from('VehicleClassSetting="Test Car"\n'+['FRONTLEFT','FRONTRIGHT','REARLEFT','REARRIGHT'].map(w=>'['+w+']\nPressureSetting=1//'+p+' kPa\nCamberSetting=5//-2.5 deg\nFastBumpSetting=5//5\nSlowReboundSetting=5//5\n').join(''))});
 (async()=>{const browser=await chromium.launch();let checks=0;
-try{for(const lang of ['it','en'])for(const [width,height] of [[1366,768],[1920,1080]]){
+try{for(const lang of ['it'])for(const [width,height] of [[1366,768],[1920,1080]]){
   const ctx=await browser.newContext({viewport:{width,height}});const p=await ctx.newPage();const errors=[];
   p.on('pageerror',e=>errors.push(e.message));
   await ctx.route('**/*',r=>new URL(r.request().url()).origin===new URL(url).origin?r.continue():r.abort());

@@ -93,5 +93,17 @@ setTimeout(()=>{const m=$('#mLive');if(!m||$('#lvProbe'))return;const sel=$('#lv
 .lvrace{display:flex;flex-wrap:wrap;gap:0;padding:0!important;margin-bottom:10px;overflow:hidden}.lrb{flex:1 1 130px;padding:10px 14px;border-right:1px solid var(--line);min-width:0}.lrb:last-of-type{border-right:0}
 .lrb span{display:block;font-size:.74rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}.lrb b{display:block;font:600 1.35rem var(--f-mono);color:#fff;white-space:nowrap}.lrb small{display:block;color:var(--psil,#C9CDD3);font-size:.8rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .lrb.warn b{color:var(--warn)}.lrb.bad b{color:var(--bad)}.lvrace.lvold .lrb b{opacity:.55}.lrbold{flex-basis:100%;padding:6px 14px;background:color-mix(in srgb,var(--warn) 14%,transparent);color:var(--warn);font-size:.86rem}
+.lvone{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1.35fr) minmax(0,.9fr);gap:12px;align-items:start}.lvone .panel{margin:0 0 12px}
+/* compact top of the Muretto: session data in one line, so the race data start in the first screen */
+#lvSess{display:flex!important;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin}#lvSess .cchip{padding:6px 14px 6px 12px!important;flex:none}#lvSess .cchip b{font-size:1rem!important}
+td.egc{text-align:left}
+#lvAlerts:empty,#lvRace:empty{display:none}#v-live>.lvsub{margin-top:0}#lvRace .lvrace{margin-bottom:0}
+.lvo-sub{margin-top:14px}.lvone>*{min-width:0}
+/* the in-game style box (tyres, fuel, energy) fits the middle column: its blocks wrap instead of spilling over */
+.lvo-c .gw3{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}.lvo-c .gwsave{grid-column:1/-1}.lvo-l .tw{max-height:46vh;overflow:auto}
+.lvtm{display:grid;grid-template-columns:1fr 1fr;gap:8px}.lvtmc{border:1px solid var(--line);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column}.lvtmc span{font-size:.76rem;color:var(--muted)}
+.lvtmc b{font:600 1.5rem var(--f-mono)}.lvtmc small{color:var(--psil,#C9CDD3);font:500 .78rem var(--f-mono)}.lvtmc.bad{border-color:var(--bad)}.lvtmc em{font-style:normal;color:var(--bad);font-weight:600}
+@media (max-width:1400px){.lvone{grid-template-columns:minmax(0,1fr) minmax(0,1.2fr)}.lvo-r{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}}
+@media (max-width:900px){.lvone{grid-template-columns:1fr}.lvo-r{grid-template-columns:1fr}}
 .muadv{margin:10px 0}.muadv summary{cursor:pointer;color:var(--psil,#C9CDD3)}#lvProbeR{align-self:center;margin:0 8px}
 `;document.head.appendChild(st);})();
