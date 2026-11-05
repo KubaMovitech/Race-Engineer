@@ -12,8 +12,9 @@ document.addEventListener('click',e=>{const l=$('#lvBellList');if(l&&!l.hidden&&
     const btns=v.querySelector('.lvbtns');if(btns&&!$('#lvBell')){btns.insertAdjacentHTML('afterbegin',`<div class="bellw"><button class="btn" type="button" id="lvBell" title="${esc(tr('Avvisi della sessione'))}"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><i></i></button><div id="lvBellList" class="belllist" hidden></div></div>`);
       $('#lvBell').onclick=()=>{const l=$('#lvBellList');l.hidden=!l.hidden;if(!l.hidden){bellList();LIVE.bellSeen=Date.now();bellUpdate();}};}
     // ---------- 2. Panoramica: the essentials first (car, gaps, pace, map), the detail panels after them ----------
-    const ov=v.querySelector('.lvsub[data-p="ov"]');const first=ov&&ov.querySelector(':scope > .lvgrid');const gw=$('#lvGwOv')?.closest('.panel'),tf=$('#lvTraf')?.closest('.panel');
-    if(first){const near=ov.querySelector(':scope > .lvgrid3');if(tf)first.after(tf);if(gw)(near||tf||first).after(gw);}
+    // one screen: tyres, fuel and energy in the middle under the car, traffic on the right with the other short panels
+    const ov=v.querySelector('.lvsub[data-p="ov"]');const gw=$('#lvGwOv')?.closest('.panel'),tf=$('#lvTraf')?.closest('.panel');
+    const mid=ov?.querySelector('.lvo-c'),right=ov?.querySelector('.lvo-r');if(mid&&gw)mid.firstElementChild?mid.firstElementChild.after(gw):mid.append(gw);if(right&&tf)right.prepend(tf);
     bellUpdate();};})();
 
 // ---------- 3. welcome page when nothing is open; a slim line on the other tabs ----------

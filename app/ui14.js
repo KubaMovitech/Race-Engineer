@@ -95,14 +95,15 @@ function liveSkeleton(){const v=$('#v-live');if(v.dataset.ok)return;v.dataset.ok
     <nav class="lvtabs" role="tablist">${LV_SUBS.map(([k,l])=>`<button type="button" role="tab" data-sub="${k}" aria-selected="${k===sub}">${l}</button>`).join('')}</nav></div>
   <div id="lvRace"></div><div id="lvAlerts"></div>
   <div class="lvsub" data-p="ov"${sub!=='ov'?' hidden':''}>
-    <div class="lvgrid"><div class="panel"><div id="lvHead"></div><div id="lvKpi"></div></div>
-      <div class="panel"><div class="panel-h"><h3>Pista</h3><span class="muted small" id="lvMapNote"></span></div><canvas id="lvMap" style="width:100%;height:300px"></canvas><div id="lvMapLeg" class="mapleg"></div></div></div>
-    <div class="lvgrid3 lvg3e"><div class="panel"><div class="panel-h"><h3>Condizioni</h3><span class="muted small" id="lvCondT"></span></div><div id="lvCond"></div></div>
-      <div class="panel"><div class="panel-h"><h3 id="lvConsT">Consumi</h3></div><div id="lvCons"></div></div>
-      <div class="panel"><div class="panel-h"><h3>In breve</h3></div><div id="lvBrief"></div></div></div>
-    <div class="grid2"><div class="panel"><div class="panel-h"><h3 id="lvNearT">Intorno a noi</h3></div><div id="lvNear" class="tw"></div></div>
-      <div class="panel"><div class="panel-h"><h3>Relativo in pista</h3><span class="muted small">auto vicine sul tracciato</span></div><div id="lvRel" class="tw"></div></div></div>
-    <div class="panel"><div class="panel-h"><h3>Ultimi eventi</h3></div><div id="lvEvShort" class="lvev"></div></div></div>
+    <div class="lvone">
+      <div class="lvo-l panel"><div class="panel-h"><h3 id="lvNearT">Intorno a noi</h3></div><div id="lvNear" class="tw"></div>
+        <div class="panel-h lvo-sub"><h3>Relativo in pista</h3><span class="muted small">auto vicine sul tracciato</span></div><div id="lvRel" class="tw"></div></div>
+      <div class="lvo-c"><div class="panel"><div id="lvHead"></div><div id="lvKpi"></div></div>
+        <div class="panel"><div class="panel-h"><h3>Pista</h3><span class="muted small" id="lvMapNote"></span></div><canvas id="lvMap" style="width:100%;height:260px"></canvas><div id="lvMapLeg" class="mapleg"></div></div></div>
+      <div class="lvo-r"><div class="panel"><div class="panel-h"><h3 id="lvConsT">Consumi</h3></div><div id="lvCons"></div></div>
+        <div class="panel"><div class="panel-h"><h3>Condizioni</h3><span class="muted small" id="lvCondT"></span></div><div id="lvCond"></div></div>
+        <div class="panel"><div class="panel-h"><h3>In breve</h3></div><div id="lvBrief"></div></div>
+        <div class="panel"><div class="panel-h"><h3>Ultimi eventi</h3></div><div id="lvEvShort" class="lvev"></div></div></div></div></div>
   <div class="lvsub" data-p="lb"${sub!=='lb'?' hidden':''}>
     <div class="panel"><div class="panel-h"><h3 id="lvLbT">Classifica</h3><span class="muted small" id="lvLbNote"></span><label class="f" style="min-width:150px">Classe<select id="lvCls"></select></label>
       <span class="seg" id="lvGapMode"><button type="button" data-g="all">Assoluto</button><button type="button" data-g="cls">Classe</button></span></div><div id="lvStand" class="tw lvlb"></div>
@@ -264,7 +265,7 @@ function lvBoard(x){const {sc,I,kind,rows,me,names}=x;if(!sc){$('#lvStand').inne
     shown.forEach(r=>{if(!leaderOf[r.cls])leaderOf[r.cls]=r;});const prevIn={};
     $('#lvLbT').textContent=tr('Classifica di gara');$('#lvLbNote').textContent=tr('clic su una riga per tempi, soste e cambi pilota');
     const cb=secClassBest(rows);const vb=vmaxBest(rows);
-    H=`<th></th><th>Pos</th><th>Cl.</th><th class="l">Pilota</th><th>Stato</th><th class="l">VE · benzina</th><th>Giri</th><th>${gm==='cls'?'Dal 1° di classe':'Distacco'}</th><th>Interv.</th><th class="sxh">S1</th><th class="sxh">S2</th><th class="sxh">S3</th><th>Ultimo</th><th>Best · passo</th>${hasV?'<th title="velocità massima: sessione · stint · ultimo giro">Vel. max</th>':''}<th>Soste</th><th>Box tra</th><th title="mescola e giri delle gomme">Gomme</th><th>Danni · limiti</th>`;
+    H=`<th></th><th>Pos</th><th>Cl.</th><th class="l">Pilota</th><th>Stato</th><th>Energia</th><th>Giri</th><th>${gm==='cls'?'Dal 1° di classe':'Distacco'}</th><th>Interv.</th><th class="sxh">S1</th><th class="sxh">S2</th><th class="sxh">S3</th><th>Ultimo</th><th>Best · passo</th>${hasV?'<th title="velocità massima: sessione · stint · ultimo giro">Vel. max</th>':''}<th>Soste</th><th>Box tra</th><th title="mescola e giri delle gomme">Gomme</th><th>Danni · limiti</th>`;
     B=shown.map(r=>{const s=carStats(r.veh,r);const ld=leaderOf[r.cls];let gap,intv;
       if(gm==='cls'){const L=lt(r);gap=r===ld?'—':(r.lapsL-ld.lapsL>0?`+${r.lapsL-ld.lapsL}G`:'+'+fx((r.gapL+r.lapsL*L)-(ld.gapL+ld.lapsL*L),1));const pv=prevIn[r.cls];intv=pv?((r.lapsL-pv.lapsL)>0&&(r.gapL+r.lapsL*L)-(pv.gapL+pv.lapsL*L)>L?`+${r.lapsL-pv.lapsL}G`:'+'+fx((r.gapL+r.lapsL*L)-(pv.gapL+pv.lapsL*L),1)):'—';prevIn[r.cls]=r;}
       else{gap=r.pos===1?tr('leader'):r.lapsL>0?`+${r.lapsL}G`:'+'+fx(r.gapL,1);intv=r.pos===1?'—':r.lapsN>0?`+${r.lapsN}G`:'+'+fx(r.gapN,1);}
@@ -279,11 +280,11 @@ function lvBoard(x){const {sc,I,kind,rows,me,names}=x;if(!sc){$('#lvStand').inne
     // sectors of each car's best lap: from the game, or from the lap history
     const secOf=r=>{if(r.blS1>0&&r.blS2>r.blS1&&r.best>r.blS2)return [r.blS1,r.blS2-r.blS1,r.best-r.blS2];const L=fLaps(r.veh).filter(l=>!l[7]&&l[1]>0&&l[4]>0&&l[5]>l[4]&&l[1]>l[5]);if(!L.length)return [NaN,NaN,NaN];const b=L.reduce((a,l)=>l[1]<a[1]?l:a);return [b[4],b[5]-b[4],b[1]-b[5]];};
     shown.forEach(r=>{r.ss=secOf(r);});const cbq=secClassBest(rows);const vbq=vmaxBest(rows);const bs={};shown.forEach(r=>{r.ss.forEach((v,i)=>{const k=r.cls+i;if(v>0&&(!bs[k]||v<bs[k]))bs[k]=v;});});
-    H=`<th></th><th>Pos</th><th>Cl.</th><th class="l">Pilota</th><th>Stato</th><th class="l">VE · benzina</th><th>Best</th><th>${gm==='cls'?'Dalla pole di classe':'Dalla pole'}</th><th>Dal precedente</th><th class="sxh">S1</th><th class="sxh">S2</th><th class="sxh">S3</th><th>Ideale</th>${hasV?'<th>Vel. max</th>':''}<th>Ultimo</th><th>Giri</th><th class="l">VE · benzina</th><th>Gomme</th>`;
+    H=`<th></th><th>Pos</th><th>Cl.</th><th class="l">Pilota</th><th>Stato</th><th>Energia</th><th>Best</th><th>${gm==='cls'?'Dalla pole di classe':'Dalla pole'}</th><th>Dal precedente</th><th class="sxh">S1</th><th class="sxh">S2</th><th class="sxh">S3</th><th>Ideale</th>${hasV?'<th>Vel. max</th>':''}<th>Ultimo</th><th>Giri</th><th>Gomme</th>`;
     let i=0;const cp={};B=shown.map(r=>{const s=carStats(r.veh,r);i++;cp[r.cls]=(cp[r.cls]||0)+1;const ref=gm==='cls'?cbest[r.cls]:obest;const pv=gm==='cls'?prev[r.cls]:prev.all;
       const secs=secCells(r,cbq);const bl=r.ss.every(v=>v>0)?`${tr('Settori del giro migliore')}: ${r.ss.map(v=>fx(v,3)).join(' · ')}`:'';
       const out=`<tr class="${ours.has(r.veh)?'ours':''}${riv.includes(r.veh)?' riv':''}${r.inPit||r.gar?' inpit':''}" data-car="${esc(r.veh)}"><td>${star(r)}</td><td>${r.best>0?i:'—'}</td><td><span class="clsdot" style="background:${LV_CLS(r.cls)}"></span>${r.best>0?cp[r.cls]:'—'}</td><td class="l">${name(r,s)}</td><td>${stat(r)}</td>${energyCell(r)}
-        <td class="${r.best>0&&r.best===cbest[r.cls]?'bestc':''}" title="${esc(bl)}">${fmtLap(r.best)}</td><td>${r.best>0&&ref?(r.best===ref?'—':'+'+fx(r.best-ref,3)):'—'}</td><td>${pv&&r.best>0?'+'+fx(r.best-pv.best,3):'—'}</td>${secs}<td>${fmtLap(s.ideal)}</td>${hasV?vmaxCell(r,vbq):''}<td class="${s.lastInv?'neg':''}">${fmtLap(s.lastT>0?s.lastT:r.last)}</td><td>${r.laps}</td>${energyCell(r)}${tyreCell(r)}</tr>`;
+        <td class="${r.best>0&&r.best===cbest[r.cls]?'bestc':''}" title="${esc(bl)}">${fmtLap(r.best)}</td><td>${r.best>0&&ref?(r.best===ref?'—':'+'+fx(r.best-ref,3)):'—'}</td><td>${pv&&r.best>0?'+'+fx(r.best-pv.best,3):'—'}</td>${secs}<td>${fmtLap(s.ideal)}</td>${hasV?vmaxCell(r,vbq):''}<td class="${s.lastInv?'neg':''}">${fmtLap(s.lastT>0?s.lastT:r.last)}</td><td>${r.laps}</td>${tyreCell(r)}</tr>`;
       if(r.best>0){prev[r.cls]=r;prev.all=r;}return out;}).join('');}
   $('#lvStand').innerHTML=`<table class="lbt"><thead><tr>${H}</tr></thead><tbody>${B}</tbody></table>`;}
 

@@ -45,7 +45,7 @@ function lvStripHTML(){const sc=LIVE.sc;const I=sc?.i||{};const len=I.lapDist;if
 // consumption of each of the last 3 laps (virtual energy, or fuel when the car has none), in % of the tank
 function last3(veh){const L=fLaps(veh);const pick=L.some(l=>l[9]>0)?9:8;const out=[];
   for(let i=L.length-1;i>0&&out.length<3;i--){const a=L[i-1],b=L[i];if(b[0]!==a[0]+1||b[3]||a[3])continue;const d=a[pick]-b[pick];if(d>0&&d<0.3)out.unshift(d*100);}
-  return {v:out,k:pick===9?'VE':(LANG==='en'?'F':'B')};}
+  return {v:out,k:pick===9?'VE':'B'};}
 function incidents(){const n={};const rows=liveRows(LIVE.sc);const byDrv=d=>rows.find(r=>r.drv===d)?.veh||Object.entries(LIVE.field?.cars||{}).find(([,c])=>c.drivers?.includes(d)||c.name===d)?.[0];
   (LIVE.field?.stream||[]).forEach(e=>{if(e.tag!=='Incident')return;const v=byDrv(e.drv);if(v)n[v]=(n[v]||0)+1;});return n;}
 (function(){const lb=lvBoard;window.lvBoard=lvBoard=function(x){lb(x);const t=$('#lvStand table');if(!t||t.querySelector('th.l3'))return;

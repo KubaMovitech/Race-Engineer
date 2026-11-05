@@ -679,7 +679,12 @@ td.tyc2 small{display:inline-block;vertical-align:middle;font-size:.68rem;color:
 .tyb{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--f);font:700 12px/1 var(--f-mono);box-shadow:inset 0 0 0 2px rgba(0,0,0,.25)}
 .tyb.split{width:34px;border-radius:12px;background:linear-gradient(90deg,var(--f) 0 50%,var(--r) 50% 100%);gap:4px;font-size:11px}
 .tyb i{font-style:normal}
-td.egc{width:128px;min-width:128px}
+td.egc{width:118px;min-width:118px}
+/* virtual energy in the standings: ring + % + laps left */
+.vep{display:inline-flex;align-items:center;gap:7px;padding:3px 10px 3px 4px;border-radius:999px;background:color-mix(in srgb,var(--c) 12%,transparent);border:1px solid color-mix(in srgb,var(--c) 35%,transparent);--c:var(--good)}
+.vep.warn{--c:var(--warn)}.vep.bad{--c:var(--bad)}
+.vep i{width:16px;height:16px;border-radius:50%;flex:none;background:conic-gradient(var(--c) calc(var(--p)*1%),rgba(255,255,255,.12) 0);-webkit-mask:radial-gradient(circle,transparent 4px,#000 4.5px);mask:radial-gradient(circle,transparent 4px,#000 4.5px)}
+.vep b{font:600 .82rem var(--f-mono);color:var(--ink)}.vep small{font:500 .72rem var(--f-mono);color:var(--muted);white-space:nowrap}
 .eg{display:grid;grid-template-columns:20px 1fr 28px;align-items:center;gap:5px;line-height:1.25}
 .eg em{font-style:normal;font-size:.66rem;color:var(--muted);font-weight:700;letter-spacing:.04em}
 .eg .t{height:7px;border-radius:4px;background:var(--grid);overflow:hidden}.eg .t i{display:block;height:100%;border-radius:4px;background:var(--lapA)}

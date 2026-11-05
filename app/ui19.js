@@ -54,9 +54,11 @@ function tyreCell(r){const c=r.comp||'';if(!c)return `<td class="tyc2"><span cla
   const k=[0,1,2,3].map(i=>c[i]||c[c.length-1]);const tip=k.map((x,i)=>tr(['Ant. sx','Ant. dx','Post. sx','Post. dx'][i])+': '+(COMP_N[x]||x)).join(' · ');
   const col=x=>COMP_COL[x]||COMP_COL['?'];const st=carStats(r.veh,r);
   return `<td class="tyc2" title="${esc(tip)}"><span class="ty4">${k.map(x=>`<i style="background:${col(x)};color:${COMP_INK(x)}">${esc(x)}</i>`).join('')}</span><small>${st.stintLaps}${tr('g')}</small></td>`;}
-function energyCell(r){const row=(lab,v,cls)=>{const p=Math.max(0,Math.min(1,v));return `<span class="eg ${cls}${p<0.12?' low':''}"><em>${lab}</em><span class="t"><i style="width:${(p*100).toFixed(1)}%"></i></span><b>${Math.round(p*100)}</b></span>`;};
-  if(!(r.ve>=0)&&!(r.fuel>=0))return '<td class="egc muted">—</td>';
-  return `<td class="egc">${r.ve>=0?row('VE',r.ve,'ve'):''}${r.fuel>=0?row(LANG==='en'?'F':'B',r.fuel,'fu'):''}</td>`;}
+// virtual energy of a car in the standings: a small ring, the percentage and the laps it still allows (from its own
+// consumption, when known). Fuel is not shown: for the other cars the game does not give it.
+function energyCell(r){if(!(r.ve>=0))return '<td class="egc muted">—</td>';const p=Math.max(0,Math.min(1,r.ve));
+  let lv=NaN;try{lv=carStats(r.veh,r)?.lv;}catch(e){}const k=p<0.12||lv<2?'bad':p<0.3||lv<4?'warn':'good';
+  return `<td class="egc"><span class="vep ${k}" style="--p:${(p*100).toFixed(1)}" title="${esc(tr('Energia virtuale'))}"><i aria-hidden="true"></i><b>${Math.round(p*100)}%</b>${Number.isFinite(lv)?`<small>${fx(lv,1)} ${tr('giri')}</small>`:''}</span></td>`;}
 // the Muretto uses the whole screen width
 (function(){const os=showView;window.showView=showView=function(v){os(v);document.body.classList.toggle('vwide',v==='live');};document.body.classList.toggle('vwide',curView()==='live');})();
 
