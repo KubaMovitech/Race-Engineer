@@ -70,3 +70,14 @@ pezzo di comportamento che dipende dall'ordine.
   Muretto, Libreria (`PRO_SEC` in `app/ui41.js`). Ogni pagina ha ancora il suo pulsante `#proNav .pn[data-n=…]`:
   per aprirla dal codice usare `proGo(id)`. Le pagine della sezione aperta stanno sotto la sua voce; con il menu
   stretto (≤ 1100 px) diventano schede in cima alla pagina (`#proSecTabs`).
+
+## Grafite (dalla 2.23)
+- Stile predefinito: `html[data-look="pro"][data-pal="grafite"]`, tutto in `app/grafite.css` (ultimo CSS in build.sh).
+  In Personalizza › Stile restano «Nero, argento e oro» (`look=prooro`) e «Blu notte» (`look=problu`); `look=pro` è Grafite.
+- Regola dei colori: blu = riferimento (giro A, `--lapA`), arancione = quello che analizzi / la tua auto / la scelta attiva
+  (`--pacc`, `--lapB`), giallo e rosso solo per gli avvisi, viola e verde solo per tempi e settori.
+  Un solo pulsante pieno arancione (Carica dati); gli altri `.btn.primary` sono bordati.
+- Menu: le 4 sezioni in una riga sotto la barra in alto (`#proNav` diventa orizzontale), le pagine della sezione
+  sempre come schede sottolineate in cima alla pagina (`#proSecTabs`).
+- `applyUI` (Personalizza › Sfondo) scrive i colori di fondo sulla pagina: con Grafite `proDens` li toglie,
+  così valgono quelli di grafite.css. Le linee dei grafici non hanno alone (`GL()` in charts.js).

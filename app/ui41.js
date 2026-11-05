@@ -128,15 +128,21 @@ function proStrip(){const h=$('#hero'),a=active();if(!proLook()||!h||!a?.S)retur
 function proDens(){const u=LS.get('ui',{});const old=LS.get('dens',null);if(old&&!u.density){u.density=old==='compatta'?'compact':old==='comoda'?'large':'normal';LS.set('ui',u);}if(old)LS.set('dens',null);
   const d={compact:'compatta',large:'comoda'}[LS.get('ui',{}).density];if(d)document.documentElement.dataset.dens=d;else delete document.documentElement.dataset.dens;
   // in Pro the accent is the look's own (gold or blue), whatever Personalizza had for the old looks
-  if(proLook()){const r=document.documentElement.style;const pal=document.documentElement.dataset.pal==='blu';r.setProperty('--accent',pal?'#2F7CF6':'#C9A54C');r.setProperty('--accent2',pal?'#7FB2FF':'#E6C877');r.setProperty('--accent-ink',pal?'#ffffff':'#111111');r.setProperty('--accent-soft',pal?'#1D4FA8':'#8C6D24');}}
+  if(proLook()){const r=document.documentElement.style;const A={blu:['#2F7CF6','#7FB2FF','#ffffff','#1D4FA8'],oro:['#C9A54C','#E6C877','#111111','#8C6D24'],grafite:['#F2722B','#FF9A5C','#ffffff','#8A3E14']}[document.documentElement.dataset.pal]||['#F2722B','#FF9A5C','#ffffff','#8A3E14'];['--accent','--accent2','--accent-ink','--accent-soft'].forEach((k,i)=>r.setProperty(k,A[i]));
+    // Grafite has its own background and lines: the old «Sfondo» of Personalizza (written on the page) steps aside
+    if(document.documentElement.dataset.pal==='grafite')['bg','panel','panel2','band','line','grid','hdr','hdr-line','trackbed'].forEach(k=>r.removeProperty('--'+k));}}
 (function(){const au=window.applyUI;if(typeof au==='function')window.applyUI=applyUI=function(){au();proDens();};})();
-function proApply(){const on=proLook();document.documentElement.dataset.look=on?'pro':'carbon';document.documentElement.dataset.pal=LS.get('look','pro')==='problu'?'blu':'oro';if(on){proBuild();proSync();proSyncChip();proFilter(false);}proDens();
-  const n=$('#proNav');if(n)n.hidden=!on;const sub=$('.tabs.subtabs');if(sub&&!on&&!$('.top').contains(sub))$('.top').append(sub);if(sub&&on&&!$('main').contains(sub))$('main').prepend(sub);}
+// 2.23: «pro» is Grafite; the old black-and-gold and night-blue stay in Personalizza
+const proPal=()=>({problu:'blu',prooro:'oro'})[LS.get('look','pro')]||'grafite';
+function proApply(){const on=proLook();document.documentElement.dataset.look=on?'pro':'carbon';document.documentElement.dataset.pal=proPal();if(on){proBuild();proSync();proSyncChip();proFilter(false);}proDens();
+  const n=$('#proNav');if(n)n.hidden=!on;
+  // Grafite: the pages of the section sit in the same row as the four sections (one row of menu, more room for the page)
+  const st=$('#proSecTabs');if(st&&n){if(document.documentElement.dataset.pal==='grafite'){if(st.parentNode!==n)n.querySelector('nav').after(st);}else if(!$('main').contains(st))$('main').prepend(st);}const sub=$('.tabs.subtabs');if(sub&&!on&&!$('.top').contains(sub))$('.top').append(sub);if(sub&&on&&!$('main').contains(sub))$('main').prepend(sub);}
 setTimeout(()=>{proApply();renderHero();setInterval(proSyncChip,5000);},0);
 
 // ---------- Personalizza: choose the look ----------
 setTimeout(()=>{const h=$('#mSettings .mbox>.panel-h');if(!h||$('#lookSel'))return;
-  h.insertAdjacentHTML('afterend',`<div class="lookrow"><label class="f">${tr('Stile dell\'app')}<select id="lookSel"><option value="pro">${tr('Pro · nero, argento e oro')}</option><option value="problu">${tr('Pro · blu notte')}</option><option value="carbon">${tr('Carbon · rosso e nero')}</option></select></label></div>`);
+  h.insertAdjacentHTML('afterend',`<div class="lookrow"><label class="f">${tr('Stile dell\'app')}<select id="lookSel"><option value="pro">${tr('Grafite')}</option><option value="prooro">${tr('Nero, argento e oro')}</option><option value="problu">${tr('Blu notte')}</option><option value="carbon">${tr('Carbon · rosso e nero')}</option></select></label></div>`);
   const s=$('#lookSel');s.value=LS.get('look','pro');s.onchange=()=>{LS.set('look',s.value);proApply();showView(curView());};},0);
 
 // ---------- team logo (Personalizza): in Pro it sits at the bottom of the side menu, where there is room for it ----------
