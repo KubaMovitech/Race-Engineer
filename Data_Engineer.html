@@ -1642,6 +1642,65 @@ html[data-look="pro"] .pevs .pbl{font-size:11px}
   html[data-look="pro"] .pdt td:nth-child(3){position:absolute;right:0}html[data-look="pro"] .pdt tr{position:relative}
   html[data-look="pro"] .pdt td:first-child{padding-right:80px}
 }
+/* Desktop analysis workspace: compact context, clear next action, readable evidence. */
+@media(min-width:1000px){
+ html[data-look="pro"][data-pnav="tech"] #v-setup>.panel:first-child{display:none}
+ html[data-look="pro"] #techP .ttop{display:grid;grid-template-columns:minmax(220px,1fr) minmax(240px,340px);gap:12px;align-items:center}
+ html[data-look="pro"] #techP .tsel{grid-column:1/-1;display:flex;width:100%;margin:0;gap:8px;flex-wrap:wrap}
+ html[data-look="pro"] #techP .tsel .f{flex:1 1 120px;min-width:100px}
+ html[data-look="pro"] #techP .tsel .tsb{flex:1.4 1 180px;min-width:140px}
+ html[data-look="pro"] #techP .tsetup select{width:100%;height:36px}
+ html[data-look="pro"] #techP .tdg{grid-template-columns:repeat(2,minmax(0,1fr))}
+ html[data-look="pro"] #techP .tdh{flex-wrap:wrap}
+ html[data-look="pro"] #techP .tsg{min-height:38px;font-size:13px;line-height:1.45}
+ html[data-look="pro"] #techP .thist{max-height:150px}
+ html[data-look="pro"][data-pnav="tel"] .pstrip .pmain{display:none}
+ html[data-look="pro"] .twhead{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:12px}
+ html[data-look="pro"] .twhead .twtitle{grid-column:1/-1;min-height:0}
+ html[data-look="pro"] .twbest{display:flex;align-items:baseline;gap:10px}
+ html[data-look="pro"] .twbest b{font-size:1.1rem}
+ html[data-look="pro"] .twlaps{display:grid;grid-template-columns:26px minmax(0,1fr);align-content:start;margin:0;padding:10px;border:1px solid var(--line);border-radius:8px}
+ html[data-look="pro"] .twlaps .f{min-width:0;width:100%;max-width:none}
+ html[data-look="pro"] .twlaps select{width:100%;max-width:100%}
+ html[data-look="pro"] .twlaprow{grid-column:1/-1;display:flex;flex-wrap:nowrap;overflow-x:auto;max-height:88px;gap:5px;padding-bottom:4px}
+ html[data-look="pro"] .twlap{flex-shrink:0}
+ html[data-look="pro"] .pcomp{padding:10px 14px}
+ html[data-look="pro"] .pcomp .panel-h{margin-bottom:6px;padding-bottom:6px}
+ html[data-look="pro"] .pcomp .psug{margin-top:6px}
+ html[data-look="pro"] .pcomp .psb{padding:4px 8px}
+ html[data-look="pro"] #techP .tcards{grid-template-columns:repeat(auto-fit,minmax(min(100%,430px),1fr))}
+}
+.tworkflow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:12px 0}
+.tstep{display:flex;gap:10px;text-align:left;align-items:flex-start;padding:12px;border:1px solid var(--line);border-radius:10px;background:linear-gradient(135deg,var(--panel2),transparent);color:var(--ink);cursor:pointer;font:inherit;min-width:0}
+.tstep:hover,.tstep:focus-visible{border-color:var(--pacc);outline-offset:3px}
+.tstep>span:nth-child(2){flex:1;min-width:0}.tstepn{font:600 12px var(--f-mono);color:var(--pacc);padding-top:2px}
+.tstep b,.tstep strong,.tstep small{display:block}.tstep b{font-size:14px}.tstep strong{font:500 13px var(--f-mono);margin:6px 0;color:var(--psil)}.tstep small{font-size:12px;color:var(--muted);line-height:1.4}
+.tused{flex:1 1 260px;font-size:13px;color:var(--psil)}.tused b{color:var(--ink)}
+.tbrief{display:flex;gap:6px 14px;flex-wrap:wrap;font-size:13px;margin-top:8px;color:var(--psil)}.tbrief .bad{color:var(--bad)}.tbrief .good{color:var(--good)}
+.tproposal{padding:10px 12px;border-radius:6px;background:var(--panel2);font-size:14px;line-height:1.5}.tproposal small{color:var(--muted)}
+.tproof{margin-top:12px;border-top:1px solid var(--line);padding-top:10px}.tproof summary{cursor:pointer;font-size:13px;color:var(--psil)}
+.invitebox{max-width:820px!important;width:min(820px,95vw);border:1px solid var(--line);border-top:2px solid var(--pacc);border-radius:14px!important}
+.invitebox .ey{font:600 11px var(--f-body);letter-spacing:.18em;color:var(--pacc);margin-bottom:5px}.invitebox h2{margin:0;font-size:24px}
+.inviteintro{color:var(--psil);font-size:15px;margin:12px 0 18px}
+.invitesteps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;list-style:none;margin:0 0 18px;padding:0}
+.invitesteps li{border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;gap:10px;font-size:14px;line-height:1.4}.invitesteps li>b{color:var(--pacc);font:600 12px var(--f-mono)}.invitesteps small{display:block;color:var(--muted);font-size:12px;margin-top:7px}
+.invitelink,.invitenote{padding:16px;border:1px solid var(--line);border-radius:10px;background:var(--panel2);margin:14px 0}
+.inviteheading{display:flex;justify-content:space-between;gap:12px;margin-bottom:12px}.invitelink label,.invitemessage{display:block;font-size:13px;color:var(--psil)}
+.invitecopy{display:flex;gap:8px;margin-top:7px}.invitecopy input{flex:1;min-width:0;padding:10px;font-size:13px}.invitemessage textarea{display:block;resize:vertical;width:100%;box-sizing:border-box;margin-top:8px;min-height:145px;padding:12px;background:var(--bg);color:var(--psil);font:13px/1.6 var(--f-body);border:1px solid var(--line);border-radius:8px}
+.inviteactions{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px}.invitenote p{font-size:14px;color:var(--muted)}.invitenote .btn{margin-right:8px}
+@media(max-width:999px){.tworkflow,.invitesteps{grid-template-columns:1fr}.invitecopy,.inviteactions{flex-wrap:wrap}}
+/* Wide tables keep their own horizontal navigation without widening the page. */
+.ttable{max-width:100%;overflow-x:auto;min-width:0}
+html[data-look="pro"] #techP .tdc{min-width:0}
+html[data-look="pro"] #techP .tzt{table-layout:fixed}
+html[data-look="pro"] #techP .tzt th{white-space:normal;overflow-wrap:anywhere;font-size:12px}
+html[data-look="pro"] #techP .tzt td{font-size:12px}
+html[data-look="pro"] #techP .tzt th:first-child{width:65px}
+@media(min-width:1000px){
+ html[data-look="pro"][data-pnav="tech"] #hero{display:none}
+ html[data-look="pro"] #techP .tech:not([data-tech-tab="q"]):not([data-tech-tab="diag"]) .tworkflow{display:none}
+}
+.invitebox .panel-h{display:flex;align-items:center;justify-content:space-between;gap:16px}
 </style>
 <header class="top">
   <div class="top-in">
@@ -1766,6 +1825,7 @@ html[data-look="pro"] .pevs .pbl{font-size:11px}
       <label class="f" style="min-width:260px">File setup<select id="suFile"></select></label>
     </div>
     <div id="suWarn"></div>
+    <div id="setupContext"></div>
     <details class="set"><summary>Obiettivi di riferimento (modificabili)</summary>
       <div class="setgrid">
         <label class="f">Pressione calda min (kPa)<input type="number" id="cfgPmin" step="0.5"></label>
@@ -2376,14 +2436,16 @@ function chqFinish(ch){const out=[];
 // cheap pass over a channel: finite count, range, how often it really changes, the longest hold and NaN run while the car moves
 // A value held at the channel's own minimum or maximum is saturation (full throttle, pedal released), not a stuck signal:
 // those samples are left out of the update rate and of the longest hold.
-function chqStats(c,moving){const v=c.v,n=v.length;let nf=0,lo=Infinity,hi=-Infinity,ch=0,hold=0,maxHold=0,nanRun=0,maxNan=0,mv=0;let prev=NaN;
+function chqStats(c,moving){const v=c.v,n=v.length;let nf=0,lo=Infinity,hi=-Infinity,ch=0,hold=0,maxHold=0,nanRun=0,maxNan=0,mv=0;let prev=NaN,lastChange=-1;const intervals=[];
   for(let i=0;i<n;i++){const x=v[i];if(Number.isFinite(x)){if(x<lo)lo=x;if(x>hi)hi=x;}}const eps=(hi-lo)*0.002;const sat=x=>x<=lo+eps||x>=hi-eps;
   const mvAt=new Uint8Array(n);for(let i=0;i<n;i++)mvAt[i]=moving?(moving(i/c.f)?1:0):1;
   for(let i=0;i<n;i++){const x=v[i];const m=mvAt[i];
-    if(!Number.isFinite(x)){nf++;if(m){nanRun++;if(nanRun>maxNan)maxNan=nanRun;}prev=NaN;continue;}nanRun=0;
-    if(m&&!sat(x)){mv++;if(x===prev){hold++;if(hold>maxHold)maxHold=hold;}else{hold=0;if(Number.isFinite(prev))ch++;}}else hold=0;prev=x;}
+    if(!Number.isFinite(x)){nf++;if(m){nanRun++;if(nanRun>maxNan)maxNan=nanRun;}prev=NaN;lastChange=-1;continue;}nanRun=0;
+    if(m&&!sat(x)){mv++;if(x===prev){hold++;if(hold>maxHold)maxHold=hold;}else{hold=0;if(Number.isFinite(prev)){ch++;if(lastChange>=0)intervals.push(i-lastChange);lastChange=i;}}}else hold=0;prev=x;}
   const dur=n/c.f,mvDur=mv/c.f;
-  return {n,f:c.f,dur,nonFinite:nf,min:lo,max:hi,range:hi-lo,effHz:mvDur>1?ch/mvDur:NaN,maxHoldS:maxHold/c.f,maxNanS:maxNan/c.f};}
+  // Typical update spacing distinguishes sample-and-hold from a genuinely quiet stretch of track.
+  const spacing=intervals.length>=10?median(intervals):NaN;
+  return {n,f:c.f,dur,nonFinite:nf,min:lo,max:hi,range:hi-lo,effHz:spacing>0?Math.min(c.f,c.f/spacing):NaN,maxHoldS:maxHold/c.f,maxNanS:maxNan/c.f};}
 
 // a physical signal that never moves while the car does: it carries no information (exported as a constant)
 function chqDead(S){const ch=S.ch,sp=ch['Ground Speed'];S.deadCh=S.deadCh||{};if(!sp)return S.deadCh;
@@ -2435,7 +2497,24 @@ function chqChannel(S,name){const key='chq:'+name;if(S.cache?.has(key))return S.
   S.cache?.set(key,r);return r;}
 
 // is this analysis possible on this file, and what limits it (channels only; laps and repeatability come with chqReliability)
+function chqDamperInput(S,w){
+  const rejected=[];
+  for(const name of ['Damper Vel '+w,'Susp Pos '+w]){const c=S.ch[name];if(!c)continue;
+    const q=chqChannel(S,name),hz=q.effHz??c.f;
+    if(c.conv?.some(x=>x.bad)){rejected.push(name+': '+tr('unità non riconosciuta'));continue;}
+    if(!(hz>=50)){rejected.push(name+': '+tr('frequenza insufficiente')+' ('+fx(hz,0)+' Hz; ≥ 50 Hz)');continue;}
+    return {name,c,q,derived:name.startsWith('Susp Pos'),why:''};
+  }
+  return {name:null,c:null,derived:false,why:rejected.join(' · ')||tr('canali mancanti')};
+}
 function chqAnalysis(S,a){const miss=[],lim=[],ok=[],optMiss=[];let effHz=Infinity;
+  if(a.id==='damp'){
+    const inputs=CHQ_W.map(w=>({w,...chqDamperInput(S,w)}));
+    for(const x of inputs){const r={n:x.name||x.w,L:x.q?[x.q]:[],why:x.why};
+      (!x.c?miss:x.q.st==='limitato'?lim:ok).push(r);}
+    return {a,st:miss.length?'no':lim.length?'lim':'ok',miss,lim,ok,optMiss,inputs,
+      derived:inputs.some(x=>x.derived),why:inputs.filter(x=>!x.c).map(x=>x.w+': '+x.why).join(' · ')};
+  }
   const one=n=>{const L=chqExpand(n).map(x=>chqChannel(S,x));const bad=L.filter(x=>x.st==='mancante'||x.st==='piatto');
     if(bad.length)return {n,st:'mancante',L,why:bad.map(x=>`${x.name}: ${tr(x.st)}${x.why?' ('+tr(x.why)+')':''}`).join(' · ')};
     const l=L.filter(x=>x.st==='limitato');L.forEach(x=>{if(x.effHz<effHz)effHz=x.effHz;});
@@ -2554,25 +2633,31 @@ function vdSign(S,laps,w){const key='vdsign:'+w+':'+laps.map(l=>l.i).join(',');i
   const r={sign,cert,ev,why:sign?'':(pos&&neg?'evidenze in contrasto':'nessuna evidenza abbastanza forte')};S.cache.set(key,r);return r;}
 
 // one lap of one wheel on the native samples of its position: everything the analyses need
-function vdLap(S,lap,w,sgn){const key='vdlap:'+lap.i+':'+w;if(S.cache.has(key))return S.cache.get(key);
-  const P=vdChan(S,'Susp Pos '+w),V=vdChan(S,'Damper Vel '+w);const main=P||V;if(!main){S.cache.set(key,null);return null;}
-  const sg=P?P:V;const seg=vdSeg(sg,lap.t0,lap.t1);const f=seg.f,N=seg.v.length;
+function vdLap(S,lap,w,sgn){const key='vdlap:'+lap.i+':'+w+':'+(sgn||1);if(S.cache.has(key))return S.cache.get(key);
+  const input=chqDamperInput(S,w);
+  const rawP=vdChan(S,'Susp Pos '+w),P=rawP&&!rawP.conv?.some(x=>x.bad)?rawP:null;
+  const V=input.c&&!input.derived?input.c:null;
+  const main=V||P;if(!main){S.cache.set(key,null);return null;}
+  // The measured velocity sets its own resolution, even if position is slower.
+  const sg=main;const seg=vdSeg(sg,lap.t0,lap.t1);const f=seg.f,N=seg.v.length;
+  const position=P?(P===sg?seg.v:vdAt(P,seg.ts,f,N)):null;
   let vel,velSrc;
   if(V){const s=vdSeg(V,lap.t0,lap.t1);vel=V===sg?Float32Array.from(s.v):vdAt(V,seg.ts,f,N);velSrc='misurato';
     // a measured velocity can use the opposite sign of the position: align it to the position's derivative
-    if(P){const dp=vdDeriv(seg.v,f,vdSGm(f));if(vdCorr(dp,vel)<0)for(let i=0;i<N;i++)vel[i]=-vel[i];}}
-  else{vel=vdDeriv(seg.v,f,vdSGm(f));velSrc='derivato';}
+    if(P){const dp=vdDeriv(position,f,vdSGm(f));if(vdCorr(dp,vel)<-0.5)for(let i=0;i<N;i++)vel[i]=-vel[i];}}
+  else if(input.c){vel=vdDeriv(seg.v,f,vdSGm(f));velSrc='derivato';}
+  else{vel=new Float32Array(N);vel.fill(NaN);velSrc='non disponibile';}
   const sp=vdAt(vdChan(S,'Ground Speed'),seg.ts,f,N),br=vdAt(vdChan(S,'Brake Pos'),seg.ts,f,N),th=vdAt(vdChan(S,'Throttle Pos'),seg.ts,f,N),la=vdAt(vdChan(S,'G Force Lat'),seg.ts,f,N);
   const ld=vdAt(vdChan(S,'Tyre Load '+w),seg.ts,f,N),gv=vdAt(vdChan(S,'G Force Vert'),seg.ts,f,N),su=vdChan(S,'Surface Type '+w)?vdAt(vdChan(S,'Surface Type '+w),seg.ts,f,N,true):null;
   const dla=vdDeriv(Float32Array.from(la,Math.abs),f,Math.max(2,Math.round(0.1*f)));
   // trimmed to the lap
   const a=seg.a,b=seg.b,n=Math.max(0,b-a);const cut=x=>x?x.subarray(a,b):null;
-  const pos=P?seg.v.subarray(a,b):null;const s=sgn||1;
+  const pos=position?position.subarray(a,b):null;const s=sgn||1;
   // compression-positive views (when the sign is unknown, s = 1 and the page says «direzione non determinata»)
   const cv=new Float32Array(n);for(let i=0;i<n;i++)cv[i]=vel[a+i]*s;
   const ph=new Array(n);for(let i=0;i<n;i++){ph[i]=su&&su[a+i]===VD_KERB&&sp[a+i]>=VD_TH.spd?'kerb':vdPhase(sp[a+i],br[a+i],th[a+i],la[a+i],dla[a+i]);}
   const tr=lapTrace(S,lap);const t0=seg.ts+a/f-lap.t0;const d=new Float32Array(n);for(let i=0;i<n;i++)d[i]=vdDist(tr,t0+i/f);
-  const o={lap,w,f,n,t0,d,pos,comp:pos?Float32Array.from(pos,x=>x*s):null,vel:cut(vel),cv,velSrc,sp:cut(sp),br:cut(br),th:cut(th),la:cut(la),ld:cut(ld),gv:cut(gv),su:cut(su),ph,
+  const o={lap,w,f,n,t0,d,pos,comp:pos?Float32Array.from(pos,x=>x*s):null,vel:cut(vel),cv,velSrc,velWhy:input.why,sp:cut(sp),br:cut(br),th:cut(th),la:cut(la),ld:cut(ld),gv:cut(gv),su:cut(su),ph,
     filt:velSrc==='derivato'?{m:vdSGm(f),ms:Math.round((2*vdSGm(f)+1)/f*1000)}:null};
   S.cache.set(key,o);return o;}
 
@@ -2596,14 +2681,16 @@ function vdSusp(S,laps,opt={}){const knee=opt.knee||50,range=opt.range||250,bin=
     for(const L of Ls){const lp=[],lv=[];for(let i=0;i<L.n;i++){if(!vdPick(L,i,sel))continue;const v=L.cv[i];cv.push(v);lv.push(v);if(L.comp){pos.push(L.comp[i]);lp.push(L.comp[i]);}
         const P=byPh[L.ph[i]]||(byPh[L.ph[i]]={v:[],p:[]});P.v.push(v);if(L.comp)P.p.push(L.comp[i]);}
       perLap.travel.push(lp.length?vdQ(lp,0.99)-vdQ(lp,0.01):NaN);perLap.bump95.push(vdQ(lv.filter(x=>x>0),0.95));perLap.reb95.push(-vdQ(lv.filter(x=>x<0).map(x=>-x),0.95));}
-    const f=Ls[0].f;R.resHz=R.resHz?Math.min(R.resHz,f):f;
+    const f=Ls[0].f;R.resHz=R.resHz?Math.min(R.resHz,f):f;const hist=vdHist(cv,range,bin);
     const ph={};for(const [k] of VD_PH){const P=byPh[k];if(!P||P.v.length<f*0.5)continue;
       const sp=vdSorted(P.p);ph[k]={n:P.v.length,s:P.v.length/f,bump95:vdQ(P.v.filter(x=>x>0),0.95),reb95:-vdQ(P.v.filter(x=>x<0).map(x=>-x),0.95),p1:vdQs(sp,0.01),p50:vdQs(sp,0.5),p99:vdQs(sp,0.99),z:vdZones(P.v,knee)};}
-    R.w[w]={sign:sg,velSrc:Ls[0].velSrc,filt:Ls[0].filt,f,hist:vdHist(cv,range,bin),z:vdZones(cv,knee),n:cv.length,s:cv.length/f,
+    R.w[w]={sign:sg,velSrc:Ls[0].velSrc,velWhy:Ls[0].velWhy,filt:Ls[0].filt,f,hist,z:vdZones(cv,knee),n:hist.n,s:hist.n/f,
       bump95:vdQ(cv.filter(x=>x>0),0.95),reb95:-vdQ(cv.filter(x=>x<0).map(x=>-x),0.95),
       travel:pos.length?(sp=>({p1:vdQs(sp,0.01),p50:vdQs(sp,0.5),p99:vdQs(sp,0.99),min:vdQs(sp,0),max:vdQs(sp,1)}))(vdSorted(pos)):null,ph,perLap};
     // events always on all the chosen laps: the page filters them by lap and place
-    R.ev.push(...vdEvents(S,laps.map(l=>vdLap(S,l,w,sg.sign||1)).filter(Boolean),w,sg));}
+    const ek='vdev:'+laps.map(l=>l.i).join(',')+':'+w+':'+sg.sign;
+    if(!S.cache.has(ek))S.cache.set(ek,vdEvents(S,laps.map(l=>vdLap(S,l,w,sg.sign||1)).filter(Boolean),w,sg));
+    R.ev.push(...S.cache.get(ek));}
   R.groups=vdGroup(R.ev,laps.length);return R;}
 
 // ---------- events of one wheel ----------
@@ -2665,9 +2752,11 @@ function vdAxles(S,laps){const key='vdax:'+laps.map(l=>l.i).join(',');if(S.cache
   for(const lap of laps){const Ls={};VD_W.forEach(w=>{Ls[w]=vdLap(S,lap,w,sg[w].sign||1);});const L0=Ls.FL||Ls.RL;if(!L0)continue;const n=L0.n,f=L0.f,ts=lap.t0+L0.t0;
     const g=k=>{const c=ch(k);return c?vdAt(c,ts,f,n):null;};const t3F=g('Front 3rd Pos'),t3R=g('Rear 3rd Pos'),pi=g('Body Pitch'),ro=g('Body Roll'),gl=g('G Force Long');
     const rh={};VD_W.forEach(w=>rh[w]=g('Ride Height '+w));const ld={};VD_W.forEach(w=>ld[w]=g('Tyre Load '+w));
+    // Align wheel positions by time; array indices differ at different native rates.
+    const cp={};VD_W.forEach(w=>{const L=Ls[w];cp[w]=L?.comp?vdAt({v:L.comp,f:L.f},ts-lap.t0-L.t0,f,n):null;});
     const pl={heaveF:[],heaveR:[]};
     for(let i=0;i<n;i++){const ph=L0.ph[i];const v=L0.sp[i];if(!(v>=VD_TH.spd))continue;
-      const c=w=>Ls[w]?.comp?.[i];const hF=(c('FL')+c('FR'))/2,hR=(c('RL')+c('RR'))/2;const rF=c('FL')-c('FR'),rR=c('RL')-c('RR');
+      const c=w=>cp[w]?.[i]??NaN;const hF=(c('FL')+c('FR'))/2,hR=(c('RL')+c('RR'))/2;const rF=c('FL')-c('FR'),rR=c('RL')-c('RR');
       const rf=rh.FL&&rh.FR?(rh.FL[i]+rh.FR[i])/2:NaN,rr=rh.RL&&rh.RR?(rh.RL[i]+rh.RR[i])/2:NaN;
       const vals={heaveF:hF,heaveR:hR,pitchI:hF-hR,rollF:rF,rollR:rR,rhF:rf,rhR:rr,rake:rr-rf,t3F:t3F?.[i],t3R:t3R?.[i],pitch:pi?.[i],roll:ro?.[i]};
       for(const [k,x] of Object.entries(vals))push(ph,k,x);
@@ -3436,7 +3525,7 @@ function balSpeed(D){const x=D.raw.B?.speedIdx;if(!x)return null;const l=x.lente
 KB.forEach(k=>k.fixes.forEach(f=>f.label=SETUP_LABELS[f.key]||f.key));
 function renderDoctor(){
   const out=$('#docOut');if(!out)return;
-  const S=active()?.S,D=DIAG&&DIAG.S===S?DIAG:null,su=D?D.su:byId($('#suFile').value);
+  const S=active()?.S,D=DIAG&&DIAG.S===S?DIAG:null,su=D?D.su:analysisSetup();
   // mark problems detected by telemetry
   $$('#suChips .pchip').forEach(b=>{const k=KB.find(x=>x.id===b.dataset.k);let e=null;try{e=D&&k.ev(D);}catch(_){}b.dataset.label=k.label;b.innerHTML=esc(k.label)+(e&&e.hit?' <span style="color:var(--bad)">●</span>':'');b.title=e?e.txt:'';});
   const sel=$$('#suChips .pchip[aria-pressed="true"]').map(b=>KB.find(x=>x.id===b.dataset.k));
@@ -3936,7 +4025,7 @@ function openReport(){
       if(S.merged.sess.drivers.length>1){const tmp=document.createElement('div');tmp.innerHTML=rivalsHTML(S.merged.sess,D);const ul=tmp.querySelector('ul');if(ul)h+=`<h2>Contro i rivali</h2>${ul.outerHTML}`;}}
     const lim=limitEvents(S);if(lim){const by={};lim.ev.filter(e=>e.ov>1||e.off).forEach(e=>{by[e.corner]=(by[e.corner]||0)+1;});const top=Object.entries(by).sort((x,y)=>y[1]-x[1]).slice(0,3);if(top.length)h+=`<h2>Limiti di pista</h2><p>Curve a rischio: ${top.map(([k,v])=>`${esc(k)} (${v})`).join(', ')}</p>`;}
     const ro=refOptions(S);const R=ro[0]&&pickRef(ro[0][0]);if(R&&b&&!(R.S===S&&R.lap===b)){const tips=coachTips(S,b,R);if(tips.length)h+=`<h2>Consigli di guida (contro ${esc((R.S.meta.driver||'riferimento').replace(/#\d+$/,''))} ${fmtLap(R.lap.time)})</h2><ul>${tips.map(t=>`<li><b>${t.n}</b> (${fsign(t.dt,2)} s): ${esc(t.why.join(', '))}</li>`).join('')}</ul>`;}
-    try{const su=byId($('#suFile').value);const D2=diagnose(S,fl.length?fl:S.laps.filter(l=>l.complete),su);const bad=D2.cards.filter(c=>c.st&&c.st!=='good');if(bad.length)h+=`<h2>Setup da controllare</h2><ul>${bad.map(c=>{const t=document.createElement('div');t.innerHTML=c.fix||'';return `<li><b>${esc(c.title)}</b>${c.fix?': '+esc(t.textContent):''}</li>`;}).join('')}</ul>`;}catch(e){}
+    try{const su=analysisSetup(S);const D2=diagnose(S,fl.length?fl:S.laps.filter(l=>l.complete),su);const bad=D2.cards.filter(c=>c.st&&c.st!=='good');if(bad.length)h+=`<h2>Setup da controllare</h2><ul>${bad.map(c=>{const t=document.createElement('div');t.innerHTML=c.fix||'';return `<li><b>${esc(c.title)}</b>${c.fix?': '+esc(t.textContent):''}</li>`;}).join('')}</ul>`;}catch(e){}
     h+=`<h2>Giri</h2><table><thead><tr><th>Giro</th><th class="l">Tipo</th><th>Tempo</th><th>Carb.</th></tr></thead><tbody>${S.laps.filter(l=>l.complete||l.start).map(l=>`<tr><td>${l.num}</td><td class="l">${l.type}</td><td class="${l.invalid?'t-bad':l===b?'t-best':''}">${fmtLap(l.time)}</td><td>${fx(lapStats(S,l).fuel,2)}</td></tr>`).join('')}</tbody></table>`;}
   else{const R=a.xml,sess=R.sessions[a.si],D=sess.drivers[myDriverIdx(R,sess)];const ps=driverPace(D);
     h+=`<h1>${esc(R.venue)}</h1><p>${esc(sess.name)} · ${esc(R.time)} · ${esc(D.name.replace(/#\d+$/,''))} · ${esc(D.car)}</p><div class="rk"><div>Posizione<b>${D.cpos||D.pos||'—'}°</b></div><div>Miglior giro<b>${fmtLap(D.best)}</b></div><div>Media 5<b>${fmtLap(ps.avg5)}</b></div><div>Giri<b>${D.laps.length}</b></div></div>`;
@@ -4937,6 +5026,64 @@ function openDebrief(){let m=$('#mDeb');if(!m){m=document.createElement('div');m
   openModal('#mDeb');}
 // Italian → English phrases. '#' stands for any number (kept as-is). Longest entries are applied first.
 const I18N_EN=[
+["Link per chi guida (con il programma acceso)", "Link for the driver (with the program running)"],
+["Pagina web del Muretto", "Pit wall web page"],
+["per seguire la squadra non serve installare niente: il programma serve solo a chi guida", "to follow the team nothing needs installing: only the driver runs the program"],
+["Sei nel Muretto della squadra", "You are on the team's pit wall"],
+["Per chi fa l'ingegnere", "For the engineer"],
+["niente da installare", "nothing to install"],
+["Link del Muretto (browser)", "Pit wall link (browser)"],
+["Copia link ingegnere", "Copy engineer link"],
+["Si apre da PC, tablet o telefono e mostra il Muretto della squadra. Il programma serve solo a chi guida. Chi ha il link vede i dati: mandalo solo alla squadra.", "Opens on PC, tablet or phone and shows the team's pit wall. Only the driver needs the program. Whoever has the link sees the data: send it only to the team."],
+["Verso − veloce", "Fast − direction"],
+["Verso − lento", "Slow − direction"],
+["Verso + lento", "Slow + direction"],
+["Verso + veloce", "Fast + direction"],
+["Nessuna differenza rilevata nei dati disponibili. Controlla anche le condizioni non registrate.", "No difference detected in available data. Also check conditions that were not recorded."],
+["pista diversa", "different track"],
+["dati insufficienti per questa metrica", "insufficient data for this metric"],
+["frequenza insufficiente", "insufficient sample rate"],
+["Nessun consiglio ammortizzatori da questo segnale.", "No damper advice is generated from this signal."],
+["Analisi con", "Analysing with"],
+["copia confermata", "confirmed copy"],
+["setup selezionato", "selected setup"],
+["Il file originale è cambiato. La copia storica è conservata.", "The original file has changed. The historical copy is preserved."],
+["Prova il setup selezionato", "Explore selected setup"],
+["Torna al setup confermato", "Return to confirmed setup"],
+["Controlla i dati", "Check the data"],
+["Leggi la macchina", "Read the car"],
+["Verifica una modifica", "Test a change"],
+["analisi disponibili", "available analyses"],
+["eventi ripetibili", "repeatable events"],
+["prove suggerite", "suggested tests"],
+["Canali, unità e frequenze prima dei consigli.", "Channels, units and sample rates before advice."],
+["Ammortizzatori, terzo elemento e piattaforma.", "Dampers, third element and platform."],
+["Una modifica, una metrica, un confronto prima e dopo.", "One change, one metric, one before-and-after comparison."],
+["Setup da confrontare", "Setup to explore"],
+["Nessuna modifica proposta: verifica prima i dati e le evidenze.", "No change proposed: check data and evidence first."],
+["Evidenze, cause e verifica", "Evidence, causes and verification"],
+["Copiato. Incollalo nella chat della squadra.", "Copied. Paste it into your team chat."],
+["Copia manualmente il testo selezionato con Ctrl+C.", "Copy the selected text manually with Ctrl+C."],
+["CORRI IN SQUADRA", "RACE TOGETHER"],
+["Un messaggio pronto, poi siete nello stesso Muretto.", "A ready-to-send message to bring everyone to the same Pit wall."],
+["Scarica Data Engineer", "Download Data Engineer"],
+["Il programma va avviato sul PC del compagno.", "Your teammate must start the app on their PC."],
+["Apri il link squadra", "Open the team link"],
+["Con Data Engineer acceso, il link apre il suo Muretto locale.", "With Data Engineer running, the link opens their local Pit wall."],
+["Controlla il collegamento", "Check the connection"],
+["Stato del Muretto mostra quando arrivano i dati dei compagni.", "Pit wall status shows when teammates’ data arrives."],
+["Link pronto", "Link ready"],
+["Link squadra", "Team link"],
+["Copia link squadra", "Copy team link"],
+["Il link funziona sul PC di chi lo apre, con Data Engineer avviato. Condividilo solo con la squadra.", "The link works on the recipient’s PC with Data Engineer running. Share it only with your team."],
+["Prima collega una squadra", "Connect a team first"],
+["Puoi già condividere il programma. Per aggiungere il link al messaggio, crea una squadra o entra con un invito.", "You can already share the app. To include the team link, create a team or join with an invitation."],
+["Ho già un invito", "I have an invitation"],
+["Messaggio per Discord o WhatsApp", "Message for Discord or WhatsApp"],
+["Include download e istruzioni di avvio.", "Includes download and startup instructions."],
+["Copia messaggio completo", "Copy full message"],
+["Invita con link", "Invite with link"],
+
 ["Apri la scheda in Analisi tecnica", "Open the card in Technical analysis"],
 ["nel setup di riferimento", "in the reference setup"],
 ["rif.", "ref."],
@@ -6154,9 +6301,10 @@ const tr=I18N.tr;
 })();
 const AI_LANG=()=>LANG==='en'?'\n\nIMPORTANT: write your whole answer in English (the instructions above are in Italian, but the driver reads English).':'';
 // ================= VERSIONE, NOVITÀ E AGGIORNAMENTI =================
-const APP_VERSION='2.19.0';
+const APP_VERSION='2.20.0';
 const DEFAULT_UPD='https://raw.githubusercontent.com/KubaMovitech/Race-Engineer/main/';   // update channel (folder with version.json), set when the team repository exists
 const CHANGELOG=[
+{v:'2.20.0',d:'05/11/2026',items:['Muretto dal browser: in «Invita un compagno» c\'è il link per chi fa l\'ingegnere. Si apre da PC, tablet o telefono senza installare niente ed entra direttamente nel Muretto della squadra. Il programma serve solo a chi guida.','Analisi tecnica: il setup confermato con la sessione è la base dei calcoli; si può provare un altro setup e tornare a quello confermato. Schede più corte, con la modifica proposta in evidenza e le prove richiudibili.','Ammortizzatori analizzati solo con un segnale abbastanza veloce; senza, nessun consiglio basato su quel dato.','Invita un compagno più semplice: messaggio pronto, link per chi guida e link per l\'ingegnere, copia sicura anche quando gli appunti non funzionano.']},
 {v:'2.19.0',d:'01/11/2026',items:['Setup Builder: «Confronta con» un altro setup della stessa auto, con i valori diversi in giallo e il valore di riferimento accanto. Vicino ai parametri compare quante schede di Analisi tecnica propongono di cambiarli: un clic apre la scheda.','Ogni ruota del Setup Builder ha «analisi →», che apre gli ammortizzatori di quella ruota in Analisi tecnica. In Race Engineer «Analisi →» apre la stessa scheda in Analisi tecnica.','Analisi tecnica: parte alta della pagina più compatta, i grafici salgono nella prima schermata.','Muretto: vista gara in una riga con auto seguita, posizione, distacchi, autonomia, prossima sosta e avvisi in ordine di importanza; i dati vecchi sono segnalati. «Stato del Muretto» si apre da solo solo quando qualcosa blocca.']},
 {v:'2.18.0',d:'01/11/2026',items:['Nuova pagina «Analisi tecnica» (menu Prepara): qualità della telemetria, ammortizzatori, molle e 3° elemento, piattaforma e aerodinamica, eventi e diagnosi, con la scelta di giro, curva o tratto, fase e sessione B da confrontare. Il pannello si può ingrandire.','Qualità della telemetria: per ogni analisi dice se si può fare, quali canali mancano e cosa è misurato, ricavato o stimato. Le unità si leggono dal file (non più a occhio dai valori), i canali sempre uguali a 0 sono trattati come mancanti e l\'affidabilità è «alta» solo con almeno 5 giri confrontabili e un risultato che si ripete.','Ammortizzatori: velocità calcolata giro per giro senza picchi finti, verso compressione/estensione verificato, istogrammi con unità e valori fuori scala, analisi per frenata, inserimento, appoggio, uscita, rettilineo e cordoli. Gli istogrammi descrivono: non danno più giudizi dalla loro forma.','Eventi sul giro, ripetibili e posizionati sulla pista: ruota che si scarica, oscillazioni, recupero lento, compressione che si accumula. Un clic apre la mappa con i segnali sincronizzati o il punto in Telemetria.','Packer e tamponi: il contatto è misurato, stimato da più indizi o non determinabile; la corsa massima osservata non viene più presa per il fine corsa. Rake in mm, altezze con la velocità, oscillazioni della piattaforma.','Diagnosi in 10 punti: fenomeno, dove, evidenze, ripetibilità, cause, affidabilità, una modifica, valore nel setup, cosa verificare ed esito prima/dopo. «Prova questa modifica» misura il risultato nello stesso punto e dice migliorato, peggiorato o inconcludente rispetto alla variabilità tra i giri.','Setup della sessione: confermato, suggerito o mancante, con una copia del contenuto che resta anche se il file cambia, e il controllo con la telemetria (ripartizione frenata e campanatura).','Libreria: «Apri ultima sessione», telemetrie raggruppate per pista, setup compatibili in alto, un solo pulsante «Apri analisi», stato della cartella del gioco e scelta a mano della cartella, lista che si aggiorna da sola e file ancora in scrittura riconosciuti.','Muretto: «Stato del Muretto» passo per passo (programma, gioco, squadra, compagni, dati aggiornati) con cosa fare quando qualcosa non va, profili Pilota e Ingegnere, server della squadra provato da questo PC prima di crearla.','Correzioni: nomi delle piste con accenti, setup salvati con il gioco in italiano, giri più lenti del 4% esclusi dai confronti; tolti i consigli non dimostrabili su rake e rollio.']},
 {v:'2.17.0',d:'01/11/2026',items:['Auto vista dall\'alto ridisegnata: un prototipo Le Mans perfettamente simmetrico (la metà destra è lo specchio della sinistra), con splitter, abitacolo, ala e ruote al posto giusto. È la stessa in Setup Builder e in Dashboard, dove ora sta tutta tra i riquadri delle gomme.','Niente più testi sovrapposti: le etichette dei grafici di Telemetria hanno un fondo scuro e non finiscono sotto le linee, la riga «linea B» della mappa non si accavalla, la tabella curva per curva non viene più tagliata, i numeri della striscia posizioni del Muretto vanno su più righe quando le auto sono vicine.','Barra in alto: con un nome di sessione lungo la pagina non scorre più di lato e i pulsanti IT/EN non vengono schiacciati; il nome si accorcia con «…».','Telefono: nessuna pagina più larga dello schermo; la diagnosi di Race Engineer diventa una scheda per problema; il grafico della Dashboard è disegnato alla larghezza vera e non ha più le scritte schiacciate.','Testi più leggibili: nessuna scritta sotto i 12 px e al massimo tre spessori di carattere. Gli avvisi «da controllare» sono gialli, così non si confondono con il giro B arancione.']},
@@ -7103,7 +7251,7 @@ function susHints(X,su,D){const S=D?.S||active()?.S;if(!S)return [];
 // ================= DEBRIEF AUTOMATICO DELLA SESSIONE (offline, niente AI) =================
 // One page from the .ld (+ .svm + .xml): the 3 setup changes that matter most, the 3 corners where time
 // is lost and why, the stint (pace, consistency, degradation, fuel), and what to try in the next run.
-function sessDebrief(S){const su=byId($('#suFile').value);const all=S.laps.filter(l=>l.complete);
+function sessDebrief(S){const su=analysisSetup(S);const all=S.laps.filter(l=>l.complete);
   const fl=S.laps.filter(l=>l.complete&&l.type==='lanciato'&&!l.invalid);const use=fl.length?fl:all;const b=bestValid(S);
   if(!use.length||!b)return null;const out={S,b,setup:[],drive:[],stint:{},next:[]};
   // ---- setup: problems the doctor confirms in the data, balance first, then suspension, then tyres
@@ -7774,7 +7922,7 @@ function guideLib(key,car){if(!car||typeof libLearn!=='function')return'';const 
 
 function openGuide(key,ctx={}){const id=GUIDE_P[key]?key:guideId(key);const P=GUIDE_P[id];if(!P)return;
   let m=$('#mGuide');if(!m){m=document.createElement('div');m.className='modal';m.id='mGuide';m.hidden=true;m.innerHTML='<div class="mbox wide"><div class="panel-h"><h2 id="mGuideT"></h2><button class="btn" type="button" data-close>'+tr('Chiudi')+'</button></div><div id="mGuideB"></div></div>';document.body.appendChild(m);}
-  const S=active()?.S;const su=($('#suFile')&&typeof byId==='function'&&byId($('#suFile').value))||active()?.su||null;const car=ctx.car||(typeof libCar==='function'&&su?.car?libCar(su.car):'')||'';const cls=guideCls(car||S?.meta?.car);
+  const S=active()?.S;const su=($('#suFile')&&typeof byId==='function'&&analysisSetup())||active()?.su||null;const car=ctx.car||(typeof libCar==='function'&&su?.car?libCar(su.car):'')||'';const cls=guideCls(car||S?.meta?.car);
   const settingKey=GUIDE_P[key]?null:key;const now=settingKey&&su?Object.entries(su.sec).flatMap(([sec,it])=>it.filter(x=>x.key===settingKey&&x.disp&&!/N\/A|N\/D|Non regolabile|Separat[ao]/.test(x.disp)).map(x=>`${SH_SEC[sec]?SH_SEC[sec]+' ':''}<span class="mono">${esc(x.disp)}</span>`)).slice(0,4).join(' · '):'';
   const li=(lab,txt,c='')=>`<div class="gl ${c}"><b>${lab}</b><p>${esc(tr(txt))}</p></div>`;
   $('#mGuideT').textContent=tr(P.t);
@@ -8504,14 +8652,19 @@ window.addEventListener('resize',()=>{if(curView()==='stint'&&$('#dashMap')){con
 // ---------- 1. the team: one invite link instead of codes to copy ----------
 // The code still exists (it is what links the bridges of the team), but nobody has to see it: the engineer sends a
 // link, the teammate opens it on his PC with Data Engineer running, and both the page and his bridge join the team.
+// The same app is also a web page (GitHub Pages, from the root of the repository: the published version).
+// Whoever follows the race as engineer opens this link in any browser: no program to install. The team code stays
+// after the «#», which browsers never send to the server; the data arrive encrypted from the team server.
+const WEB_URL='https://kubamovitech.github.io/Race-Engineer/';
+function engineerUrl(){const c=LS.get('live:team','');return c?WEB_URL+'#muretto&t='+encodeURIComponent(c):'';}
 function teamInviteUrl(){const c=LS.get('live:team','');return c?'http://localhost:8790/#join&t='+encodeURIComponent(c):'';}
-function teamInvite(){const url=teamInviteUrl();if(!url){toast(tr('Nessuna squadra: creane una o entra in una squadra'));return;}
-  try{navigator.clipboard?.writeText(url)?.catch(()=>{});}catch(e){}
-  openCode({title:tr('Invita un compagno'),help:tr('Link copiato. Il compagno avvia Data Engineer sul suo PC e apre questo link: entra nella squadra da solo, anche il suo bridge. Chi ha il link vede i dati della squadra: mandalo solo al team.'),text:url});}
+function teamInvite(){inviteFriend();}
 // opening an invite link
-(function(){const m=/^#join&t=(.+)$/.exec(location.hash);if(!m)return;let code='';try{code=decodeURIComponent(m[1]).trim();}catch(e){}history.replaceState(null,'',location.pathname);
+(function(){const m=/^#(join|muretto)&t=(.+)$/.exec(location.hash);if(!m)return;let code='';try{code=decodeURIComponent(m[2]).trim();}catch(e){}history.replaceState(null,'',location.pathname);const eng=m[1]==='muretto';
   if(!teamParse(code)){setTimeout(()=>toast(tr('Link della squadra non valido')),900);return;}
   LS.set('live:team',code);LS.set('tab','live');
+  // engineer link: only this page joins (a bridge on this PC, if any, is left as it is), engineer profile, Muretto on
+  if(eng){LS.set('live:off',false);LS.set('mu:prof','ingegnere');LS.set('live:notif','all');LS.set('live:sub','ov');liveStart();setTimeout(()=>toast(tr('Sei nel Muretto della squadra')),900);return;}
   if(isBridgeHost())bridgeTeam(code).then(()=>{toast(tr('Sei nella squadra: il bridge si riavvia con il nuovo collegamento'));setTimeout(()=>location.reload(),4000);}).catch(()=>{toast(tr('Sei nella squadra'));liveStart();});
   else{liveStart();setTimeout(()=>toast(tr('Sei nella squadra')),900);}})();
 // the page knows the team but the bridge of this PC does not (first start, reinstall): give it the same team, once
@@ -8520,6 +8673,7 @@ function teamInvite(){const url=teamInviteUrl();if(!url){toast(tr('Nessuna squad
 // the Squadra menu: shows the team instead of a generic label; simpler words
 (function(){const sk=liveSkeleton;window.liveSkeleton=liveSkeleton=function(){const fresh=!$('#v-live')?.dataset.ok;sk();if(!fresh)return;
   const t=teamParse(LS.get('live:team',''));const sum=$('#v-live details.menu>summary');if(sum){sum.innerHTML=t?`<span class="tmdot"></span>${esc(t.n||tr('Squadra'))} ▾`:`${tr('Collega squadra')} ▾`;sum.classList.toggle('on',!!t);}
+  const menu=$('#v-live details.menu');if(menu&&!$('#lvInviteLink')){const b=document.createElement('button');b.type='button';b.id='lvInviteLink';b.className='btn primary';b.textContent=tr('Invita con link');b.onclick=inviteFriend;menu.before(b);}
   const j=$('#lvJoin');if(j)j.textContent=tr('Entra in una squadra');
   const c=$('#lvCode');if(c){c.textContent=tr('Invita un compagno');c.onclick=teamInvite;}
   const n=$('#lvNew');if(n&&t)n.textContent=tr('Crea un\'altra squadra');
@@ -9268,9 +9422,10 @@ function proCarHTML(su,ref,links=[]){const C={FL:'FRONTLEFT',FR:'FRONTRIGHT',RL:
   const car=carTopSVG({wheelFill:w=>links.some(c=>c.w===w)?'rgba(255,207,51,.35)':'#0A0A0C'});
   return `<div class="pcar2">${corner('FL')}${corner('FR')}<div class="pcc2">${car}</div>${corner('RL')}${corner('RR')}</div><div class="pcmid">${mid}</div>`;}
 function proVersions(su){const car=(su?.car||'').toLowerCase();const L=svms().filter(x=>!car||(x.car||'').toLowerCase()===car);
+  const current=x=>x===su||(x.id===su.id&&svmHash(x.text||setupText(x))===svmHash(su.text||setupText(su)));
   const nd=(a,b)=>{let n=0;for(const [sec,it] of Object.entries(a.sec||{}))for(const i of it){const o=b.sec?.[sec]?.find(x=>x.key===i.key);if(o&&o.raw!==i.raw)n++;}return n;};
-  return L.map(x=>`<button type="button" class="pvr${x===su?' cur':''}" data-id="${esc(x.id)}"><i></i><div><b>${esc(x.label||x.name)}</b><small>${x===su?tr('in uso'):nd(su,x)+' '+tr('differenze')}</small></div></button>`).join('')||`<p class="muted small">${tr('Carica altri .svm della stessa auto per vederli qui.')}</p>`;}
-function proSetupPanel(){const old=$('#pSetCar');const su=byId($('#suFile')?.value);const nav=$('#suTabs');if(!nav||!proLook()){old?.remove();return;}
+  return L.map(x=>`<button type="button" class="pvr${current(x)?' cur':''}" data-id="${esc(x.id)}"><i></i><div><b>${esc(x.label||x.name)}</b><small>${current(x)?tr('in uso'):nd(su,x)+' '+tr('differenze')}</small></div></button>`).join('')||`<p class="muted small">${tr('Carica altri .svm della stessa auto per vederli qui.')}</p>`;}
+function proSetupPanel(){const old=$('#pSetCar');const su=analysisSetup();const nav=$('#suTabs');if(!nav||!proLook()){old?.remove();return;}
   const S=active()?.S;const R=S?proFindings(S):null;const F=R?[...R.F].filter(f=>f.s>0).sort((a,b)=>b.s-a.s).slice(0,3):[];
   const car=(su?.car||'').toLowerCase();const others=su?svms().filter(x=>x!==su&&(!car||(x.car||'').toLowerCase()===car)):[];const ref=others.find(x=>x.id===LS.get('setb:ref',''))||null;
   // the setup cards of «Analisi tecnica», only when they are already computed (no slow work here)
@@ -9282,7 +9437,7 @@ function proSetupPanel(){const old=$('#pSetCar');const su=byId($('#suFile')?.val
      ${S?`<div class="panel"><div class="panel-h"><h3>${tr('Problemi rilevati dai dati')}</h3><button type="button" class="btn" id="pToEng">${tr('Race Engineer')} →</button></div>${F.length?F.map(proFindRow).join(''):`<p class="muted small">${tr('Niente di urgente.')}</p>`}</div>`:''}</div>`
      :`<div class="panel"><div class="empty">${tr('Carica un file setup .svm (Documenti o cartella UserData/player/Settings di Le Mans Ultimate).')}</div></div>`}</div>`;
   if(old)old.outerHTML=h;else nav.insertAdjacentHTML('afterend',h);
-  $$('#pSetCar .pvr').forEach(b=>b.onclick=()=>{const s=$('#suFile');s.value=b.dataset.id;s.onchange&&s.onchange();});
+  $$('#pSetCar .pvr').forEach(b=>b.onclick=()=>{if(S)LS.set('sesMode:'+sesKey(S),'selected');const s=$('#suFile');s.value=b.dataset.id;s.onchange&&s.onchange();});
   const pr=$('#pRef');if(pr)pr.onchange=()=>{LS.set('setb:ref',pr.value);proSetupPanel();};
   // a wheel or a linked problem opens the analysis that matters
   $$('#pSetCar .pwgo').forEach(b=>b.onclick=()=>techGo('damp',{w:b.dataset.w}));
@@ -9395,8 +9550,8 @@ function ptAll(){return LS.get('ptests',[]);}
 function ptSave(L){LS.set('ptests',L.slice(-40));}
 function ptActive(S){const car=(proCarOf(S)||'').toLowerCase();return ptAll().find(t=>!t.closed&&t.venue===S.meta?.venue&&(t.car||'').toLowerCase()===car)||null;}
 function ptStart(S,D,laps,f){const x=f.fx.find(x=>!x.conflict)||{};const k=ptMetric(f);const L=ptAll().filter(t=>!(t.venue===S.meta?.venue&&!t.closed&&(t.car||'').toLowerCase()===(proCarOf(S)||'').toLowerCase()));
-  const base=ptSnap(S,D,laps);if(x.key&&D.su)base.val=suValAny(D.su,x.key);
-  L.push({id:'pt'+Date.now(),at:Date.now(),venue:S.meta?.venue||'',car:proCarOf(S),problem:f.t,change:{label:x.label||'',dir:x.dir||'',key:x.key||'',now:x.now||''},metric:k,
+  const base=ptSnap(S,D,laps);if(x.key&&D.su)base.val=setupVal(D.su,x.key,x.sec||undefined);
+  L.push({id:'pt'+Date.now(),at:Date.now(),venue:S.meta?.venue||'',car:proCarOf(S),problem:f.t,change:{label:x.label||'',dir:x.dir||'',key:x.key||'',sec:x.sec||null,now:x.now||''},metric:k,
     hyp:`${tr(x.label||'')}: ${x.dir||''} → ${f.t}: ${ptGoal(k)}`,base});ptSave(L);}
 function suValAny(su,key){for(const it of Object.values(su?.sec||{})){const x=it.find(i=>i.key===key);if(x)return x.disp;}return null;}
 function ptHTML(t,S,D,laps){if(t.metric==='loc')return ptLocHTML(t,S,D,laps);const K=ptKpi(t.metric);const lab=tr(K?.[1]||t.metric),u=K?.[2]||'',dp=K?.[3]??2;const same=t.base.id===S.id;
@@ -9407,7 +9562,7 @@ function ptHTML(t,S,D,laps){if(t.metric==='loc')return ptLocHTML(t,S,D,laps);con
     if(t.base.cond&&cur.cond&&t.base.cond!==cur.cond)W.push(`${tr('meteo diverso')} (${esc(tr(t.base.cond))} → ${esc(tr(cur.cond))})`);
     if(Number.isFinite(t.base.track)&&Number.isFinite(cur.track)&&Math.abs(cur.track-t.base.track)>3)W.push(`${tr('pista')} ${cur.track>t.base.track?'+':'−'}${fx(Math.abs(cur.track-t.base.track),0)} °C`);
     if(t.base.n<3||cur.n<3)W.push(`${tr('pochi giri buoni')} (${t.base.n} → ${cur.n})`);
-    const nowVal=t.change.key&&D.su?suValAny(D.su,t.change.key):null;const changed=t.base.val==null||nowVal==null?null:nowVal!==t.base.val;
+    const nowVal=t.change.key&&D.su?setupVal(D.su,t.change.key,t.change.sec||undefined):null;const changed=t.base.val==null||nowVal==null?null:nowVal!==t.base.val;
     const r=W.length&&J.r!=='inc'?{r:'inc',why:tr('le condizioni sono cambiate: ripeti la prova con carburante, gomme e pista simili')}:changed===false?{r:'inc',why:tr('la modifica non risulta nel setup scelto')}:J;
     res=`<div class="ptres ${PT_R[r.r][1]}"><b>${tr(PT_R[r.r][0])}</b>${r.why?` · <span>${esc(r.why)}</span>`:''}</div>
       <table class="lbt ptt"><thead><tr><th class="l"></th><th>${tr('Prima')}</th><th>${tr('Ora')}</th></tr></thead><tbody>
@@ -9426,13 +9581,13 @@ function ptHTML(t,S,D,laps){if(t.metric==='loc')return ptLocHTML(t,S,D,laps);con
 // a test started from a card of «Analisi tecnica»: the metric is measured at the place of the card, lap by lap, and judged
 // against the spread between laps (vdCompare); the lap time is judged apart, because a faster lap does not prove the fix
 function ptLocHTML(t,S,D,laps){const p=t.loc;const same=t.base.id===S.id;const f=v=>fx(v,p.dec);const ms=(a)=>{const v=a.filter(Number.isFinite);return v.length?`${f(vdMean(v))} ± ${f(vdSd(v))} ${p.unit}`:'—';};
-  let res='';if(!same){const J=techJudge(t,S,laps);const W=[];const cur={fuel:null,cmp:null,cond:S.cond?.label,track:S.cond?.track?.avg};const su=D&&D.S===S?D.su:null;
+  let res='';if(!same){const J=techJudge(t,S,laps,D?.su||analysisSetup(S));const W=[];const cur={fuel:null,cmp:null,cond:S.cond?.label,track:S.cond?.track?.avg};const su=D&&D.S===S?D.su:null;
     if(su){cur.fuel=suFind(su,'GENERAL',/^FuelCapacity/)||suFind(su,'GENERAL',/^FuelSetting/);cur.cmp=suFind(su,'FRONTLEFT',/^CompoundSetting/);}
     if(t.base.fuel&&cur.fuel&&t.base.fuel!==cur.fuel)W.push(`${tr('carburante diverso')} (${esc(t.base.fuel)} → ${esc(cur.fuel)})`);
     if(t.base.cmp&&cur.cmp&&t.base.cmp!==cur.cmp)W.push(`${tr('mescola diversa')} (${esc(t.base.cmp)} → ${esc(cur.cmp)})`);
     if(t.base.cond&&cur.cond&&t.base.cond!==cur.cond)W.push(`${tr('meteo diverso')} (${esc(tr(t.base.cond))} → ${esc(tr(cur.cond))})`);
     if(Number.isFinite(t.base.track)&&Number.isFinite(cur.track)&&Math.abs(cur.track-t.base.track)>3)W.push(`${tr('pista')} ${cur.track>t.base.track?'+':'−'}${fx(Math.abs(cur.track-t.base.track),0)} °C`);
-    const nowVal=t.change.key&&su?suValAny(su,t.change.key):null;const changed=t.base.val==null||nowVal==null?null:nowVal!==t.base.val;
+    const nowVal=t.change.key&&su?setupVal(su,t.change.key,t.change.sec||undefined):null;const changed=t.base.val==null||nowVal==null?null:nowVal!==t.base.val;
     const r=W.length&&J.r!=='inc'?{r:'inc',why:tr('le condizioni sono cambiate: ripeti la prova con carburante, gomme e pista simili')}:changed===false?{r:'inc',why:tr('la modifica non risulta nel setup scelto')}:J;
     const TV={migliorato:tr('più veloce'),peggiorato:tr('più lento'),inconcludente:tr('differenza nel rumore')}[J.T.verdict]||'';
     res=`<div class="ptres ${PT_R[r.r][1]}"><b>${tr(PT_R[r.r][0])}</b>${r.why?` · <span>${esc(r.why)}</span>`:''}</div>
@@ -9788,9 +9943,31 @@ function friendMessage(){const base=(typeof UPD!=='undefined'&&UPD.base)||(typeo
     `3) ${tr('Nelle opzioni del gioco attiva la telemetria MoTeC: le sessioni compaiono da sole nella Libreria.')}`];
   if(team)L.push(`4) ${tr('Per entrare nel nostro Muretto, con il programma acceso apri questo link')}: ${team}`);
   return L.join('\n');}
-function inviteFriend(){const txt=friendMessage();navigator.clipboard?.writeText(txt).catch(()=>{});
-  openCode({title:tr('Invita un amico'),help:tr('Messaggio copiato: incollalo su WhatsApp, Discord o dove vuoi. Contiene il link per scaricare il programma')+(txt.includes('#join')?' '+tr('e quello per entrare nella squadra: mandalo solo a chi corre con te.'):'.'),text:txt});
-  if(navigator.share)try{const b=document.createElement('button');b.type='button';b.className='btn';b.textContent=tr('Condividi…');b.onclick=()=>navigator.share({text:txt}).catch(()=>{});const box=$('.modal:not([hidden]) .mbox');box?.querySelector('.panel-h')?.append(b);}catch(e){}}
+// One invitation surface for both the sidebar and the Pit wall. Clipboard failure never reports success.
+async function inviteCopy(text,field){
+  try{if(!navigator.clipboard?.writeText)throw new Error();await navigator.clipboard.writeText(text);toast(tr('Copiato. Incollalo nella chat della squadra.'));return true;}
+  catch(e){field.focus();field.select();toast(tr('Copia manualmente il testo selezionato con Ctrl+C.'));return false;}
+}
+function inviteFriend(){
+  let m=$('#mInvite');if(!m){m=document.createElement('div');m.id='mInvite';m.className='modal';m.hidden=true;document.body.append(m);}
+  const code=LS.get('live:team','');const team=!liveOff()&&teamParse(code);const url=team?teamInviteUrl():'';const web=team?engineerUrl():'';const txt=friendMessage();
+  m.innerHTML=`<div class="mbox invitebox" role="dialog" aria-modal="true" aria-labelledby="inviteTitle">
+    <div class="panel-h"><div><div class="ey">${tr('CORRI IN SQUADRA')}</div><h2 id="inviteTitle">${tr('Invita un compagno')}</h2></div><button type="button" class="btn" data-close>${tr('Chiudi')}</button></div>
+    <p class="inviteintro">${tr('Un messaggio pronto, poi siete nello stesso Muretto.')}</p>
+    <ol class="invitesteps"><li><b>01</b><span>${tr('Scarica Data Engineer')}<small>${tr('Il programma va avviato sul PC del compagno.')}</small></span></li><li><b>02</b><span>${tr('Apri il link squadra')}<small>${tr('Con Data Engineer acceso, il link apre il suo Muretto locale.')}</small></span></li><li><b>03</b><span>${tr('Controlla il collegamento')}<small>${tr('Stato del Muretto mostra quando arrivano i dati dei compagni.')}</small></span></li></ol>
+    ${team?`<div class="invitelink"><div class="inviteheading"><b>${esc(team.n||tr('Squadra'))}</b><span class="tst good">${tr('Link pronto')}</span></div><label for="inviteUrl">${tr('Link per chi guida (con il programma acceso)')}</label><div class="invitecopy"><input id="inviteUrl" type="text" readonly value="${esc(url)}"><button type="button" class="btn primary" id="inviteLinkCopy">${tr('Copia link squadra')}</button></div><p class="muted small">${tr('Il link funziona sul PC di chi lo apre, con Data Engineer avviato. Condividilo solo con la squadra.')}</p></div>
+    <div class="invitelink"><div class="inviteheading"><b>${tr('Per chi fa l\'ingegnere')}</b><span class="tst good">${tr('niente da installare')}</span></div><label for="inviteWeb">${tr('Link del Muretto (browser)')}</label><div class="invitecopy"><input id="inviteWeb" type="text" readonly value="${esc(web)}"><button type="button" class="btn primary" id="inviteWebCopy">${tr('Copia link ingegnere')}</button></div><p class="muted small">${tr('Si apre da PC, tablet o telefono e mostra il Muretto della squadra. Il programma serve solo a chi guida. Chi ha il link vede i dati: mandalo solo alla squadra.')}</p></div>`:`<div class="invitenote"><b>${tr('Prima collega una squadra')}</b><p>${tr('Puoi già condividere il programma. Per aggiungere il link al messaggio, crea una squadra o entra con un invito.')}</p><button type="button" class="btn" id="inviteCreate">${tr('Crea squadra')}</button><button type="button" class="btn" id="inviteJoin">${tr('Ho già un invito')}</button></div>`}
+    <label class="invitemessage" for="inviteMessage">${tr('Messaggio per Discord o WhatsApp')}<textarea id="inviteMessage" readonly rows="7"></textarea></label>
+    <div class="inviteactions"><span class="muted small">${tr('Include download e istruzioni di avvio.')}</span><button type="button" class="btn primary" id="inviteMessageCopy">${tr('Copia messaggio completo')}</button></div></div>`;
+  $('#inviteMessage').value=txt;
+  $('#inviteMessageCopy').onclick=()=>inviteCopy(txt,$('#inviteMessage'));
+  const link=$('#inviteLinkCopy');if(link)link.onclick=()=>inviteCopy(url,$('#inviteUrl'));
+  const wl=$('#inviteWebCopy');if(wl)wl.onclick=()=>inviteCopy(web,$('#inviteWeb'));
+  const create=$('#inviteCreate');if(create)create.onclick=()=>{m.hidden=true;liveNewTeam();};
+  const join=$('#inviteJoin');if(join)join.onclick=()=>{m.hidden=true;showView('live');$('#lvJoin')?.click();};
+  openModal('#mInvite');m.querySelector('[data-close]').focus();
+  m.onkeydown=e=>{if(e.key==='Escape'){m.hidden=true;$('#proInvite')?.focus();}if(e.key==='Tab'){const els=[...m.querySelectorAll('button,input,textarea')].filter(x=>!x.disabled);const first=els[0],last=els[els.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}};
+}
 setTimeout(()=>{const nav=$('#proNav');if(nav&&!$('#proInvite')){const b=document.createElement('button');b.type='button';b.id='proInvite';b.className='pinv';b.innerHTML=`<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M3 20c0-3.5 2.7-6 6-6s6 2.5 6 6"/><path d="M18 8v6M15 11h6"/></svg><span>${tr('Invita un amico')}</span>`;b.onclick=inviteFriend;
     const before=nav.querySelector('#proLogo')||nav.querySelector('.pfoot');before?before.before(b):nav.append(b);}
   const row=$('#mSettings .lookrow');if(row&&!$('#setInvite')){row.insertAdjacentHTML('beforeend',`<button type="button" class="btn" id="setInvite">${tr('Invita un amico')}</button>`);$('#setInvite').onclick=()=>{$('#mSettings').hidden=true;inviteFriend();};}},50);
@@ -9882,15 +10059,15 @@ function techChart(series,{w=700,h=230,xl='',yl='',x0,x1,y0,y1,mark}={}){const P
   return `<figure class="tch"><svg viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(yl)}">${grid}${lines}${mk}<text x="${w-P.r}" y="${h-4}" text-anchor="end" class="tal">${esc(xl)}</text><text x="${P.l}" y="${P.t-2}" class="tal">${esc(yl)}</text></svg>${leg?`<figcaption>${leg}</figcaption>`:''}</figure>`;}
 
 // ---------- damper histogram with units, knee and samples out of range ----------
-function techHist(H,knee,HB,sign){const W=760,Hh=140,P={l:8,r:8,t:8,b:30};const nb=H.h.length,bw=(W-P.l-P.r)/nb;const tot=H.n||1,totB=HB?.n||1;
+function techHist(H,knee,HB,sign){const W=Math.max(360,Math.min(760,(($('#techP')?.clientWidth||1560)-64)/2)),Hh=154,P={l:8,r:8,t:8,b:42};const nb=H.h.length,bw=(W-P.l-P.r)/nb;const tot=H.n||1,totB=HB?.n||1;
   const mx=Math.max(...H.h.map(x=>x/tot),...(HB?HB.h.map(x=>x/totB):[0]),1e-6);const x=v=>P.l+(v+H.range)/(2*H.range)*(W-P.l-P.r);const y=p=>Hh-P.b-p/mx*(Hh-P.t-P.b);
   const bars=H.h.map((c,i)=>{const v=-H.range+i*H.bin;const fast=Math.abs(v+H.bin/2)>=knee;return `<rect x="${(P.l+i*bw+0.4).toFixed(1)}" y="${y(c/tot).toFixed(1)}" width="${Math.max(0.5,bw-0.8).toFixed(1)}" height="${(Hh-P.b-y(c/tot)).toFixed(1)}" fill="var(--lapA)" opacity="${fast?0.5:0.95}"/>`;}).join('');
   const bl=HB?`<polyline fill="none" stroke="var(--lapB)" stroke-width="2" points="${HB.h.map((c,i)=>`${(P.l+(i+0.5)*bw).toFixed(1)},${y(c/totB).toFixed(1)}`).join(' ')}"/>`:'';
-  const ticks=[-H.range,-H.range/2,0,H.range/2,H.range].map((v,i)=>`<text x="${x(v)}" y="${Hh-P.b+14}" text-anchor="${i===0?'start':i===4?'end':'middle'}">${v}</text>`).join('');
+  const ticks=[-H.range,-H.range/2,0,H.range/2,H.range].map((v,i)=>`<text x="${x(v)}" y="${Hh-P.b+18}" text-anchor="${i===0?'start':i===4?'end':'middle'}">${v}</text>`).join('');
   const lo=H.lo/tot*100,hi=H.hi/tot*100;const neg=sign?tr('estensione'):tr('verso −'),pos=sign?tr('compressione'):tr('verso +');
   return `<svg class="thist" viewBox="0 0 ${W} ${Hh}" role="img" aria-label="${esc(tr('Istogramma velocità ammortizzatore'))}">${bars}${bl}
     <line x1="${x(-knee)}" x2="${x(-knee)}" y1="${P.t}" y2="${Hh-P.b}" class="tmk"/><line x1="${x(knee)}" x2="${x(knee)}" y1="${P.t}" y2="${Hh-P.b}" class="tmk"/><line x1="${x(0)}" x2="${x(0)}" y1="${P.t}" y2="${Hh-P.b}" class="tz"/>
-    ${ticks}<text x="${W/2}" y="${Hh-2}" text-anchor="middle" class="tal">mm/s · ← ${esc(neg)} · ${esc(pos)} →</text></svg>
+    ${ticks}<text x="${W/2}" y="${Hh-8}" text-anchor="middle" class="tal">mm/s · ← ${esc(neg)} · ${esc(pos)} →</text></svg>
     <div class="thx"><span class="${lo>0.5?'w':''}">${fx(lo,1)}% ${tr('sotto')} −${H.range}</span><span>${tr('soglia lento/veloce')} ±${knee} mm/s</span><span class="${hi>0.5?'w':''}">${fx(hi,1)}% ${tr('sopra')} +${H.range}</span></div>`;}
 
 // ---------- 1. quality ----------
@@ -9904,7 +10081,7 @@ function techQualityHTML(S,X){const rows=ANA.map(a=>{const A=chqAnalysis(S,a);co
     const conv=(c.conv||[]).filter(x=>x.k!==1||x.cert!=='certa').map(x=>`${x.from||'—'} → ${x.to}${x.k!==1?` (×${+x.k.toFixed(4)})`:''} · <span class="${x.cert==='incerta'?'w':''}">${tr(certN[x.cert]||x.cert)}</span>`).join('<br>');
     return `<tr><td class="l mono">${esc(c.name)}${c.alias?`<div class="muted">${tr('nel file')}: ${esc(c.alias)}</div>`:''}</td><td><span class="tst ${st[0]}">${tr(st[1])}</span></td><td class="mono">${c.raw?esc(c.raw.unit||'—'):'—'} → ${esc(c.u||'—')}</td><td class="l small">${conv||'—'}</td><td class="mono">${c.f?c.f+' Hz':'—'}${c.effHz&&c.f&&c.effHz<c.f*0.9?` <span class="w">(~${fx(c.effHz,0)})</span>`:''}</td><td class="l small">${esc(c.why||'')}</td></tr>`;}).join('');
   const sw=Object.values(X.sus.w);const vs=sw[0];
-  const der=[[tr('Velocità ammortizzatore'),vs?(vs.velSrc==='misurato'?tr('misurata (canale Damper Vel)'):`${tr('derivata dalla posizione')}: Savitzky–Golay ${2*vs.filt.m+1} ${tr('campioni')} (${vs.filt.ms} ms) ${tr('su ogni giro separato, con 1 s di margine')}`):tr('non disponibile')],
+  const der=[[tr('Velocità ammortizzatore'),vs?.velSrc==='misurato'?tr('misurata (canale Damper Vel)'):vs?.filt?`${tr('derivata dalla posizione')}: Savitzky–Golay ${2*vs.filt.m+1} ${tr('campioni')} (${vs.filt.ms} ms) ${tr('su ogni giro separato, con 1 s di margine')}`:tr('non disponibile')],
     [tr('Segno compressione'),sw.length?VD_W.filter(w=>X.sus.w[w]).map(w=>`${w}: ${tr(X.sus.w[w].sign.cert)}`).join(' · '):tr('non disponibile')],
     [tr('Movimento comune e differenziale degli assi, indice di beccheggio'),X.ax.have?tr('derivati dalle quattro posizioni (indicatori, non la corsa delle molle)'):tr('non disponibile')],
     [tr('Rake'),X.pl.none?tr('non disponibile'):tr('derivato: altezza posteriore − anteriore in mm (non è un angolo: il passo non è nel file)')],
@@ -9923,9 +10100,10 @@ function techDampHTML(S,X,XB){const R=X.sus,RB=XB?.sus;const ws=VD_W.filter(w=>R
   const o=X.opt;const signTxt=x=>{const s=x.sign;const ev=s.ev.map(e=>`${tr(e.lab)} ${e.r>0?'+':'−'}${fx(Math.abs(e.r),2)}`).join(', ');
     return s.sign?`${tr('compressione')} = ${tr('posizione che')} ${s.sign>0?tr('aumenta'):tr('diminuisce')} · <b class="${s.cert==='verificato'?'pos':'w'}">${tr(s.cert)}</b>${ev?` (${ev})`:''}`:`<b class="w">${tr('direzione di compressione non determinabile')}</b>: ${esc(tr(s.why||''))}`;};
   const cards=ws.map(w=>{const x=R.w[w],xb=RB?.w[w];const z=x.z;
+    if(!x.hist.n)return `<div class="tdc"><div class="tdh"><b>${tr(TECH_WN[w])}</b><span class="tst bad">${tr('non analizzabile')}</span></div><p>${esc(x.velWhy||tr('Dati insufficienti'))}</p><p class="muted small">${tr('Nessun consiglio ammortizzatori da questo segnale.')}</p></div>`;
     return `<div class="tdc" data-w="${w}"><div class="tdh"><b>${tr(TECH_WN[w])}</b><span class="tst ${x.velSrc==='misurato'?'good':'muted'}">${tr(x.velSrc==='misurato'?'velocità misurata':'velocità derivata')}</span><span class="muted small">${fx(x.s,0)} s ${tr('di dati')}</span></div>
       <div class="small tsg">${signTxt(x)}</div>${techHist(x.hist,o.knee,xb?.hist,x.sign.sign)}
-      <table class="lbt tzt"><thead><tr><th class="l"></th><th>${tr('Estensione veloce')}</th><th>${tr('Estensione lenta')}</th><th>${tr('Compressione lenta')}</th><th>${tr('Compressione veloce')}</th></tr></thead><tbody>
+      <table class="lbt tzt"><thead><tr><th class="l"></th><th>${tr(x.sign.sign?'Estensione veloce':'Verso − veloce')}</th><th>${tr(x.sign.sign?'Estensione lenta':'Verso − lento')}</th><th>${tr(x.sign.sign?'Compressione lenta':'Verso + lento')}</th><th>${tr(x.sign.sign?'Compressione veloce':'Verso + veloce')}</th></tr></thead><tbody>
        <tr><td class="l"><b class="ca">A</b> % ${tr('tempo')}</td><td>${fx(z.fr,1)}</td><td>${fx(z.sr,1)}</td><td>${fx(z.sb,1)}</td><td>${fx(z.fb,1)}</td></tr>
        ${xb?`<tr><td class="l"><b class="cb">B</b> % ${tr('tempo')}</td><td>${fx(xb.z.fr,1)}</td><td>${fx(xb.z.sr,1)}</td><td>${fx(xb.z.sb,1)}</td><td>${fx(xb.z.fb,1)}</td></tr>`:''}</tbody></table>
       <div class="tkv small"><span>${tr('Velocità al 95%')}</span><span>${tr('compressione')} ${fx(x.bump95,0)} · ${tr('estensione')} ${fx(Math.abs(x.reb95),0)} mm/s${xb?` · <span class="cb">B ${fx(xb.bump95,0)} · ${fx(Math.abs(xb.reb95),0)}</span>`:''}</span>
@@ -10032,7 +10210,10 @@ function techCards(S,laps,su,X){X=X||techData(S,laps);const C=[];const n=laps.le
   const mk=(g,o)=>{const e=g.ev[0];const L=lenOf(e.li);const W=techWhere(S,g.d,L);
     if(g.others?.length)o.ev=[...o.ev,`${tr('stesso fenomeno anche in')} ${g.others.length} ${g.others.length===1?tr('altro punto'):tr('altri punti')}: ${g.others.slice(0,5).map(x=>techWhere(S,x.d,lenOf(x.ev[0].li)).txt).join(', ')}${g.others.length>5?'…':''}`];const frac=g.d/L;const M=TECH_METRIC[g.k];const per=techPerLapAt(S,laps,g.k,g.w,frac,M[0]);
     const rel=chqReliability(S,laps,g.k==='low'?'plat':g.k==='unload'?'load':'damp',{perLap:per,tol:o.tol,unit:M[2],dec:M[3]});
-    const fx0=o.fx?{...o.fx,label:SETUP_LABELS[o.fx.key]||o.fx.key,now:o.fx.key?val(o.fx.key,o.fx.sec):null}:null;
+    // Observations may remain visible, but unusable signals must never generate setup changes.
+    const directionOK=!['rec','pack','osc'].includes(g.k)||X.sus.w[g.w]?.sign.sign;
+    const available=!su||!o.fx?.key||val(o.fx.key,o.fx.sec)!=null;
+    const fx0=o.fx&&rel.lv>0&&directionOK&&available?{...o.fx,label:SETUP_LABELS[o.fx.key]||o.fx.key,now:o.fx.key?val(o.fx.key,o.fx.sec):null}:null;
     C.push({id:g.k+':'+g.w+':'+Math.round(frac*1000),k:g.k,w:g.w,s:o.s,a:o.a,cat:o.cat,t:o.t,where:{txt:`${W.txt} · ${techPhN(g.ph)}${g.kerb>0.5&&g.ph!=='kerb'?' · '+tr('cordolo'):''}`,d:W.d,li:e.li,te:e.t},
       ev:o.ev.filter(Boolean),rep:{n:g.n,of:n,txt:`${g.n} ${tr('giri su')} ${n}${g.rep?' · '+tr('ripetibile'):' · '+tr('non ripetibile')}`,per},causes:o.causes,rel,fx:fx0,expect:o.expect,
       pt:{loc:1,k:g.k,w:g.w,frac,field:M[0],label:M[1],unit:M[2],dec:M[3],better:g.k==='low'?1:-1,minDiff:o.minDiff||0}});};
@@ -10077,9 +10258,12 @@ const TECH_SUP={'sì':'pos','compatibile':'pos','possibile':'w','no':'muted','no
 const TECH_CAT={regime:'Sostegno a regime: molle, 3° elemento, packer',transitori:'Transitori: ammortizzatori',rollio:'Rollio: barre e molle'};
 function techCardHTML(c,S,laps){const t=typeof ptAll==='function'?[...ptAll()].reverse().find(x=>x.cardId===c.id&&x.venue===S.meta?.venue):null;
   let out=tr('nessuna prova ancora');if(t){if(t.res)out=`${tr(PT_R[t.res.r]?.[0]||'Inconcludente')} (${tr(t.closed==='keep'?'tenuta':t.closed==='back'?'tolta':'annullata')})`;
-    else if(t.base.id!==S.id){const J=techJudge(t,S,laps);out=`${tr(PT_R[J.r][0])}: ${fx(vdMean(t.base.per||[]),c.pt.dec)} → ${fx(vdMean(J.now),c.pt.dec)} ${c.pt.unit}${J.why?' · '+J.why:''}`;}else out=tr('prova in corso: carica la telemetria dopo la modifica');}
+    else if(t.base.id!==S.id){const J=techJudge(t,S,laps,analysisSetup(S));out=`${tr(PT_R[J.r][0])}: ${fx(vdMean(t.base.per||[]),c.pt.dec)} → ${fx(vdMean(J.now),c.pt.dec)} ${c.pt.unit}${J.why?' · '+J.why:''}`;}else out=tr('prova in corso: carica la telemetria dopo la modifica');}
   return `<article class="tcard s${c.s}" data-id="${esc(c.id)}"><header><i></i><b>${esc(c.t)}</b><span class="muted small">${tr(TECH_CAT[c.cat]||'')}</span>${c.where.li!=null?`<button type="button" class="btn icon tcgo" data-li="${c.where.li}" data-t="${c.where.te}" data-w="${c.w}" data-k="${c.k}" title="${esc(tr('Apri nei grafici sincronizzati'))}">⌖</button>`:''}</header>
-    <ol class="t10">
+    <div class="tbrief"><span>${esc(c.where.txt)}</span><span class="${REL_CLS[c.rel?.label]||'muted'}">${tr('affidabilità')} ${tr(c.rel?.label||'non analizzabile')}</span><span>${esc(c.rep.txt)}</span></div>
+    <p class="tproposal">${c.fx?`<b>${esc(tr(c.fx.label))}</b> · ${esc(c.fx.dir)}${c.fx.now?` <small>(${tr('ora')} ${esc(c.fx.now)})</small>`:''}`:tr('Nessuna modifica proposta: verifica prima i dati e le evidenze.')}</p>
+    ${c.fx&&c.fx.now&&c.pt&&!t?`<button type="button" class="btn tcpt" data-id="${esc(c.id)}">${tr('Prova questa modifica')}</button>`:''}
+    <details class="tproof"><summary>${tr('Evidenze, cause e verifica')}</summary><ol class="t10">
      <li><span>${tr('Fenomeno')}</span><div>${esc(c.t)}</div></li>
      <li><span>${tr('Dove e quando')}</span><div>${esc(c.where.txt)}</div></li>
      <li><span>${tr('Evidenze')}</span><div class="eev">${c.ev.map(e=>`<span>${esc(e)}</span>`).join('')}</div></li>
@@ -10089,11 +10273,21 @@ function techCardHTML(c,S,laps){const t=typeof ptAll==='function'?[...ptAll()].r
      <li><span>${tr('Modifica da provare')}</span><div>${c.fx?`<b>${esc(tr(c.fx.label))}</b>: ${esc(c.fx.dir)} <small class="muted">${esc(c.fx.why)}</small>`:tr('nessuna')}</div></li>
      <li><span>${tr('Valore nel .svm')}</span><div class="mono">${c.fx?(c.fx.now?esc(c.fx.now):`<span class="muted">${tr('carica o conferma il setup della sessione')}</span>`):'—'}</div></li>
      <li><span>${tr('Risultato atteso e verifica')}</span><div>${esc(c.expect)}${c.pt?` <small class="muted">(${tr('metrica')}: ${tr(c.pt.label)}${c.rep.per?` · ${tr('ora')} ${c.rep.per.map(v=>fx(v,c.pt.dec)).join(' / ')} ${c.pt.unit}`:''})</small>`:''}</div></li>
-     <li><span>${tr('Esito prima/dopo')}</span><div>${esc(out)}${c.fx&&c.pt&&!t?` <button type="button" class="btn tcpt" data-id="${esc(c.id)}">${tr('Prova questa modifica')}</button>`:''}</div></li></ol></article>`;}
+     <li><span>${tr('Esito prima/dopo')}</span><div>${esc(out)}</div></li></ol></details></article>`;}
 function techDiagHTML(S,X,su){const C=techCards(S,X.laps,su,X);
   const top=C.slice(0,6),rest=C.slice(6);
   return C.length?`<p class="small muted">${tr('Ogni scheda parte da un fenomeno misurato e ripetibile. Una modifica alla volta; un tempo migliore non dimostra da solo che il problema è risolto: guarda la metrica della scheda.')}</p><div class="tcards">${top.map(c=>techCardHTML(c,S,X.laps)).join('')}</div>${rest.length?`<details class="tmore"><summary>${tr('Altre schede')} (${rest.length})</summary><div class="tcards">${rest.map(c=>techCardHTML(c,S,X.laps)).join('')}</div></details>`:''}`
     :`<p>${tr('Nessun fenomeno ripetibile da collegare al setup nei giri scelti.')}</p><p class="muted small">${tr('Con meno di 2 giri lo stesso fenomeno non può risultare ripetibile.')}</p>`;}
+
+function techOverviewHTML(S,X){
+  const usable=Object.values(X.rel).filter(r=>r.lv>0).length;
+  const events=X.sus.groups.filter(g=>g.rep&&g.k!=='max').length+(X.pl.lowG||[]).filter(g=>g.rep).length;
+  const cards=techCards(S,X.laps,analysisSetup(S),X).filter(c=>c.fx).length;
+  const steps=[['q','01','Controlla i dati',usable+' / '+ANA.length+' '+tr('analisi disponibili'),'Canali, unità e frequenze prima dei consigli.'],
+    ['damp','02','Leggi la macchina',events+' '+tr('eventi ripetibili'),'Ammortizzatori, terzo elemento e piattaforma.'],
+    ['diag','03','Verifica una modifica',cards+' '+tr('prove suggerite'),'Una modifica, una metrica, un confronto prima e dopo.']];
+  return `<div class="tworkflow">${steps.map(([tab,n,t,v,d])=>`<button type="button" data-tt="${tab}" class="tstep"><span class="tstepn">${n}</span><span><b>${tr(t)}</b><strong>${v}</strong><small>${tr(d)}</small></span><span aria-hidden="true">→</span></button>`).join('')}</div>`;
+}
 
 // ---------- the setup each session was run with ----------
 // stored by session: {st: 'confermato' | 'suggerito', name, car, hash, text (copy of the .svm), at}. «Mancante» = nothing stored.
@@ -10101,8 +10295,16 @@ function sesKey(S){const m=S.meta||{};return ['ses',m.venue,m.date,m.time,(m.dri
 function svmHash(t){let h=0x811c9dc5;for(let i=0;i<t.length;i++){h^=t.charCodeAt(i);h=Math.imul(h,0x01000193)>>>0;}return h.toString(16);}
 function sesSetupAll(){return LS.get('sesSetup',{})||{};}
 function sesSetupGet(S){return sesSetupAll()[sesKey(S)]||null;}
+// The confirmed copy is the default analysis input. Exploring another setup is an explicit choice per session.
+function sesSetupResolve(S,selected){
+  if(!S)return selected;
+  const a=sesSetupGet(S);if(!a||a.st!=='confermato'||LS.get('sesMode:'+sesKey(S),'saved')==='selected')return selected;
+  if(S._setupCopy?.hash!==a.hash){const su=parseSVM(a.text,a.name);su.label=a.name.replace(/\.svm$/i,'');su.snapshot=true;S._setupCopy={hash:a.hash,su};}
+  return S._setupCopy.su;
+}
+function analysisSetup(S=active()?.S){return sesSetupResolve(S,byId($('#suFile')?.value));}
 function sesSetupSet(S,su,st){const A=sesSetupAll();const k=sesKey(S);if(!su){delete A[k];LS.set('sesSetup',A);return;}const text=su.text||setupText(su);
-  A[k]={st,name:su.name,car:su.car||'',hash:svmHash(text),text,at:Date.now()};const keys=Object.keys(A).sort((a,b)=>A[a].at-A[b].at);while(keys.length>60)delete A[keys.shift()];LS.set('sesSetup',A);}
+  A[k]={st,name:su.name,car:su.car||'',hash:svmHash(text),text,at:Date.now()};const keys=Object.keys(A).sort((a,b)=>A[a].at-A[b].at);while(keys.length>60)delete A[keys.shift()];LS.set('sesSetup',A);LS.set('sesMode:'+k,'saved');}
 // is the car of the setup the car of the telemetry?
 function suCarMatch(S,su){const car=(S.meta?.car||S.merged?.d.car||'').toLowerCase(),sc=(su?.car||'').toLowerCase();if(!car||!sc)return null;return sc.includes(car)||(car.startsWith('hyper')&&/hypercar/.test(sc))||car.split(/\s+/).some(t=>t.length>3&&sc.includes(t));}
 // does the telemetry agree with this setup? Only settings the car reports back are compared: the brake balance
@@ -10118,13 +10320,16 @@ function suTeleCheck(S,su){if(!S||!su)return null;const ev=[];let bad=false,ok=0
     ev.push(`${tr(w[0]==='F'?'campanatura ant.':'campanatura post.')} ${fx(meas,2)}° ${tr('misurata in rettilineo')}, ${fx(set,1)}° ${tr('nel setup')} (${tr('indicativo')})`);};
   cam('FL','FRONTLEFT');cam('RL','REARLEFT');
   return {st:bad?'no':ok?'compatibile':'non verificabile',ev};}
-function sesSetupHTML(S){const a=sesSetupGet(S);const su=byId($('#suFile')?.value);const loaded=a?lds().find(x=>x.kind==='svm'&&x.name===a.name):null;const changed=a&&loaded&&loaded.text&&svmHash(loaded.text)!==a.hash;
+function sesSetupHTML(S){const a=sesSetupGet(S);const su=byId($('#suFile')?.value);const loaded=a?svms().find(x=>x.name===a.name):null;const changed=!!(a&&loaded&&svmHash(loaded.text||setupText(loaded))!==a.hash);
+  const saved=a?.st==='confermato'&&LS.get('sesMode:'+sesKey(S),'saved')!=='selected';const used=sesSetupResolve(S,su);const different=a&&su&&(a.name!==su.name||svmHash(su.text||setupText(su))!==a.hash);
   const st=a?a.st:'mancante';const cls={confermato:'good',suggerito:'warn',mancante:'muted'}[st];const mm=su?suCarMatch(S,su):null;
   return `<div class="tses"><span>${tr('Setup della sessione')}</span><span class="tst ${cls}">${tr(st==='confermato'?'setup confermato':st==='suggerito'?'abbinamento suggerito':'setup mancante')}</span>${a?`<b>${esc(a.name)}</b> <small class="muted">${tr('copia salvata il')} ${new Date(a.at).toLocaleDateString()}</small>`:''}
-    ${changed?`<span class="w small">${tr('il file è cambiato dopo: uso la copia salvata con la sessione')}</span>`:''}${mm===false?`<span class="w small">${tr('auto del setup diversa da quella della telemetria')}</span>`:''}
+    <span class="tused">${tr('Analisi con')}: <b>${esc(used?.name||tr('setup mancante'))}</b> · ${tr(saved?'copia confermata':'setup selezionato')}</span>
+    ${changed?`<span class="w small">${tr('Il file originale è cambiato. La copia storica è conservata.')}</span>`:''}${mm===false?`<span class="w small">${tr('auto del setup diversa da quella della telemetria')}</span>`:''}
     ${(()=>{const K=su?suTeleCheck(S,su):null;if(!K||!K.ev.length)return '';return `<span class="tsck ${K.st==='no'?'w':K.st==='compatibile'?'pos':'muted'} small" title="${esc(K.ev.join(' · '))}">${K.st==='no'?'✗ '+tr('la telemetria non corrisponde a questo setup (a meno che la ripartizione non sia stata cambiata in macchina)'):K.st==='compatibile'?'✓ '+tr('telemetria compatibile con questo setup'):tr('compatibilità non verificabile')}: ${esc(K.ev[0])}</span>`;})()}
-    <span class="tsesb">${su&&(!a||a.name!==su.name||a.st!=='confermato')?`<button type="button" class="btn" data-ses="ok">${tr('Conferma')}: ${esc(su.name)}</button>`:''}${a&&(!su||su.name!==a.name||changed)?`<button type="button" class="btn" data-ses="old">${tr('Apri la copia salvata')}</button>`:''}${a?`<button type="button" class="btn" data-ses="rm">${tr('Togli')}</button>`:''}</span></div>`;}
-function sesSetupBind(S){$$('[data-ses]').forEach(b=>b.onclick=async()=>{const k=b.dataset.ses;const su=byId($('#suFile').value);
+    <span class="tsesb">${saved&&different?`<button type="button" class="btn" data-ses="selected">${tr('Prova il setup selezionato')}</button>`:''}${a?.st==='confermato'&&!saved?`<button type="button" class="btn" data-ses="saved">${tr('Torna al setup confermato')}</button>`:''}${su&&(!a||different||a.st!=='confermato')?`<button type="button" class="btn" data-ses="ok">${tr('Conferma')}: ${esc(su.name)}</button>`:''}${a?`<button type="button" class="btn" data-ses="rm">${tr('Togli')}</button>`:''}</span></div>`;}
+function sesSetupBind(S,root=document){$$('[data-ses]',root).forEach(b=>b.onclick=async()=>{const k=b.dataset.ses;const su=byId($('#suFile').value);
+  if(k==='selected'||k==='saved')LS.set('sesMode:'+sesKey(S),k);
   if(k==='ok'&&su){if(suCarMatch(S,su)===false&&!confirm(tr('Il setup sembra di un\'altra auto. Confermare lo stesso?')))return;sesSetupSet(S,su,'confermato');toast(tr('Setup confermato per questa sessione'));}
   if(k==='rm')sesSetupSet(S,null);
   if(k==='old'){const a=sesSetupGet(S);if(a){const name=a.name.replace(/\.svm$/i,'')+` (${tr('copia')} ${new Date(a.at).toLocaleDateString().replace(/\//g,'-')}).svm`;const it=await addFile(name,new TextEncoder().encode(a.text).buffer,{persist:false});relink();refreshAll();if(it?.id)$('#suFile').value=it.id;}}
@@ -10139,13 +10344,14 @@ function renderTech(){const host=$('#techP');if(!host)return;const S=active()?.S
   if(!host.querySelector('.tech')||host.dataset.s!==S.id){host.dataset.s=S.id;host.innerHTML=`<div class="panel tech"><div class="empty">${tr('Calcolo…')}</div></div>`;}
   clearTimeout(TECH._t);TECH._t=setTimeout(()=>{try{techDraw(S,laps);}catch(e){console.error(e);host.innerHTML=`<div class="warnbar">${esc(e.message)}</div>`;}},30);}
 function techDraw(S,laps){const host=$('#techP');const X=techData(S,laps);const SB=techB(S);const XB=SB?techData(SB,techLaps(SB)):null;const sel=techSel();
-  const su=typeof DIAG!=='undefined'&&DIAG&&DIAG.S===S?DIAG.su:byId($('#suFile')?.value);
+  const su=typeof DIAG!=='undefined'&&DIAG&&DIAG.S===S?DIAG.su:analysisSetup(S);
   const others=lds().filter(x=>x!==S&&x.kind==='ld'&&!x.sample&&x.meta?.venue===S.meta?.venue);
-  const cond=XB?vdCondDiffs(vdConditions(S,laps,su),vdConditions(SB,XB.laps,null)):[];
+  const cond=XB?vdCondDiffs(vdConditions(S,laps,su),vdConditions(SB,XB.laps,sesSetupResolve(SB,null))):[];
   const cor=techCorners(S);const tab=TECH_TABS.find(t=>t[0]===TECH.tab)?TECH.tab:'q';
   const body=tab==='q'?techQualityHTML(S,X):tab==='damp'?techDampHTML(S,X,XB):tab==='axle'?techAxleHTML(S,X,XB):tab==='plat'?techPlatHTML(S,X,XB):tab==='ev'?techEvHTML(S,X):techDiagHTML(S,X,su);
-  host.innerHTML=`<div class="panel tech${TECH.full?' tfull':''}">
+  host.innerHTML=`<div class="panel tech${TECH.full?' tfull':''}" data-tech-tab="${tab}">
    <div class="ttop"><div class="ttl"><div class="ey">${tr('Analisi tecnica')}</div><b>${esc(S.meta?.venue||'')}</b><span class="muted small">${esc(engLapsText(laps))}</span></div>
+    <label class="f tsetup">${tr('Setup da confrontare')}<select id="techSetup"><option value="">${tr('setup mancante')}</option>${svms().map(x=>`<option value="${esc(x.id)}"${$('#suFile').value===x.id?' selected':''}>${esc(x.label||x.name)}</option>`).join('')}</select></label>
     <div class="tsel"><label class="f">${tr('Giri')}<select id="vdLaps"><option value="eng"${LS.get('vd:laps','eng')!=='all'?' selected':''}>${tr('come Race Engineer')}</option><option value="all"${LS.get('vd:laps','eng')==='all'?' selected':''}>${tr('tutti i giri lanciati validi')}</option></select></label>
      <label class="f">${tr('Giro')}<select id="vdLap"><option value="">${tr('tutti')}</option>${laps.map(l=>`<option value="${l.i}"${sel.lap===l.i?' selected':''}>${tr('G')}${l.num} · ${fmtLap(l.time)}</option>`).join('')}</select></label>
      <label class="f">${tr('Tratto')}<select id="vdCor"><option value="">${tr('tutto il giro')}</option>${cor.map(c=>`<option value="${c.k}"${sel.c==String(c.k)?' selected':''}>T${c.k} · ${Math.round(c.dS)}–${Math.round(c.dE)} m</option>`).join('')}<option value="r"${sel.c==='r'?' selected':''}>${tr('intervallo…')}</option></select></label>
@@ -10154,11 +10360,14 @@ function techDraw(S,laps){const host=$('#techP');const X=techData(S,laps);const 
      <label class="f tsb">${tr('Confronta con (B)')}<select id="vdB"><option value="">${tr('nessuna')}</option>${others.map(o=>`<option value="${esc(o.id)}"${SB===o?' selected':''}>${esc((o.meta?.date||'')+' '+(o.meta?.time||'').slice(0,5)+' · '+(o.label||o.name))}</option>`).join('')}</select></label>
      <button type="button" class="btn icon" id="vdFull" title="${esc(tr(TECH.full?'Riduci':'Ingrandisci il pannello'))}" aria-pressed="${TECH.full}">${TECH.full?'⤡':'⤢'}</button></div></div>
    ${sesSetupHTML(S)}
-   ${XB?`<div class="${cond.length?'pcw2':'pcok'} tcond">${cond.length?`<b>⚠ ${tr('A e B non sono nelle stesse condizioni')}:</b> ${cond.map(c=>`<span>${esc(c)}</span>`).join('')}<small>${tr('Le differenze possono venire da qui e non dal setup.')}</small>`:`✓ ${tr('A e B in condizioni simili (pista, carburante, mescola, bagnato).')}`} <span class="muted small">A: ${X.laps.length} ${tr('giri')} · B: ${XB.laps.length} ${tr('giri')}</span></div>`:''}
+   ${techOverviewHTML(S,X)}
+   ${XB?`<div class="${cond.length?'pcw2':'pcok'} tcond">${cond.length?`<b>⚠ ${tr('A e B non sono nelle stesse condizioni')}:</b> ${cond.map(c=>`<span>${esc(c)}</span>`).join('')}<small>${tr('Le differenze possono venire da qui e non dal setup.')}</small>`:`✓ ${tr('Nessuna differenza rilevata nei dati disponibili. Controlla anche le condizioni non registrate.')}`} <span class="muted small">A: ${X.laps.length} ${tr('giri')} · B: ${XB.laps.length} ${tr('giri')}</span></div>`:''}
    <nav class="ttabs" role="tablist">${TECH_TABS.map(([k,l])=>`<button type="button" role="tab" data-tt="${k}" aria-selected="${k===tab}">${tr(l)}</button>`).join('')}</nav>
    <div class="tbody">${body}</div></div>`;
+  host.querySelectorAll('.tbody table').forEach(t=>{const wrap=document.createElement('div');wrap.className='ttable';t.before(wrap);wrap.append(t);});
   techBind(S,X);sesSetupBind(S);setTimeout(techFocus,60);}
 function techBind(S,X){const host=$('#techP');const setSel=o=>{LS.set('vd:sel',{...techSel(),...o});renderTech();};
+  const setup=$('#techSetup');if(setup)setup.onchange=()=>{const original=$('#suFile');original.value=setup.value;original.dispatchEvent(new Event('change'));};
   host.querySelectorAll('[data-tt]').forEach(b=>b.onclick=()=>{TECH.tab=b.dataset.tt;LS.set('vd:tab',TECH.tab);TECH.ev=null;renderTech();});
   const on=(id,f)=>{const e=$('#'+id);if(e)e.onchange=()=>f(e.value);};
   on('vdLaps',v=>{LS.set('vd:laps',v);LS.set('vd:sel',{});renderTech();});on('vdLap',v=>setSel({lap:v===''?null:+v}));
@@ -10169,18 +10378,23 @@ function techBind(S,X){const host=$('#techP');const setSel=o=>{LS.set('vd:sel',{
   const openEv=d=>{TECH.ev=d;if(TECH.tab!=='ev'){TECH.tab='ev';LS.set('vd:tab','ev');techDraw(S,X.laps);}techEvDetail(S,d);host.querySelectorAll('.tevr').forEach(r=>r.classList.toggle('on',r.dataset.li==d.li&&r.dataset.t==d.t&&r.dataset.w===d.w));};
   host.querySelectorAll('.tevr').forEach(r=>r.onclick=()=>openEv({...r.dataset}));
   host.querySelectorAll('.tcgo').forEach(b=>b.onclick=()=>openEv({...b.dataset}));
-  host.querySelectorAll('.tcpt').forEach(b=>b.onclick=()=>{const su=typeof DIAG!=='undefined'&&DIAG&&DIAG.S===S?DIAG.su:byId($('#suFile')?.value);const c=techCards(S,X.laps,su,X).find(x=>x.id===b.dataset.id);if(!c)return;techStartTest(S,X.laps,c,su);renderTech();toast(tr('Prova iniziata: cambia solo questo nel gioco, poi carica la nuova telemetria'));});
+  host.querySelectorAll('.tcpt').forEach(b=>b.onclick=()=>{const su=typeof DIAG!=='undefined'&&DIAG&&DIAG.S===S?DIAG.su:analysisSetup(S);const c=techCards(S,X.laps,su,X).find(x=>x.id===b.dataset.id);if(!c)return;techStartTest(S,X.laps,c,su);renderTech();toast(tr('Prova iniziata: cambia solo questo nel gioco, poi carica la nuova telemetria'));});
   if(TECH.ev&&TECH.tab==='ev')techEvDetail(S,TECH.ev);}
 // the guided test of ui45 (ptests), with a metric measured at the place of the card
 function techStartTest(S,laps,c,su){const L=ptAll().filter(t=>!(t.venue===S.meta?.venue&&!t.closed&&(t.car||'').toLowerCase()===(proCarOf(S)||'').toLowerCase()));
   const P=typeof proPace==='function'?proPace(S):null;
-  L.push({id:'pt'+Date.now(),at:Date.now(),venue:S.meta?.venue||'',car:proCarOf(S),cardId:c.id,problem:c.t,change:{label:c.fx?.label||'',dir:c.fx?.dir||'',key:c.fx?.key||'',now:c.fx?.now||''},metric:'loc',loc:c.pt,
-    hyp:`${tr(c.fx?.label||'')}: ${c.fx?.dir||''} → ${c.t}`,base:{id:S.id,when:`${S.meta?.date||''} ${(S.meta?.time||'').slice(0,5)}`,per:c.rep.per,lapTimes:laps.map(l=>l.time),pace:P?.t,best:S.best?.time,n:laps.length,lm:engLapMode(),
-      track:S.cond?.track?.avg,cond:S.cond?.label,su:su?.name||'',val:c.fx?.key&&su?suValAny(su,c.fx.key):null,fuel:su?suFind(su,'GENERAL',/^FuelCapacity/)||suFind(su,'GENERAL',/^FuelSetting/):null,cmp:su?suFind(su,'FRONTLEFT',/^CompoundSetting/):null}});ptSave(L);}
+  L.push({id:'pt'+Date.now(),at:Date.now(),venue:S.meta?.venue||'',car:proCarOf(S),cardId:c.id,problem:c.t,change:{label:c.fx?.label||'',dir:c.fx?.dir||'',key:c.fx?.key||'',sec:c.fx?.sec||null,now:c.fx?.now||''},metric:'loc',loc:c.pt,
+    hyp:`${tr(c.fx?.label||'')}: ${c.fx?.dir||''} → ${c.t}`,base:{conditions:vdConditions(S,laps,su),id:S.id,when:`${S.meta?.date||''} ${(S.meta?.time||'').slice(0,5)}`,per:c.rep.per,lapTimes:laps.map(l=>l.time),pace:P?.t,best:S.best?.time,n:laps.length,lm:engLapMode(),
+      track:S.cond?.track?.avg,cond:S.cond?.label,su:su?.name||'',val:c.fx?.key&&su?setupVal(su,c.fx.key,c.fx.sec||undefined):null,fuel:su?suFind(su,'GENERAL',/^FuelCapacity/)||suFind(su,'GENERAL',/^FuelSetting/):null,cmp:su?suFind(su,'FRONTLEFT',/^CompoundSetting/):null}});ptSave(L);}
 // before / after for a test with a place metric: the same metric at the same place in the new session, lap by lap
-function techJudge(t,S,laps){const p=t.loc;const now=techPerLapAt(S,laps,p.k,p.w,p.frac,p.field);const C=vdCompare(t.base.per||[],now,{better:p.better,minDiff:p.minDiff||0});
+function techJudge(t,S,laps,su){const p=t.loc;const now=techPerLapAt(S,laps,p.k,p.w,p.frac,p.field);const C=vdCompare(t.base.per||[],now,{better:p.better,minDiff:p.minDiff||0});
   const T=vdCompare(t.base.lapTimes||[],laps.map(l=>l.time),{better:-1,minDiff:0.05});
-  return {r:C.verdict==='migliorato'?'ok':C.verdict==='peggiorato'?'ko':'inc',why:C.why,C,T,now};}
+  const limits=t.base.conditions?vdCondDiffs(t.base.conditions,vdConditions(S,laps,su)):[];
+  if(t.venue&&t.venue!==S.meta?.venue)limits.push(tr('pista diversa'));
+  if(t.change?.key&&su&&t.base.val!=null&&setupVal(su,t.change.key,t.change.sec||undefined)===t.base.val)limits.push(tr('la modifica non risulta nel setup scelto'));
+  const a=chqAnalysis(S,ANA.find(x=>x.id===(p.k==='low'?'plat':p.k==='unload'?'load':'damp')));
+  if(a.st==='no')limits.push(tr('dati insufficienti per questa metrica'));
+  return {r:limits.length?'inc':C.verdict==='migliorato'?'ok':C.verdict==='peggiorato'?'ko':'inc',why:limits.length?limits.join(' · '):C.why,C,T,now};}
 
 // open «Analisi tecnica» on a tab, with a wheel or a card in view (from Setup Builder and Race Engineer)
 function techGo(tab,o={}){TECH.tab=tab;LS.set('vd:tab',tab);TECH.focus=o;LS.set('su:tab','dyn');$('#proNav .pn[data-n="tech"]')?.click();if(curView()!=='setup')showView('setup');renderTech();}
@@ -10251,11 +10465,13 @@ const muLocal=()=>/^(localhost|127\.0\.0\.1)$/.test(location.hostname)&&!!locati
 function muAge(){let t=0;Object.values(LIVE.drivers||{}).forEach(D=>{if(D.carAt>t)t=D.carAt;});return t?(Date.now()-t)/1000:null;}
 function muSteps(){const S=LIVE.status||{},team=teamParse(LS.get('live:team','')),local=muLocal();const me=LIVE.drivers?.[LIVE.myId||'local'];const age=muAge();const R=[];
   // 1. the program
-  R.push(local?{k:'good',t:tr('Programma avviato su questo PC'),d:S.local==='on'?tr('il bridge risponde'):tr('il bridge non risponde: chiudi e riapri DataEngineerBridge.exe')}
-    :{k:'bad',t:tr('Programma non avviato da qui'),d:tr('Apri DataEngineerBridge.exe sul PC con cui corri: la pagina giusta è http://localhost:8790. I link di invito funzionano solo con il programma avviato sul PC di chi li apre.')});
+  // on the web page (engineer) no program is needed: only who drives runs it
+  if(!local)R.push({k:'good',t:tr('Pagina web del Muretto'),d:tr('per seguire la squadra non serve installare niente: il programma serve solo a chi guida')});
+  else R.push({k:S.local==='on'?'good':'bad',t:tr('Programma avviato su questo PC'),d:S.local==='on'?tr('il bridge risponde'):tr('il bridge non risponde: chiudi e riapri DataEngineerBridge.exe')});
+
   // 2. the game
   const myFresh=me&&me.carAt&&Date.now()-me.carAt<8000;
-  R.push(myFresh?{k:'good',t:tr('Le Mans Ultimate in pista'),d:tr('i dati della tua auto arrivano')}:local&&S.local==='on'?{k:'warn',t:tr('Gioco non in pista'),d:tr('avvia Le Mans Ultimate ed esci dai box: i dati partono da soli')}:{k:'muted',t:tr('Gioco'),d:tr('serve il programma avviato')});
+  if(local)R.push(myFresh?{k:'good',t:tr('Le Mans Ultimate in pista'),d:tr('i dati della tua auto arrivano')}:local&&S.local==='on'?{k:'warn',t:tr('Gioco non in pista'),d:tr('avvia Le Mans Ultimate ed esci dai box: i dati partono da soli')}:{k:'muted',t:tr('Gioco'),d:tr('serve il programma avviato')});
   // 3. the team
   if(!team)R.push({k:'warn',t:tr('Nessuna squadra'),d:tr('apri il link di invito che ti hanno mandato (con il programma avviato) oppure crea una squadra'),act:'team'});
   else{const st=S.team;const host=team.r||LS.get('relay:url','')?tr('server della squadra'):team.h;
@@ -10336,7 +10552,7 @@ setTimeout(()=>{const m=$('#mLive');if(!m||$('#lvProbe'))return;const sel=$('#lv
 // ================= SETUP =================
 let DIAG=null;
 RENDER.setup=()=>{
-  const su=byId($('#suFile').value),S=active()?.S;
+  const S=active()?.S,su=analysisSetup(S);
   const c=cfg();[['#cfgPmin','pmin'],['#cfgPmax','pmax'],['#cfgIOmin','iomin'],['#cfgIOmax','iomax'],['#cfgBmax','bmax'],['#cfgRH','rh'],['#cfgTmin','tmin'],['#cfgTmax','tmax']].forEach(([id,k])=>{const el=$(id);if(document.activeElement!==el)el.value=c[k];});
   renderSheet(su);
   const w=[];let mismatch=false;if(su&&S){const car=(S.meta.car||S.merged?.d.car||'').toLowerCase(),sc=su.car.toLowerCase();
@@ -10344,6 +10560,8 @@ RENDER.setup=()=>{
     if(car&&!same){mismatch=true;w.push(`Il setup è per «${su.car}», la telemetria è di «${S.meta.car||S.merged?.d.car}». I controlli sotto usano solo la telemetria e non mostrano i valori «ora» del setup: carica il .svm di questa auto.`);}
     else if(!car)w.push(`Il file .ld non indica l'auto: verifica che telemetria e setup (${su.car}) siano della stessa vettura.`);}
   $('#suWarn').innerHTML=w.map(x=>`<div class="warnbar" style="margin-bottom:10px">${esc(x)}</div>`).join('');
+  const context=$('#setupContext');context.innerHTML=S&&LS.get('su:tab','eng')!=='dyn'?sesSetupHTML(S):'';
+  if(S)sesSetupBind(S,context);
   if(!S){$('#suDiag').innerHTML='<div class="empty">Scegli una telemetria .ld in alto: i controlli partono da lì.</div>';DIAG=null;renderDoctor();return;}
   const use=engLaps(S);
   if(!use.length){$('#suDiag').innerHTML='<div class="empty">Servono giri completi.</div>';return;}
@@ -10462,7 +10680,7 @@ async function runAI(turns,outEl,tier='complex'){
 }
 let suTurns=[];
 function setupPrompt(){
-  const su=byId($('#suFile').value),S=active()?.S;
+  const S=active()?.S,su=analysisSetup(S);
   const probs=$$('#suChips .pchip[aria-pressed="true"]').map(b=>b.dataset.label||b.textContent),txt=$('#suText').value.trim();
   const tele=DIAG&&S?`TELEMETRIA (${S.label}, pilota ${S.meta.driver}, auto ${S.meta.car||S.merged?.d.car||'n.d.'}):\n- `+DIAG.summary.join('\n- '):'Nessuna telemetria.';
   return `Sei un ingegnere di pista esperto di Le Mans Ultimate (simulatore, fisica rFactor 2). Aiuti un pilota sim racing a risolvere problemi di guida modificando il setup. Rispondi in italiano, concreto.
