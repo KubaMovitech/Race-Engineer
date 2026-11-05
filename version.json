@@ -1,17 +1,17 @@
 {
- "version": "2.20.0",
+ "version": "2.21.0",
  "date": "2026-11-05",
  "notes": [
-  "Muretto dal browser: link per chi fa l'ingegnere, senza installare niente",
-  "Analisi tecnica basata sul setup confermato della sessione, schede più corte",
-  "Invita un compagno più semplice: link per chi guida e per l'ingegnere"
+  "Muretto in una schermata: classifica vicina, la tua auto, gomme, energia, mappa ed eventi",
+  "Classifica: energia virtuale a pillola con giri che restano, senza benzina",
+  "Solo italiano"
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "4ab046f22566a1c47cf5332c5d2ba9625fda1b2e8e78d7777c2c74babdb5ce84"
+  "sha256": "bc05cfe73b09097891d5d86c60c2cc7515487049ed61bf877111cf68688c1c6d"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "1826d5fdd133064a772fc12e596b00a0c3651e1ad87ae64a7ae199b8b708fa74"
+  "sha256": "632cc361b60dbff042635d06325ef349f0d58aa5d24078cdafd0667179364fd5"
  }
 }
