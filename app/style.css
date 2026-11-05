@@ -770,3 +770,6 @@ body:not(.vwide) #lvToasts{display:none}
 @media (max-width:560px){.gw3,.gw3.two{grid-template-columns:minmax(0,1fr)}.gwtyres{gap:8px 10px}.gwt{gap:6px;min-width:0}.gwr{width:52px;height:52px}.gwv b{font-size:.8rem}.gwv i{width:13px;height:13px;font-size:8px;line-height:13px}
   .gwd{font-size:.68rem;min-width:0}.gwd b{font-size:.85rem}.gwtab{font-size:.74rem}.gwtab td,.gwtab th{padding:4px 3px}.gwbox{padding:9px}}
 @media (max-width:560px){.gwbox{overflow-x:auto}.gwtab th{white-space:normal}.gwtab td small{display:block;margin-left:0}}
+
+/* results (.xml): the simple lap table; fuel, VE, wear and top speed only on request */
+.xlaps:not(.xfull) .xadv{display:none}.xlaps .panel-h .chk{margin-left:auto}.xnote{margin:0 0 10px}.xinfo{margin-top:8px}.xinfo summary{cursor:pointer;color:var(--muted);font-size:.86rem}

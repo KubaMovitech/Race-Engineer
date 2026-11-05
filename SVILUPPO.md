@@ -64,3 +64,9 @@ pezzo di comportamento che dipende dall'ordine.
 ## Solo italiano (dalla 2.21)
 - L'inglese è stato tolto: niente dizionario (`i18n_dict.js`) né pulsante IT/EN. `tr()` resta e restituisce il testo
   com'è, così il codice esistente non cambia; i testi nuovi si scrivono direttamente in italiano.
+
+## Menu a 4 sezioni (dalla 2.22)
+- Sessione (Dashboard, Telemetria, Coach, Sessioni, Progressi), Setup (Race Engineer, Analisi tecnica, Setup Builder, BOP),
+  Muretto, Libreria (`PRO_SEC` in `app/ui41.js`). Ogni pagina ha ancora il suo pulsante `#proNav .pn[data-n=…]`:
+  per aprirla dal codice usare `proGo(id)`. Le pagine della sezione aperta stanno sotto la sua voce; con il menu
+  stretto (≤ 1100 px) diventano schede in cima alla pagina (`#proSecTabs`).

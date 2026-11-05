@@ -10,7 +10,8 @@ const advKey=(v,t)=>'adv:'+v+(t?':'+t:'');
 let advQ=0;
 function advApply(){if(!proLook())return;const v=curView();const t=v==='setup'?LS.get('su:tab','eng'):'';
   $$('.adv-off').forEach(e=>e.classList.remove('adv-off'));$$('.advbar').forEach(b=>{if(b.dataset.k!==advKey(v,t))b.remove();});
-  const R=ADV.find(r=>r[0]===v&&r[1]===t);if(!R)return;const sec=$('#v-'+v);if(!sec)return;
+  // the results-only view (.xml) is already short: nothing goes behind «Mostra dettagli»
+  const R=v==="stint"&&active()?.xml?null:ADV.find(r=>r[0]===v&&r[1]===t);if(!R)return;const sec=$('#v-'+v);if(!sec)return;
   const els=[...new Set(R[2].flatMap(s=>{try{return [...sec.querySelectorAll(s)];}catch(e){return [];}}))].filter(e=>!e.classList.contains('advbar')&&!e.classList.contains('sutab-off'));
   if(!els.length)return;const open=LS.get(advKey(v,t),false)===true;
   els.forEach(e=>e.classList.toggle('adv-off',!open));

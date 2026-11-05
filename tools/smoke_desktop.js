@@ -20,7 +20,7 @@ try{for(const lang of ['it'])for(const [width,height] of [[1366,768],[1920,1080]
   await p.setInputFiles('#fileIn',[setup('Desktop-A.svm',150),setup('Desktop-B.svm',180)]);
   await p.waitForFunction(()=>svms().length===2);
   await p.evaluate(()=>document.querySelectorAll('.modal').forEach(m=>m.hidden=true));
-  await p.locator('#proNav .pn[data-n="tech"]').click();await p.waitForSelector('#techSetup');
+  await p.evaluate(n=>proGo(n),'tech');await p.waitForSelector('#techSetup');
   await p.selectOption('#techSetup','svm:Desktop-A.svm');await p.locator('[data-ses="ok"]').click();
   await p.waitForFunction(()=>sesSetupGet(active().S)?.st==='confermato');
   await p.selectOption('#techSetup','svm:Desktop-B.svm');
@@ -32,12 +32,12 @@ try{for(const lang of ['it'])for(const [width,height] of [[1366,768],[1920,1080]
   await p.setInputFiles('#fileIn',setup('Desktop-A.svm',220));
   await p.waitForFunction(()=>setupVal(byId('svm:Desktop-A.svm'),'PressureSetting','FRONTLEFT')==='220 kPa');
   assert.equal(await p.evaluate(()=>setupVal(DIAG.su,'PressureSetting','FRONTLEFT')),'150 kPa');checks++;
-  await p.locator('#proNav .pn[data-n="setb"]').click();
+  await p.evaluate(n=>proGo(n),'setb');
   await p.locator('#pSetCar .pvr[data-id="svm:Desktop-B.svm"]').click();
   await p.waitForFunction(()=>setupVal(DIAG.su,'PressureSetting','FRONTLEFT')==='180 kPa');checks++;
   await p.locator('#setupContext [data-ses="saved"]').click();
   await p.waitForFunction(()=>setupVal(DIAG.su,'PressureSetting','FRONTLEFT')==='150 kPa');checks++;
-  await p.locator('#proNav .pn[data-n="tech"]').click();await p.waitForSelector('#techSetup');
+  await p.evaluate(n=>proGo(n),'tech');await p.waitForSelector('#techSetup');
   for(const tab of ['q','damp','axle','plat','ev','diag']){
     await p.locator(`#techP .ttabs [data-tt="${tab}"]`).click();
     await p.waitForSelector(`#techP .ttabs [data-tt="${tab}"][aria-selected="true"]`);
@@ -47,11 +47,11 @@ try{for(const lang of ['it'])for(const [width,height] of [[1366,768],[1920,1080]
     assert(overflow.scroll<=overflow.width+1,JSON.stringify({lang,width,tab,...overflow}));checks++;
   }
   if(screens){fs.mkdirSync(screens,{recursive:true});await p.screenshot({path:path.join(screens,`${lang}-${width}-technical.png`)});}
-  await p.locator('#proNav .pn[data-n="tel"]').click();await p.waitForSelector('#twMap');
+  await p.evaluate(n=>proGo(n),'tel');await p.waitForSelector('#twMap');
   assert.equal(await p.evaluate(()=>document.querySelector('#twMap').getBoundingClientRect().top<innerHeight),true);checks++;
   assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true);checks++;
   if(screens)await p.screenshot({path:path.join(screens,`${lang}-${width}-telemetry.png`)});
-  await p.locator('#proNav .pn[data-n="live"]').click();await p.waitForSelector('#lvInviteLink');
+  await p.evaluate(n=>proGo(n),'live');await p.waitForSelector('#lvInviteLink');
   await p.locator('#lvInviteLink').click();await p.waitForSelector('#mInvite:not([hidden])');
   assert.equal(await p.locator('#inviteUrl').count(),0);checks++;
   await p.locator('#mInvite [data-close]').click();

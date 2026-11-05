@@ -409,3 +409,20 @@ html[data-look="pro"] .pevs .pbl{font-size:11px}
   html[data-look="pro"] .pdt td:nth-child(3){position:absolute;right:0}html[data-look="pro"] .pdt tr{position:relative}
   html[data-look="pro"] .pdt td:first-child{padding-right:80px}
 }
+
+/* ---------- 2.22: four sections in the side menu ---------- */
+html[data-look="pro"] .psec{display:flex;flex-direction:column}
+html[data-look="pro"] .psub{display:none;flex-direction:column;gap:1px;margin:0 0 8px 0;padding-left:40px}
+html[data-look="pro"] .psec.on .psub:not([hidden]){display:flex}
+html[data-look="pro"] .psub .pn{padding:7px 10px;border-left-width:2px;border-radius:8px;justify-content:flex-start}html[data-look="pro"] .psub .pn span{text-align:left}
+html[data-look="pro"] .psub .pn b{font-size:.9rem;font-weight:500;color:var(--psil)}
+html[data-look="pro"] .psub .pn[aria-current="page"] b{color:#fff;font-weight:600}
+html[data-look="pro"] .pmain[aria-current="true"]{color:#fff}html[data-look="pro"] .pmain[aria-current="true"] b{color:var(--pacc2,#E6C877)}
+html[data-look="pro"] .pmain[aria-current="true"] svg{opacity:1;stroke:var(--pacc2,#E6C877)}
+.psectabs{display:none}
+@media (max-width:1100px){
+  html[data-look="pro"] .psub{display:none!important}
+  html[data-look="pro"] .psectabs:not([hidden]){display:flex;gap:4px;flex-wrap:wrap;margin:0 0 12px}
+  .psectabs .pst{border:1px solid var(--line);background:transparent;color:var(--psil);border-radius:999px;padding:6px 14px;cursor:pointer;font:600 .86rem var(--f-body)}
+  .psectabs .pst[aria-current="page"]{border-color:var(--pacc);color:#fff;background:var(--psel)}}
+@media (max-width:760px){html[data-look="pro"] .psec{display:contents}html[data-look="pro"] .pmain{display:flex!important;flex:1 1 0;min-width:0}}

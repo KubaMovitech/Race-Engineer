@@ -18,7 +18,6 @@ if(LS.get('live:sub','ov')==='tv')LS.set('live:sub','ov');
 // ---------- the Libreria page ----------
 PRO_ICONS.libr='<path d="M4 4h4v16H4zM10 4h4v16h-4z"/><path d="M16.5 4.5l3.8 1 -3.9 15 -3.8-1z"/>';
 PRO_NAV.splice(1,0,['libr','Libreria','Setup e telemetrie del PC',['lib']]);
-PRO_GROUPS[0][1].splice(1,0,'libr');
 (function(){const tabs=$('.tabs');if(tabs&&!$('#t-lib')){const b=document.createElement('button');b.className='tab';b.setAttribute('role','tab');b.id='t-lib';b.dataset.view='lib';b.setAttribute('aria-selected','false');b.textContent=tr('Libreria');b.onclick=()=>showView('lib');tabs.appendChild(b);}
   const m=$('main');if(m&&!$('#v-lib')){const s=document.createElement('section');s.className='view';s.id='v-lib';s.hidden=true;s.innerHTML='<div id="libBody"></div>';m.appendChild(s);}})();
 
@@ -133,7 +132,7 @@ setTimeout(()=>{const row=$('#mSettings .lookrow');if(!row||$('#liveOn'))return;
 
 (function(){const st=document.createElement('style');st.textContent=`
 /* Muretto off: no menu entry, no Gara group, no Muretto card on the welcome page */
-html.no-live #proNav .pn[data-n="live"],html.no-live #proNav .pgh:nth-last-of-type(1),html.no-live .wcard.w2,html.no-live #t-live,html.no-live .mtab[data-group="live"]{display:none!important}
+html.no-live #proNav .psec[data-s="live"],html.no-live #proNav .pn[data-n="live"],html.no-live .wcard.w2,html.no-live #t-live,html.no-live .mtab[data-group="live"]{display:none!important}
 /* no OBS overlay and no TV direction */
 #lvObs,.lvtabs [data-sub="tv"]{display:none!important}
 html[data-look="pro"][data-pnav="libr"] .hero{display:none}
