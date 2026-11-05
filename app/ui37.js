@@ -3,12 +3,19 @@
 // ---------- 1. the team: one invite link instead of codes to copy ----------
 // The code still exists (it is what links the bridges of the team), but nobody has to see it: the engineer sends a
 // link, the teammate opens it on his PC with Data Engineer running, and both the page and his bridge join the team.
+// The same app is also a web page (GitHub Pages, from the root of the repository: the published version).
+// Whoever follows the race as engineer opens this link in any browser: no program to install. The team code stays
+// after the «#», which browsers never send to the server; the data arrive encrypted from the team server.
+const WEB_URL='https://kubamovitech.github.io/Race-Engineer/';
+function engineerUrl(){const c=LS.get('live:team','');return c?WEB_URL+'#muretto&t='+encodeURIComponent(c):'';}
 function teamInviteUrl(){const c=LS.get('live:team','');return c?'http://localhost:8790/#join&t='+encodeURIComponent(c):'';}
 function teamInvite(){inviteFriend();}
 // opening an invite link
-(function(){const m=/^#join&t=(.+)$/.exec(location.hash);if(!m)return;let code='';try{code=decodeURIComponent(m[1]).trim();}catch(e){}history.replaceState(null,'',location.pathname);
+(function(){const m=/^#(join|muretto)&t=(.+)$/.exec(location.hash);if(!m)return;let code='';try{code=decodeURIComponent(m[2]).trim();}catch(e){}history.replaceState(null,'',location.pathname);const eng=m[1]==='muretto';
   if(!teamParse(code)){setTimeout(()=>toast(tr('Link della squadra non valido')),900);return;}
   LS.set('live:team',code);LS.set('tab','live');
+  // engineer link: only this page joins (a bridge on this PC, if any, is left as it is), engineer profile, Muretto on
+  if(eng){LS.set('live:off',false);LS.set('mu:prof','ingegnere');LS.set('live:notif','all');LS.set('live:sub','ov');liveStart();setTimeout(()=>toast(tr('Sei nel Muretto della squadra')),900);return;}
   if(isBridgeHost())bridgeTeam(code).then(()=>{toast(tr('Sei nella squadra: il bridge si riavvia con il nuovo collegamento'));setTimeout(()=>location.reload(),4000);}).catch(()=>{toast(tr('Sei nella squadra'));liveStart();});
   else{liveStart();setTimeout(()=>toast(tr('Sei nella squadra')),900);}})();
 // the page knows the team but the bridge of this PC does not (first start, reinstall): give it the same team, once

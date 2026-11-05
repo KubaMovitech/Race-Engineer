@@ -11,11 +11,13 @@ const muLocal=()=>/^(localhost|127\.0\.0\.1)$/.test(location.hostname)&&!!locati
 function muAge(){let t=0;Object.values(LIVE.drivers||{}).forEach(D=>{if(D.carAt>t)t=D.carAt;});return t?(Date.now()-t)/1000:null;}
 function muSteps(){const S=LIVE.status||{},team=teamParse(LS.get('live:team','')),local=muLocal();const me=LIVE.drivers?.[LIVE.myId||'local'];const age=muAge();const R=[];
   // 1. the program
-  R.push(local?{k:S.local==='on'?'good':'bad',t:tr('Programma avviato su questo PC'),d:S.local==='on'?tr('il bridge risponde'):tr('il bridge non risponde: chiudi e riapri DataEngineerBridge.exe')}
-    :{k:'bad',t:tr('Programma non avviato da qui'),d:tr('Apri DataEngineerBridge.exe sul PC con cui corri: la pagina giusta è http://localhost:8790. I link di invito funzionano solo con il programma avviato sul PC di chi li apre.')});
+  // on the web page (engineer) no program is needed: only who drives runs it
+  if(!local)R.push({k:'good',t:tr('Pagina web del Muretto'),d:tr('per seguire la squadra non serve installare niente: il programma serve solo a chi guida')});
+  else R.push({k:S.local==='on'?'good':'bad',t:tr('Programma avviato su questo PC'),d:S.local==='on'?tr('il bridge risponde'):tr('il bridge non risponde: chiudi e riapri DataEngineerBridge.exe')});
+
   // 2. the game
   const myFresh=me&&me.carAt&&Date.now()-me.carAt<8000;
-  R.push(myFresh?{k:'good',t:tr('Le Mans Ultimate in pista'),d:tr('i dati della tua auto arrivano')}:local&&S.local==='on'?{k:'warn',t:tr('Gioco non in pista'),d:tr('avvia Le Mans Ultimate ed esci dai box: i dati partono da soli')}:{k:'muted',t:tr('Gioco'),d:tr('serve il programma avviato')});
+  if(local)R.push(myFresh?{k:'good',t:tr('Le Mans Ultimate in pista'),d:tr('i dati della tua auto arrivano')}:local&&S.local==='on'?{k:'warn',t:tr('Gioco non in pista'),d:tr('avvia Le Mans Ultimate ed esci dai box: i dati partono da soli')}:{k:'muted',t:tr('Gioco'),d:tr('serve il programma avviato')});
   // 3. the team
   if(!team)R.push({k:'warn',t:tr('Nessuna squadra'),d:tr('apri il link di invito che ti hanno mandato (con il programma avviato) oppure crea una squadra'),act:'team'});
   else{const st=S.team;const host=team.r||LS.get('relay:url','')?tr('server della squadra'):team.h;

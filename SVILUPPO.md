@@ -52,3 +52,11 @@ pezzo di comportamento che dipende dall'ordine.
 - Le analisi ammortizzatori richiedono una frequenza effettiva di almeno 50 Hz. La velocità misurata mantiene
   la propria frequenza; se manca una sorgente utilizzabile non si deriva la velocità e non si propongono
   modifiche fondate su quella metrica. La corsa sospensioni resta consultabile quando disponibile.
+
+## Pagina web (Muretto per l'ingegnere)
+- GitHub Pages pubblica la radice del repository: `index.html` apre `Data_Engineer.html`, cioè la versione pubblicata
+  (si aggiorna da sola a ogni release). Indirizzo: https://kubamovitech.github.io/Race-Engineer/
+- `#muretto&t=<codice>` (link «Per chi fa l'ingegnere» in Invita un compagno) entra nella squadra solo con la pagina,
+  profilo Ingegnere, senza programma. Il codice resta dopo «#» e non arriva al server. `#join&t=` resta il link per chi
+  guida (il bridge del suo PC entra nella squadra).
+- Chi guida ha sempre bisogno del bridge: il browser non può leggere la memoria condivisa del gioco.
