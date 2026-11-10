@@ -1,17 +1,18 @@
 {
- "version": "2.22.0",
- "date": "2026-11-05",
+ "version": "2.23.0",
+ "date": "2026-11-10",
  "notes": [
-  "Menu a 4 sezioni: Sessione, Setup, Muretto, Libreria",
-  "Risultati .xml più semplici",
-  "Analisi tecnica con meno testo"
+  "Nuova grafica Grafite, l'unica dell'app",
+  "Menu in una riga in alto",
+  "Tolte le vecchie grafiche",
+  "Telefono e testi fuori dai riquadri sistemati"
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "94a9734b6d099072ebfbb42121afa42980b9ae50a58f7ba5d4559550be2ab3f4"
+  "sha256": "1848bd15acdf4fccc3a523e1a7f63b4f56243b35d1ffffa47fa9c8402629ecbf"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "4d48d87e523c6a2e76f2d60928f6f526c0f9307c6a62df15444ea6f5b6ac1f8f"
+  "sha256": "dded230790580860d8c2774830308dcd60195b4e4d31ee6ed33fc8cdafd3cc66"
  }
 }
