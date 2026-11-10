@@ -1156,123 +1156,15 @@ html[data-skin="ws"] .panel>h3::before{background:var(--lapA);box-shadow:none}
   html[data-skin="wall"] .lvsess .cchip:nth-child(odd){border-right:1px solid var(--line)}
 }
 
-/* ================= CARBON TECH (html[data-look="carbon"], on top of both skins) =================
-   A constructor's engineering look: carbon weave, red and white, panels with cut corners and a short red bar,
-   Chakra Petch for titles and the numbers that matter. It overrides the colours of "ws" and "wall"; layouts stay. */
-html[data-look="carbon"]{
-  --bg:#0B0C0F; --panel:#16181D; --panel2:#1D2026; --band:#111316; --line:rgba(255,255,255,.10); --grid:#1A1C21; --trackbed:#24272D;
-  --ink:#F3F4F6; --muted:#8B9098; --faint:#5C6068; --accent:#FF1A2D; --accent2:#B3000F; --accent-soft:rgba(255,26,45,.12);
-  --lapA:#F3F4F6; --lapB:#FFB020; --cyan:#F3F4F6; --best:#B46BFF; --good:#2BE38A; --warn:#FFD23F; --bad:#FF3B4E;
-  --hdr:#08090B; --hdr-ink:#F3F4F6; --hdr-muted:#8B9098; --hdr-line:rgba(255,255,255,.10); --edge:rgba(255,255,255,.10); --edge2:rgba(255,255,255,.2);
-  --r:0px; --glow:rgba(255,26,45,.35); --glowc:rgba(255,255,255,.15);
-  --f-display:"Chakra Petch","Barlow Condensed","Titillium Web",sans-serif; --cut:14px;
-}
-html[data-look="carbon"] body{background:
-  radial-gradient(1100px 700px at 82% -6%,rgba(255,26,45,.13),transparent 60%),
-  repeating-linear-gradient(45deg,rgba(255,255,255,.022) 0 2px,transparent 2px 4px),
-  repeating-linear-gradient(-45deg,rgba(0,0,0,.35) 0 2px,transparent 2px 4px),#0B0C0F;background-attachment:fixed}
-/* header: brand slab, skewed tabs, the active one white */
-html[data-look="carbon"] .top{background:linear-gradient(180deg,rgba(0,0,0,.82),rgba(8,9,11,.9));backdrop-filter:blur(10px);border-bottom:1px solid var(--line);box-shadow:none}
-html[data-look="carbon"] .top::after{display:block;left:0;right:auto;width:180px;height:2px;background:var(--accent);opacity:1;box-shadow:none}
-html[data-look="carbon"] .brand .logo{filter:none}html[data-look="carbon"] .brand b{font-family:"Chakra Petch",var(--f-display);letter-spacing:.12em}
-html[data-look="carbon"] .mtabs{gap:2px;padding-left:8px}
-html[data-look="carbon"] .mtab{font-family:"Chakra Petch",var(--f-display);font-weight:600;font-size:.86rem;letter-spacing:.24em;color:var(--muted);clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);padding:0 22px;background:transparent}
-html[data-look="carbon"] .mtab:hover{color:#fff;background:rgba(255,255,255,.05)}
-html[data-look="carbon"] .mtab[aria-selected="true"]{background:#F3F4F6;color:#0B0C0F}
-html[data-look="carbon"] .mtab[aria-selected="true"]::after{display:none}
-html[data-look="carbon"] .mtab .livedot{background:var(--accent)}
-html[data-look="carbon"] .top>.tabs.subtabs{background:transparent;gap:2px;padding:6px 16px 8px;border-top:1px solid rgba(255,255,255,.05)}
-html[data-look="carbon"] .top>.tabs.subtabs .tab{clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);border:0;border-radius:0;background:rgba(255,255,255,.04);font-family:"Chakra Petch",var(--f-display);font-weight:600;letter-spacing:.2em;color:var(--muted);min-height:28px;padding:0 18px;box-shadow:none}
-html[data-look="carbon"] .top>.tabs.subtabs .tab:hover{background:rgba(255,255,255,.08);color:#fff}
-html[data-look="carbon"] .top>.tabs.subtabs .tab[aria-selected="true"]{background:var(--accent);color:#fff;box-shadow:none}
-/* panels with cut corners and a red bar on the top-left */
-html[data-look="carbon"] .panel,html[data-look="carbon"] .wcard,html[data-look="carbon"] .lbcard,html[data-look="carbon"] .suscard{
-  background:linear-gradient(180deg,rgba(24,26,31,.94),rgba(14,15,18,.96));border:1px solid var(--line);border-radius:0;box-shadow:0 18px 40px -18px rgba(0,0,0,.8);
-  clip-path:polygon(var(--cut) 0,100% 0,100% calc(100% - var(--cut)),calc(100% - var(--cut)) 100%,0 100%,0 var(--cut))}
-html[data-look="carbon"] .panel::before,html[data-look="carbon"] .wcard::before{display:block;content:"";position:absolute;left:var(--cut);top:0;width:60px;height:3px;inset:auto;left:14px;top:0;background:var(--accent);border-radius:0;opacity:1;box-shadow:none}
-html[data-look="carbon"] .panel:hover{border-color:var(--edge2)}
-html[data-look="carbon"] .panel>.panel-h:first-child,html[data-look="carbon"] .panel>h3:first-child{background:none;border-radius:0;border-bottom:1px solid var(--line)}
-html[data-look="carbon"] .panel-h h2,html[data-look="carbon"] .panel-h h3,html[data-look="carbon"] .panel>h3{font-family:"Chakra Petch",var(--f-display);font-weight:600;font-size:.78rem;letter-spacing:.32em;color:#C7CBD1}
-html[data-look="carbon"] .panel-h h3::before,html[data-look="carbon"] .panel-h h2::before,html[data-look="carbon"] .panel>h3::before{width:6px;height:6px;background:var(--accent);box-shadow:none;transform:skewX(-12deg)}
-/* controls */
-html[data-look="carbon"] .btn{clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);border-radius:0;background:rgba(255,255,255,.06);border:0;font-family:"Chakra Petch",var(--f-display);font-weight:600;letter-spacing:.14em;padding:7px 18px;box-shadow:none}
-html[data-look="carbon"] .btn:hover{background:rgba(255,255,255,.12)}
-html[data-look="carbon"] .btn.primary{background:var(--accent);color:#fff;box-shadow:none}html[data-look="carbon"] .btn.primary:hover{background:#FF3A4A}
-html[data-look="carbon"] .btn.icon{clip-path:none;padding:6px 10px}
-html[data-look="carbon"] select,html[data-look="carbon"] input[type=number],html[data-look="carbon"] input[type=text],html[data-look="carbon"] input[type=password],html[data-look="carbon"] input:not([type]),html[data-look="carbon"] textarea{background:#0D0E11!important;border:1px solid var(--edge2)!important;border-radius:0!important}
-html[data-look="carbon"] select:focus,html[data-look="carbon"] input:focus,html[data-look="carbon"] textarea:focus{border-color:#fff!important;box-shadow:0 0 0 1px rgba(255,255,255,.4)}
-html[data-look="carbon"] .seg{border-radius:0;overflow:hidden}html[data-look="carbon"] .seg button[aria-pressed="true"]{background:#F3F4F6;color:#0B0C0F;box-shadow:none}
-html[data-look="carbon"] input[type=range]{accent-color:var(--accent)}
-/* session title and condition chips */
-html[data-look="carbon"] .hero .ey{color:var(--accent);text-shadow:none;letter-spacing:.3em;font-family:"Chakra Petch",var(--f-mono)}
-html[data-look="carbon"] .hero h1,html[data-look="carbon"] .wtop h1{background:none;-webkit-background-clip:initial;background-clip:initial;color:#fff;font-family:"Chakra Petch",var(--f-display);font-weight:700;letter-spacing:.02em}
-html[data-look="carbon"] .cchip{background:rgba(22,24,29,.9);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:0;clip-path:polygon(0 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%)}
-html[data-look="carbon"] .cchip b{font-family:"Chakra Petch",var(--f-mono);font-size:1.05rem}
-/* KPI tiles: cut corner, red tick, technical numbers */
-html[data-look="carbon"] .kpi{background:linear-gradient(180deg,rgba(29,32,38,.92),rgba(17,19,22,.95));border:1px solid var(--line);border-radius:0;clip-path:polygon(0 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%)}
-html[data-look="carbon"] .kpi::before{content:"";position:absolute;left:0;top:0;width:28px;height:3px;right:auto;background:var(--accent);opacity:1}
-html[data-look="carbon"] .kpi::after{display:none}
-html[data-look="carbon"] .kpi .l{font-family:"Chakra Petch",var(--f-display);letter-spacing:.24em}
-html[data-look="carbon"] .kpi .v{font-family:"Chakra Petch",var(--f-mono);font-weight:600;color:#fff;text-shadow:none;letter-spacing:0}
-html[data-look="carbon"] .kpi.hl .v{color:var(--best);text-shadow:none}
-/* tables */
-html[data-look="carbon"] th{background:#101114!important;color:#8B9098;font-family:"Chakra Petch",var(--f-display);letter-spacing:.2em;border-bottom:1px solid var(--edge2)!important}
-html[data-look="carbon"] td{border-bottom:1px solid rgba(255,255,255,.05)}
-html[data-look="carbon"] tbody tr:nth-child(even) td{background:rgba(255,255,255,.015)}
-html[data-look="carbon"] tbody tr:hover td{background:rgba(255,26,45,.08)}
-html[data-look="carbon"] .badge,html[data-look="carbon"] .tag{border-radius:0!important}
-html[data-look="carbon"] .mbox{background:linear-gradient(180deg,#191B20,#101114)!important;border-color:var(--edge2)!important;border-radius:0!important;clip-path:polygon(16px 0,100% 0,100% calc(100% - 16px),calc(100% - 16px) 100%,0 100%,0 16px)}
-html[data-look="carbon"] .mbox::before{background:var(--accent);width:80px;right:auto}
-html[data-look="carbon"] #toastStack .toast{background:#16181D;border-left-color:var(--accent);border-radius:0}
-html[data-look="carbon"] #botnav{background:rgba(8,9,11,.96)}html[data-look="carbon"] #botnav button[aria-selected="true"]{color:#fff;box-shadow:inset 0 2px var(--accent)}
-/* Muretto keeps its timing tower and ticker, in the same materials */
-html[data-look="carbon"][data-skin="wall"] body{background:
-  radial-gradient(1100px 700px at 82% -6%,rgba(255,26,45,.10),transparent 60%),repeating-linear-gradient(45deg,rgba(255,255,255,.02) 0 2px,transparent 2px 4px),#08090B}
-html[data-look="carbon"] .lvtabs button{font-family:"Chakra Petch",var(--f-display);letter-spacing:.2em}
-html[data-look="carbon"] .lvtabs button[aria-selected="true"]{background:#F3F4F6;color:#0B0C0F;border-bottom-color:var(--accent)}
-html[data-look="carbon"] .lvsess .cchip{clip-path:none;border-left:0}
-html[data-look="carbon"] #rcBar .rcl{font-family:"Chakra Petch",var(--f-display);clip-path:polygon(0 0,100% 0,calc(100% - 12px) 100%,0 100%);padding-right:24px}
 /* LED bars used by the dashboard */
 .leds{display:flex;gap:3px}.leds i{flex:1;max-width:10px;height:20px;background:rgba(255,255,255,.08);transform:skewX(-12deg)}
-/* a panel with a drop-down menu must not clip it */
-html[data-look="carbon"] .panel:has(details.menu),html[data-look="carbon"] .panel:has(.menu-list){clip-path:none}
 /* ================= PRO (html[data-look="pro"], ui41.js) =================
    Night blue engineering screen: side menu with icons, a top bar with car / track / session, rounded panels,
    blue for what is selected, red only for the brand and for problems. Only looks change here. */
-/* palette: black, silver and gold (default) */
-html[data-look="pro"],html[data-look="pro"][data-skin]{
-  --bg:#070708; --panel:#0F0F11; --panel2:#151518; --band:#0C0C0E; --line:#26262B; --grid:#18181C; --trackbed:#1E1E22;
-  --ink:#ECEDEF; --muted:#8F9298; --faint:#5D6066; --hdr:#060607; --hdr-line:#1F1F23; --hdr-ink:#ECEDEF; --hdr-muted:#8F9298;
-  --pacc:#C9A54C; --pacc2:#E6C877; --accent2:#E6C877; --lapA:#4DA8FF; --lapB:#FF8A1F; --cyan:#22D3EE;
-  --edge:#26262B; --edge2:#4A4231; --r:10px; --shadow:0 10px 30px rgba(0,0,0,.45);
-  --pnw:236px; --ptop:64px; --f-display:"Titillium Web","Barlow Condensed",sans-serif;
-  --psel:#2A2416; --psel2:#17140D; --pbtn1:#E2C46A; --pbtn2:#A8862F; --pbtnb:#E6C877; --pbtnt:#111111;
-  --pg1:#121214; --pg2:#0B0B0C; --pside1:#0B0B0C; --pbody1:#0B0B0C; --pbody2:#050505;
-  --pglow:rgba(201,165,76,.07); --pfocus:rgba(201,165,76,.28); --ptopbg:rgba(7,7,8,.92); --psideglow:rgba(201,165,76,.16);
-  --psil:#C9CDD3; --psil2:#E3E6EA; --psil3:#A9ADB4; --pinput:#09090A; --pth:#111113; --pline2:#1D1D21; --pbrand:#C9A54C;
-  --pcar1:#1A1A1D; --pcar2:#3A3A40; --pcar3:#24242A; --pwarn:#FFCF33; --pwarnbg:rgba(255,207,51,.14);
-  --good:#2BE38A; --bad:#FF5A6A; --warn:#FFCF33; --best:#B57BFF;
-}
-/* palette: night blue (Personalizza › Stile) */
-html[data-look="pro"][data-pal="blu"],html[data-look="pro"][data-pal="blu"][data-skin]{
-  --bg:#060C17; --panel:#0B1526; --panel2:#0F1C31; --band:#0A1322; --line:#1A2942; --grid:#13213A; --trackbed:#1A2740;
-  --ink:#E8EEF7; --muted:#8495AF; --faint:#55657F; --hdr:#060B15; --hdr-line:#16243A; --hdr-ink:#E8EEF7; --hdr-muted:#8495AF;
-  --pacc:#2F7CF6; --pacc2:#7FB2FF; --accent2:#22D3EE; --lapA:#38BDF8; --lapB:#F59E0B;
-  --edge:#1A2942; --edge2:#26395A;
-  --psel:#13284A; --psel2:#0E1D35; --pbtn1:#1D5FD6; --pbtn2:#1749A8; --pbtnb:#3B82F6; --pbtnt:#FFFFFF;
-  --pg1:#0D1829; --pg2:#0A1322; --pside1:#07101D; --pbody1:#07101F; --pbody2:#050A13;
-  --pglow:rgba(47,124,246,.10); --pfocus:rgba(47,124,246,.25); --ptopbg:rgba(6,11,21,.92); --psideglow:rgba(229,53,75,.22);
-  --psil:#C9D3E3; --psil2:#DCE4F0; --psil3:#AEB9CB; --pinput:#08111F; --pth:#0C1729; --pline2:#132138; --pbrand:#E5354B;
-  --pcar1:#0E2240; --pcar2:#1B3E6E; --pcar3:#16335C; --pwarn:#FFC53D; --pwarnbg:rgba(255,197,61,.15);
-  --good:#2BE38A; --bad:#FF5A6A; --warn:#FFC53D; --best:#B57BFF;
-}
+/* colours and materials: grafite.css (the only look since 2.23) */
+html[data-look="pro"]{--f-display:"Titillium Web","Barlow Condensed",sans-serif}
 html[data-look="pro"] body{background:linear-gradient(180deg,var(--pbody1),var(--pbody2) 60%) fixed;}
-/* gold: metallic text for the brand and the selected item, silver for the rest */
-html[data-look="pro"]:not([data-pal="blu"]) .brand b span{color:var(--pacc)}
-html[data-look="pro"]:not([data-pal="blu"]) .brand .logo stop:first-child{stop-color:#E6C877}html[data-look="pro"]:not([data-pal="blu"]) .brand .logo stop:last-child{stop-color:#8C6D24}
 
-html[data-look="pro"]:not([data-pal="blu"]) .pn[aria-current="page"] svg{stroke:var(--pacc2)}
-html[data-look="pro"]:not([data-pal="blu"]) .pstrip .pv.best{color:#E6C877}
 
 /* ---------- top bar ---------- */
 html[data-look="pro"] .top{position:sticky;top:0;background:var(--ptopbg);backdrop-filter:blur(10px);border-bottom:1px solid var(--hdr-line);box-shadow:none}
@@ -1420,10 +1312,6 @@ html[data-look="pro"] #rcBar{left:var(--pnw)}
   html[data-look="pro"] .pstrip .pbtn{flex-direction:row;flex-basis:100%;justify-content:flex-start}
   html[data-look="pro"] .pcar{display:none}
 }
-/* other looks: the pieces added for Pro step aside, the session menu stays in the header */
-html:not([data-look="pro"]) .psel{display:contents}
-html:not([data-look="pro"]) .psel .pf:not(.pfs),html:not([data-look="pro"]) .psel svg,html:not([data-look="pro"]) #proSync,html:not([data-look="pro"]) #btnLoad svg{display:none}
-html:not([data-look="pro"]) .psel .pfs{display:contents}
 /* team logo: big at the bottom of the side menu; in the header only on the phone */
 #proLogo{display:none}
 html[data-look="pro"] #proLogo{display:flex;justify-content:center;margin-top:auto;padding:18px 8px 0;position:relative;z-index:1}
@@ -1649,21 +1537,7 @@ html[data-look="pro"] .pevs .pbl{font-size:11px}
 }
 
 /* ---------- 2.22: four sections in the side menu ---------- */
-html[data-look="pro"] .psec{display:flex;flex-direction:column}
-html[data-look="pro"] .psub{display:none;flex-direction:column;gap:1px;margin:0 0 8px 0;padding-left:40px}
-html[data-look="pro"] .psec.on .psub:not([hidden]){display:flex}
-html[data-look="pro"] .psub .pn{padding:7px 10px;border-left-width:2px;border-radius:8px;justify-content:flex-start}html[data-look="pro"] .psub .pn span{text-align:left}
-html[data-look="pro"] .psub .pn b{font-size:.9rem;font-weight:500;color:var(--psil)}
-html[data-look="pro"] .psub .pn[aria-current="page"] b{color:#fff;font-weight:600}
-html[data-look="pro"] .pmain[aria-current="true"]{color:#fff}html[data-look="pro"] .pmain[aria-current="true"] b{color:var(--pacc2,#E6C877)}
-html[data-look="pro"] .pmain[aria-current="true"] svg{opacity:1;stroke:var(--pacc2,#E6C877)}
 .psectabs{display:none}
-@media (max-width:1100px){
-  html[data-look="pro"] .psub{display:none!important}
-  html[data-look="pro"] .psectabs:not([hidden]){display:flex;gap:4px;flex-wrap:wrap;margin:0 0 12px}
-  .psectabs .pst{border:1px solid var(--line);background:transparent;color:var(--psil);border-radius:999px;padding:6px 14px;cursor:pointer;font:600 .86rem var(--f-body)}
-  .psectabs .pst[aria-current="page"]{border-color:var(--pacc);color:#fff;background:var(--psel)}}
-@media (max-width:760px){html[data-look="pro"] .psec{display:contents}html[data-look="pro"] .pmain{display:flex!important;flex:1 1 0;min-width:0}}
 /* Desktop analysis workspace: compact context, clear next action, readable evidence. */
 @media(min-width:1000px){
  html[data-look="pro"][data-pnav="tech"] #v-setup>.panel:first-child{display:none}
@@ -1723,6 +1597,182 @@ html[data-look="pro"] #techP .tzt th:first-child{width:65px}
  html[data-look="pro"] #techP .tech:not([data-tech-tab="q"]):not([data-tech-tab="diag"]) .tworkflow{display:none}
 }
 .invitebox .panel-h{display:flex;align-items:center;justify-content:space-between;gap:16px}
+/* ================= GRAFITE (2.23, default look: html[data-look="pro"][data-pal="grafite"]) =================
+   Graphite background, thin lines, flat panels with small corners. One rule for colour everywhere:
+   blue = reference (giro A), orange = what you analyse / your car / what is selected,
+   yellow and red only for warnings, purple and green only for lap and sector times.
+   Menu: the four sections in a row under the top bar, the pages of the open section as tabs on top of the page.
+   Only looks change here. */
+html[data-look="pro"][data-pal="grafite"],html[data-look="pro"][data-pal="grafite"][data-skin]{
+  --bg:#15181C; --panel:#1B1F24; --panel2:#21262C; --band:#181B20; --line:#2B3038; --grid:#23272D; --trackbed:#2A2F36;
+  --ink:#ECEEF1; --muted:#8D949E; --faint:#5F6670; --hdr:#15181C; --hdr-line:#2B3038; --hdr-ink:#ECEEF1; --hdr-muted:#8D949E;
+  --pacc:#F2722B; --pacc2:#FF9A5C; --accent2:#FF9A5C; --lapA:#7196DA; --lapB:#F2722B; --cyan:#5BB8E8;
+  --edge:#2B3038; --edge2:#3E454F; --r:3px; --shadow:none;
+  --pnw:0px; --ptop:64px;
+  --psel:#262B32; --psel2:#21262C; --pbtn1:#F2722B; --pbtn2:#E4631C; --pbtnb:#F2722B; --pbtnt:#FFFFFF;
+  --pg1:#1B1F24; --pg2:#1B1F24; --pside1:#15181C; --pbody1:#15181C; --pbody2:#15181C;
+  --pglow:transparent; --pfocus:rgba(242,114,43,.28); --ptopbg:#15181C; --psideglow:transparent;
+  --psil:#C3C8CF; --psil2:#E3E6EA; --psil3:#A0A7B0; --pinput:#121519; --pth:#1B1F24; --pline2:#23272D; --pbrand:#ECEEF1;
+  --pcar1:#23272D; --pcar2:#3A4049; --pcar3:#2C3138; --pwarn:#F2C230; --pwarnbg:rgba(242,194,48,.13);
+  --good:#3DBE7C; --bad:#E5484D; --warn:#F2C230; --best:#A673F0;
+}
+html[data-look="pro"][data-pal="grafite"] body{background:var(--bg)}
+
+/* ---------- top bar ---------- */
+html[data-look="pro"][data-pal="grafite"] .top{background:var(--bg);backdrop-filter:none}
+html[data-look="pro"][data-pal="grafite"] .brand{width:auto;flex:0 0 auto;padding:0 22px;border-right:1px solid var(--hdr-line)}
+html[data-look="pro"][data-pal="grafite"] .brand b{font-weight:700;font-size:1.2rem;letter-spacing:.06em}
+html[data-look="pro"][data-pal="grafite"] .brand .teamlogo{display:block}
+html[data-look="pro"][data-pal="grafite"] .pf{border-radius:3px;background:var(--panel)}
+html[data-look="pro"][data-pal="grafite"] .hdr-tools .btn{border-radius:3px;background:transparent;border-color:#4A515B}
+html[data-look="pro"][data-pal="grafite"] #btnLoad{background:var(--pacc);border-color:var(--pacc);color:#fff}
+html[data-look="pro"][data-pal="grafite"] #btnLoad svg{stroke:#fff}
+html[data-look="pro"][data-pal="grafite"] .psync.on b{color:var(--good)}html[data-look="pro"][data-pal="grafite"] .psync.on b i{background:var(--good);box-shadow:none}
+
+/* ---------- the four sections in a row ---------- */
+html[data-look="pro"][data-pal="grafite"] #proNav{position:sticky;top:var(--ptop);left:auto;bottom:auto;width:auto;height:52px;flex-direction:row;align-items:stretch;
+  padding:0 22px;background:var(--bg);border-right:0;border-bottom:1px solid var(--line);overflow:visible;z-index:25}
+html[data-look="pro"][data-pal="grafite"] #proNav::after,html[data-look="pro"][data-pal="grafite"] #proNav .pfoot,html[data-look="pro"][data-pal="grafite"] #proNav #proLogo{display:none}
+html[data-look="pro"][data-pal="grafite"] #proNav nav{flex-direction:row;gap:4px;height:100%;width:auto}
+html[data-look="pro"][data-pal="grafite"] #proNav .psec{display:flex;flex-direction:row}
+html[data-look="pro"][data-pal="grafite"] #proNav .psub{display:none!important}
+html[data-look="pro"][data-pal="grafite"] #proNav .pmain{display:flex!important;flex:none;flex-direction:row;align-items:center;gap:8px;height:100%;min-width:0;padding:0 18px;border:0;border-bottom:3px solid transparent;border-radius:0;background:none!important;color:#B8BEC6}
+html[data-look="pro"][data-pal="grafite"] #proNav .pmain svg{display:none}
+html[data-look="pro"][data-pal="grafite"] #proNav .pmain span{display:block}
+html[data-look="pro"][data-pal="grafite"] #proNav .pmain small{display:none}
+html[data-look="pro"][data-pal="grafite"] #proNav .pmain b{font:400 1.08rem var(--f-body);color:#B8BEC6;white-space:nowrap}
+html[data-look="pro"][data-pal="grafite"] #proNav .pmain:hover b{color:#fff}
+html[data-look="pro"][data-pal="grafite"] #proNav .pmain[aria-current="true"]{border-bottom-color:var(--pacc)}
+html[data-look="pro"][data-pal="grafite"] #proNav .pmain[aria-current="true"] b{color:#fff;font-weight:600}
+html[data-look="pro"][data-pal="grafite"] #proNav .livedot{background:var(--bad)}
+html[data-look="pro"][data-pal="grafite"] #proNav .pinv{margin:9px 0 9px auto;padding:0 14px;border:1px solid #4A515B;border-radius:3px;font-size:.9rem}
+html[data-look="pro"][data-pal="grafite"] #proNav .pinv span{display:inline}
+/* the pages of the open section: in the same row, after a thin line */
+html[data-look="pro"][data-pal="grafite"] #proNav .psectabs:not([hidden]){display:flex;flex-wrap:nowrap;align-items:stretch;gap:0;margin:0 0 0 14px;padding:0 0 0 14px;border:0;position:relative;min-width:0}
+html[data-look="pro"][data-pal="grafite"] #proNav .psectabs::before{content:"";position:absolute;left:0;top:15px;bottom:15px;width:1px;background:#3E454F}
+html[data-look="pro"][data-pal="grafite"] #proNav .psectabs .pst{display:flex;align-items:center;padding:3px 13px 0;font-size:.95rem;white-space:nowrap;border-bottom:3px solid transparent}
+html[data-look="pro"][data-pal="grafite"] #proNav .psectabs .pst[aria-current="page"]{border-bottom-color:#C3C8CF}
+/* (older placement, on top of the page) */
+html[data-look="pro"][data-pal="grafite"] .psectabs:not([hidden]){display:flex;gap:2px;flex-wrap:wrap;margin:-18px -22px 18px;padding:0 22px;border-bottom:1px solid var(--line)}
+html[data-look="pro"][data-pal="grafite"] .psectabs .pst{border:0;border-bottom:3px solid transparent;border-radius:0;background:none;color:#B8BEC6;padding:12px 16px 9px;cursor:pointer;font:400 1rem var(--f-body)}
+html[data-look="pro"][data-pal="grafite"] .psectabs .pst:hover{color:#fff}
+html[data-look="pro"][data-pal="grafite"] .psectabs .pst[aria-current="page"]{border-bottom-color:var(--pacc);color:#fff;font-weight:600;background:none}
+html[data-look="pro"][data-pal="grafite"] main{margin:0;padding:18px 22px 64px}
+html[data-look="pro"][data-pal="grafite"] main>.tabs.subtabs .tab{border-radius:3px}
+html[data-look="pro"][data-pal="grafite"] #rcBar{left:0}
+
+/* ---------- flat panels, small corners, no glow ---------- */
+html[data-look="pro"][data-pal="grafite"] .panel,html[data-look="pro"][data-pal="grafite"] .wcard,html[data-look="pro"][data-pal="grafite"] .lbcard,html[data-look="pro"][data-pal="grafite"] .suscard,
+html[data-look="pro"][data-pal="grafite"] .kpi,html[data-look="pro"][data-pal="grafite"] .hero,html[data-look="pro"][data-pal="grafite"] .hero.pstrip,html[data-look="pro"][data-pal="grafite"] .modal .mbox{background:var(--panel);border-radius:3px;box-shadow:none}
+html[data-look="pro"][data-pal="grafite"] .hero.pstrip{border-left:1px solid var(--line)}
+html[data-look="pro"][data-pal="grafite"] .panel:hover{border-color:var(--line)}
+html[data-look="pro"][data-pal="grafite"] .panel>.panel-h:first-child,html[data-look="pro"][data-pal="grafite"] .panel>h3:first-child{border-radius:3px 3px 0 0}
+/* titles in plain case, labels small and grey */
+html[data-look="pro"][data-pal="grafite"] .panel-h h2,html[data-look="pro"][data-pal="grafite"] .panel-h h3,html[data-look="pro"][data-pal="grafite"] .panel>h3,html[data-look="pro"][data-pal="grafite"] .dt,html[data-look="pro"][data-pal="grafite"] .dash .dt{text-transform:none;letter-spacing:0;font-size:1.02rem;font-weight:600;color:#fff}
+html[data-look="pro"][data-pal="grafite"] .btn,html[data-look="pro"][data-pal="grafite"] .seg button,html[data-look="pro"][data-pal="grafite"] .tog,html[data-look="pro"][data-pal="grafite"] .sutabs button,html[data-look="pro"][data-pal="grafite"] .pstrip .pbtn .btn{border-radius:3px}
+html[data-look="pro"][data-pal="grafite"] .btn{background:transparent;border-color:#4A515B}
+html[data-look="pro"][data-pal="grafite"] .btn:hover{background:var(--panel2);border-color:#6B727C}
+html[data-look="pro"][data-pal="grafite"] .btn.primary{background:var(--pacc);border-color:var(--pacc);color:#fff}
+html[data-look="pro"][data-pal="grafite"] .btn.primary:hover{background:var(--pbtn2)}
+html[data-look="pro"][data-pal="grafite"] select,html[data-look="pro"][data-pal="grafite"] input[type=number],html[data-look="pro"][data-pal="grafite"] input[type=text],html[data-look="pro"][data-pal="grafite"] input:not([type]),html[data-look="pro"][data-pal="grafite"] textarea{border-radius:3px!important}
+html[data-look="pro"][data-pal="grafite"] .seg button[aria-pressed="true"],html[data-look="pro"][data-pal="grafite"] .tog[aria-pressed="true"],html[data-look="pro"][data-pal="grafite"] .sutabs button[aria-selected="true"],html[data-look="pro"][data-pal="grafite"] main>.tabs.subtabs .tab[aria-selected="true"]{background:var(--psel);border-color:var(--pacc);color:#fff}
+html[data-look="pro"][data-pal="grafite"] th{background:transparent!important}
+html[data-look="pro"][data-pal="grafite"] .pstrip .pv.best{color:var(--best)}
+html[data-look="pro"][data-pal="grafite"] .pstrip .pv.good,html[data-look="pro"][data-pal="grafite"] .pq.q2{color:var(--good)!important}
+html[data-look="pro"][data-pal="grafite"] .pstrip .pt.s2,html[data-look="pro"][data-pal="grafite"] .pstrip .pv.bad,html[data-look="pro"][data-pal="grafite"] .pq.q0{color:var(--bad)!important}
+html[data-look="pro"][data-pal="grafite"] .pstrip .pt.ok{color:var(--good)}
+
+/* ---------- narrow screens ---------- */
+@media (max-width:1100px){html[data-look="pro"][data-pal="grafite"] #proNav .pinv span{display:none}}
+@media (max-width:760px){
+  html[data-look="pro"][data-pal="grafite"] .brand{padding:0;border:0}
+  html[data-look="pro"][data-pal="grafite"] #proNav{position:relative;top:0;padding:0 6px;height:auto;flex-wrap:wrap}
+  html[data-look="pro"][data-pal="grafite"] #proNav nav{height:48px}
+  html[data-look="pro"][data-pal="grafite"] #proNav .psectabs:not([hidden]){flex:1 1 100%;margin:0 -6px;padding:0 6px;height:44px;border-top:1px solid var(--line);overflow-x:auto}
+  html[data-look="pro"][data-pal="grafite"] #proNav .psectabs::before{display:none}
+  html[data-look="pro"][data-pal="grafite"] #proNav nav{width:100%;justify-content:space-between}
+  html[data-look="pro"][data-pal="grafite"] #proNav .psec{display:contents}
+  html[data-look="pro"][data-pal="grafite"] #proNav .pmain{flex:1 1 0;justify-content:center;padding:0 6px}
+  html[data-look="pro"][data-pal="grafite"] #proNav .pmain b{font-size:.95rem}
+  html[data-look="pro"][data-pal="grafite"] .psectabs:not([hidden]){margin:-12px -10px 12px;padding:0 6px;flex-wrap:nowrap;overflow-x:auto}
+  html[data-look="pro"][data-pal="grafite"] .psectabs .pst{white-space:nowrap;padding:10px 12px 8px}
+}
+
+/* ---------- one orange action per place: the rest are plain outlined buttons ---------- */
+html[data-look="pro"][data-pal="grafite"] .btn{text-transform:none;letter-spacing:0;font-family:var(--f-body)}
+html[data-look="pro"][data-pal="grafite"] main .btn.primary,html[data-look="pro"][data-pal="grafite"] .modal .btn.primary{background:transparent;color:var(--pacc2);border-color:var(--pacc)}
+html[data-look="pro"][data-pal="grafite"] main .btn.primary:hover,html[data-look="pro"][data-pal="grafite"] .modal .btn.primary:hover{background:color-mix(in srgb,var(--pacc) 14%,transparent);color:#fff}
+html[data-look="pro"][data-pal="grafite"] .pstrip .pbtn .btn,html[data-look="pro"][data-pal="grafite"] .pstrip .pbtn .btn.primary{background:transparent;color:var(--psil2);border-color:#4A515B;text-transform:none;letter-spacing:0;font-size:.86rem}
+html[data-look="pro"][data-pal="grafite"] .sb.race{background:transparent;color:var(--pacc2);border:1px solid var(--pacc);border-radius:3px}
+html[data-look="pro"][data-pal="grafite"] #rcBar{background:var(--bg);border-top-color:var(--line)}
+html[data-look="pro"][data-pal="grafite"] #rcBar .rcl{background:var(--panel2);color:var(--pacc2)}
+html[data-look="pro"][data-pal="grafite"] .tabs.subtabs .tab,html[data-look="pro"][data-pal="grafite"] main>.tabs.subtabs .tab{text-transform:none;letter-spacing:0;font:600 .92rem var(--f-body)}
+
+/* ---------- words in the text font, numbers in the mono font ---------- */
+html[data-look="pro"][data-pal="grafite"] td.l,html[data-look="pro"][data-pal="grafite"] .kpi .s,html[data-look="pro"][data-pal="grafite"] .kpi .l{font-family:var(--f-body)}
+html[data-look="pro"][data-pal="grafite"] .kpi .l,html[data-look="pro"][data-pal="grafite"] .cchip span,html[data-look="pro"][data-pal="grafite"] .pstrip .pl{font:600 .76rem var(--f-body)!important;letter-spacing:.1em!important;text-transform:uppercase;color:var(--muted)}
+html[data-look="pro"][data-pal="grafite"] .lvsess .cchip b{font-size:1.1rem}
+html[data-look="pro"][data-pal="grafite"] .lvtabs{border-top:0;border-bottom:1px solid var(--line);gap:2px}
+html[data-look="pro"][data-pal="grafite"] .lvtabs button{font:400 1rem var(--f-body)!important;text-transform:none!important;letter-spacing:0!important;padding:10px 16px 8px;border:0;border-bottom:3px solid transparent;border-radius:0;background:none!important;color:#B8BEC6}
+html[data-look="pro"][data-pal="grafite"] .lvtabs button:hover{color:#fff}
+html[data-look="pro"][data-pal="grafite"] .lvtabs button[aria-selected="true"]{color:#fff!important;font-weight:600!important;border-bottom-color:var(--pacc);background:none!important;box-shadow:none}
+html[data-look="pro"][data-pal="grafite"] table.lbt tbody tr:nth-child(even) td{background:transparent}
+html[data-look="pro"][data-pal="grafite"] table.lbt tbody tr:hover td{background:var(--panel2)}
+html[data-look="pro"][data-pal="grafite"] table.lbt tr.ours td,html[data-look="pro"][data-pal="grafite"] tr.ours td{background:#262B32!important}
+html[data-look="pro"][data-pal="grafite"] table.lbt tr.ours td:first-child,html[data-look="pro"][data-pal="grafite"] tr.ours td:first-child{box-shadow:inset 3px 0 var(--pacc)}
+html[data-look="pro"][data-pal="grafite"] .lvlb table.lbt td.l{font-family:var(--f-body);text-transform:none;letter-spacing:0;font-weight:600}
+html[data-look="pro"][data-pal="grafite"] .lbar{box-shadow:none;border-color:var(--line);border-top:2px solid var(--pacc);border-radius:3px;background:var(--panel)}
+html[data-look="pro"][data-pal="grafite"] .btn.primary{box-shadow:none}
+/* Setup Builder tabs: underlined like the other tabs */
+html[data-look="pro"][data-pal="grafite"] .sutabs{gap:2px;border-bottom:1px solid var(--line)}
+html[data-look="pro"][data-pal="grafite"] .sutabs button{border:0;border-bottom:3px solid transparent;border-radius:0;background:none;color:#B8BEC6;font:400 1rem var(--f-body);letter-spacing:0;text-transform:none;padding:10px 16px 8px}
+html[data-look="pro"][data-pal="grafite"] .sutabs button:hover{color:#fff}
+html[data-look="pro"][data-pal="grafite"] .sutabs button[aria-selected="true"]{background:none;border-color:transparent;border-bottom-color:var(--pacc);color:#fff;font-weight:600}
+/* race mode: same graphite, clock in plain white */
+html[data-look="pro"][data-pal="grafite"] #raceMode{background:var(--bg)}
+html[data-look="pro"][data-pal="grafite"] #raceMode .rmtop{border-bottom-color:var(--line)}
+html[data-look="pro"][data-pal="grafite"] #raceMode .rmclock{color:var(--ink);text-shadow:none}
+html[data-look="pro"][data-pal="grafite"] #raceMode .kpi{background:var(--panel)}
+
+/* ---------- leftovers of the older looks, found page by page: corners, glows, gradients, blue selections ---------- */
+html[data-look="pro"][data-pal="grafite"] *{text-shadow:none!important}
+html[data-look="pro"][data-pal="grafite"] .vebar b{text-shadow:0 0 3px #000!important}
+html[data-look="pro"][data-pal="grafite"] :is(.dmiss,.menu-list,.muguide,.pwgo,.gwbox,.tstep,.tses,.pab,.invitesteps li,.toast,.lvtoast,.tdc,.pinfo>div,.lvwn,.lvt,.lvt-c,.lvlife>div,.pcard,.seg,.tbox,.pvr,.pfi,.pfr,.pcw,.twlaps,.invitenote,.bigst,.tevd,.plap b,.lstat,.cchip,.wcard,.lbcard,.suscard,.pinv,.advbar,.tag,.badge,td em.ok,td em,.pfr em){border-radius:3px!important}
+html[data-look="pro"][data-pal="grafite"] input,html[data-look="pro"][data-pal="grafite"] select,html[data-look="pro"][data-pal="grafite"] textarea{border-radius:3px!important}
+html[data-look="pro"][data-pal="grafite"] .modal .mbox,html[data-look="pro"][data-pal="grafite"] #mInvite .mbox.invitebox{background:var(--panel)!important;border:1px solid var(--line)!important;border-radius:4px!important;box-shadow:0 20px 60px rgba(0,0,0,.5)!important}
+html[data-look="pro"][data-pal="grafite"] .modal .mbox::before,html[data-look="pro"][data-pal="grafite"] .modal .mbox::after{display:none!important}
+html[data-look="pro"][data-pal="grafite"] .tstep{background:var(--panel2)}
+html[data-look="pro"][data-pal="grafite"] .twmapw{background:var(--band)}
+html[data-look="pro"][data-pal="grafite"] .vebar i{background:var(--good)}
+html[data-look="pro"][data-pal="grafite"] .plive i,html[data-look="pro"][data-pal="grafite"] .bigst.on,html[data-look="pro"][data-pal="grafite"] .bigst i{box-shadow:none}
+html[data-look="pro"][data-pal="grafite"] .lsbar .lsc.us{box-shadow:0 0 0 3px rgba(255,255,255,.18)}
+html[data-look="pro"][data-pal="grafite"] .strip .lp,html[data-look="pro"][data-pal="grafite"] .mapzoom button,html[data-look="pro"][data-pal="grafite"] .sb,html[data-look="pro"][data-pal="grafite"] .sesbadge .sb{clip-path:none!important;box-shadow:none}
+html[data-look="pro"][data-pal="grafite"] .strip .lp{border-radius:2px}
+/* what is selected: grey fill and an orange line, never blue (blue is the reference lap) */
+html[data-look="pro"][data-pal="grafite"] .seg button[aria-pressed="true"],html[data-look="pro"][data-pal="grafite"] .tog[aria-pressed="true"]{background:#2F353D!important;color:#fff!important;border-color:transparent;box-shadow:inset 0 -2px 0 var(--pacc)!important}
+html[data-look="pro"][data-pal="grafite"] tbody tr:hover td{background:rgba(255,255,255,.035)}
+html[data-look="pro"][data-pal="grafite"] table.lbt thead,html[data-look="pro"][data-pal="grafite"] table.lbt thead tr{background:var(--panel)}
+html[data-look="pro"][data-pal="grafite"] table.lbt th{background:var(--panel)!important}
+/* page title of the pages without telemetry (results file, welcome): same voice as the rest */
+html[data-look="pro"][data-pal="grafite"] .hero .ey{font:600 .78rem var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+html[data-look="pro"][data-pal="grafite"] .hero h1{font:600 clamp(1.5rem,2.4vw,2rem)/1.15 var(--f-body);letter-spacing:0;text-transform:none;color:#fff}
+html[data-look="pro"][data-pal="grafite"] .hero:not(.pstrip){background:none;border:0;padding:0 0 10px}
+html[data-look="pro"][data-pal="grafite"] .hero::after{display:none!important}
+/* small sector cells and the stint bar: the number stays inside */
+html[data-look="pro"][data-pal="grafite"] .sxmini .sx{font-size:.72rem;letter-spacing:-.02em;padding-left:2px;padding-right:2px}
+html[data-look="pro"][data-pal="grafite"] .stgantt .stint{overflow:hidden}
+html[data-look="pro"][data-pal="grafite"] .stgantt .stint b{overflow:hidden;text-overflow:clip}
+@media (max-width:760px){
+  html[data-look="pro"][data-pal="grafite"] .dsecs .dv{font-size:1.15rem}
+}
+html[data-look="pro"][data-pal="grafite"] .wcard h3{font:600 1.1rem var(--f-body);letter-spacing:0;text-transform:none}
+html[data-look="pro"][data-pal="grafite"] .wcard{background:var(--panel)}
+/* phone: the stint bar shows only the stint number (the laps are in the table right below) */
+@media (max-width:760px){html[data-look="pro"][data-pal="grafite"] .stgantt .stint{font-size:0!important;justify-content:center;text-align:center}html[data-look="pro"][data-pal="grafite"] .stgantt .stint b{font-size:.78rem;margin:0}}
+html[data-look="pro"][data-pal="grafite"] :is(.ecount span,.card .fix){border-radius:3px!important}
+html[data-look="pro"][data-pal="grafite"] #rcBar .rcs span.info b{color:var(--psil)}
+html[data-look="pro"][data-pal="grafite"] .badge{font-family:var(--f-body);text-transform:none;letter-spacing:.02em!important}
+html[data-look="pro"][data-pal="grafite"] .badge.off{background:transparent}
 </style>
 <header class="top">
   <div class="top-in">
@@ -1922,10 +1972,7 @@ html[data-look="pro"] #techP .tzt th:first-child{width:65px}
 
 </main>
 <div class="modal" id="mSettings" hidden><div class="mbox"><div class="panel-h"><h2>Personalizza</h2><button class="btn" type="button" data-close>Chiudi</button></div>
-  <h3>Colore principale</h3><div class="swatches" id="swAccent"></div>
-  <div class="row" style="margin-top:8px"><label class="f" style="flex-direction:row;align-items:center;gap:8px">Colore personalizzato <input type="color" id="cAccent"></label></div>
-  <h3 style="margin-top:16px">Sfondo</h3><div class="swatches" id="swBg"></div>
-  <h3 style="margin-top:16px">Colori dei grafici</h3><div class="row"><label class="f" style="flex-direction:row;align-items:center;gap:8px">Giro A <input type="color" id="cA2"></label><label class="f" style="flex-direction:row;align-items:center;gap:8px">Giro B <input type="color" id="cB2"></label></div>
+  <h3>Colori dei grafici</h3><div class="row"><label class="f" style="flex-direction:row;align-items:center;gap:8px">Giro A <input type="color" id="cA2"></label><label class="f" style="flex-direction:row;align-items:center;gap:8px">Giro B <input type="color" id="cB2"></label></div>
   <h3 style="margin-top:16px">Densità</h3><span class="seg" id="segDensity"><button type="button" data-d="compact">Compatta</button><button type="button" data-d="normal">Normale</button><button type="button" data-d="large">Grande</button></span>
   <h3 style="margin-top:16px">Backup</h3><div class="row"><button class="btn" type="button" id="bkExport">Esporta impostazioni, note e piani</button><button class="btn" type="button" id="bkImport">Importa backup</button><button class="btn" type="button" id="uiReset">Ripristina colori</button></div>
 </div></div>
@@ -2900,7 +2947,8 @@ function vdCondDiffs(a,b){const D=[];if(Number.isFinite(a.track)&&Number.isFinit
   if(a.power&&b.power&&a.power!==b.power)D.push(`${tr('motore/ibrido')} ${a.power} → ${b.power}`);if(a.car&&b.car&&a.car!==b.car)D.push(tr('auto diversa'));return D;}
 // ================= CHARTS =================
 // the workstation skin draws clean lines, the Muretto keeps the glow
-function GL(){return document.documentElement.dataset.skin==='ws'?0:1;}
+// no glow on the lines in Workspace and in Grafite
+function GL(){const d=document.documentElement.dataset;return d.skin==='ws'||d.pal==='grafite'?0:1;}
 function tok(n){return getComputedStyle(document.documentElement).getPropertyValue('--'+n).trim()||'#888';}
 function fitCanvas(cv,h){const dpr=window.devicePixelRatio||1,w=cv.clientWidth||cv.parentElement.clientWidth;if(h)cv.style.height=h+'px';const hh=cv.clientHeight||h;cv.width=Math.round(w*dpr);cv.height=Math.round(hh*dpr);const c=cv.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);return {c,w,h:hh};}
 function niceTicks(lo,hi,n=4){const r=hi-lo||1,raw=r/n,p=Math.pow(10,Math.floor(Math.log10(raw))),m=raw/p,st=(m<1.5?1:m<3?2:m<7?5:10)*p;const out=[];for(let v=Math.ceil(lo/st)*st;v<=hi+1e-9;v+=st)out.push(+v.toFixed(6));return out;}
@@ -3083,7 +3131,7 @@ class TrackMap{
       if(P2&&P2[this.cursor]){dot(P2[this.cursor],tok('lapB'));dot(P[this.cursor],tok('lapA'));
         const g=this.lineGap(this.cursor);if(g){const txt=g.m<0.3?'stessa linea':`B ${g.m.toFixed(1)} m ${g.inside==null?(g.left?'a sinistra':'a destra'):g.inside?'più all\'interno':'più all\'esterno'}`;c.font='600 12px "JetBrains Mono",monospace';const tw=c.measureText(txt).width;c.fillStyle='rgba(5,7,10,.88)';c.fillRect(8,8,tw+16,22);c.fillStyle=tok('lapB');c.fillRect(8,8,3,22);c.fillStyle=tok('ink');c.textBaseline='middle';c.fillText(txt,16,19);}}
       else dot(P[this.cursor],tok('accent'));}
-    if(P2&&!lines){c.font='10px "JetBrains Mono",monospace';c.fillStyle=tok('lapB');c.textAlign='right';c.textBaseline='bottom';c.fillText('zoom su una curva per le due linee',w-46,h-8);}
+    if(P2&&!lines&&w>=460){c.font='10px "JetBrains Mono",monospace';c.fillStyle=tok('lapB');c.textAlign='right';c.textBaseline='bottom';c.fillText('zoom su una curva per le due linee',w-46,h-8);}
   }
 }
 function lerpColor(a,b,t){const pa=hex(a),pb=hex(b);return `rgb(${pa.map((v,i)=>Math.round(v+(pb[i]-v)*t)).join(',')})`;}
@@ -3217,7 +3265,7 @@ function fillSelects(){
 function renderHero(){
   const h=$('#hero'),a=active();
   if(!a){h.innerHTML=`<div><div class="ey">Nessuna sessione</div><h1>Carica una sessione</h1><div class="meta">Per una sessione bastano due file della stessa uscita in pista: la telemetria <b>.ld</b> e i risultati <b>.xml</b>. Il setup <b>.svm</b> serve solo per la scheda Setup. Premi <b>File</b> per vedere cosa serve e dove li salva LMU, oppure <b>Aggiorna da LMU</b> per prenderli dalla cartella del gioco.</div></div>`;return;}
-  if(a.xml){const R=a.xml,s=R.sessions[a.si];h.innerHTML=`<div><div class="ey">Risultati ufficiali · ${esc(s.name)}</div><h1>${esc(R.venue)}</h1><div class="meta">${esc(R.event)} · ${esc(R.time)} · senza telemetria: niente condizioni pista, tracce o setup</div></div><div class="cond"><button class="btn primary" type="button" id="btnReport">Report</button></div>`;$('#btnReport').onclick=openReport;return;}
+  if(a.xml){const R=a.xml,s=R.sessions[a.si];h.innerHTML=`<div><div class="ey">Risultati ufficiali · ${esc(s.name)}</div><h1>${esc(R.venue)}</h1><div class="meta">${[R.event,R.time,'senza telemetria: niente condizioni pista, tracce o setup'].filter(x=>x&&String(x).trim()).map(esc).join(' · ')}</div></div><div class="cond"><button class="btn primary" type="button" id="btnReport">Report</button></div>`;$('#btnReport').onclick=openReport;return;}
   const S=a.S,m=S.meta,c=S.cond,fl=S.laps.filter(l=>l.complete).length;
   const rng=(r,d=1,u='°C')=>!r?'—':Math.abs(r.max-r.min)<0.2?fx(r.avg,d)+u:`${fx(r.start,d)}→${fx(r.end,d)}${u}`;
   const chips=[['Aria',rng(c.air)],['Pista',rng(c.track)],['Meteo',c.label,c.state],c.wet&&c.wet.max>0?['Bagnato',fx(c.wet.max*100,0)+'%','wet']:null,c.cloud?['Nuvole',fx(c.cloud.avg*100,0)+'%']:null,c.wind?['Vento',fx(c.wind.avg,1)+' m/s']:null].filter(Boolean);
@@ -3955,29 +4003,18 @@ async function syncLMU(){
   toast((n?`Caricati ${n} file nuovi dalla cartella LMU`:'Nessun file nuovo')+(older?` · ${older} telemetrie meno recenti non caricate (puoi aggiungerle a mano)`:'')+(!n&&skipped?` (ignorati ${skipped} più vecchi di una settimana)`:''));
 }
 // ================= THEME / SETTINGS =================
-const ACCENTS=[['Rosso F1','#E10600','#7A0300'],['Papaya','#FF8000','#8A3B00'],['Verde corsa','#00A86B','#00553A'],['Blu','#1E6BFF','#0B2F7A'],['Viola','#9B30FF','#4B0F8A'],['Giallo','#F5C518','#8A6B00'],['Teal','#00C2B8','#005F5A'],['Argento','#C9D1D9','#59626C']];
-const BGS=[['Carbonio',{bg:'#08090B',panel:'#101318',panel2:'#171B22',band:'#0D1015',line:'#232A33',grid:'#171D24',hdr:'#000000','hdr-line':'#1B2129',trackbed:'#1E252E'}],
- ['Grafite',{bg:'#14171C',panel:'#1B1F26',panel2:'#232831',band:'#181C22',line:'#2E3540',grid:'#222831',hdr:'#0D0F13','hdr-line':'#262C35',trackbed:'#2A313B'}],
- ['Notte blu',{bg:'#060A13',panel:'#0C1322',panel2:'#121B2E',band:'#09101C',line:'#1D2941',grid:'#141F34',hdr:'#02050B','hdr-line':'#16203A',trackbed:'#1A2540'}],
- ['Box notturno',{bg:'#0B0A09',panel:'#151311',panel2:'#1E1B18',band:'#110F0E',line:'#2F2A25',grid:'#201D1A',hdr:'#000000','hdr-line':'#26221E',trackbed:'#2A2520'}]];
-function lum(hx){const [r,g,b]=hex(hx).map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4);});return .2126*r+.7152*g+.0722*b;}
-function darken(hx,k){return '#'+hex(hx).map(v=>Math.round(v*k).toString(16).padStart(2,'0')).join('');}
+// Grafite is the only look: its accent (orange) is written here so the older rules that read --accent follow it
+const ACCENT=['#F2722B','#FF9A5C','#ffffff','#8A3E14'];
 function applyUI(){const u=LS.get('ui',{});const r=document.documentElement.style;
-  const acc=u.accent||'#E10600',acc2=u.accent2||darken(acc,.5);r.setProperty('--accent',acc);r.setProperty('--accent2',acc2);r.setProperty('--accent-ink',lum(acc)>.45?'#0b0b0b':'#ffffff');r.setProperty('--accent-soft',darken(acc,.22));
-  const bg=BGS.find(b=>b[0]===u.bg)||BGS[0];Object.entries(bg[1]).forEach(([k,v])=>r.setProperty('--'+k,v));
+  ['--accent','--accent2','--accent-ink','--accent-soft'].forEach((k,i)=>r.setProperty(k,ACCENT[i]));
   document.body.classList.remove('d-compact','d-large');if(u.density&&u.density!=='normal')document.body.classList.add('d-'+u.density);}
 function openModal(id){const m=$(id);m.hidden=false;m.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>{m.hidden=true;});m.onclick=e=>{if(e.target===m)m.hidden=true;};}
 function initSettings(){
   const u=()=>LS.get('ui',{});
   const render=()=>{const cur=u();
-    $('#swAccent').innerHTML=ACCENTS.map(([n,a,b])=>`<button type="button" class="sw" data-a="${a}" data-b="${b}" aria-pressed="${(cur.accent||'#E10600').toLowerCase()===a.toLowerCase()}"><i style="background:linear-gradient(135deg,${a},${b})"></i>${esc(n)}</button>`).join('');
-    $('#swBg').innerHTML=BGS.map(([n,c])=>`<button type="button" class="sw" data-bg="${esc(n)}" aria-pressed="${(cur.bg||'Carbonio')===n}"><i style="background:linear-gradient(135deg,${c.panel},${c.bg});border:1px solid ${c.line}"></i>${esc(n)}</button>`).join('');
-    $('#cAccent').value=cur.accent||'#E10600';$('#cA2').value=toHex(tok('lapA'));$('#cB2').value=toHex(tok('lapB'));
+    $('#cA2').value=toHex(tok('lapA'));$('#cB2').value=toHex(tok('lapB'));
     $$('#segDensity button').forEach(b=>b.setAttribute('aria-pressed',(cur.density||'normal')===b.dataset.d));
-    $$('#swAccent .sw').forEach(b=>b.onclick=()=>{LS.set('ui',{...u(),accent:b.dataset.a,accent2:b.dataset.b});applyUI();render();redrawAll();});
-    $$('#swBg .sw').forEach(b=>b.onclick=()=>{LS.set('ui',{...u(),bg:b.dataset.bg});applyUI();render();redrawAll();});
     $$('#segDensity button').forEach(b=>b.onclick=()=>{LS.set('ui',{...u(),density:b.dataset.d});applyUI();render();redrawAll();});};
-  $('#cAccent').oninput=e=>{LS.set('ui',{...u(),accent:e.target.value,accent2:darken(e.target.value,.45)});applyUI();redrawAll();};
   const setAB=()=>{LS.set('colors',{A:$('#cA2').value,B:$('#cB2').value});applyColors();redrawAll();};$('#cA2').oninput=setAB;$('#cB2').oninput=setAB;
   $('#uiReset').onclick=()=>{LS.set('ui',{});LS.set('colors',{});document.documentElement.removeAttribute('style');applyUI();applyColors();render();redrawAll();};
   $('#bkExport').onclick=()=>{const o={};try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.startsWith('pitwall:'))o[k]=localStorage.getItem(k);}}catch(e){}
@@ -4915,7 +4952,7 @@ const LOGO_SVG=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><def
     addEventListener('beforeinstallprompt',e=>{e.preventDefault();const b=document.createElement('button');b.className='btn dark';b.type='button';b.textContent=tr('Installa app');b.title=tr('Aggiunge Data Engineer al PC con la sua icona');b.onclick=async()=>{e.prompt();await e.userChoice;b.remove();};$('.hdr-tools')?.prepend(b);});}
   applyTeamLogo();
   // settings: team logo
-  const box=$('#mSettings .mbox');if(box&&!$('#tlBox')){box.insertAdjacentHTML('beforeend',`<h3 style="margin-top:16px">Logo della squadra</h3><div class="row" id="tlBox"><span id="tlPrev" class="tlprev"></span><button class="btn" type="button" id="tlPick">Scegli immagine…</button><button class="btn" type="button" id="tlDel">Togli</button></div><p class="muted small">Compare in basso nel menu laterale (sul telefono accanto al nome dell'app). Resta salvato in questo browser.</p>`);
+  const box=$('#mSettings .mbox');if(box&&!$('#tlBox')){box.insertAdjacentHTML('beforeend',`<h3 style="margin-top:16px">Logo della squadra</h3><div class="row" id="tlBox"><span id="tlPrev" class="tlprev"></span><button class="btn" type="button" id="tlPick">Scegli immagine…</button><button class="btn" type="button" id="tlDel">Togli</button></div><p class="muted small">Compare in alto, accanto al nome dell'app. Resta salvato in questo browser.</p>`);
     $('#tlPick').onclick=()=>{const i=document.createElement('input');i.type='file';i.accept='image/*';i.onchange=()=>{const f=i.files[0];if(!f)return;const img=new Image();img.onload=()=>{const s=Math.min(1,128/Math.max(img.width,img.height));const cv=document.createElement('canvas');cv.width=Math.round(img.width*s);cv.height=Math.round(img.height*s);cv.getContext('2d').drawImage(img,0,0,cv.width,cv.height);LS.set('teamLogo',cv.toDataURL('image/png'));applyTeamLogo();URL.revokeObjectURL(img.src);};img.src=URL.createObjectURL(f);};i.click();};
     $('#tlDel').onclick=()=>{LS.set('teamLogo','');applyTeamLogo();};}})();
 function applyTeamLogo(){const u=LS.get('teamLogo','');let el=$('#teamLogo');const brand=$('.brand');if(!brand)return;
@@ -5055,9 +5092,10 @@ const tr=s=>s;
 document.documentElement.lang='it';
 const AI_LANG=()=>'';
 // ================= VERSIONE, NOVITÀ E AGGIORNAMENTI =================
-const APP_VERSION='2.22.0';
+const APP_VERSION='2.23.0';
 const DEFAULT_UPD='https://raw.githubusercontent.com/KubaMovitech/Race-Engineer/main/';   // update channel (folder with version.json), set when the team repository exists
 const CHANGELOG=[
+{v:'2.23.0',d:'10/11/2026',items:['Nuova grafica «Grafite», l\'unica dell\'app: fondo grafite, linee sottili, riquadri piatti. Blu = giro di riferimento, arancione = quello che analizzi o la tua auto, giallo e rosso solo per gli avvisi, viola e verde solo per tempi e settori.','Menu in una riga in alto: le 4 sezioni e le pagine della sezione aperta, niente più colonna a sinistra. La pagina ha più spazio.','Tolte le vecchie grafiche (Carbon, nero e oro, blu notte) e in Personalizza «Colore principale» e «Sfondo». Restano colori dei giri A/B, densità, backup e logo.','Telefono: il riquadro «Problema principale» in alto non è più tagliato; la barra degli stint mostra il numero dello stint.','Sistemati testi che uscivano dai riquadri, finestre con il vecchio fondo blu, intestazioni nere nelle tabelle del Muretto e la scritta sovrapposta nella mappa del Confronto.']},
 {v:'2.22.0',d:'05/11/2026',items:['Menu più semplice: 4 sezioni (Sessione, Setup, Muretto, Libreria) invece di 11 voci. Le pagine della sezione aperta stanno sotto la sua voce e ogni sezione riapre l\'ultima pagina usata.','Risultati (.xml) più semplici: posizione in alto e una tabella dei giri essenziale; consumi, usura e velocità solo se li chiedi. La tabella non resta più nascosta dietro «Mostra dettagli».','Analisi tecnica con meno testo: le spiegazioni lunghe sono dentro «ⓘ Come leggere».']},
 {v:'2.21.0',d:'05/11/2026',items:['Muretto in una schermata: chi hai intorno in classe e vicino in pista, la tua auto con gomme, carburante ed energia, la mappa, consumi, condizioni ed eventi, tutto nella Panoramica. Parte alta più compatta.','Classifica più pulita: tolta la benzina (degli altri non si vede); l\'energia virtuale è una pillola con anello, percentuale e giri che restano, verde, gialla o rossa.','Solo italiano: tolti il pulsante IT/EN e la traduzione inglese.']},
 {v:'2.20.0',d:'05/11/2026',items:['Muretto dal browser: in «Invita un compagno» c\'è il link per chi fa l\'ingegnere. Si apre da PC, tablet o telefono senza installare niente ed entra direttamente nel Muretto della squadra. Il programma serve solo a chi guida.','Analisi tecnica: il setup confermato con la sessione è la base dei calcoli; si può provare un altro setup e tornare a quello confermato. Schede più corte, con la modifica proposta in evidenza e le prove richiudibili.','Ammortizzatori analizzati solo con un segnale abbastanza veloce; senza, nessun consiglio basato su quel dato.','Invita un compagno più semplice: messaggio pronto, link per chi guida e link per l\'ingegnere, copia sicura anche quando gli appunti non funzionano.']},
@@ -6801,7 +6839,7 @@ function lapRefApply(){const sel=$('#lapRef');const C=lapCur;if(!sel||!C?.S||!la
   sel.value=[...sel.options].some(o=>o.value===want)?want:'';lapRefApply();};})();
 // ================= SKINS: workstation for the analysis, timing wall for the Muretto =================
 // The look follows the section (see skin.css); nothing is moved or hidden, so every number stays where it was.
-document.documentElement.dataset.look='carbon';
+document.documentElement.dataset.look='pro';document.documentElement.dataset.pal='grafite';
 function applySkin(){const v=curView();document.documentElement.dataset.skin=v==='live'?'wall':'ws';rcBar();}
 (function(){const sv=showView;window.showView=showView=function(v){document.documentElement.dataset.skin=v==='live'?'wall':'ws';sv(v);rcBar();};})();
 setTimeout(applySkin,0);
@@ -7039,7 +7077,7 @@ class TWMap{
     // the track: surface between the edges, then the edges
     const twPx=14*s;this.line(c,D.A,0,n-1,tok('trackbed'),Math.max(9,twPx+4));
     if(D.L&&D.R&&twPx>10){c.beginPath();for(let i=0;i<n;i+=2){const [x,y]=this.P(D.L.x[i],D.L.y[i]);i?c.lineTo(x,y):c.moveTo(x,y);}for(let i=n-1;i>=0;i-=2){const [x,y]=this.P(D.R.x[i],D.R.y[i]);c.lineTo(x,y);}c.closePath();c.fillStyle=tok('band');c.fill('evenodd');
-      const ec=document.documentElement.dataset.look==='carbon'?'rgba(255,255,255,.75)':'rgba(200,210,225,.35)';this.line(c,D.L,0,n-1,ec,1.2);this.line(c,D.R,0,n-1,ec,1.2);
+      const ec='rgba(200,210,225,.35)';this.line(c,D.L,0,n-1,ec,1.2);this.line(c,D.R,0,n-1,ec,1.2);
 }
     // start / finish and sector lines across the track
     if(D.L&&D.R){const across=(i,col,lab)=>{const [a,b]=this.P(D.L.x[i],D.L.y[i]),[e,f]=this.P(D.R.x[i],D.R.y[i]);const mx=(a+e)/2,my=(b+f)/2,dx=(e-a),dy=(f-b),l=Math.hypot(dx,dy)||1,hl=Math.max(l/2,9);
@@ -7829,7 +7867,8 @@ const PRO_SEC=[['sess','Sessione','Dati, telemetria e coach',['dash','tel','coac
 const proSecOf=id=>PRO_SEC.find(s=>s[3].includes(id))||PRO_SEC[0];
 // open a page by its id (dash, tel, eng, tech, setb, live, libr …)
 function proGo(id){const b=$(`#proNav .pn[data-n="${id}"]`);if(b)b.click();}
-const proLook=()=>/^pro/.test(LS.get('look','pro'));
+// one look since 2.23 (Grafite): kept as a function because older code asks it
+const proLook=()=>true;
 function proNavOf(v){if(v==='setup'){const t=LS.get('su:tab','eng');return t==='eng'?'eng':t==='dyn'?'tech':'setb';}return (PRO_NAV.find(n=>n[3].includes(v))||PRO_NAV[0])[0];}
 function proSync(){if(!proLook())return;const v=curView(),id=proNavOf(v);const g=PRO_NAV.find(n=>n[0]===id);
   $$('#proNav .pn[data-n]').forEach(b=>b.setAttribute('aria-current',b.dataset.n===id?'page':'false'));
@@ -7924,17 +7963,16 @@ function proStrip(){const h=$('#hero'),a=active();if(!proLook()||!h||!a?.S)retur
 // text size: the «Densità» of Personalizza (compact / normal / large) also scales the Pro layout; 2.10 kept it apart in «dens»
 function proDens(){const u=LS.get('ui',{});const old=LS.get('dens',null);if(old&&!u.density){u.density=old==='compatta'?'compact':old==='comoda'?'large':'normal';LS.set('ui',u);}if(old)LS.set('dens',null);
   const d={compact:'compatta',large:'comoda'}[LS.get('ui',{}).density];if(d)document.documentElement.dataset.dens=d;else delete document.documentElement.dataset.dens;
-  // in Pro the accent is the look's own (gold or blue), whatever Personalizza had for the old looks
-  if(proLook()){const r=document.documentElement.style;const pal=document.documentElement.dataset.pal==='blu';r.setProperty('--accent',pal?'#2F7CF6':'#C9A54C');r.setProperty('--accent2',pal?'#7FB2FF':'#E6C877');r.setProperty('--accent-ink',pal?'#ffffff':'#111111');r.setProperty('--accent-soft',pal?'#1D4FA8':'#8C6D24');}}
+}
 (function(){const au=window.applyUI;if(typeof au==='function')window.applyUI=applyUI=function(){au();proDens();};})();
-function proApply(){const on=proLook();document.documentElement.dataset.look=on?'pro':'carbon';document.documentElement.dataset.pal=LS.get('look','pro')==='problu'?'blu':'oro';if(on){proBuild();proSync();proSyncChip();proFilter(false);}proDens();
-  const n=$('#proNav');if(n)n.hidden=!on;const sub=$('.tabs.subtabs');if(sub&&!on&&!$('.top').contains(sub))$('.top').append(sub);if(sub&&on&&!$('main').contains(sub))$('main').prepend(sub);}
+function proApply(){document.documentElement.dataset.look='pro';document.documentElement.dataset.pal='grafite';proBuild();proSync();proSyncChip();proFilter(false);proDens();
+  const n=$('#proNav');if(n)n.hidden=false;
+  // Grafite: the pages of the section sit in the same row as the four sections (one row of menu, more room for the page)
+  const st=$('#proSecTabs');if(st&&n){if(st.parentNode!==n)n.querySelector('nav').after(st);}const sub=$('.tabs.subtabs');if(sub&&!$('main').contains(sub))$('main').prepend(sub);}
 setTimeout(()=>{proApply();renderHero();setInterval(proSyncChip,5000);},0);
 
-// ---------- Personalizza: choose the look ----------
-setTimeout(()=>{const h=$('#mSettings .mbox>.panel-h');if(!h||$('#lookSel'))return;
-  h.insertAdjacentHTML('afterend',`<div class="lookrow"><label class="f">${tr('Stile dell\'app')}<select id="lookSel"><option value="pro">${tr('Pro · nero, argento e oro')}</option><option value="problu">${tr('Pro · blu notte')}</option><option value="carbon">${tr('Carbon · rosso e nero')}</option></select></label></div>`);
-  const s=$('#lookSel');s.value=LS.get('look','pro');s.onchange=()=>{LS.set('look',s.value);proApply();showView(curView());};},0);
+// ---------- Personalizza: the row where later files add their switches (live on/off, invite) ----------
+setTimeout(()=>{const h=$('#mSettings .mbox>.panel-h');if(h&&!$('#mSettings .lookrow'))h.insertAdjacentHTML('afterend','<div class="lookrow"></div>');},0);
 
 // ---------- team logo (Personalizza): in Pro it sits at the bottom of the side menu, where there is room for it ----------
 (function(){const al=window.applyTeamLogo;if(typeof al!=='function')return;window.applyTeamLogo=applyTeamLogo=function(){al();const nav=$('#proNav');if(!nav)return;const u=LS.get('teamLogo','');let w=$('#proLogo');
@@ -8741,7 +8779,6 @@ setTimeout(()=>{const nav=$('#proNav');if(nav&&!$('#proInvite')){const b=documen
 .adv-off{display:none!important}
 .advbar{display:flex;align-items:center;gap:12px;margin:4px 0 16px;padding:10px 0;border-top:1px dashed var(--line)}
 .advbar .btn{height:34px}
-html:not([data-look="pro"]) .advbar{display:none}
 .pinv{display:none}
 html[data-look="pro"] .pinv{display:flex;align-items:center;gap:10px;margin:10px 4px 0;padding:9px 12px;border:1px dashed var(--line);border-radius:10px;background:transparent;color:var(--psil,#C9CDD3);cursor:pointer;font:600 .86rem var(--f-body);text-align:left}
 html[data-look="pro"] .pinv:hover{border-color:var(--pacc);color:#fff}
@@ -9052,7 +9089,7 @@ function techOverviewHTML(S,X){
   const events=X.sus.groups.filter(g=>g.rep&&g.k!=='max').length+(X.pl.lowG||[]).filter(g=>g.rep).length;
   const cards=techCards(S,X.laps,analysisSetup(S),X).filter(c=>c.fx).length;
   const steps=[['q','01','Controlla i dati',usable+' / '+ANA.length+' '+tr('analisi disponibili'),'Canali, unità e frequenze prima dei consigli.'],
-    ['damp','02','Leggi la macchina',events+' '+tr('eventi ripetibili'),'Ammortizzatori, terzo elemento e piattaforma.'],
+    ['damp','02','Trova i problemi',events+' '+tr('eventi ripetibili'),'Ammortizzatori, terzo elemento e piattaforma.'],
     ['diag','03','Verifica una modifica',cards+' '+tr('prove suggerite'),'Una modifica, una metrica, un confronto prima e dopo.']];
   return `<div class="tworkflow">${steps.map(([tab,n,t,v,d])=>`<button type="button" data-tt="${tab}" class="tstep"><span class="tstepn">${n}</span><span><b>${tr(t)}</b><strong>${v}</strong><small>${tr(d)}</small></span><span aria-hidden="true">→</span></button>`).join('')}</div>`;
 }
