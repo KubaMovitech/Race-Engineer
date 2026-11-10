@@ -100,7 +100,7 @@ class TWMap{
     // the track: surface between the edges, then the edges
     const twPx=14*s;this.line(c,D.A,0,n-1,tok('trackbed'),Math.max(9,twPx+4));
     if(D.L&&D.R&&twPx>10){c.beginPath();for(let i=0;i<n;i+=2){const [x,y]=this.P(D.L.x[i],D.L.y[i]);i?c.lineTo(x,y):c.moveTo(x,y);}for(let i=n-1;i>=0;i-=2){const [x,y]=this.P(D.R.x[i],D.R.y[i]);c.lineTo(x,y);}c.closePath();c.fillStyle=tok('band');c.fill('evenodd');
-      const ec=document.documentElement.dataset.look==='carbon'?'rgba(255,255,255,.75)':'rgba(200,210,225,.35)';this.line(c,D.L,0,n-1,ec,1.2);this.line(c,D.R,0,n-1,ec,1.2);
+      const ec='rgba(200,210,225,.35)';this.line(c,D.L,0,n-1,ec,1.2);this.line(c,D.R,0,n-1,ec,1.2);
 }
     // start / finish and sector lines across the track
     if(D.L&&D.R){const across=(i,col,lab)=>{const [a,b]=this.P(D.L.x[i],D.L.y[i]),[e,f]=this.P(D.R.x[i],D.R.y[i]);const mx=(a+e)/2,my=(b+f)/2,dx=(e-a),dy=(f-b),l=Math.hypot(dx,dy)||1,hl=Math.max(l/2,9);

@@ -1,6 +1,6 @@
 // ================= SKINS: workstation for the analysis, timing wall for the Muretto =================
 // The look follows the section (see skin.css); nothing is moved or hidden, so every number stays where it was.
-document.documentElement.dataset.look='carbon';
+document.documentElement.dataset.look='pro';document.documentElement.dataset.pal='grafite';
 function applySkin(){const v=curView();document.documentElement.dataset.skin=v==='live'?'wall':'ws';rcBar();}
 (function(){const sv=showView;window.showView=showView=function(v){document.documentElement.dataset.skin=v==='live'?'wall':'ws';sv(v);rcBar();};})();
 setTimeout(applySkin,0);

@@ -32,7 +32,8 @@ const PRO_SEC=[['sess','Sessione','Dati, telemetria e coach',['dash','tel','coac
 const proSecOf=id=>PRO_SEC.find(s=>s[3].includes(id))||PRO_SEC[0];
 // open a page by its id (dash, tel, eng, tech, setb, live, libr …)
 function proGo(id){const b=$(`#proNav .pn[data-n="${id}"]`);if(b)b.click();}
-const proLook=()=>/^pro/.test(LS.get('look','pro'));
+// one look since 2.23 (Grafite): kept as a function because older code asks it
+const proLook=()=>true;
 function proNavOf(v){if(v==='setup'){const t=LS.get('su:tab','eng');return t==='eng'?'eng':t==='dyn'?'tech':'setb';}return (PRO_NAV.find(n=>n[3].includes(v))||PRO_NAV[0])[0];}
 function proSync(){if(!proLook())return;const v=curView(),id=proNavOf(v);const g=PRO_NAV.find(n=>n[0]===id);
   $$('#proNav .pn[data-n]').forEach(b=>b.setAttribute('aria-current',b.dataset.n===id?'page':'false'));
@@ -127,17 +128,16 @@ function proStrip(){const h=$('#hero'),a=active();if(!proLook()||!h||!a?.S)retur
 // text size: the «Densità» of Personalizza (compact / normal / large) also scales the Pro layout; 2.10 kept it apart in «dens»
 function proDens(){const u=LS.get('ui',{});const old=LS.get('dens',null);if(old&&!u.density){u.density=old==='compatta'?'compact':old==='comoda'?'large':'normal';LS.set('ui',u);}if(old)LS.set('dens',null);
   const d={compact:'compatta',large:'comoda'}[LS.get('ui',{}).density];if(d)document.documentElement.dataset.dens=d;else delete document.documentElement.dataset.dens;
-  // in Pro the accent is the look's own (gold or blue), whatever Personalizza had for the old looks
-  if(proLook()){const r=document.documentElement.style;const pal=document.documentElement.dataset.pal==='blu';r.setProperty('--accent',pal?'#2F7CF6':'#C9A54C');r.setProperty('--accent2',pal?'#7FB2FF':'#E6C877');r.setProperty('--accent-ink',pal?'#ffffff':'#111111');r.setProperty('--accent-soft',pal?'#1D4FA8':'#8C6D24');}}
+}
 (function(){const au=window.applyUI;if(typeof au==='function')window.applyUI=applyUI=function(){au();proDens();};})();
-function proApply(){const on=proLook();document.documentElement.dataset.look=on?'pro':'carbon';document.documentElement.dataset.pal=LS.get('look','pro')==='problu'?'blu':'oro';if(on){proBuild();proSync();proSyncChip();proFilter(false);}proDens();
-  const n=$('#proNav');if(n)n.hidden=!on;const sub=$('.tabs.subtabs');if(sub&&!on&&!$('.top').contains(sub))$('.top').append(sub);if(sub&&on&&!$('main').contains(sub))$('main').prepend(sub);}
+function proApply(){document.documentElement.dataset.look='pro';document.documentElement.dataset.pal='grafite';proBuild();proSync();proSyncChip();proFilter(false);proDens();
+  const n=$('#proNav');if(n)n.hidden=false;
+  // Grafite: the pages of the section sit in the same row as the four sections (one row of menu, more room for the page)
+  const st=$('#proSecTabs');if(st&&n){if(st.parentNode!==n)n.querySelector('nav').after(st);}const sub=$('.tabs.subtabs');if(sub&&!$('main').contains(sub))$('main').prepend(sub);}
 setTimeout(()=>{proApply();renderHero();setInterval(proSyncChip,5000);},0);
 
-// ---------- Personalizza: choose the look ----------
-setTimeout(()=>{const h=$('#mSettings .mbox>.panel-h');if(!h||$('#lookSel'))return;
-  h.insertAdjacentHTML('afterend',`<div class="lookrow"><label class="f">${tr('Stile dell\'app')}<select id="lookSel"><option value="pro">${tr('Pro · nero, argento e oro')}</option><option value="problu">${tr('Pro · blu notte')}</option><option value="carbon">${tr('Carbon · rosso e nero')}</option></select></label></div>`);
-  const s=$('#lookSel');s.value=LS.get('look','pro');s.onchange=()=>{LS.set('look',s.value);proApply();showView(curView());};},0);
+// ---------- Personalizza: the row where later files add their switches (live on/off, invite) ----------
+setTimeout(()=>{const h=$('#mSettings .mbox>.panel-h');if(h&&!$('#mSettings .lookrow'))h.insertAdjacentHTML('afterend','<div class="lookrow"></div>');},0);
 
 // ---------- team logo (Personalizza): in Pro it sits at the bottom of the side menu, where there is room for it ----------
 (function(){const al=window.applyTeamLogo;if(typeof al!=='function')return;window.applyTeamLogo=applyTeamLogo=function(){al();const nav=$('#proNav');if(!nav)return;const u=LS.get('teamLogo','');let w=$('#proLogo');
