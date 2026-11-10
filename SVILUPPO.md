@@ -71,13 +71,18 @@ pezzo di comportamento che dipende dall'ordine.
   per aprirla dal codice usare `proGo(id)`. Le pagine della sezione aperta stanno sotto la sua voce; con il menu
   stretto (≤ 1100 px) diventano schede in cima alla pagina (`#proSecTabs`).
 
-## Grafite (dalla 2.23)
-- Stile predefinito: `html[data-look="pro"][data-pal="grafite"]`, tutto in `app/grafite.css` (ultimo CSS in build.sh).
-  In Personalizza › Stile restano «Nero, argento e oro» (`look=prooro`) e «Blu notte» (`look=problu`); `look=pro` è Grafite.
+## Grafite: l'unica grafica (dalla 2.23)
+- Una sola grafica: `html[data-look="pro"][data-pal="grafite"]` (messi subito da `app/ui33.js`, confermati da `proApply`).
+  Colori e materiali stanno tutti in `app/grafite.css` (ultimo CSS in build.sh); `pro.css` tiene solo la disposizione.
+  Tolti: Carbon, nero/oro, blu notte, e in Personalizza «Colore principale» e «Sfondo» (restano colori dei giri A/B,
+  densità, backup, logo). `proLook()` resta e vale sempre vero, per il codice vecchio che la chiama.
 - Regola dei colori: blu = riferimento (giro A, `--lapA`), arancione = quello che analizzi / la tua auto / la scelta attiva
   (`--pacc`, `--lapB`), giallo e rosso solo per gli avvisi, viola e verde solo per tempi e settori.
   Un solo pulsante pieno arancione (Carica dati); gli altri `.btn.primary` sono bordati.
-- Menu: le 4 sezioni in una riga sotto la barra in alto (`#proNav` diventa orizzontale), le pagine della sezione
-  sempre come schede sottolineate in cima alla pagina (`#proSecTabs`).
-- `applyUI` (Personalizza › Sfondo) scrive i colori di fondo sulla pagina: con Grafite `proDens` li toglie,
-  così valgono quelli di grafite.css. Le linee dei grafici non hanno alone (`GL()` in charts.js).
+  Scelta attiva in `.seg` / `.tog`: fondo grigio e riga arancione sotto, mai azzurro.
+- Menu: le 4 sezioni e le pagine della sezione aperta in una riga sotto la barra in alto
+  (`#proNav` orizzontale, `#proSecTabs` spostato dentro `#proNav` da `proApply`). Niente menu laterale.
+- Niente aloni sul testo, niente angoli tagliati, angoli 3 px: la sezione «leftovers» in fondo a grafite.css
+  elenca le classi vecchie riportate allo stile. Le linee dei grafici non hanno alone (`GL()` in charts.js).
+- Regole CSS del menu (`.pmain`, `.psec`) sempre sotto `#proNav`: gli stessi nomi esistono nella striscia della
+  sessione (`.pstrip .pmain`, `.pstrip .psec`).

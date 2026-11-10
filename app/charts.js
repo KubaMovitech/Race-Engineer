@@ -184,7 +184,7 @@ class TrackMap{
       if(P2&&P2[this.cursor]){dot(P2[this.cursor],tok('lapB'));dot(P[this.cursor],tok('lapA'));
         const g=this.lineGap(this.cursor);if(g){const txt=g.m<0.3?'stessa linea':`B ${g.m.toFixed(1)} m ${g.inside==null?(g.left?'a sinistra':'a destra'):g.inside?'più all\'interno':'più all\'esterno'}`;c.font='600 12px "JetBrains Mono",monospace';const tw=c.measureText(txt).width;c.fillStyle='rgba(5,7,10,.88)';c.fillRect(8,8,tw+16,22);c.fillStyle=tok('lapB');c.fillRect(8,8,3,22);c.fillStyle=tok('ink');c.textBaseline='middle';c.fillText(txt,16,19);}}
       else dot(P[this.cursor],tok('accent'));}
-    if(P2&&!lines){c.font='10px "JetBrains Mono",monospace';c.fillStyle=tok('lapB');c.textAlign='right';c.textBaseline='bottom';c.fillText('zoom su una curva per le due linee',w-46,h-8);}
+    if(P2&&!lines&&w>=460){c.font='10px "JetBrains Mono",monospace';c.fillStyle=tok('lapB');c.textAlign='right';c.textBaseline='bottom';c.fillText('zoom su una curva per le due linee',w-46,h-8);}
   }
 }
 function lerpColor(a,b,t){const pa=hex(a),pb=hex(b);return `rgb(${pa.map((v,i)=>Math.round(v+(pb[i]-v)*t)).join(',')})`;}

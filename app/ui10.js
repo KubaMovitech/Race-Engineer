@@ -1,27 +1,16 @@
 // ================= THEME / SETTINGS =================
-const ACCENTS=[['Rosso F1','#E10600','#7A0300'],['Papaya','#FF8000','#8A3B00'],['Verde corsa','#00A86B','#00553A'],['Blu','#1E6BFF','#0B2F7A'],['Viola','#9B30FF','#4B0F8A'],['Giallo','#F5C518','#8A6B00'],['Teal','#00C2B8','#005F5A'],['Argento','#C9D1D9','#59626C']];
-const BGS=[['Carbonio',{bg:'#08090B',panel:'#101318',panel2:'#171B22',band:'#0D1015',line:'#232A33',grid:'#171D24',hdr:'#000000','hdr-line':'#1B2129',trackbed:'#1E252E'}],
- ['Grafite',{bg:'#14171C',panel:'#1B1F26',panel2:'#232831',band:'#181C22',line:'#2E3540',grid:'#222831',hdr:'#0D0F13','hdr-line':'#262C35',trackbed:'#2A313B'}],
- ['Notte blu',{bg:'#060A13',panel:'#0C1322',panel2:'#121B2E',band:'#09101C',line:'#1D2941',grid:'#141F34',hdr:'#02050B','hdr-line':'#16203A',trackbed:'#1A2540'}],
- ['Box notturno',{bg:'#0B0A09',panel:'#151311',panel2:'#1E1B18',band:'#110F0E',line:'#2F2A25',grid:'#201D1A',hdr:'#000000','hdr-line':'#26221E',trackbed:'#2A2520'}]];
-function lum(hx){const [r,g,b]=hex(hx).map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4);});return .2126*r+.7152*g+.0722*b;}
-function darken(hx,k){return '#'+hex(hx).map(v=>Math.round(v*k).toString(16).padStart(2,'0')).join('');}
+// Grafite is the only look: its accent (orange) is written here so the older rules that read --accent follow it
+const ACCENT=['#F2722B','#FF9A5C','#ffffff','#8A3E14'];
 function applyUI(){const u=LS.get('ui',{});const r=document.documentElement.style;
-  const acc=u.accent||'#E10600',acc2=u.accent2||darken(acc,.5);r.setProperty('--accent',acc);r.setProperty('--accent2',acc2);r.setProperty('--accent-ink',lum(acc)>.45?'#0b0b0b':'#ffffff');r.setProperty('--accent-soft',darken(acc,.22));
-  const bg=BGS.find(b=>b[0]===u.bg)||BGS[0];Object.entries(bg[1]).forEach(([k,v])=>r.setProperty('--'+k,v));
+  ['--accent','--accent2','--accent-ink','--accent-soft'].forEach((k,i)=>r.setProperty(k,ACCENT[i]));
   document.body.classList.remove('d-compact','d-large');if(u.density&&u.density!=='normal')document.body.classList.add('d-'+u.density);}
 function openModal(id){const m=$(id);m.hidden=false;m.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>{m.hidden=true;});m.onclick=e=>{if(e.target===m)m.hidden=true;};}
 function initSettings(){
   const u=()=>LS.get('ui',{});
   const render=()=>{const cur=u();
-    $('#swAccent').innerHTML=ACCENTS.map(([n,a,b])=>`<button type="button" class="sw" data-a="${a}" data-b="${b}" aria-pressed="${(cur.accent||'#E10600').toLowerCase()===a.toLowerCase()}"><i style="background:linear-gradient(135deg,${a},${b})"></i>${esc(n)}</button>`).join('');
-    $('#swBg').innerHTML=BGS.map(([n,c])=>`<button type="button" class="sw" data-bg="${esc(n)}" aria-pressed="${(cur.bg||'Carbonio')===n}"><i style="background:linear-gradient(135deg,${c.panel},${c.bg});border:1px solid ${c.line}"></i>${esc(n)}</button>`).join('');
-    $('#cAccent').value=cur.accent||'#E10600';$('#cA2').value=toHex(tok('lapA'));$('#cB2').value=toHex(tok('lapB'));
+    $('#cA2').value=toHex(tok('lapA'));$('#cB2').value=toHex(tok('lapB'));
     $$('#segDensity button').forEach(b=>b.setAttribute('aria-pressed',(cur.density||'normal')===b.dataset.d));
-    $$('#swAccent .sw').forEach(b=>b.onclick=()=>{LS.set('ui',{...u(),accent:b.dataset.a,accent2:b.dataset.b});applyUI();render();redrawAll();});
-    $$('#swBg .sw').forEach(b=>b.onclick=()=>{LS.set('ui',{...u(),bg:b.dataset.bg});applyUI();render();redrawAll();});
     $$('#segDensity button').forEach(b=>b.onclick=()=>{LS.set('ui',{...u(),density:b.dataset.d});applyUI();render();redrawAll();});};
-  $('#cAccent').oninput=e=>{LS.set('ui',{...u(),accent:e.target.value,accent2:darken(e.target.value,.45)});applyUI();redrawAll();};
   const setAB=()=>{LS.set('colors',{A:$('#cA2').value,B:$('#cB2').value});applyColors();redrawAll();};$('#cA2').oninput=setAB;$('#cB2').oninput=setAB;
   $('#uiReset').onclick=()=>{LS.set('ui',{});LS.set('colors',{});document.documentElement.removeAttribute('style');applyUI();applyColors();render();redrawAll();};
   $('#bkExport').onclick=()=>{const o={};try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.startsWith('pitwall:'))o[k]=localStorage.getItem(k);}}catch(e){}

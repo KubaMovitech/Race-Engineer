@@ -67,7 +67,6 @@ setTimeout(()=>{const nav=$('#proNav');if(nav&&!$('#proInvite')){const b=documen
 .adv-off{display:none!important}
 .advbar{display:flex;align-items:center;gap:12px;margin:4px 0 16px;padding:10px 0;border-top:1px dashed var(--line)}
 .advbar .btn{height:34px}
-html:not([data-look="pro"]) .advbar{display:none}
 .pinv{display:none}
 html[data-look="pro"] .pinv{display:flex;align-items:center;gap:10px;margin:10px 4px 0;padding:9px 12px;border:1px dashed var(--line);border-radius:10px;background:transparent;color:var(--psil,#C9CDD3);cursor:pointer;font:600 .86rem var(--f-body);text-align:left}
 html[data-look="pro"] .pinv:hover{border-color:var(--pacc);color:#fff}

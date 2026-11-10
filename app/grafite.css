@@ -134,3 +134,43 @@ html[data-look="pro"][data-pal="grafite"] #raceMode{background:var(--bg)}
 html[data-look="pro"][data-pal="grafite"] #raceMode .rmtop{border-bottom-color:var(--line)}
 html[data-look="pro"][data-pal="grafite"] #raceMode .rmclock{color:var(--ink);text-shadow:none}
 html[data-look="pro"][data-pal="grafite"] #raceMode .kpi{background:var(--panel)}
+
+/* ---------- leftovers of the older looks, found page by page: corners, glows, gradients, blue selections ---------- */
+html[data-look="pro"][data-pal="grafite"] *{text-shadow:none!important}
+html[data-look="pro"][data-pal="grafite"] .vebar b{text-shadow:0 0 3px #000!important}
+html[data-look="pro"][data-pal="grafite"] :is(.dmiss,.menu-list,.muguide,.pwgo,.gwbox,.tstep,.tses,.pab,.invitesteps li,.toast,.lvtoast,.tdc,.pinfo>div,.lvwn,.lvt,.lvt-c,.lvlife>div,.pcard,.seg,.tbox,.pvr,.pfi,.pfr,.pcw,.twlaps,.invitenote,.bigst,.tevd,.plap b,.lstat,.cchip,.wcard,.lbcard,.suscard,.pinv,.advbar,.tag,.badge,td em.ok,td em,.pfr em){border-radius:3px!important}
+html[data-look="pro"][data-pal="grafite"] input,html[data-look="pro"][data-pal="grafite"] select,html[data-look="pro"][data-pal="grafite"] textarea{border-radius:3px!important}
+html[data-look="pro"][data-pal="grafite"] .modal .mbox,html[data-look="pro"][data-pal="grafite"] #mInvite .mbox.invitebox{background:var(--panel)!important;border:1px solid var(--line)!important;border-radius:4px!important;box-shadow:0 20px 60px rgba(0,0,0,.5)!important}
+html[data-look="pro"][data-pal="grafite"] .modal .mbox::before,html[data-look="pro"][data-pal="grafite"] .modal .mbox::after{display:none!important}
+html[data-look="pro"][data-pal="grafite"] .tstep{background:var(--panel2)}
+html[data-look="pro"][data-pal="grafite"] .twmapw{background:var(--band)}
+html[data-look="pro"][data-pal="grafite"] .vebar i{background:var(--good)}
+html[data-look="pro"][data-pal="grafite"] .plive i,html[data-look="pro"][data-pal="grafite"] .bigst.on,html[data-look="pro"][data-pal="grafite"] .bigst i{box-shadow:none}
+html[data-look="pro"][data-pal="grafite"] .lsbar .lsc.us{box-shadow:0 0 0 3px rgba(255,255,255,.18)}
+html[data-look="pro"][data-pal="grafite"] .strip .lp,html[data-look="pro"][data-pal="grafite"] .mapzoom button,html[data-look="pro"][data-pal="grafite"] .sb,html[data-look="pro"][data-pal="grafite"] .sesbadge .sb{clip-path:none!important;box-shadow:none}
+html[data-look="pro"][data-pal="grafite"] .strip .lp{border-radius:2px}
+/* what is selected: grey fill and an orange line, never blue (blue is the reference lap) */
+html[data-look="pro"][data-pal="grafite"] .seg button[aria-pressed="true"],html[data-look="pro"][data-pal="grafite"] .tog[aria-pressed="true"]{background:#2F353D!important;color:#fff!important;border-color:transparent;box-shadow:inset 0 -2px 0 var(--pacc)!important}
+html[data-look="pro"][data-pal="grafite"] tbody tr:hover td{background:rgba(255,255,255,.035)}
+html[data-look="pro"][data-pal="grafite"] table.lbt thead,html[data-look="pro"][data-pal="grafite"] table.lbt thead tr{background:var(--panel)}
+html[data-look="pro"][data-pal="grafite"] table.lbt th{background:var(--panel)!important}
+/* page title of the pages without telemetry (results file, welcome): same voice as the rest */
+html[data-look="pro"][data-pal="grafite"] .hero .ey{font:600 .78rem var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+html[data-look="pro"][data-pal="grafite"] .hero h1{font:600 clamp(1.5rem,2.4vw,2rem)/1.15 var(--f-body);letter-spacing:0;text-transform:none;color:#fff}
+html[data-look="pro"][data-pal="grafite"] .hero:not(.pstrip){background:none;border:0;padding:0 0 10px}
+html[data-look="pro"][data-pal="grafite"] .hero::after{display:none!important}
+/* small sector cells and the stint bar: the number stays inside */
+html[data-look="pro"][data-pal="grafite"] .sxmini .sx{font-size:.72rem;letter-spacing:-.02em;padding-left:2px;padding-right:2px}
+html[data-look="pro"][data-pal="grafite"] .stgantt .stint{overflow:hidden}
+html[data-look="pro"][data-pal="grafite"] .stgantt .stint b{overflow:hidden;text-overflow:clip}
+@media (max-width:760px){
+  html[data-look="pro"][data-pal="grafite"] .dsecs .dv{font-size:1.15rem}
+}
+html[data-look="pro"][data-pal="grafite"] .wcard h3{font:600 1.1rem var(--f-body);letter-spacing:0;text-transform:none}
+html[data-look="pro"][data-pal="grafite"] .wcard{background:var(--panel)}
+/* phone: the stint bar shows only the stint number (the laps are in the table right below) */
+@media (max-width:760px){html[data-look="pro"][data-pal="grafite"] .stgantt .stint{font-size:0!important;justify-content:center;text-align:center}html[data-look="pro"][data-pal="grafite"] .stgantt .stint b{font-size:.78rem;margin:0}}
+html[data-look="pro"][data-pal="grafite"] :is(.ecount span,.card .fix){border-radius:3px!important}
+html[data-look="pro"][data-pal="grafite"] #rcBar .rcs span.info b{color:var(--psil)}
+html[data-look="pro"][data-pal="grafite"] .badge{font-family:var(--f-body);text-transform:none;letter-spacing:.02em!important}
+html[data-look="pro"][data-pal="grafite"] .badge.off{background:transparent}
