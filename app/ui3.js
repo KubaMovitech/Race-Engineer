@@ -58,8 +58,8 @@ function renderDoctor(){
     const fixes=k.fixes.filter(f=>!su||setupVal(su,f.key,f.sec)!=null);
     const st=e?(e.hit?'bad':'good'):'';
     return `<div class="card ${e&&e.hit?'warn':''}"><span class="st"><span class="dot ${st}"></span>${esc(k.label)}</span>
-      <p class="small">${e?(e.hit?'<b style="color:var(--bad)">Confermato dai dati</b> · ':'<b style="color:var(--good)">Non visto nei dati</b> · ')+esc(e.txt):'<span class="muted">Nessun dato di telemetria per verificarlo.</span>'}</p>
-      <ol style="margin:0;padding-left:20px;font-size:.87rem;display:grid;gap:5px">${fixes.map(f=>{const v=setupVal(su,f.key,f.sec);return `<li><b>${esc(f.label)}</b>: ${esc(f.dir)}${v?` <span class="mono muted">(ora ${esc(v)})</span>`:''}<br><span class="muted small">${esc(f.why)}</span></li>`;}).join('')||'<li class="muted">Nessuno dei parametri classici è regolabile su questa auto.</li>'}</ol></div>`;}).join('')}</div>
+      <p class="small">${e?(e.hit?'<b style="color:var(--bad)">Confermato dai dati</b> · ':'<b style="color:var(--good)">Non visto nei dati</b> · ')+esc(e.txt):'<span class="muted">Nessun dato di telemetria per verificarlo</span>'}</p>
+      <ol style="margin:0;padding-left:20px;font-size:.87rem;display:grid;gap:5px">${fixes.map(f=>{const v=setupVal(su,f.key,f.sec);return `<li><b>${esc(f.label)}</b>: ${esc(f.dir)}${v?` <span class="mono muted">(ora ${esc(v)})</span>`:''}<br><span class="muted small">${esc(f.why)}</span></li>`;}).join('')||'<li class="muted">Nessuno dei parametri classici è regolabile su questa auto</li>'}</ol></div>`;}).join('')}</div>
     <p class="muted small" style="margin-top:10px">Cambia una cosa alla volta, di 1–2 click, e rifai 3–5 giri prima di giudicare. ${su?'':'Carica il .svm per vedere i valori attuali e nascondere i parametri che la tua auto non ha.'}</p>`;
 }
 

@@ -207,14 +207,14 @@ const TW_INS=[['Pilota',['Ground Speed','Throttle Pos','Brake Pos','Steering','G
   ['Dinamica',['G Force Lat','G Force Long','@gsum','Local Rotation Y','Body Pitch','Body Roll','Path Lateral']],
   ['Motore e ibrido',['@power','Engine Torque','Motor Torque','Battery Charge Level','Fuel Level','Eng Water Temp','Eng Oil Temp']],
   ['Telaio',['Front 3rd Pos','Rear 3rd Pos','Brake Bias Rear']]];
-function twInspect(D,i){if(i==null)return `<div class="muted small">${tr('Passa sopra la mappa o i grafici.')}</div>`;const gA=D.gA,gB=D.gB;
+function twInspect(D,i){if(i==null)return `<div class="muted small">${tr('Passa sopra la mappa o i grafici')}</div>`;const gA=D.gA,gB=D.gB;
   const row=n=>{const m=twMeta(n);const a=twArr(gA,n),b=gB?twArr(gB,n):null;if(!a)return '';const va=a[i],vb=b?b[i]:NaN;const d=vb-va;
     return `<tr><td>${tr(m[0])}</td><td class="a">${twFmt(va,m[2])}</td><td class="b">${b?twFmt(vb,m[2]):''}</td><td class="${d>0?'up':d<0?'dn':''}">${b&&Number.isFinite(d)&&Math.abs(d)>=Math.pow(10,-m[2])/2?(d>0?'+':'')+d.toFixed(m[2]):''}</td><td class="u">${m[1]}</td></tr>`;};
   const head=`<div class="twih"><div><span>${tr('Distanza')}</span><b>${Math.round(gA.d[i])} m</b></div><div><span>${tr('Tempo')} A</span><b>${gA.t[i].toFixed(2)} s</b></div>${D.delta?`<div><span>Delta</span><b class="${D.delta[i]>0?'up':'dn'}">${D.delta[i]>0?'+':''}${D.delta[i].toFixed(3)} s</b></div>`:''}${D.gap?`<div><span>${tr('Linea B')}</span><b>${Math.abs(D.gap[i]).toFixed(1)} m ${D.gap[i]>0?tr('a sinistra'):tr('a destra')}</b></div>`:''}</div>`;
   return head+TW_INS.map(([g,L])=>`<table class="twit"><thead><tr><th>${tr(g)}</th><th class="a">A</th><th class="b">${gB?'B':''}</th><th>${gB?'Δ':''}</th><th></th></tr></thead><tbody>${L.map(row).join('')}</tbody></table>`).join('');}
 // the four tyres of A (or B) under the cursor
 function twWheels(D,i,useB){const g=useB&&D.gB?D.gB:D.gA;if(i==null)return '';const v=n=>{const a=twArr(g,n);return a?a[i]:NaN;};
-  const tcol=t=>!Number.isFinite(t)?'#333':t<70?'#3B6FD6':t<80?'#38B6C9':t<95?'#35C46A':t<105?'#E8B23A':'#E0403A';
+  const tcol=t=>!Number.isFinite(t)?'#2C2F34':t<70?'#5B8DEF':t<80?'#4FB3C8':t<95?'#4CC38A':t<105?'#F2C230':'#E5484D';
   const tyre=w=>{const I=v(`Tyre Temp ${w} Inner`),C=v(`Tyre Temp ${w} Centre`),O=v(`Tyre Temp ${w} Outer`);const left=w.endsWith('L');const order=left?[O,C,I]:[I,C,O];const grip=v('Grip Fract '+w);
     return `<div class="twty"><div class="tt"><b>${w}</b><span>${twFmt(v('Tyre Pressure '+w),1)} kPa</span></div><div class="bars">${order.map(t=>`<i style="background:${tcol(t)}" title="${twFmt(t,0)} °C">${twFmt(t,0)}</i>`).join('')}</div>
       <div class="kv"><span>${tr('Carico')}</span><b>${twFmt(v('Tyre Load '+w)/1000,1)} kN</b></div><div class="kv"><span>${tr('Aderenza')}</span><b>${twFmt(grip,0)}%</b></div><div class="gb"><i style="width:${Math.max(0,Math.min(100,grip||0))}%"></i></div>
@@ -256,7 +256,7 @@ function twLapBtns(S,which){const best=S.best;const secs=S.laps.filter(l=>l.comp
   return S.laps.filter(l=>l.complete).map(l=>{const s=twLapSectors(S,l);const on=which==='A'?(TW.SA===S&&TW.a===l.i):(TW.SB===S&&TW.b===l.i);
     return `<button type="button" class="twlap ${on?'on':''} ${l.invalid?'inv':''}" data-s="${esc(S.id)}" data-l="${l.i}" data-w="${which}"><span class="n">${tr('G')}${l.num}${l===best?' ★':''}</span><b>${fmtLap(l.time)}</b>${s?`<span class="ss">${s.map((x,k)=>`<i class="${Math.abs(x-bs[k])<0.0005?'p':''}">${x.toFixed(2)}</i>`).join('')}</span>`:''}</button>`;}).join('');}
 RENDER.tele=()=>{const el=$('#twBody');const SS=twSessions();
-  if(!SS.length){el.innerHTML=`<div class="panel"><div class="empty">${tr('Carica una telemetria MoTeC (.ld) con almeno un giro completo.')}</div></div>`;return;}
+  if(!SS.length){el.innerHTML=`<div class="panel"><div class="empty">${tr('Carica una telemetria MoTeC (.ld) con almeno un giro completo')}</div></div>`;return;}
   const act=active()?.S;if(!TW.SA||!SS.includes(TW.SA)){TW.SA=SS.includes(act)?act:SS[SS.length-1];TW.a=TW.SA.best?.i??TW.SA.laps.find(l=>l.complete).i;TW.SB=null;TW.b=null;}
   if(TW.SB===undefined||(TW.SB&&!SS.includes(TW.SB))){TW.SB=null;}
   if(TW.SB===null&&TW.auto!==false){const other=TW.SA.laps.filter(l=>l.complete&&l.i!==TW.a).sort((x,y)=>x.time-y.time)[0];if(other){TW.SB=TW.SA;TW.b=other.i;}}
@@ -282,7 +282,7 @@ RENDER.tele=()=>{const el=$('#twBody');const SS=twSessions();
   const D=twPrep();TW.D=D;
   const map=new TWMap($('#twMap'),{onCursor:i=>twCursor(i,'map')});map.onCorner=c=>twZoomCorner(c);TW.map=map;
   const trc=new TWTraces($('#twTr'),$('#twOv'),{onCursor:i=>twCursor(i,'tr'),onRange:r=>{TW.range=r;if($('#twFollow').checked){if(r)map.fitRange(Math.round(r[0]/D.step),Math.round(r[1]/D.step));else map.reset();}twGG($('#twGG'),D,r);$('#twGGt').textContent=r?`${Math.round(r[0])}–${Math.round(r[1])} m`:tr('tutto il giro');}});TW.tr=trc;
-  if(!D.A){$('.twmapp').innerHTML=`<div class="empty">${tr('Questa telemetria non ha la posizione GPS: la mappa non è disponibile.')}</div>`;}else map.set(D,mode);
+  if(!D.A){$('.twmapp').innerHTML=`<div class="empty">${tr('Questa telemetria non ha la posizione GPS: la mappa non è disponibile')}</div>`;}else map.set(D,mode);
   trc.set(D,twPanels(D,list));$('#twCor').innerHTML=twCornersHTML(D);$('#twSum').innerHTML=twSummaryHTML(D);twGG($('#twGG'),D,null);$('#twGGt').textContent=tr('tutto il giro');
   $('#twLeg').innerHTML=twLegend(mode,!!D.gB);twCursor(TW.cur!=null&&TW.cur<D.n?TW.cur:D.corners[0]?.apex??0,'init');
   // wiring
@@ -303,7 +303,7 @@ RENDER.tele=()=>{const el=$('#twBody');const SS=twSessions();
 function twLegend(m,hasB){const A=`<span><i style="background:var(--lapA)"></i>A</span>`,B=hasB?`<span><i style="background:${typeof bDash==='function'&&bDash()?'repeating-linear-gradient(90deg,var(--lapB) 0 5px,transparent 5px 8px)':'var(--lapB)'}"></i>B</span>`:'';
   const pts=`<span>● ${tr('frenata')}</span><span>▲ ${tr('gas pieno')}</span>`;
   if(m==='inputs')return `<span><i style="background:#FF2D55"></i>${tr('freno')}</span><span><i style="background:#22E58B"></i>${tr('gas pieno')}</span><span><i style="background:#9BE8B9"></i>${tr('gas parziale')}</span><span><i style="background:#8A93A3"></i>${tr('senza pedali')}</span>${hasB?`<span>- - B</span>`:''}`;
-  if(m==='delta')return hasB?`<span><i style="background:#22E58B"></i>${tr('A guadagna')}</span><span><i style="background:#FF2D55"></i>${tr('A perde')}</span>${B}`:`<span>${tr('Scegli un giro B per il delta.')}</span>`;
+  if(m==='delta')return hasB?`<span><i style="background:#22E58B"></i>${tr('A guadagna')}</span><span><i style="background:#FF2D55"></i>${tr('A perde')}</span>${B}`:`<span>${tr('Scegli un giro B per il delta')}</span>`;
   if(m==='speed')return `<span><i style="background:linear-gradient(90deg,${TWSPD.join(',')})"></i>${tr('lento → veloce')}</span>${B}`;
   if(m==='gear')return TWGEAR.slice(1,8).map((c,i)=>`<span><i style="background:${c}"></i>${i+1}ª</span>`).join('');
   return A+B+pts;}

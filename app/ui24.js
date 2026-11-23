@@ -36,7 +36,7 @@ function tyreDeg(S){const b=bestValid(S);const pool=S.laps.filter(l=>l.complete&
   const wear={};W.forEach(w=>{wear[w]=median(st.map(s=>Math.abs(s.w[w].wear)*ws).filter(v=>v>0&&v<10));});const wv=W.map(w=>wear[w]).filter(Number.isFinite);const maxW=wv.length?Math.max(...wv):NaN;
   const sp=LS.get('strategy',{});const wearMax=+sp.wearMax||35,t4=+sp.t4||12;const lapsWear=maxW>0?wearMax/maxW:NaN;const nOpt=deg>0.01?Math.sqrt(2*t4/deg):Infinity;
   return {n:pool.length,slope,fuel,fe,deg,wear,maxW,wearMax,lapsWear,t4,nOpt,stint:Math.min(nOpt,Number.isFinite(lapsWear)?lapsWear:Infinity)};}
-function tyreDegHTML(X){if(!X)return `<div class="muted small">${tr('Servono almeno 5 giri lanciati validi vicini al migliore.')}</div>`;
+function tyreDegHTML(X){if(!X)return `<div class="muted small">${tr('Servono almeno 5 giri lanciati validi vicini al migliore')}</div>`;
   const worst=W.reduce((a,w)=>X.wear[w]>(X.wear[a]||-1)?w:a,'FL');
   const k=[liveTile('Calo del tempo',`${X.slope>0?'+':''}${fx(X.slope,3)} s`,tr('a giro, misurato')),liveTile('Calo dovuto alle gomme',`${X.deg>0?'+':''}${fx(X.deg,3)} s`,Number.isFinite(X.fuel)?`${tr('a giro, togliendo la benzina')} (${fx(X.fuel,2)} L × ${X.fe} s)`:tr('a giro')),
     liveTile('Usura per giro',Number.isFinite(X.maxW)?fx(X.maxW,2)+'%':'—',Number.isFinite(X.maxW)?`${tr('la più consumata')}: ${tr(WN[W.indexOf(worst)])}`:''),
@@ -54,7 +54,7 @@ function tyreFix(D,S){const T=D?.raw?.T;if(!T)return null;const c=cfg();const pm
     const now=setupVal(su,'PressureSetting',SEC_OF[w]);const nowN=now?parseFloat(String(now).replace(',','.')):NaN;
     const io_=x.I-x.O,ioT=Number.isFinite(io)&&Number.isFinite(iomax)?(io+iomax)/2:NaN;
     return {w,pHot:x.p,th,tgt,dCold,now,nowN,io:io_,ioT,dIO:!Number.isFinite(ioT)?NaN:io_<io-1?io_-io:io_>iomax+1?io_-iomax:0,cam:setupVal(su,'CamberSetting',SEC_OF[w])};});}
-function tyreFixHTML(D,S){const F=tyreFix(D,S);if(!F)return `<div class="empty">${tr('Scegli una telemetria .ld in alto.')}</div>`;const hasT=F.some(f=>Number.isFinite(f.tgt));
+function tyreFixHTML(D,S){const F=tyreFix(D,S);if(!F)return `<div class="empty">${tr('Scegli una telemetria .ld in alto')}</div>`;const hasT=F.some(f=>Number.isFinite(f.tgt));
   const rows=F.map(f=>{const ok=Math.abs(f.dCold)<0.5;const camTxt=!Number.isFinite(f.dIO)?'—':!f.dIO?`<span class="pos">ok</span>`:f.dIO>0?`${tr('meno negativa')} <small>(${fx(f.dIO,1)} °C ${tr('in più all\'interno')})</small>`:`${tr('più negativa')} <small>(${fx(-f.dIO,1)} °C ${tr('in più all\'esterno')})</small>`;
     return `<tr><td class="l"><b>${tr(WN[W.indexOf(f.w)])}</b></td><td>${fx(f.pHot,1)} kPa</td><td>${Number.isFinite(f.tgt)?fx(f.tgt,1)+' kPa':'—'}</td>
       <td class="${ok?'pos':''}"><b>${!Number.isFinite(f.dCold)?'—':ok?'ok':(f.dCold>0?'+':'')+fx(f.dCold,1)+' kPa'}</b>${f.now&&Number.isFinite(f.nowN)&&Number.isFinite(f.dCold)&&!ok?` <small class="muted">(${esc(f.now)} → ≈ ${fx(f.nowN+f.dCold,1)})</small>`:f.now?` <small class="muted">(${tr('ora')} ${esc(f.now)})</small>`:''}</td>
@@ -91,7 +91,7 @@ function shHTML(S){const H=Object.values(LS.get('suhist',{}));const venue=S?.met
 // panels in the Setup tab, after the automatic checks (RENDER.setup is defined later in the bundle)
 setTimeout(()=>{const anchor=$('#suDiag')?.closest('.panel');if(anchor&&!$('#suTyreP'))anchor.insertAdjacentHTML('afterend',`<div class="panel" id="suTyreP"><div class="panel-h"><h3>${tr('Pressioni e campanature: quanto cambiare')}</h3></div><div id="suTyre"></div></div>`);
   const sus=$('#doc');if(sus&&!$('#suHistP'))sus.insertAdjacentHTML('afterend',`<div class="panel" id="suHistP"><div class="panel-h"><h3>${tr('Storico setup e risultati')}</h3><span class="muted small">${tr('stessa pista e stessa auto')}</span></div><div id="suHist"></div></div>`);
-  const base=RENDER.setup;RENDER.setup=()=>{base();try{const S=active()?.S;const D=DIAG&&DIAG.S===S?DIAG:null;if(!$('#suTyre')||!$('#suHist'))return;$('#suTyre').innerHTML=S?tyreFixHTML(D,S):`<div class="empty">${tr('Scegli una telemetria .ld in alto.')}</div>`;
+  const base=RENDER.setup;RENDER.setup=()=>{base();try{const S=active()?.S;const D=DIAG&&DIAG.S===S?DIAG:null;if(!$('#suTyre')||!$('#suHist'))return;$('#suTyre').innerHTML=S?tyreFixHTML(D,S):`<div class="empty">${tr('Scegli una telemetria .ld in alto')}</div>`;
       if(S&&D&&D.su)shRecord(S,D,D.su);$('#suHist').innerHTML=S?shHTML(S):'';}catch(e){console.error(e);}};if(curView()==='setup')RENDER.setup();},0);
 
 // the debrief also reports the tyre degradation

@@ -24,7 +24,7 @@ function statusChip(r){if(r.fin===1)return '<span class="st st-fin">🏁</span>'
   if(r.gar)return `<span class="st st-gar">${tr('GARAGE')}</span>`;
   if(r.inPit){const k=r.pitSt===3?tr('FERMO'):r.pitSt===4?tr('USCITA'):r.pitSt===2?tr('ENTRA'):tr('BOX');return `<span class="st st-box">${k}</span>`;}
   return `<span class="st st-on">${tr('PISTA')}</span>`;}
-function bigStatus(stt,c,me){let k='off',t=tr('NON IN PISTA');if(me&&me.gar){k='gar';t=tr('IN GARAGE');}else if((c&&c.pit)||(me&&me.inPit)){k='box';t=me&&me.pitSt===3?tr('AI BOX · FERMO'):tr('AI BOX');}else if(stt.live||me){k='on';t=tr('IN PISTA');}
+function bigStatus(stt,c,me){let k='off',t=tr('Non in pista');if(me&&me.gar){k='gar';t=tr('In garage');}else if((c&&c.pit)||(me&&me.inPit)){k='box';t=me&&me.pitSt===3?tr('Ai box · fermo'):tr('Ai box');}else if(stt.live||me){k='on';t=tr('In pista');}
   return `<span class="bigst ${k}"><i></i>${t}</span>`;}
 // energy first: virtual energy (or fuel for cars without it), always visible
 function veCell(r){if(r.ve>=0){const p=Math.max(0,Math.min(1,r.ve));return `<span class="vebar${p<0.12?' low':''}" title="${esc(tr('Energia virtuale'))}"><i style="width:${p*100}%"></i><b>${Math.round(p*100)}%</b></span>${r.fuel>=0?`<small class="muted vefuel">${tr('benz.')} ${Math.round(r.fuel*100)}%</small>`:''}`;}
@@ -80,7 +80,7 @@ function lvSetupPanel(x){const el=$('#lvSetup');if(!el)return;const {stt}=x;cons
 
 // game strategy data, in readable units
 window.lvGame=lvGame=function(x){const {stt}=x;const Dp=(stt.Ds||[]).filter(D=>D.pit).sort((a,b)=>(b.pitAt||0)-(a.pitAt||0))[0];const g=Dp?.pit?.game||LIVE.rec?.pitRec?.game;
-  if(!g||!Object.keys(g).length){$('#lvGame').innerHTML=`<div class="muted small">${tr('Appare con il bridge 1.3 quando il pilota è in pista.')}</div>`;return;}
+  if(!g||!Object.keys(g).length){$('#lvGame').innerHTML=`<div class="muted small">${tr('Appare con il bridge 1.3 quando il pilota è in pista')}</div>`;return;}
   const v=k=>{const e=Object.entries(g).find(([kk])=>kk.toLowerCase().endsWith('.'+k.toLowerCase()));return e?e[1]:undefined;};const pct=(a,b)=>Number.isFinite(a)&&b>0?a/b*100:NaN;
   const fuel=v('currentFuel'),fmax=v('maxFuel'),ve=v('currentVirtualEnergy'),vmax=v('maxVirtualEnergy'),bat=v('currentBattery'),bmax=v('maxBattery');
   const tiles=[];if(Number.isFinite(ve)&&vmax>0)tiles.push(liveTile('Energia virtuale',fx(pct(ve,vmax),1)+' %',`${tr('del massimo consentito')}`));

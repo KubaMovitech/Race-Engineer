@@ -31,12 +31,12 @@ function refSegments(g0){const cr=detectCorners(g0);const segs=[];if(!cr.length)
 // ================= COACH =================
 RENDER.coach=()=>{
   const S=active()?.S;const ids=['#coIdeal','#coTips','#coStyle','#coCons','#coGGtxt'];
-  if(!S){ids.forEach(i=>$(i).innerHTML='');$('#coIdeal').innerHTML='<div class="empty">Scegli una telemetria .ld in alto.</div>';return;}
+  if(!S){ids.forEach(i=>$(i).innerHTML='');$('#coIdeal').innerHTML='<div class="empty">Scegli una telemetria .ld in alto</div>';return;}
   const rs=$('#coRef');const newRef=rs.dataset.sess!==S.id;if(newRef){opt(rs,refOptions(S),false);rs.dataset.sess=S.id;}
   const ls=$('#coLap');if(ls.dataset.sess!==S.id||newRef){const prev=ls.dataset.sess===S.id?ls.value:null;opt(ls,lapOptions(S).filter(([i])=>S.laps[+i].complete),false);const b=bestValid(S),r0=pickRef(rs.value||'');
     let d=b;if(r0&&r0.S===S){const alt=S.laps.filter(l=>l.complete&&l.type==='lanciato'&&l!==r0.lap).sort((a,c)=>a.time-c.time)[0];if(alt)d=alt;}
     ls.value=prev??(d?String(d.i):ls.value);ls.dataset.sess=S.id;}
-  const R=pickRef(rs.value),lap=S.laps[+ls.value];if(!R||!lap){$('#coIdeal').innerHTML='<div class="empty">Serve almeno un giro completo.</div>';return;}
+  const R=pickRef(rs.value),lap=S.laps[+ls.value];if(!R||!lap){$('#coIdeal').innerHTML='<div class="empty">Serve almeno un giro completo</div>';return;}
   const g0=lapGrid(R.S,R.lap,2),segs=refSegments(g0),corners=segs.filter(s=>s.c);
   // --- ideal lap
   const laps=S.laps.filter(l=>l.complete&&l.type==='lanciato'&&!l.invalid);
@@ -45,7 +45,7 @@ RENDER.coach=()=>{
     const rows=segs.map(sg=>{const ts=grids.map(({l,g})=>({l,t:g.t[sg.e]-g.t[sg.s]}));const best=ts.reduce((a,b)=>a.t<b.t?a:b);const bl=bestValid(S);const inBest=ts.find(x=>x.l===bl)?.t;return {sg,best,inBest,gain:inBest-best.t};});
     const ideal=rows.reduce((a,r)=>a+r.best.t,0),bl=bestValid(S),pot=bl.time-ideal;
     const mx=Math.max(...rows.map(r=>r.gain));
-    $('#coIdeal').innerHTML=`<div class="kpis" style="margin-bottom:12px"><div class="kpi hl"><div class="l">Giro ideale</div><div class="v">${fmtLap(ideal)}</div><div class="s">da ${grids.length} giri validi</div></div><div class="kpi"><div class="l">Tuo miglior giro</div><div class="v">${fmtLap(bl.time)}</div><div class="s">giro ${bl.num}</div></div><div class="kpi"><div class="l">Tempo già nelle tue mani</div><div class="v" style="color:var(--good)">${fx(pot,3)} s</div><div class="s">senza cambiare setup</div></div></div>
+    $('#coIdeal').innerHTML=`<div class="kpis" style="margin-bottom:12px"><div class="kpi hl"><div class="l">Giro ideale</div><div class="v">${fmtLap(ideal)}</div><div class="s">da ${grids.length} giri validi</div></div><div class="kpi"><div class="l">Tuo miglior giro</div><div class="v">${fmtLap(bl.time)}</div><div class="s">giro ${bl.num}</div></div><div class="kpi"><div class="l">Tempo da recuperare</div><div class="v" style="color:var(--good)">${fx(pot,3)} s</div><div class="s">senza cambiare setup</div></div></div>
     <div class="tw"><table><thead><tr><th>Tratto</th><th>Migliore</th><th>Nel giro</th><th>Nel tuo best</th><th>Guadagno</th><th class="l" style="width:40%"></th></tr></thead><tbody>${rows.map(r=>`<tr><td>${r.sg.name}</td><td>${fx(r.best.t,3)}</td><td>${r.best.l.num}</td><td>${fx(r.inBest,3)}</td><td class="${r.gain>0.02?'pos':''}">${r.gain>0.0005?'−'+fx(r.gain,3):'—'}</td><td class="l"><span style="display:inline-block;height:8px;border-radius:4px;background:var(--good);width:${mx>0?Math.max(0,r.gain/mx*100):0}%"></span></td></tr>`).join('')}</tbody></table></div>`;
   }else $('#coIdeal').innerHTML='<div class="note">Servono almeno 2 giri validi lanciati nella stessa sessione per costruire il giro ideale.</div>';
   // --- style vs reference
@@ -79,7 +79,7 @@ function goCompare(RS,rl,S,lap,d){showView('cmp');$('#cmpSessA').value=RS.id;$('
 function envelope(glat,glong){const bins=new Array(36).fill(0).map(()=>[]);for(let i=0;i<glat.length;i++){const x=glat[i],y=glong[i];if(!Number.isFinite(x)||!Number.isFinite(y))continue;const r=Math.hypot(x,y);if(r<0.2)continue;const a=Math.atan2(y,x);const b=Math.floor(((a+Math.PI)/(2*Math.PI))*36)%36;bins[b].push(r);}return bins.map(b=>b.length>5?pct(b,0.97):NaN);}
 function drawGG(gm,g0,same){
   const cv=$('#coGG');const {c,w,h}=fitCanvas(cv);c.clearRect(0,0,w,h);
-  const la=gm.get('G Force Lat'),lo=gm.get('G Force Long'),ra=g0.get('G Force Lat'),ro=g0.get('G Force Long');if(!la||!lo){$('#coGGtxt').innerHTML='<div class="note">Canali G non presenti.</div>';return;}
+  const la=gm.get('G Force Lat'),lo=gm.get('G Force Long'),ra=g0.get('G Force Lat'),ro=g0.get('G Force Long');if(!la||!lo){$('#coGGtxt').innerHTML='<div class="note">Canali G non presenti</div>';return;}
   const mx=Math.max(2,pct(la.map(Math.abs),0.995),pct(lo.map(Math.abs),0.995),pct(ra.map(Math.abs),0.995))*1.1;const cx=w/2,cy=h/2,sc=(Math.min(w,h)/2-18)/mx;
   c.strokeStyle=tok('grid');c.lineWidth=1;for(let r=0.5;r<=mx;r+=0.5){c.beginPath();c.arc(cx,cy,r*sc,0,7);c.stroke();}
   c.strokeStyle=tok('line');c.beginPath();c.moveTo(cx,10);c.lineTo(cx,h-10);c.moveTo(10,cy);c.lineTo(w-10,cy);c.stroke();
@@ -120,8 +120,8 @@ RENDER.diary=()=>{
   opt($('#diA'),svms().map(s=>[s.id,s.label]));opt($('#diB'),svms().map(s=>[s.id,s.label]));if(!$('#diB').dataset.init&&svms().length>1){$('#diB').value=svms()[1].id;$('#diB').dataset.init=1;}
   const a=byId($('#diA').value),b=byId($('#diB').value);
   if(!a||!b){$('#diDiff').innerHTML='<div class="note">Carica almeno un file .svm.</div>';}
-  else if(a===b){$('#diDiff').innerHTML='<div class="note">Scegli due setup diversi (ne hai caricato '+svms().length+').</div>';}
-  else{const d=svmDiff(a,b);$('#diDiff').innerHTML=d.length?`<table><thead><tr><th>Gruppo</th><th class="l">Parametro</th><th>A</th><th>B</th></tr></thead><tbody>${d.map(r=>`<tr><td class="l" style="font-family:var(--f-body)">${esc(r.sec)}</td><td class="l" style="font-family:var(--f-body)">${esc(r.label)}</td><td>${esc(r.a)}</td><td><b>${esc(r.b)}</b></td></tr>`).join('')}</tbody></table>`:'<div class="note">I due setup sono identici.</div>';}
+  else if(a===b){$('#diDiff').innerHTML='<div class="note">Scegli due setup diversi (ne hai caricato '+svms().length+')</div>';}
+  else{const d=svmDiff(a,b);$('#diDiff').innerHTML=d.length?`<table><thead><tr><th>Gruppo</th><th class="l">Parametro</th><th>A</th><th>B</th></tr></thead><tbody>${d.map(r=>`<tr><td class="l" style="font-family:var(--f-body)">${esc(r.sec)}</td><td class="l" style="font-family:var(--f-body)">${esc(r.label)}</td><td>${esc(r.a)}</td><td><b>${esc(r.b)}</b></td></tr>`).join('')}</tbody></table>`:'<div class="note">I due setup sono identici</div>';}
 };
 function diaryRow(S,prev,suOpts){
   const r=runSummary(S),su=byId(LS.get('runsu:'+S.id,''));

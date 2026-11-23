@@ -40,7 +40,7 @@ function guideEng(id){try{const S=active()?.S;if(!S||typeof DIAG==='undefined'||
   const sym=GUIDE_SYM.filter(s=>s.k.includes(id));const li=(lab,txt,c='')=>`<div class="gl ${c}"><b>${lab}</b><p>${esc(tr(txt))}</p></div>`;
   const extra=`${X?`<div class="glr">${li(tr('Di quanto cambiarlo'),X.step)}${li(tr('Quando toccarlo'),X.ord)}</div>${li(tr('Interazioni con gli altri parametri'),X.int)}`:''}
     ${sym.length?`<div class="gl"><b>${tr('Sintomi che lo chiamano in causa')}</b><div class="gchips" style="margin-top:6px">${sym.map(s=>`<button type="button" class="gchip" data-gs="${esc(s.s)}">${esc(tr(s.s))}</button>`).join('')}</div></div>`:''}
-    <div style="margin-top:10px"><b class="small">${tr('Cosa dice l\'ingegnere sulla tua telemetria')}</b>${guideEng(id)||`<p class="small muted">${tr('Carica telemetria e setup per vedere cosa dice.')}</p>`}</div>`;
+    <div style="margin-top:10px"><b class="small">${tr('Cosa dice l\'ingegnere sulla tua telemetria')}</b>${guideEng(id)||`<p class="small muted">${tr('Carica telemetria e setup per vedere cosa dice')}</p>`}</div>`;
   const last=b.lastElementChild;last?last.insertAdjacentHTML('beforebegin',extra):b.insertAdjacentHTML('beforeend',extra);
   b.querySelectorAll('[data-gs]').forEach(x=>x.onclick=()=>{$('#mGuide').hidden=true;LS.set('su:tab','gui');LS.set('guide:tab','s');LS.set('guide:open',x.dataset.gs);showView('setup');});};})();
 // the parameter list: one line per setting with what it does, and the symptom tab opens the asked symptom

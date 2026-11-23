@@ -11,7 +11,7 @@ function predictFinish(rows,me,I){const LD=I.lapDist;if(!me||!(LD>0))return null
     return {r,p,prog,inTank,stops,margin:inTank-toEnd,flag:lapsRace?NaN:prog+(T-st*loss)/p,time:lapsRace?(I.maxLaps-prog)*p+st*loss:NaN};}).filter(Boolean);
   out.sort((a,b)=>lapsRace?a.time-b.time:b.flag-a.flag);out.forEach((o,i)=>o.pred=i+1);return {list:out,lapsRace,loss};}
 function lvFinishPanel(x){const el=$('#lvFin');if(!el)return;const P=predictFinish(x.rows,x.me,x.I);
-  if(!P||!P.list.length){el.innerHTML=`<div class="muted small">${tr('In gara, con la classifica e qualche giro fatto da ogni auto.')}</div>`;return;}
+  if(!P||!P.list.length){el.innerHTML=`<div class="muted small">${tr('In gara, con la classifica e qualche giro fatto da ogni auto')}</div>`;return;}
   const rows=[...P.list].sort((a,b)=>a.pred-b.pred).map(o=>{const r=o.r,ch=r.pic-o.pred;
     return `<tr class="${r===x.me?'ours':''}" data-car="${esc(r.veh)}"><td>P${o.pred}</td><td>${ch?`<span class="${ch>0?'pos':'neg'}">${ch>0?'▲':'▼'}${Math.abs(ch)}</span>`:'—'}</td><td class="l">${esc(r.drv)}<div class="muted small">P${r.pic} ${tr('ora')}</div></td>
       <td>${P.lapsRace?hms(o.time):fx(o.flag,1)}</td><td>${fmtLap(o.p)}</td><td>${Number.isFinite(o.stops)?o.stops:'—'}</td>
@@ -26,7 +26,7 @@ function trafficList(rows,me,I){const LD=I.lapDist;if(!me||!(LD>0))return null;c
     const pv=P[r.veh];let rate=NaN;if(pv&&now-pv.at>1500&&now-pv.at<10000)rate=(Math.abs(pv.t)-Math.abs(t))/((now-pv.at)/1000);if(!pv||now-pv.at>=1500)P[r.veh]={t,at:now};
     return {r,t,faster:CLS_RANK(r.cls)>mr,rate};}).filter(o=>o.faster?o.t<0&&o.t>-15:o.t>0&&o.t<15);
   return {behind:L.filter(o=>o.faster).sort((a,b)=>b.t-a.t),ahead:L.filter(o=>!o.faster).sort((a,b)=>a.t-b.t)};}
-function lvTrafficPanel(x){const el=$('#lvTraf');if(!el)return;const T=trafficList(x.rows,x.me,x.I);if(!T){el.innerHTML=`<div class="muted small">${tr('Servono la classifica e la nostra auto in pista.')}</div>`;return;}
+function lvTrafficPanel(x){const el=$('#lvTraf');if(!el)return;const T=trafficList(x.rows,x.me,x.I);if(!T){el.innerHTML=`<div class="muted small">${tr('Servono la classifica e la nostra auto in pista')}</div>`;return;}
   const row=o=>{const eta=o.rate>0.05?Math.abs(o.t)/o.rate:NaN;return `<div class="lvrow" data-car="${esc(o.r.veh)}"><span><span class="clsdot" style="background:${LV_CLS(o.r.cls)}"></span> ${esc(o.r.drv)} <span class="muted small">${esc(o.r.cls)}</span></span><b class="${Math.abs(o.t)<3?'neg':''}">${fx(Math.abs(o.t),1)} s${Number.isFinite(eta)&&eta<60?` <small class="muted">· ${tr('tra')} ${Math.round(eta)} s</small>`:''}</b></div>`;};
   el.innerHTML=`<div class="grid2" style="gap:14px"><div><h4>${tr('Più veloci dietro di noi')}</h4>${T.behind.map(row).join('')||`<div class="muted small">${tr('Nessuno entro 15 s.')}</div>`}</div>
     <div><h4>${tr('Più lenti davanti a noi')}</h4>${T.ahead.map(row).join('')||`<div class="muted small">${tr('Nessuno entro 15 s.')}</div>`}</div></div>`;}
@@ -43,7 +43,7 @@ function gwDamage(stt,c){const Dp=(stt.Ds||[]).filter(D=>D.pit).sort((a,b)=>(b.p
     ${Number.isFinite(w.aero)?`<div class="gwrow"><span>${tr('Aerodinamica')}</span><b class="${w.aero>0.02?'neg':''}">${w.aero>0.005?tr('danno')+' '+pc(w.aero):tr('integra')}</b></div>`:''}
     ${w.suspension?`<div class="gwrow"><span>${tr('Sospensioni')}</span><b>${w.suspension.map((v,i)=>`<span class="${v>0.02?'neg':''}" title="${esc(tr(WN[i]))}">${pc(v)}</span>`).join(' · ')}</b></div>`:''}
     ${w.brakes?`<table class="gwtab"><thead><tr><th>${tr('Freni')}</th><th>${tr('Usati')}</th><th>${tr('Per giro')}</th><th>${tr('Giri al 90%')}</th></tr></thead><tbody>${w.brakes.map((b,i)=>`<tr><td>${tr(WN[i])}</td><td class="${col(b)}">${pc(b)}</td><td>${B&&B[i].rate>0?fx(B[i].rate*100,2)+'%':'—'}</td><td class="${B&&B[i].laps<20?'neg':''}">${B&&B[i].rate>0?Math.max(0,Math.floor(B[i].laps)):'—'}</td></tr>`).join('')}</tbody></table>`:''}
-    ${B?'':`<p class="muted small" style="margin:6px 0 0">${tr('I giri che durano i freni compaiono dopo 3 giri.')}</p>`}</div>`;}
+    ${B?'':`<p class="muted small" style="margin:6px 0 0">${tr('I giri che durano i freni compaiono dopo 3 giri')}</p>`}</div>`;}
 
 // ---------- track clock: in-game time, time scale, sunset / sunrise ----------
 // typical event date and place for the LMU tracks (sun times are an estimate from date and coordinates)

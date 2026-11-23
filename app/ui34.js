@@ -65,7 +65,7 @@ setInterval(()=>{if(typeof LIVE==='undefined')return;const trk=bopTrack(LIVE.sc?
 // ---------- the BOP view (Setup › BOP) ----------
 function bopMine(){const f=typeof LIVE!=='undefined'?Object.values(LIVE.drivers||{}).find(D=>D.car?.car&&bopCar(D.car.car))?.car.car:null;const s=LS.get('bop:car',null);
   if(s)return s;const c=f?bopCar(f):null;if(c)return c.cls+'|'+c.model;const S=active()?.S;const g=S?ldCar(S):null;return g?g.cls+'|'+g.model:'HY|M Hybrid V8';}
-RENDER.bop=()=>{const el=$('#bopBody');if(!BOPV){el.innerHTML=`<div class="panel"><div class="empty">${tr('Nessun BOP caricato.')}</div></div>`;return;}
+RENDER.bop=()=>{const el=$('#bopBody');if(!BOPV){el.innerHTML=`<div class="panel"><div class="empty">${tr('Nessun BOP caricato')}</div></div>`;return;}
   bopScanLds();const mode=LS.get('bop:mode','trk');const mine=bopMine();const [mc,mm]=mine.split('|');const trks=Object.keys(BOPV.tracks);
   const S=active()?.S;const liveT=typeof LIVE!=='undefined'?bopTrack(LIVE.sc?.i?.trk):null;let trk=LS.get('bop:trk',null);if(!trk||!BOPV.tracks[trk])trk=liveT||bopTrack(S?.meta?.venue)||trks[0];
   const cls=LS.get('bop:cls',mc);const allCars=Object.entries(BOP_COLS).flatMap(([k])=>(BOPV.tracks[trks[0]].cls[k]||[]).map(r=>[k+'|'+r.model,`${BOP_CLS[k]} · ${r.mfr} ${r.model}`]));
@@ -100,7 +100,7 @@ RENDER.bop=()=>{const el=$('#bopBody');if(!BOPV){el.innerHTML=`<div class="panel
   $('#v-live .lvsub[data-p="car"] .lvgrid3')?.insertAdjacentHTML('afterend',`<div class="panel"><div class="panel-h"><h3>BOP</h3><span class="muted small" id="lvBopT"></span></div><div id="lvBop"></div></div>`);};})();
 (function(){const lc=lvCar;window.lvCar=lvCar=function(x){lc(x);const el=$('#lvBop');if(!el)return;const c=x.c;const trk=bopTrack(x.I?.trk);const car=bopCar(c?.car||x.me?.label);
   $('#lvBopT').textContent=BOPV?`${tr('ufficiale')} ${BOPV.ver} · ${trk||tr('pista non trovata')}`:'';
-  if(!BOPV||!trk||!car){el.innerHTML=`<div class="muted small">${!BOPV?tr('Nessun BOP caricato.'):!trk?tr('Pista non presente nel BOP.'):tr('Auto non riconosciuta nel BOP.')}</div>`;return;}
+  if(!BOPV||!trk||!car){el.innerHTML=`<div class="muted small">${!BOPV?tr('Nessun BOP caricato'):!trk?tr('Pista non presente nel BOP.'):tr('Auto non riconosciuta nel BOP.')}</div>`;return;}
   const r=bopRow(car.cls,car.model,trk);const day=new Date().toISOString().slice(0,10);const F=BOPFP();const id=`live|${car.model}|${trk}|${day}|${x.I?.ses??''}`;const e=F[id];
   const B=BOPLIVE.buf.get(id)||[];const v=e?bopVerdict(e,F):null;
   el.innerHTML=(r?bopTable(car.cls,[[`${r.mfr} ${r.model}`,r,'x']],'x',tr('Auto')):'')+

@@ -14,27 +14,27 @@ function dashFit(xy,w,h,pad){const xs=xy.map(p=>p[0]),ys=xy.map(p=>p[1]);let x0=
   const X=P.map(p=>p[0]),Y=P.map(p=>p[1]);x0=Math.min(...X);x1=Math.max(...X);y0=Math.min(...Y);y1=Math.max(...Y);const k=Math.min((w-2*pad)/(x1-x0),(h-2*pad)/(y1-y0));const ox=(w-(x1-x0)*k)/2,oy=(h-(y1-y0)*k)/2;
   return P.map(([x,y])=>[ox+(x-x0)*k,oy+(y-y0)*k]);}
 const dPath=(P,a=0,b=P.length-1)=>'M'+P.slice(a,b+1).map(p=>p[0].toFixed(1)+' '+p[1].toFixed(1)).join('L');
-const dTc=t=>!Number.isFinite(t)?'#333':t<70?'#3B82F6':t<78?'#22D3EE':t<92?'#2BE38A':t<102?'#FFD23F':'#FF1A2D';
-function dashMap(d,W,H){if(!d.xy)return `<text x="20" y="40" fill="#8B9098">${tr('Questa telemetria non ha la posizione GPS: la mappa non è disponibile.')}</text>`;
+const dTc=t=>!Number.isFinite(t)?'#333':t<70?'#5B8DEF':t<78?'#4FB3C8':t<92?'#4CC38A':t<102?'#F2C230':'#E5484D';
+function dashMap(d,W,H){if(!d.xy)return `<text x="20" y="40" fill="#8B9098">${tr('Questa telemetria non ha la posizione GPS: la mappa non è disponibile')}</text>`;
   const P=dashFit(d.xy,W,H,Math.min(110,W*0.12));let m=`<defs><pattern id="dgr" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M30 0H0V30" fill="none" stroke="rgba(255,255,255,.05)"/></pattern>
     <pattern id="dck" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="2" height="2" fill="#fff"/><rect x="2" y="2" width="2" height="2" fill="#fff"/></pattern></defs><rect width="${W}" height="${H}" fill="url(#dgr)"/>
     <path d="${dPath(P)}Z" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="16" stroke-linejoin="round"/><path d="${dPath(P)}Z" fill="none" stroke="#0E0F12" stroke-width="13" stroke-linejoin="round"/>`;
   // racing line by inputs, grouped in runs of the same colour
-  const cs=P.map((_,i)=>d.brk[i]>5?'#FF1A2D':d.thr[i]>95?'#F3F4F6':'#8B9098');let i=0;while(i<P.length-1){let j=i+1;while(j<P.length-1&&cs[j]===cs[i])j++;m+=`<path d="${dPath(P,i,j)}" stroke="${cs[i]}" stroke-width="3" fill="none"/>`;i=j;}
+  const cs=P.map((_,i)=>d.brk[i]>5?'#E5484D':d.thr[i]>95?'#F3F4F6':'#8B9098');let i=0;while(i<P.length-1){let j=i+1;while(j<P.length-1&&cs[j]===cs[i])j++;m+=`<path d="${dPath(P,i,j)}" stroke="${cs[i]}" stroke-width="3" fill="none"/>`;i=j;}
   const cx=P.reduce((s,q)=>s+q[0],0)/P.length,cy=P.reduce((s,q)=>s+q[1],0)/P.length;const placed=[];const bw=150,bh=52;
   const hit=(x,y)=>placed.some(([u,v])=>Math.abs(u-x)<bw+8&&Math.abs(v-y)<bh+6);
   if(W<600){d.cor.forEach(c=>{const p=P[c.apex];if(!p)return;let dx=p[0]-cx,dy=p[1]-cy;const L=Math.hypot(dx,dy)||1;const x=p[0]+dx/L*26,y=p[1]+dy/L*20;
-      m+=`<circle cx="${p[0]}" cy="${p[1]}" r="4" fill="#FF1A2D"/><text x="${x}" y="${y+4}" text-anchor="middle" font-size="12" font-weight="600" fill="#FF1A2D">T${c.k}<tspan fill="#fff" font-weight="600"> ${Math.round(c.vMin)}</tspan></text>`;});}
+      m+=`<circle cx="${p[0]}" cy="${p[1]}" r="4" fill="#E5484D"/><text x="${x}" y="${y+4}" text-anchor="middle" font-size="12" font-weight="600" fill="#E5484D">T${c.k}<tspan fill="#fff" font-weight="600"> ${Math.round(c.vMin)}</tspan></text>`;});}
   else d.cor.forEach(c=>{const p=P[c.apex];if(!p)return;let dx=p[0]-cx,dy=p[1]-cy;const L=Math.hypot(dx,dy)||1;dx/=L;dy/=L;
     let bx=Math.max(10,Math.min(W-bw-10,p[0]+dx*110-bw/2)),by=Math.max(36,Math.min(H-bh-40,p[1]+dy*80-bh/2));
     if(hit(bx,by)){const b0=[bx,by];out:for(const ox of [0,-170,170,-340,340])for(const oy of [0,-62,62,-124,124]){const x=Math.max(10,Math.min(W-bw-10,b0[0]+ox)),y=Math.max(36,Math.min(H-bh-40,b0[1]+oy));if(!hit(x,y)){bx=x;by=y;break out;}}}
     placed.push([bx,by]);
-    m+=`<line x1="${p[0]}" y1="${p[1]}" x2="${bx+bw/2}" y2="${by+bh/2}" stroke="rgba(255,255,255,.45)"/><circle cx="${p[0]}" cy="${p[1]}" r="5" fill="#FF1A2D"/>
+    m+=`<line x1="${p[0]}" y1="${p[1]}" x2="${bx+bw/2}" y2="${by+bh/2}" stroke="rgba(255,255,255,.45)"/><circle cx="${p[0]}" cy="${p[1]}" r="5" fill="#E5484D"/>
      <polygon points="${bx+8},${by} ${bx+bw},${by} ${bx+bw},${by+bh-8} ${bx+bw-8},${by+bh} ${bx},${by+bh} ${bx},${by+8}" fill="rgba(11,12,15,.92)" stroke="rgba(255,255,255,.35)"/>
-     <text x="${bx+10}" y="${by+20}" fill="#FF1A2D" font-weight="600" font-size="14">T${c.k}</text><text x="${bx+42}" y="${by+20}" fill="#fff" font-weight="600" font-size="15">${Math.round(c.vMin)} km/h</text>
+     <text x="${bx+10}" y="${by+20}" fill="#E5484D" font-weight="600" font-size="14">T${c.k}</text><text x="${bx+42}" y="${by+20}" fill="#fff" font-weight="600" font-size="15">${Math.round(c.vMin)} km/h</text>
      <text x="${bx+10}" y="${by+40}" fill="#8B9098" font-size="12">${c.brake!=null?tr('frenata')+' '+Math.round(c.brake)+' m':tr('senza frenata')}${c.gear>0?' · '+Math.round(c.gear)+'ª':''}</text>`;});
   const s0=P[0];m+=`<rect x="${s0[0]-11}" y="${s0[1]-4}" width="22" height="8" fill="url(#dck)"/>
-    <g transform="translate(20,${H-18})" font-size="12" fill="#8B9098"><rect width="14" height="3" y="-4" fill="#F3F4F6"/><text x="20">${tr('gas pieno')}</text><rect x="110" width="14" height="3" y="-4" fill="#FF1A2D"/><text x="130">${tr('freno')}</text><rect x="190" width="14" height="3" y="-4" fill="#8B9098"/><text x="210">${tr('parziale')}</text></g>`;
+    <g transform="translate(20,${H-18})" font-size="12" fill="#8B9098"><rect width="14" height="3" y="-4" fill="#F3F4F6"/><text x="20">${tr('gas pieno')}</text><rect x="110" width="14" height="3" y="-4" fill="#E5484D"/><text x="130">${tr('freno')}</text><rect x="190" width="14" height="3" y="-4" fill="#8B9098"/><text x="210">${tr('parziale')}</text></g>`;
   return m;}
 function dashCar(d){const w=d.st.w;const S=.58,CX=275,CY=126;
   // the car of carTopG turned 90° (nose to the right): a point (x,y) of the 200 × 400 box goes to (CX-(y-200)·S, CY+(x-100)·S)
@@ -47,12 +47,12 @@ function dashCar(d){const w=d.st.w;const S=.58,CX=275,CY=126;
      ${order.map((v,j)=>`<rect x="${10+j*38}" y="30" width="34" height="22" fill="${dTc(v)}"/><text x="${27+j*38}" y="46" text-anchor="middle" fill="#0B0C0F" font-weight="600" font-size="13">${fx(v,0)}</text>`).join('')}
      <text x="10" y="72" fill="#8B9098" font-size="12">${tr('carcassa')}</text><text x="140" y="72" text-anchor="end" fill="#fff" font-weight="600" font-size="13">${fx(t.carc,0)}°</text>
      <text x="10" y="89" fill="#8B9098" font-size="12">${tr('pressione')}</text><text x="140" y="89" text-anchor="end" fill="#fff" font-weight="600" font-size="13">${fx(t.p,0)} kPa</text>
-     <text x="10" y="106" fill="#8B9098" font-size="12">${tr('freno max')}</text><text x="140" y="106" text-anchor="end" fill="${t.bMax>600?'#FF1A2D':'#FFD23F'}" font-weight="600" font-size="13">${fx(t.bMax,0)}°</text></g>`;});
+     <text x="10" y="106" fill="#8B9098" font-size="12">${tr('freno max')}</text><text x="140" y="106" text-anchor="end" fill="${t.bMax>600?'#E5484D':'#F2C230'}" font-weight="600" font-size="13">${fx(t.bMax,0)}°</text></g>`;});
   return c;}
 function dashStrip(d,Wt){const n=d.speed.length;const tr_=(a,h,lo,hi,dy)=>Array.from(a,(v,i)=>`${(i/(n-1)*Wt).toFixed(1)},${(dy+h-(v-lo)/(hi-lo)*h).toFixed(1)}`).join(' ');
   let lo=Infinity,hi=-Infinity;for(const v of d.speed){lo=Math.min(lo,v);hi=Math.max(hi,v);}
   let t=`<g stroke="rgba(255,255,255,.06)">${[0,1,2,3].map(i=>`<line x1="0" x2="${Wt}" y1="${i*36+2}" y2="${i*36+2}"/>`).join('')}</g><polyline points="${tr_(d.speed,110,lo-10,hi+5,0)}" fill="none" stroke="#fff" stroke-width="1.8"/>
-    <polyline points="${tr_(d.thr,34,0,100,124)}" fill="none" stroke="#2BE38A" stroke-width="1.4"/><polyline points="${tr_(d.brk,34,0,100,164)}" fill="none" stroke="#FF1A2D" stroke-width="1.4"/>`;
+    <polyline points="${tr_(d.thr,34,0,100,124)}" fill="none" stroke="#4CC38A" stroke-width="1.4"/><polyline points="${tr_(d.brk,34,0,100,164)}" fill="none" stroke="#E5484D" stroke-width="1.4"/>`;
   d.cor.forEach(c=>{const x=c.apex/(n-1)*Wt;t+=`<line x1="${x}" x2="${x}" y1="0" y2="200" stroke="rgba(255,26,45,.35)" stroke-dasharray="3 4"/><text x="${x+4}" y="210" fill="#8B9098" font-size="11">T${c.k}</text>`;});
   return t;}
 const dLeds=(f,c,n=22)=>`<div class="leds">${Array.from({length:n},(_,i)=>`<i style="${i<Math.round(Math.max(0,Math.min(1,f))*n)?`background:${c};box-shadow:0 0 6px ${c}`:''}"></i>`).join('')}</div>`;
@@ -69,8 +69,8 @@ function dashHTML(S){const d=dashData(S);if(!d)return '';const B=d.B,st=d.st;con
    <div class="panel dtel"><div class="dt">${tr('Telemetria')} · <b>${tr('G')}${B.num}</b> · ${tr('velocità / gas / freno')}</div><svg id="dashTel" viewBox="0 0 900 214" preserveAspectRatio="none"></svg></div>
    <div class="panel dlaps"><div class="dt">${tr('Giri')}</div><div class="dll">${d.L.map(l=>`<div class="kvr"><span>${tr('Giro')} ${l.num}</span><b style="color:${l===B?'var(--best)':l.invalid?'var(--bad)':'#fff'}">${fmtLap(l.time)}</b></div>`).join('')}</div></div>
    <div class="panel den"><div class="dt">${tr('Energia')}</div>
-     ${Number.isFinite(fuel)?`<div class="kvr"><span>${tr('Carburante / giro')}</span><b>${fx(fuel,2)}<small> L</small></b></div>${dLeds(fuel/4,'#FFD23F')}`:''}
-     ${Number.isFinite(bat)?`<div class="kvr"><span>${tr('Batteria fine giro')}</span><b>${fx(bat,0)}<small> %</small></b></div>${dLeds(bat/100,'#2BE38A')}`:''}
+     ${Number.isFinite(fuel)?`<div class="kvr"><span>${tr('Carburante / giro')}</span><b>${fx(fuel,2)}<small> L</small></b></div>${dLeds(fuel/4,'#F2C230')}`:''}
+     ${Number.isFinite(bat)?`<div class="kvr"><span>${tr('Batteria fine giro')}</span><b>${fx(bat,0)}<small> %</small></b></div>${dLeds(bat/100,'#4CC38A')}`:''}
      <div class="kvr"><span>${tr('Velocità max')}</span><b>${fx(vmax,0)}<small> km/h</small></b></div>${dLeds(vmax/340,'#F3F4F6')}</div></div>`;}
 function dashDraw(S){const d=dashData(S);const m=$('#dashMap');if(m){const r=m.getBoundingClientRect();const W=Math.max(300,Math.round(r.width)),H=Math.max(260,Math.round(r.height));m.setAttribute('viewBox',`0 0 ${W} ${H}`);m.innerHTML=dashMap(d,W,H);}
   const t=$('#dashTel');if(t)t.innerHTML=dashStrip(d,900);}

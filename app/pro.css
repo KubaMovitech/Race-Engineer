@@ -32,7 +32,7 @@ html[data-look="pro"] .verchip{background:transparent;border:0;color:var(--psil)
 html[data-look="pro"] .psync{display:flex;flex-direction:column;line-height:1.15;padding-left:10px;min-width:150px}
 html[data-look="pro"] .psync b{font:600 .78rem var(--f-body);display:flex;align-items:center;gap:6px;color:var(--psil);white-space:nowrap}
 html[data-look="pro"] .psync b i{width:8px;height:8px;border-radius:50%;background:var(--faint)}
-html[data-look="pro"] .psync.on b{color:#2BE38A}html[data-look="pro"] .psync.on b i{background:#2BE38A;box-shadow:0 0 8px #2BE38A}
+html[data-look="pro"] .psync.on b{color:#4CC38A}html[data-look="pro"] .psync.on b i{background:#4CC38A;box-shadow:0 0 8px #4CC38A}
 html[data-look="pro"] .psync.off b i{background:#F5B83D}
 @media (max-width:1500px){html[data-look="pro"] .psync small{display:none}html[data-look="pro"] .psync{min-width:0}}
 html[data-look="pro"] .psync small{font-size:.7rem;color:var(--muted);white-space:nowrap}
@@ -69,8 +69,8 @@ html[data-look="pro"] .pstrip .ps1{flex:1.5 1 260px}
 html[data-look="pro"] .pstrip .pl{font:600 .7rem var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 html[data-look="pro"] .pstrip .pn1{font:600 1.45rem "Titillium Web",sans-serif;color:#fff;display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:2px}
 html[data-look="pro"] .pstrip .pm{font-size:.8rem;color:var(--muted)}
-html[data-look="pro"] .plive{display:inline-flex;align-items:center;gap:6px;font:600 .78rem var(--f-body);color:#2BE38A}
-html[data-look="pro"] .plive i{width:8px;height:8px;border-radius:50%;background:#2BE38A;box-shadow:0 0 8px #2BE38A}
+html[data-look="pro"] .plive{display:inline-flex;align-items:center;gap:6px;font:600 .78rem var(--f-body);color:#4CC38A}
+html[data-look="pro"] .plive i{width:8px;height:8px;border-radius:50%;background:#4CC38A;box-shadow:0 0 8px #4CC38A}
 html[data-look="pro"] .pstrip .ps2{flex-direction:row;align-items:center;gap:12px;flex:1 1 200px}
 html[data-look="pro"] .pstrip .ps2 b{display:block;font:600 .95rem "Titillium Web",sans-serif;color:#fff;line-height:1.2}
 html[data-look="pro"] .pstrip .ps2>div{min-width:0}
@@ -79,13 +79,13 @@ html[data-look="pro"] .pcar{width:92px;height:32px;flex:none}
 html[data-look="pro"] .ptrk{width:46px;height:32px;flex:none;color:var(--psil)}
 html[data-look="pro"] .pstrip .pv{font:600 1.55rem var(--f-mono);color:#fff;line-height:1.2;white-space:nowrap}
 html[data-look="pro"] .pstrip .pv small{font-size:.9rem;color:var(--psil)}
-html[data-look="pro"] .pstrip .pv.best{color:#B57BFF}html[data-look="pro"] .pstrip .pv.good{color:#2BE38A}
+html[data-look="pro"] .pstrip .pv.best{color:#B07CFF}html[data-look="pro"] .pstrip .pv.good{color:#4CC38A}
 html[data-look="pro"] .pstrip .pwx small{white-space:nowrap}
 html[data-look="pro"] .pstrip .ps>small{font-size:.76rem;color:var(--muted);white-space:nowrap}
 html[data-look="pro"] .pbar{height:5px;background:var(--line);border-radius:3px;margin:5px 0 4px;min-width:110px}
-html[data-look="pro"] .pbar i{display:block;height:100%;border-radius:3px;background:linear-gradient(90deg,#20C673,#2BE38A)}
+html[data-look="pro"] .pbar i{display:block;height:100%;border-radius:3px;background:linear-gradient(90deg,#20C673,#4CC38A)}
 html[data-look="pro"] .pstrip .pwx{flex-direction:row;align-items:center;gap:12px}
-html[data-look="pro"] .pstrip .pwx svg{width:34px;height:34px;fill:none;stroke:#FFC53D;stroke-width:1.7;stroke-linecap:round}
+html[data-look="pro"] .pstrip .pwx svg{width:34px;height:34px;fill:none;stroke:#F2C230;stroke-width:1.7;stroke-linecap:round}
 html[data-look="pro"] .pstrip .pbtn{flex-direction:column;gap:6px;justify-content:center}
 html[data-look="pro"] .pstrip .pbtn .btn{height:32px;border-radius:8px;clip-path:none;font:600 .74rem var(--f-body);letter-spacing:.08em;text-transform:uppercase;background:var(--panel2);border:1px solid var(--line);color:var(--psil2);box-shadow:none}
 html[data-look="pro"] .pstrip .pbtn .btn:hover{border-color:var(--pacc)}
@@ -175,7 +175,7 @@ html[data-look="pro"] .pstrip .psec small{flex-basis:100%;padding-left:74px}
 html[data-look="pro"] .pstrip .psec span{color:var(--muted);font-size:.8rem;min-width:64px}
 html[data-look="pro"] .pstrip .psec b{color:var(--psil);font:600 .9rem var(--f-body)}
 html[data-look="pro"] .pstrip .psec small{color:var(--muted);font-size:.78rem}
-html[data-look="pro"] .pq.q2{color:#2BE38A!important}html[data-look="pro"] .pq.q1{color:var(--pwarn)!important}html[data-look="pro"] .pq.q0{color:#FF5A6A!important}
+html[data-look="pro"] .pq.q2{color:#4CC38A!important}html[data-look="pro"] .pq.q1{color:var(--pwarn)!important}html[data-look="pro"] .pq.q0{color:#EE6B6F!important}
 @media (max-width:1300px){html[data-look="pro"] .pstrip .pk{min-width:140px}html[data-look="pro"] .pstrip .pk .pv{font-size:1.6rem}}
 @media (max-width:760px){html[data-look="pro"] .pstrip .pk{flex:1 1 30%;min-width:0}html[data-look="pro"] .pstrip .pk .pv{font-size:1.3rem}html[data-look="pro"] .pstrip .psec{flex-basis:100%}}
 
@@ -197,11 +197,11 @@ html[data-look="pro"] .hero.pstrip{flex-direction:column;min-height:0}
 html[data-look="pro"] .pstrip .pmain{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.4fr)}
 html[data-look="pro"] .pstrip .pmain .pk{min-width:0;padding:14px 20px}
 html[data-look="pro"] .pstrip .pmain .pk .pv{font-size:2.1rem}
-html[data-look="pro"] .pstrip .pv.warn{color:var(--pwarn)}html[data-look="pro"] .pstrip .pv.bad{color:#FF5A6A}
+html[data-look="pro"] .pstrip .pv.warn{color:var(--pwarn)}html[data-look="pro"] .pstrip .pv.bad{color:#EE6B6F}
 html[data-look="pro"] .pstrip .pprob{cursor:pointer;border-right:0}
 html[data-look="pro"] .pstrip .pprob:hover{background:rgba(255,255,255,.025)}
 html[data-look="pro"] .pstrip .pt{font:600 1.15rem var(--f-body);color:#fff;line-height:1.25;margin:4px 0 2px}
-html[data-look="pro"] .pstrip .pt.s2{color:#FF5A6A}html[data-look="pro"] .pstrip .pt.s1{color:var(--pwarn)}html[data-look="pro"] .pstrip .pt.ok{color:#2BE38A}
+html[data-look="pro"] .pstrip .pt.s2{color:#EE6B6F}html[data-look="pro"] .pstrip .pt.s1{color:var(--pwarn)}html[data-look="pro"] .pstrip .pt.ok{color:#4CC38A}
 html[data-look="pro"] .pstrip .pprob small{white-space:normal;display:block}
 html[data-look="pro"] .pstrip .pline{display:flex;flex-wrap:wrap;align-items:center;gap:6px 16px;padding:8px 20px;border-top:1px solid var(--line);font-size:.86rem;color:var(--muted)}
 html[data-look="pro"] .pstrip .pline>b{color:var(--psil);font-size:.9rem}
@@ -213,7 +213,7 @@ html[data-look="pro"] .pstrip .pline .pbtn .btn{height:30px}
 
 /* ---------- 2.10: data states: missing, old, normal look different ---------- */
 .dmiss{display:inline-block;font:italic 500 .8em var(--f-body);color:var(--faint);border:1px dashed var(--faint);border-radius:6px;padding:0 8px;letter-spacing:0;vertical-align:middle}
-.dold{color:var(--pwarn,#FFC53D)}.dold::before{content:"◷ ";font-style:normal}
+.dold{color:var(--pwarn,#F2C230)}.dold::before{content:"◷ ";font-style:normal}
 
 /* ---------- 2.10: side menu grouped by activity; on the phone four places and «Altro» ---------- */
 html[data-look="pro"] .pgh{font:600 .74rem var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--faint);padding:12px 14px 4px}
@@ -285,12 +285,10 @@ html[data-look="pro"] .ecount span{letter-spacing:.05em}
 
 /* ================= MOTION (ui46.js, ui47.js): tokens, page change, press, focus, overlays =================
    Durations 100 / 150 / 200 / 300 ms only; ease-out to enter, ease-in to leave; only transform and opacity.
-   Motion answers an action (open, press, change page). The one designed moment is the lap drawing (ui47.js). */
-:root{--m-100:100ms;--m-150:150ms;--m-200:200ms;--m-300:300ms;--m-out:cubic-bezier(.16,1,.3,1);--m-in:cubic-bezier(.7,0,.84,0)}
+   Motion answers an action (open, press); changing page has no animation. The one designed moment is the lap drawing (ui47.js). */
+:root{--m-100:100ms;--m-150:150ms;--m-200:200ms;--m-300:300ms;--m-out:cubic-bezier(.16,1,.3,1)}
 
-/* page change: a 150 ms fade of the new page */
 @keyframes fIn{from{opacity:0}to{opacity:1}}
-.view.pv-enter{animation:fIn var(--m-150) var(--m-out)}
 
 /* controls: colour and border change on hover, a short press; no lifting cards */
 html[data-look="pro"] .btn,html[data-look="pro"] .pn,html[data-look="pro"] .tab,html[data-look="pro"] .sutabs button,html[data-look="pro"] .seg button,
@@ -330,7 +328,7 @@ html[data-look="pro"] #toastStack .toast[data-kind="info"] .tk{color:var(--pacc)
 /* reduced motion: nothing slides or scales; overlays and pages keep a 100 ms fade at most */
 @media (prefers-reduced-motion:reduce){
   html[data-look="pro"] .modal:not([hidden]) .mbox,html[data-look="pro"] #proNav.pmopen nav,html[data-look="pro"] #toastStack .toast{animation:fIn var(--m-100) linear}
-  .view.pv-enter,html[data-look="pro"] details[open]>:not(summary){animation:none}
+  html[data-look="pro"] details[open]>:not(summary){animation:none}
   .pskel .sk::after{animation:none}
   html[data-look="pro"] .btn:active,html[data-look="pro"] .pn:active,html[data-look="pro"] .seg button:active{transform:none}
 }

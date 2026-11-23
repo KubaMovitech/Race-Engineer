@@ -8,7 +8,7 @@ const WEL_TRACK=(()=>{const P=[];for(let i=0;i<=240;i++){const t=i/240*Math.PI*2
 function welTrack(){const S=[...lds()].filter(x=>!x.sample&&x.best).pop();if(!S)return {P:WEL_TRACK,S:null};
   try{const d=dashData(S);if(d?.xy)return {P:dashFit(d.xy,600,260,24),S,d};}catch(e){}return {P:WEL_TRACK,S:null};}
 function welHeroHTML(){const {P,S}=welTrack();const path=`M${P.map(p=>p[0].toFixed(1)+' '+p[1].toFixed(1)).join('L')}Z`;
-  const cap=S?`${esc(S.meta?.venue||'')} · ${tr('miglior giro')} <b class="mono">${fmtLap(S.best.time)}</b>`:tr('Carica una telemetria: qui comparirà il tuo giro.');
+  const cap=S?`${esc(S.meta?.venue||'')} · ${tr('miglior giro')} <b class="mono">${fmtLap(S.best.time)}</b>`:tr('Carica una telemetria: qui comparirà il tuo giro');
   return `<figure class="whero" aria-label="${esc(tr('Il tracciato dell\'ultima sessione'))}"><svg viewBox="0 0 600 260" role="img"><path class="wh-bed" d="${path}"/><path class="wh-line" d="${path}" pathLength="1000"/><circle class="wh-dot" r="6"/></svg>
     <figcaption>${cap}</figcaption><button type="button" class="btn wh-again" hidden>${tr('Rivedi')}</button></figure>`;}
 function welRun(fig){const svg=fig.querySelector('svg'),line=svg.querySelector('.wh-line'),dot=svg.querySelector('.wh-dot'),again=fig.querySelector('.wh-again');
@@ -62,7 +62,7 @@ html[data-look="pro"] .hero.welcome .wtop .ey{grid-column:1;align-self:end}html[
 .drep{position:absolute;right:222px;top:44px;display:flex;gap:6px;align-items:flex-end;flex-direction:column;z-index:1}
 .drep .btn{height:32px}.drep-r{font:600 .82rem var(--f-mono);color:var(--muted)}
 #dRep .dr-halo{fill:color-mix(in srgb,var(--pacc,#C9A54C) 25%,transparent)}#dRep .dr-dot{fill:#fff;stroke:var(--pacc,#C9A54C);stroke-width:3}
-#dRep.brk .dr-dot{stroke:#FF3B4E}#dRep.brk .dr-halo{fill:rgba(255,59,78,.25)}
+#dRep.brk .dr-dot{stroke:#E5484D}#dRep.brk .dr-halo{fill:rgba(255,59,78,.25)}
 #dRep .dr-lbl{font:600 13px "JetBrains Mono",monospace;fill:#fff;paint-order:stroke;stroke:#000;stroke-width:4px}
 @media (max-width:1100px){.drep{position:static;margin:6px 8px 0}}
 @media (prefers-reduced-motion:reduce){.whero.wh-go .wh-line{animation:none}.whero .wh-dot{transition:none}}

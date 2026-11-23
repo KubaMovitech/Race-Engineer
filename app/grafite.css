@@ -1,21 +1,21 @@
-/* ================= GRAFITE (2.23, default look: html[data-look="pro"][data-pal="grafite"]) =================
+/* ================= GRAFITE → FIAMMA (2.24: carbon black, flame orange; was 2.23, default look: html[data-look="pro"][data-pal="grafite"]) =================
    Graphite background, thin lines, flat panels with small corners. One rule for colour everywhere:
    blue = reference (giro A), orange = what you analyse / your car / what is selected,
    yellow and red only for warnings, purple and green only for lap and sector times.
    Menu: the four sections in a row under the top bar, the pages of the open section as tabs on top of the page.
    Only looks change here. */
 html[data-look="pro"][data-pal="grafite"],html[data-look="pro"][data-pal="grafite"][data-skin]{
-  --bg:#15181C; --panel:#1B1F24; --panel2:#21262C; --band:#181B20; --line:#2B3038; --grid:#23272D; --trackbed:#2A2F36;
-  --ink:#ECEEF1; --muted:#8D949E; --faint:#5F6670; --hdr:#15181C; --hdr-line:#2B3038; --hdr-ink:#ECEEF1; --hdr-muted:#8D949E;
-  --pacc:#F2722B; --pacc2:#FF9A5C; --accent2:#FF9A5C; --lapA:#7196DA; --lapB:#F2722B; --cyan:#5BB8E8;
-  --edge:#2B3038; --edge2:#3E454F; --r:3px; --shadow:none;
+  --bg:#0C0D0F; --panel:#141518; --panel2:#1C1E22; --band:#101114; --line:#25272B; --grid:#1B1D20; --trackbed:#232529;
+  --ink:#F2F2F0; --muted:#A6A8AD; --faint:#73767C; --hdr:#0C0D0F; --hdr-line:#25272B; --hdr-ink:#F2F2F0; --hdr-muted:#A6A8AD;
+  --pacc:#FF5A1F; --pacc2:#FF8452; --accent:#FF5A1F; --accent2:#FF8452; --accent-ink:#0C0D0F; --lapA:#8DB6FF; --lapB:#FF5A1F; --cyan:#6EC3E6;
+  --edge:#25272B; --edge2:#383B41; --r:4px; --shadow:none;
   --pnw:0px; --ptop:64px;
-  --psel:#262B32; --psel2:#21262C; --pbtn1:#F2722B; --pbtn2:#E4631C; --pbtnb:#F2722B; --pbtnt:#FFFFFF;
-  --pg1:#1B1F24; --pg2:#1B1F24; --pside1:#15181C; --pbody1:#15181C; --pbody2:#15181C;
-  --pglow:transparent; --pfocus:rgba(242,114,43,.28); --ptopbg:#15181C; --psideglow:transparent;
-  --psil:#C3C8CF; --psil2:#E3E6EA; --psil3:#A0A7B0; --pinput:#121519; --pth:#1B1F24; --pline2:#23272D; --pbrand:#ECEEF1;
-  --pcar1:#23272D; --pcar2:#3A4049; --pcar3:#2C3138; --pwarn:#F2C230; --pwarnbg:rgba(242,194,48,.13);
-  --good:#3DBE7C; --bad:#E5484D; --warn:#F2C230; --best:#A673F0;
+  --psel:#1F2125; --psel2:#1C1E22; --pbtn1:#FF5A1F; --pbtn2:#FF6E38; --pbtnb:#FF5A1F; --pbtnt:#0C0D0F;
+  --pg1:#141518; --pg2:#141518; --pside1:#0C0D0F; --pbody1:#0C0D0F; --pbody2:#0C0D0F;
+  --pglow:transparent; --pfocus:rgba(255,90,31,.32); --ptopbg:#0C0D0F; --psideglow:transparent;
+  --psil:#C9CACD; --psil2:#E4E5E6; --psil3:#A6A8AD; --pinput:#0F1012; --pth:#141518; --pline2:#1B1D20; --pbrand:#F2F2F0;
+  --pcar1:#1C1E22; --pcar2:#383B41; --pcar3:#26282C; --pwarn:#F2C230; --pwarnbg:rgba(242,194,48,.10);
+  --good:#4CC38A; --bad:#E5484D; --warn:#F2C230; --best:#B07CFF;
 }
 html[data-look="pro"][data-pal="grafite"] body{background:var(--bg)}
 
@@ -25,9 +25,9 @@ html[data-look="pro"][data-pal="grafite"] .brand{width:auto;flex:0 0 auto;paddin
 html[data-look="pro"][data-pal="grafite"] .brand b{font-weight:700;font-size:1.2rem;letter-spacing:.06em}
 html[data-look="pro"][data-pal="grafite"] .brand .teamlogo{display:block}
 html[data-look="pro"][data-pal="grafite"] .pf{border-radius:3px;background:var(--panel)}
-html[data-look="pro"][data-pal="grafite"] .hdr-tools .btn{border-radius:3px;background:transparent;border-color:#4A515B}
-html[data-look="pro"][data-pal="grafite"] #btnLoad{background:var(--pacc);border-color:var(--pacc);color:#fff}
-html[data-look="pro"][data-pal="grafite"] #btnLoad svg{stroke:#fff}
+html[data-look="pro"][data-pal="grafite"] .hdr-tools .btn{border-radius:3px;background:transparent;border-color:#383B41}
+html[data-look="pro"][data-pal="grafite"] #btnLoad{background:var(--pacc);border-color:var(--pacc);color:var(--accent-ink);font-weight:600}
+html[data-look="pro"][data-pal="grafite"] #btnLoad svg{stroke:var(--accent-ink)}
 html[data-look="pro"][data-pal="grafite"] .psync.on b{color:var(--good)}html[data-look="pro"][data-pal="grafite"] .psync.on b i{background:var(--good);box-shadow:none}
 
 /* ---------- the four sections in a row ---------- */
@@ -37,25 +37,25 @@ html[data-look="pro"][data-pal="grafite"] #proNav::after,html[data-look="pro"][d
 html[data-look="pro"][data-pal="grafite"] #proNav nav{flex-direction:row;gap:4px;height:100%;width:auto}
 html[data-look="pro"][data-pal="grafite"] #proNav .psec{display:flex;flex-direction:row}
 html[data-look="pro"][data-pal="grafite"] #proNav .psub{display:none!important}
-html[data-look="pro"][data-pal="grafite"] #proNav .pmain{display:flex!important;flex:none;flex-direction:row;align-items:center;gap:8px;height:100%;min-width:0;padding:0 18px;border:0;border-bottom:3px solid transparent;border-radius:0;background:none!important;color:#B8BEC6}
+html[data-look="pro"][data-pal="grafite"] #proNav .pmain{display:flex!important;flex:none;flex-direction:row;align-items:center;gap:8px;height:100%;min-width:0;padding:0 18px;border:0;border-bottom:3px solid transparent;border-radius:0;background:none!important;color:var(--muted)}
 html[data-look="pro"][data-pal="grafite"] #proNav .pmain svg{display:none}
 html[data-look="pro"][data-pal="grafite"] #proNav .pmain span{display:block}
 html[data-look="pro"][data-pal="grafite"] #proNav .pmain small{display:none}
-html[data-look="pro"][data-pal="grafite"] #proNav .pmain b{font:400 1.08rem var(--f-body);color:#B8BEC6;white-space:nowrap}
+html[data-look="pro"][data-pal="grafite"] #proNav .pmain b{font:400 1.08rem var(--f-body);color:var(--muted);white-space:nowrap}
 html[data-look="pro"][data-pal="grafite"] #proNav .pmain:hover b{color:#fff}
 html[data-look="pro"][data-pal="grafite"] #proNav .pmain[aria-current="true"]{border-bottom-color:var(--pacc)}
 html[data-look="pro"][data-pal="grafite"] #proNav .pmain[aria-current="true"] b{color:#fff;font-weight:600}
 html[data-look="pro"][data-pal="grafite"] #proNav .livedot{background:var(--bad)}
-html[data-look="pro"][data-pal="grafite"] #proNav .pinv{margin:9px 0 9px auto;padding:0 14px;border:1px solid #4A515B;border-radius:3px;font-size:.9rem}
+html[data-look="pro"][data-pal="grafite"] #proNav .pinv{margin:9px 0 9px auto;padding:0 14px;border:1px solid #383B41;border-radius:3px;font-size:.9rem}
 html[data-look="pro"][data-pal="grafite"] #proNav .pinv span{display:inline}
 /* the pages of the open section: in the same row, after a thin line */
 html[data-look="pro"][data-pal="grafite"] #proNav .psectabs:not([hidden]){display:flex;flex-wrap:nowrap;align-items:stretch;gap:0;margin:0 0 0 14px;padding:0 0 0 14px;border:0;position:relative;min-width:0}
-html[data-look="pro"][data-pal="grafite"] #proNav .psectabs::before{content:"";position:absolute;left:0;top:15px;bottom:15px;width:1px;background:#3E454F}
+html[data-look="pro"][data-pal="grafite"] #proNav .psectabs::before{content:"";position:absolute;left:0;top:15px;bottom:15px;width:1px;background:#33363B}
 html[data-look="pro"][data-pal="grafite"] #proNav .psectabs .pst{display:flex;align-items:center;padding:3px 13px 0;font-size:.95rem;white-space:nowrap;border-bottom:3px solid transparent}
-html[data-look="pro"][data-pal="grafite"] #proNav .psectabs .pst[aria-current="page"]{border-bottom-color:#C3C8CF}
+html[data-look="pro"][data-pal="grafite"] #proNav .psectabs .pst[aria-current="page"]{border-bottom-color:#D6D7D9}
 /* (older placement, on top of the page) */
 html[data-look="pro"][data-pal="grafite"] .psectabs:not([hidden]){display:flex;gap:2px;flex-wrap:wrap;margin:-18px -22px 18px;padding:0 22px;border-bottom:1px solid var(--line)}
-html[data-look="pro"][data-pal="grafite"] .psectabs .pst{border:0;border-bottom:3px solid transparent;border-radius:0;background:none;color:#B8BEC6;padding:12px 16px 9px;cursor:pointer;font:400 1rem var(--f-body)}
+html[data-look="pro"][data-pal="grafite"] .psectabs .pst{border:0;border-bottom:3px solid transparent;border-radius:0;background:none;color:var(--muted);padding:12px 16px 9px;cursor:pointer;font:400 1rem var(--f-body)}
 html[data-look="pro"][data-pal="grafite"] .psectabs .pst:hover{color:#fff}
 html[data-look="pro"][data-pal="grafite"] .psectabs .pst[aria-current="page"]{border-bottom-color:var(--pacc);color:#fff;font-weight:600;background:none}
 html[data-look="pro"][data-pal="grafite"] main{margin:0;padding:18px 22px 64px}
@@ -71,9 +71,9 @@ html[data-look="pro"][data-pal="grafite"] .panel>.panel-h:first-child,html[data-
 /* titles in plain case, labels small and grey */
 html[data-look="pro"][data-pal="grafite"] .panel-h h2,html[data-look="pro"][data-pal="grafite"] .panel-h h3,html[data-look="pro"][data-pal="grafite"] .panel>h3,html[data-look="pro"][data-pal="grafite"] .dt,html[data-look="pro"][data-pal="grafite"] .dash .dt{text-transform:none;letter-spacing:0;font-size:1.02rem;font-weight:600;color:#fff}
 html[data-look="pro"][data-pal="grafite"] .btn,html[data-look="pro"][data-pal="grafite"] .seg button,html[data-look="pro"][data-pal="grafite"] .tog,html[data-look="pro"][data-pal="grafite"] .sutabs button,html[data-look="pro"][data-pal="grafite"] .pstrip .pbtn .btn{border-radius:3px}
-html[data-look="pro"][data-pal="grafite"] .btn{background:transparent;border-color:#4A515B}
-html[data-look="pro"][data-pal="grafite"] .btn:hover{background:var(--panel2);border-color:#6B727C}
-html[data-look="pro"][data-pal="grafite"] .btn.primary{background:var(--pacc);border-color:var(--pacc);color:#fff}
+html[data-look="pro"][data-pal="grafite"] .btn{background:transparent;border-color:#383B41}
+html[data-look="pro"][data-pal="grafite"] .btn:hover{background:var(--panel2);border-color:#55585E}
+html[data-look="pro"][data-pal="grafite"] .btn.primary{background:var(--pacc);border-color:var(--pacc);color:var(--accent-ink)}
 html[data-look="pro"][data-pal="grafite"] .btn.primary:hover{background:var(--pbtn2)}
 html[data-look="pro"][data-pal="grafite"] select,html[data-look="pro"][data-pal="grafite"] input[type=number],html[data-look="pro"][data-pal="grafite"] input[type=text],html[data-look="pro"][data-pal="grafite"] input:not([type]),html[data-look="pro"][data-pal="grafite"] textarea{border-radius:3px!important}
 html[data-look="pro"][data-pal="grafite"] .seg button[aria-pressed="true"],html[data-look="pro"][data-pal="grafite"] .tog[aria-pressed="true"],html[data-look="pro"][data-pal="grafite"] .sutabs button[aria-selected="true"],html[data-look="pro"][data-pal="grafite"] main>.tabs.subtabs .tab[aria-selected="true"]{background:var(--psel);border-color:var(--pacc);color:#fff}
@@ -103,7 +103,7 @@ html[data-look="pro"][data-pal="grafite"] .pstrip .pt.ok{color:var(--good)}
 html[data-look="pro"][data-pal="grafite"] .btn{text-transform:none;letter-spacing:0;font-family:var(--f-body)}
 html[data-look="pro"][data-pal="grafite"] main .btn.primary,html[data-look="pro"][data-pal="grafite"] .modal .btn.primary{background:transparent;color:var(--pacc2);border-color:var(--pacc)}
 html[data-look="pro"][data-pal="grafite"] main .btn.primary:hover,html[data-look="pro"][data-pal="grafite"] .modal .btn.primary:hover{background:color-mix(in srgb,var(--pacc) 14%,transparent);color:#fff}
-html[data-look="pro"][data-pal="grafite"] .pstrip .pbtn .btn,html[data-look="pro"][data-pal="grafite"] .pstrip .pbtn .btn.primary{background:transparent;color:var(--psil2);border-color:#4A515B;text-transform:none;letter-spacing:0;font-size:.86rem}
+html[data-look="pro"][data-pal="grafite"] .pstrip .pbtn .btn,html[data-look="pro"][data-pal="grafite"] .pstrip .pbtn .btn.primary{background:transparent;color:var(--psil2);border-color:#383B41;text-transform:none;letter-spacing:0;font-size:.86rem}
 html[data-look="pro"][data-pal="grafite"] .sb.race{background:transparent;color:var(--pacc2);border:1px solid var(--pacc);border-radius:3px}
 html[data-look="pro"][data-pal="grafite"] #rcBar{background:var(--bg);border-top-color:var(--line)}
 html[data-look="pro"][data-pal="grafite"] #rcBar .rcl{background:var(--panel2);color:var(--pacc2)}
@@ -114,19 +114,19 @@ html[data-look="pro"][data-pal="grafite"] td.l,html[data-look="pro"][data-pal="g
 html[data-look="pro"][data-pal="grafite"] .kpi .l,html[data-look="pro"][data-pal="grafite"] .cchip span,html[data-look="pro"][data-pal="grafite"] .pstrip .pl{font:600 .76rem var(--f-body)!important;letter-spacing:.1em!important;text-transform:uppercase;color:var(--muted)}
 html[data-look="pro"][data-pal="grafite"] .lvsess .cchip b{font-size:1.1rem}
 html[data-look="pro"][data-pal="grafite"] .lvtabs{border-top:0;border-bottom:1px solid var(--line);gap:2px}
-html[data-look="pro"][data-pal="grafite"] .lvtabs button{font:400 1rem var(--f-body)!important;text-transform:none!important;letter-spacing:0!important;padding:10px 16px 8px;border:0;border-bottom:3px solid transparent;border-radius:0;background:none!important;color:#B8BEC6}
+html[data-look="pro"][data-pal="grafite"] .lvtabs button{font:400 1rem var(--f-body)!important;text-transform:none!important;letter-spacing:0!important;padding:10px 16px 8px;border:0;border-bottom:3px solid transparent;border-radius:0;background:none!important;color:var(--muted)}
 html[data-look="pro"][data-pal="grafite"] .lvtabs button:hover{color:#fff}
 html[data-look="pro"][data-pal="grafite"] .lvtabs button[aria-selected="true"]{color:#fff!important;font-weight:600!important;border-bottom-color:var(--pacc);background:none!important;box-shadow:none}
 html[data-look="pro"][data-pal="grafite"] table.lbt tbody tr:nth-child(even) td{background:transparent}
 html[data-look="pro"][data-pal="grafite"] table.lbt tbody tr:hover td{background:var(--panel2)}
-html[data-look="pro"][data-pal="grafite"] table.lbt tr.ours td,html[data-look="pro"][data-pal="grafite"] tr.ours td{background:#262B32!important}
+html[data-look="pro"][data-pal="grafite"] table.lbt tr.ours td,html[data-look="pro"][data-pal="grafite"] tr.ours td{background:#1F2125!important}
 html[data-look="pro"][data-pal="grafite"] table.lbt tr.ours td:first-child,html[data-look="pro"][data-pal="grafite"] tr.ours td:first-child{box-shadow:inset 3px 0 var(--pacc)}
 html[data-look="pro"][data-pal="grafite"] .lvlb table.lbt td.l{font-family:var(--f-body);text-transform:none;letter-spacing:0;font-weight:600}
 html[data-look="pro"][data-pal="grafite"] .lbar{box-shadow:none;border-color:var(--line);border-top:2px solid var(--pacc);border-radius:3px;background:var(--panel)}
 html[data-look="pro"][data-pal="grafite"] .btn.primary{box-shadow:none}
 /* Setup Builder tabs: underlined like the other tabs */
 html[data-look="pro"][data-pal="grafite"] .sutabs{gap:2px;border-bottom:1px solid var(--line)}
-html[data-look="pro"][data-pal="grafite"] .sutabs button{border:0;border-bottom:3px solid transparent;border-radius:0;background:none;color:#B8BEC6;font:400 1rem var(--f-body);letter-spacing:0;text-transform:none;padding:10px 16px 8px}
+html[data-look="pro"][data-pal="grafite"] .sutabs button{border:0;border-bottom:3px solid transparent;border-radius:0;background:none;color:var(--muted);font:400 1rem var(--f-body);letter-spacing:0;text-transform:none;padding:10px 16px 8px}
 html[data-look="pro"][data-pal="grafite"] .sutabs button:hover{color:#fff}
 html[data-look="pro"][data-pal="grafite"] .sutabs button[aria-selected="true"]{background:none;border-color:transparent;border-bottom-color:var(--pacc);color:#fff;font-weight:600}
 /* race mode: same graphite, clock in plain white */
@@ -150,7 +150,7 @@ html[data-look="pro"][data-pal="grafite"] .lsbar .lsc.us{box-shadow:0 0 0 3px rg
 html[data-look="pro"][data-pal="grafite"] .strip .lp,html[data-look="pro"][data-pal="grafite"] .mapzoom button,html[data-look="pro"][data-pal="grafite"] .sb,html[data-look="pro"][data-pal="grafite"] .sesbadge .sb{clip-path:none!important;box-shadow:none}
 html[data-look="pro"][data-pal="grafite"] .strip .lp{border-radius:2px}
 /* what is selected: grey fill and an orange line, never blue (blue is the reference lap) */
-html[data-look="pro"][data-pal="grafite"] .seg button[aria-pressed="true"],html[data-look="pro"][data-pal="grafite"] .tog[aria-pressed="true"]{background:#2F353D!important;color:#fff!important;border-color:transparent;box-shadow:inset 0 -2px 0 var(--pacc)!important}
+html[data-look="pro"][data-pal="grafite"] .seg button[aria-pressed="true"],html[data-look="pro"][data-pal="grafite"] .tog[aria-pressed="true"]{background:#24272B!important;color:#fff!important;border-color:transparent;box-shadow:inset 0 -2px 0 var(--pacc)!important}
 html[data-look="pro"][data-pal="grafite"] tbody tr:hover td{background:rgba(255,255,255,.035)}
 html[data-look="pro"][data-pal="grafite"] table.lbt thead,html[data-look="pro"][data-pal="grafite"] table.lbt thead tr{background:var(--panel)}
 html[data-look="pro"][data-pal="grafite"] table.lbt th{background:var(--panel)!important}
@@ -174,3 +174,108 @@ html[data-look="pro"][data-pal="grafite"] :is(.ecount span,.card .fix){border-ra
 html[data-look="pro"][data-pal="grafite"] #rcBar .rcs span.info b{color:var(--psil)}
 html[data-look="pro"][data-pal="grafite"] .badge{font-family:var(--f-body);text-transform:none;letter-spacing:.02em!important}
 html[data-look="pro"][data-pal="grafite"] .badge.off{background:transparent}
+
+/* ================= FIAMMA (2.24) =================
+   Night pit wall at Le Mans: carbon-black neutrals, one flame orange, ice blue for the reference lap.
+   Carbon weave only on the top bar and on the session strip (the two places that frame the page);
+   charts, tables and panels stay on plain surfaces so they read for hours.
+   Signature: the "timing wire", a 2px flame line that marks what is active (section, page, tab, your row).
+   Labels in sentence case, no tracking; figures in the mono font with tabular digits. */
+html[data-pal="grafite"]{color-scheme:dark;
+  --carbon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cdefs%3E%3ClinearGradient id='a' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%231a1b1e'/%3E%3Cstop offset='1' stop-color='%23141518'/%3E%3C/linearGradient%3E%3ClinearGradient id='b' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23141518'/%3E%3Cstop offset='1' stop-color='%230d0e10'/%3E%3C/linearGradient%3E%3ClinearGradient id='c'%3E%3Cstop offset='0' stop-color='%230b0c0e'/%3E%3Cstop offset='1' stop-color='%23101114'/%3E%3C/linearGradient%3E%3ClinearGradient id='d'%3E%3Cstop offset='0' stop-color='%23101114'/%3E%3Cstop offset='1' stop-color='%23090a0b'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='0' y='0' width='3' height='3' fill='url(%23a)'/%3E%3Crect x='0' y='3' width='3' height='3' fill='url(%23b)'/%3E%3Crect x='0' y='6' width='3' height='3' fill='url(%23c)'/%3E%3Crect x='0' y='9' width='3' height='3' fill='url(%23d)'/%3E%3Crect x='3' y='0' width='3' height='3' fill='url(%23b)'/%3E%3Crect x='3' y='3' width='3' height='3' fill='url(%23c)'/%3E%3Crect x='3' y='6' width='3' height='3' fill='url(%23d)'/%3E%3Crect x='3' y='9' width='3' height='3' fill='url(%23a)'/%3E%3Crect x='6' y='0' width='3' height='3' fill='url(%23c)'/%3E%3Crect x='6' y='3' width='3' height='3' fill='url(%23d)'/%3E%3Crect x='6' y='6' width='3' height='3' fill='url(%23a)'/%3E%3Crect x='6' y='9' width='3' height='3' fill='url(%23b)'/%3E%3Crect x='9' y='0' width='3' height='3' fill='url(%23d)'/%3E%3Crect x='9' y='3' width='3' height='3' fill='url(%23a)'/%3E%3Crect x='9' y='6' width='3' height='3' fill='url(%23b)'/%3E%3Crect x='9' y='9' width='3' height='3' fill='url(%23c)'/%3E%3C/svg%3E");
+  --ease:cubic-bezier(.22,1,.36,1)}
+html[data-pal="grafite"] ::selection{background:rgba(255,90,31,.32);color:#fff}
+html[data-pal="grafite"] body{-webkit-font-smoothing:antialiased}
+
+/* ---------- carbon: top bar + section row (one band), session strip ---------- */
+html[data-look="pro"][data-pal="grafite"] .top{background:linear-gradient(180deg,rgba(255,255,255,.025),rgba(0,0,0,0) 70%),var(--carbon) 0 0/16px 16px,#0C0D0F;border-bottom:0}
+html[data-look="pro"][data-pal="grafite"] #proNav{background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.35)),var(--carbon) 0 0/16px 16px,#0C0D0F;border-bottom:1px solid var(--line);box-shadow:0 1px 0 rgba(0,0,0,.6)}
+html[data-look="pro"][data-pal="grafite"] .hero.pstrip{background:linear-gradient(90deg,rgba(20,21,24,.15),rgba(20,21,24,.85) 70%),var(--carbon) 0 0/16px 16px,#0C0D0F;border:1px solid var(--line);border-left:2px solid var(--pacc);border-radius:4px}
+html[data-look="pro"][data-pal="grafite"] .pstrip .pline{background:rgba(12,13,15,.55);border-top:1px solid var(--line)}
+html[data-look="pro"][data-pal="grafite"] .pstrip .ps{border-right-color:var(--line)}
+
+/* ---------- brand: name in the interface font, flat mark ---------- */
+html[data-look="pro"][data-pal="grafite"] .brand b,html[data-look="pro"][data-pal="grafite"] .brand .bt b{font:600 1.12rem/1 var(--f-body);color:var(--ink)}
+html[data-look="pro"][data-pal="grafite"] .brand b span{color:var(--ink)}
+html[data-look="pro"][data-pal="grafite"] .brand .logo{width:28px;height:28px}
+
+/* ---------- type: sentence case everywhere, no tracking, weights 400 / 600 ---------- */
+/* :not(#_) lifts the rule above the older class rules that still carry !important */
+html[data-pal="grafite"] body :not(svg *):not(#_){text-transform:none!important;letter-spacing:normal!important}
+html[data-look="pro"][data-pal="grafite"] :is(.pstrip .pl,.kpi .l,.cchip span,.hero .ey,.lvhead .ey,label.f,.chip .k,.dsecs .dl,.pinfo span,.stbig .l,.ovh,.lvt-c small,.lvwn .t,.card .st,.sect,.grid3g h4,.pgh){font:400 .82rem/1.3 var(--f-body)!important;color:var(--muted)!important}
+html[data-look="pro"][data-pal="grafite"] th{font:400 .8rem var(--f-body)!important;color:var(--muted)!important}
+html[data-look="pro"][data-pal="grafite"] :is(.panel-h h2,.panel-h h3,.panel>h3,.dt,.dash .dt,.wcard h3){font:600 1rem/1.3 var(--f-body);color:var(--ink)}
+html[data-look="pro"][data-pal="grafite"] .dt b{font-weight:400;color:var(--muted)}
+html[data-look="pro"][data-pal="grafite"] .hero h1{font-weight:600;color:var(--ink)}
+/* figures: mono, tabular; big ones lighter so they read like a timing screen */
+html[data-look="pro"][data-pal="grafite"] :is(.mono,.num,.pstrip .pv,.kpi .v,.dsecs .dv){font-variant-numeric:tabular-nums slashed-zero}
+html[data-look="pro"][data-pal="grafite"] .pstrip .pv{font-weight:400;color:var(--ink)}
+html[data-look="pro"][data-pal="grafite"] .pstrip .pk .pv{font-size:2.1rem;line-height:1.15}
+html[data-look="pro"][data-pal="grafite"] .kpi .v{font-weight:400}
+html[data-look="pro"][data-pal="grafite"] .dsecs .dv{font-weight:400}
+html[data-look="pro"][data-pal="grafite"] .pstrip .pv.good{color:var(--good)}
+
+/* ---------- timing wire: 2px flame on what is active ---------- */
+html[data-look="pro"][data-pal="grafite"] #proNav .pmain,html[data-look="pro"][data-pal="grafite"] #proNav .psectabs .pst,html[data-look="pro"][data-pal="grafite"] .psectabs .pst,
+html[data-look="pro"][data-pal="grafite"] .lvtabs button,html[data-look="pro"][data-pal="grafite"] .sutabs button{border-bottom-width:2px!important;transition:color .15s var(--ease),border-color .15s var(--ease)}
+html[data-look="pro"][data-pal="grafite"] #proNav .pmain b{color:var(--muted);font-weight:400}
+html[data-look="pro"][data-pal="grafite"] #proNav .pmain:hover b,html[data-look="pro"][data-pal="grafite"] #proNav .psectabs .pst:hover{color:var(--ink)}
+html[data-look="pro"][data-pal="grafite"] #proNav .pmain[aria-current="true"] b{color:var(--ink);font-weight:600}
+html[data-look="pro"][data-pal="grafite"] #proNav .psectabs .pst{color:var(--muted)}
+html[data-look="pro"][data-pal="grafite"] #proNav .psectabs .pst[aria-current="page"]{border-bottom-color:var(--pacc);color:var(--ink);font-weight:600}
+html[data-look="pro"][data-pal="grafite"] #proNav .psectabs::before{background:var(--edge2)}
+html[data-look="pro"][data-pal="grafite"] .seg button[aria-pressed="true"],html[data-look="pro"][data-pal="grafite"] .tog[aria-pressed="true"]{background:#24272B!important;box-shadow:inset 0 -2px 0 var(--pacc)!important}
+html[data-look="pro"][data-pal="grafite"] table.lbt tr.ours td:first-child,html[data-look="pro"][data-pal="grafite"] tr.ours td:first-child{box-shadow:inset 2px 0 var(--pacc)}
+html[data-look="pro"][data-pal="grafite"] main>.tabs.subtabs .tab[aria-selected="true"]{background:var(--psel);border-color:var(--edge2);box-shadow:inset 0 -2px 0 var(--pacc);color:var(--ink)}
+
+/* ---------- surfaces and controls ---------- */
+html[data-look="pro"][data-pal="grafite"] :is(.panel,.wcard,.lbcard,.suscard,.kpi,.modal .mbox){border-color:var(--line);border-radius:4px}
+html[data-look="pro"][data-pal="grafite"] .btn,html[data-look="pro"][data-pal="grafite"] .hdr-tools .btn{border-color:#383B41;transition:background-color .15s var(--ease),border-color .15s var(--ease),color .15s var(--ease)}
+html[data-look="pro"][data-pal="grafite"] .btn:hover{background:#1C1E22;border-color:#55585E}
+html[data-look="pro"][data-pal="grafite"] .btn:active{transform:scale(.98)}
+html[data-look="pro"][data-pal="grafite"] #btnLoad{box-shadow:inset 0 1px 0 rgba(255,255,255,.22)}
+html[data-look="pro"][data-pal="grafite"] #btnLoad:hover{background:var(--pbtn2);border-color:var(--pbtn2)}
+html[data-look="pro"][data-pal="grafite"] main .btn.primary,html[data-look="pro"][data-pal="grafite"] .modal .btn.primary{color:var(--pacc2);border-color:rgba(255,90,31,.6)}
+html[data-look="pro"][data-pal="grafite"] :is(select,input[type=number],input[type=text],input:not([type]),textarea){background-color:var(--pinput);border-color:#2C2F34}
+html[data-look="pro"][data-pal="grafite"] :is(button,a,select,input,textarea,summary,[tabindex]):focus-visible{outline:2px solid var(--pacc);outline-offset:2px}
+html[data-look="pro"][data-pal="grafite"] tbody tr:hover td{background:rgba(255,255,255,.03)}
+html[data-look="pro"][data-pal="grafite"] .verchip.upd{animation:none}
+/* advice boxes in the Library: instructions, not errors, so no yellow fill */
+html[data-look="pro"][data-pal="grafite"] .warnbar{background:var(--panel2)!important;border:1px solid var(--line)!important;border-left:2px solid var(--warn)!important;color:var(--ink)}
+html[data-look="pro"][data-pal="grafite"] .lstat.lbad{border-color:var(--line);border-left:2px solid var(--warn)}
+/* words in the text font next to the numbers of the cursor panel */
+html[data-look="pro"][data-pal="grafite"] .twty .kv span{font-family:var(--f-body);color:var(--muted)}
+html[data-look="pro"][data-pal="grafite"] .twty .tt b{font:600 .9rem var(--f-body)}
+html[data-look="pro"][data-pal="grafite"] .twty .bars i{font-weight:600}
+/* weather line icons */
+html[data-pal="grafite"] .skyi{display:block;margin:2px auto;color:var(--muted)}
+html[data-look="pro"][data-pal="grafite"] .lvwn.cur .skyi{color:var(--ink)}
+/* scrollbars in the ramp */
+html[data-pal="grafite"]{scrollbar-color:#33363B transparent}
+
+/* ================= TIMING (2.24, frontend-design) =================
+   Lap times, gaps and sector figures in Barlow Condensed with tabular digits, like a timing tower;
+   JetBrains Mono stays for tables and small numbers. The session strip reads as a timing bar:
+   first the context (what session), then the three answers on the carbon, no boxes between them. */
+html[data-pal="grafite"]{--f-timing:"Barlow Condensed","Arial Narrow",var(--f-body)}
+html[data-look="pro"][data-pal="grafite"] :is(.pstrip .pv,.kpi .v:not(.txt),.dsecs .dv,.lrb b,.lvbig b){font-family:var(--f-timing);font-weight:500;font-variant-numeric:tabular-nums;letter-spacing:0}
+html[data-look="pro"][data-pal="grafite"] .kpi .v:not(.txt){font-size:1.75rem;line-height:1.1}
+html[data-look="pro"][data-pal="grafite"] .dsecs .dv{font-size:2.4rem;line-height:1.05}
+html[data-look="pro"][data-pal="grafite"] .lrb b{font-size:1.7rem;line-height:1.1}
+/* words in the Muretto session row are words, not code */
+html[data-look="pro"][data-pal="grafite"] .cchip b{font-family:var(--f-body);font-weight:600}
+
+/* the timing bar (wide screens; the phone keeps its stacked layout) */
+@media (min-width:761px){
+  html[data-look="pro"][data-pal="grafite"] .pstrip .pline{order:-1;border-top:0;padding:12px 24px 0;background:none;color:var(--muted)}
+  html[data-look="pro"][data-pal="grafite"] .pstrip .pline>b{color:var(--ink);font-weight:600}
+  html[data-look="pro"][data-pal="grafite"]:not([data-pnav="tel"]):not([data-pnav="tech"]) .pstrip .pmain{display:flex;align-items:flex-end;gap:56px;padding:4px 24px 16px}
+  html[data-look="pro"][data-pal="grafite"]:is([data-pnav="tel"],[data-pnav="tech"]) .pstrip .pline{padding-bottom:12px}
+  html[data-look="pro"][data-pal="grafite"] .pstrip .pmain .pk{flex:none;padding:0;border:0;min-width:0;background:none}
+  html[data-look="pro"][data-pal="grafite"] .pstrip .pmain .pprob{flex:1 1 auto;align-self:stretch;justify-content:flex-end;padding:0 0 4px;border-radius:4px}
+  html[data-look="pro"][data-pal="grafite"] .pstrip .pmain .pk .pv{font-size:3rem;line-height:1;order:0;margin:0}
+  html[data-look="pro"][data-pal="grafite"] .pstrip .pmain .pk .pl{order:1;margin-top:6px}
+  html[data-look="pro"][data-pal="grafite"] .pstrip .pmain .pk>small,html[data-look="pro"][data-pal="grafite"] .pstrip .pmain .pk .pm{order:2}
+  html[data-look="pro"][data-pal="grafite"] .pstrip .pmain .pprob .pl{order:0;margin:0 0 4px}
+  html[data-look="pro"][data-pal="grafite"] .pstrip .pmain .pprob :is(.pv,.pn1,b){font-family:var(--f-body)}
+}

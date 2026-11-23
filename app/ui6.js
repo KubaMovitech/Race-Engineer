@@ -7,7 +7,7 @@ const CMPC={Soft:'#FF3B3B',Medium:'#F5C518',Hard:'#F2F4F6',Wet:'#3A8DFF',Inter:'
 function q4(vals,fmt,color){return `<span class="q4 ${color?'':'txt'}">${W.map(w=>`<span${color?` style="background:${color(vals[w])}"`:''} title="${w}">${fmt(vals[w])}</span>`).join('')}</span>`;}
 function stintLD(S,body){
   const laps=S.laps.filter(l=>l.complete||l.start);
-  if(!laps.length){body.innerHTML='<div class="panel empty">Nessun giro completo in questa telemetria.</div>';return;}
+  if(!laps.length){body.innerHTML='<div class="panel empty">Nessun giro completo in questa telemetria</div>';return;}
   const st=laps.map(l=>lapStats(S,l)),fl=st.filter(s=>s.lap.type==='lanciato'),valid=fl.filter(s=>!s.lap.invalid);
   const best=S.best,paceSet=valid.filter(s=>best&&s.time<=best.time*1.07);
   const fuelL=median(fl.map(s=>s.fuel).filter(v=>v>0)),wearL=W.map(w=>mean(fl.map(s=>s.w[w].wear)));

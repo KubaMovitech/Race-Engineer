@@ -172,17 +172,14 @@ html[data-skin="wall"] .kpi::after{display:none}
 html[data-skin="wall"] .kpi .v{text-shadow:none;font-weight:700;color:#fff}
 html[data-skin="wall"] .kpi.hl{border-top-color:var(--best)}
 
-/* race control: the last events scroll along the bottom */
+/* race control: the last events along the bottom, newest first, standing still */
 #rcBar{position:fixed;left:0;right:0;bottom:0;z-index:35;height:34px;display:flex;align-items:stretch;background:#000;border-top:1px solid #1E2024;font:600 .8rem var(--f-mono);overflow:hidden}
 #rcBar[hidden]{display:none}
 #rcBar .rcl{flex:none;display:flex;align-items:center;padding:0 14px;background:var(--accent);color:#fff;font:700 .85rem var(--f-display);letter-spacing:.18em;text-transform:uppercase;cursor:pointer}
 #rcBar .rct{flex:1;min-width:0;position:relative;overflow:hidden}
-#rcBar .rcs{position:absolute;left:0;top:0;bottom:0;display:flex;align-items:center;gap:42px;white-space:nowrap;padding-left:100%;animation:rcs var(--rcdur,40s) linear infinite;color:#D6DAE0}
+#rcBar .rcs{position:absolute;left:0;top:0;bottom:0;display:flex;align-items:center;gap:42px;white-space:nowrap;right:0;padding-left:12px;color:#D6DAE0}
 #rcBar .rcs span i{font-style:normal;color:#6C727B;margin-right:8px}
 #rcBar .rcs span.bad b{color:#FF4D4D}#rcBar .rcs span.warn b{color:var(--warn)}#rcBar .rcs span.good b{color:var(--good)}#rcBar .rcs span.info b{color:#4FC3F7}
-#rcBar:hover .rcs{animation-play-state:paused}
-@keyframes rcs{to{transform:translateX(-100%)}}
-@media (prefers-reduced-motion:reduce){#rcBar .rcs{animation:none;padding-left:12px}}
 @media (max-width:760px){#rcBar{display:none}html[data-skin="wall"] body{padding-bottom:0}}
 html[data-skin="ws"] .panel>h3::before{background:var(--lapA);box-shadow:none}
 @media (max-width:760px){

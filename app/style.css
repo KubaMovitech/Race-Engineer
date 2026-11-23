@@ -277,8 +277,7 @@ h3{display:flex;align-items:center;gap:8px}
 .gantt span{display:flex;align-items:center;justify-content:center;font:700 .7rem var(--f-mono);color:#0b0b0b;border-right:2px solid var(--bg);white-space:nowrap;overflow:hidden}
 /* ---- Muretto live ---- */
 .livedot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--faint);margin-right:7px;vertical-align:middle}
-body.live-on .livedot{background:var(--bad);box-shadow:0 0 0 0 var(--bad);animation:lvp 1.6s infinite}
-@keyframes lvp{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--bad) 70%,transparent)}70%{box-shadow:0 0 0 7px transparent}100%{box-shadow:0 0 0 0 transparent}}
+body.live-on .livedot{background:var(--bad)}
 .pill{display:inline-flex;align-items:center;gap:5px;font-size:.76rem;font-weight:600;border:1px solid var(--line);background:var(--panel2);color:var(--muted);border-radius:999px;padding:2px 10px;white-space:nowrap}
 .pill.on{color:var(--good);border-color:color-mix(in srgb,var(--good) 45%,var(--line))}
 .pill.warn{color:var(--warn);border-color:color-mix(in srgb,var(--warn) 45%,var(--line))}
@@ -379,7 +378,7 @@ label.chk{display:inline-flex;align-items:center;gap:5px;font-size:.84rem;color:
 .lvtoast b{font-family:var(--f-display);text-transform:uppercase;letter-spacing:.06em;font-size:.78rem}
 .lvtoast.warn{border-left-color:var(--warn)}.lvtoast.bad{border-left-color:var(--bad)}
 .lvtoast.out{opacity:0;transform:translateX(30px)}
-@keyframes lvin{from{opacity:0;transform:translateX(30px)}}
+@keyframes lvin{from{opacity:0;transform:translateX(12px)}}
 @media (max-width:600px){#lvToasts{bottom:12px;right:12px}.mtab{padding:0 9px;font-size:.84rem}}
 .top>.tabs.subtabs{padding-left:14px;padding-right:14px}
 @media (max-width:600px){#lvToasts .lvtoast:nth-child(n+2){display:none}.lvtoast{font-size:.8rem;padding:8px 10px}}
@@ -414,7 +413,7 @@ tr.inpit td:first-child{box-shadow:inset 3px 0 0 var(--warn)}
 .bigst{display:inline-flex;align-items:center;gap:8px;margin-left:auto;font:800 1rem var(--f-display);letter-spacing:.1em;padding:8px 14px;border-radius:8px;white-space:nowrap}
 .bigst i{width:11px;height:11px;border-radius:50%;background:currentColor}
 .bigst.on{background:color-mix(in srgb,var(--good) 18%,transparent);color:var(--good);border:1px solid var(--good)}
-.bigst.on i{animation:lvp 1.6s infinite;box-shadow:0 0 0 0 var(--good)}
+.bigst.on i{box-shadow:none}
 .bigst.box{background:var(--warn);color:#111;animation:stb 1.2s infinite alternate}
 .bigst.gar,.bigst.off{background:var(--panel2);color:var(--muted);border:1px solid var(--line)}
 .vebar{position:relative;display:inline-block;width:78px;height:20px;background:var(--grid);border-radius:4px;overflow:hidden;vertical-align:middle}
@@ -455,11 +454,9 @@ td.sxc{padding:4px 3px}
 .sx.sy{background:var(--warn);color:#1A1400}
 .sx.old{opacity:.4}
 .sx.run{box-shadow:inset 0 -2px 0 var(--ink)}
-.sx.run::after{content:"";position:absolute;right:3px;top:3px;width:5px;height:5px;border-radius:50%;background:var(--ink);animation:sxp 1s ease-in-out infinite}
-@keyframes sxp{50%{opacity:.15}}
+.sx.run::after{content:"";position:absolute;right:3px;top:3px;width:5px;height:5px;border-radius:50%;background:var(--ink)}
 .sxleg{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:10px;font-size:12px;color:var(--muted)}
 .sxleg .sx{min-width:22px;padding:1px 5px;margin-right:4px;font-size:10px}
-@media (prefers-reduced-motion:reduce){.sx.run::after{animation:none}}
 /* ---- 1.6 strategy, map, undercut ---- */
 .finok{margin-top:10px;padding:10px 12px;border-radius:var(--r);background:var(--panel2);border-left:3px solid var(--good);font-size:14px;line-height:1.5}
 .finok.last{border-left-color:var(--accent)}

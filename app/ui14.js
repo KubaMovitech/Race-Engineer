@@ -1,7 +1,7 @@
 // ================= MURETTO: vista a schede (Panoramica, Classifica, Auto, Strategia, Rivali, Meteo, Eventi) =================
 const LV_SUBS=[['ov','Panoramica'],['lb','Classifica'],['car','Auto'],['str','Strategia'],['riv','Rivali'],['wx','Meteo'],['ev','Eventi']];
 const sesKind=I=>I&&I.ses>=10?'race':I&&I.ses>=5&&I.ses<=8?'qual':I&&I.ses===9?'warm':'prac';
-const SES_BADGE={race:'GARA',qual:'QUALIFICA',prac:'PROVE',warm:'WARMUP'};
+const SES_BADGE={race:'Gara',qual:'Qualifica',prac:'Prove',warm:'Warmup'};
 const COMP_COL={S:'#F4F4F4',M:'#F5C518',H:'#FF3B3B',W:'#35B6FF','?':'#5B6573'};
 const COMP_INK=k=>k==='H'?'#fff':'#0b0b0b';
 const COMP_N={S:'Soft',M:'Medium',H:'Hard',W:'Wet'};
@@ -191,7 +191,7 @@ function renderLive(force){
   const rb=$('#lvRace');if(rb){const h=typeof lvRaceBar==='function'?lvRaceBar(ctx,al):'';if(rb._h!==h){rb.innerHTML=h;rb._h=h;}}
   const Ds=Object.values(LIVE.drivers).filter(D=>D.hi).sort((a,b)=>(a.hi.name||'').localeCompare(b.hi.name||''));
   $('#lvTeam').innerHTML=`<div class="muted small" style="margin-top:6px">${tr('Bridge della squadra')}</div>`+(Ds.length?Ds.map(D=>{const h=D.hi;const age=Math.round((now-D.seen)/1000);const on=h.on!==false&&age<75;
-    return `<div class="lvrow"><span><span class="dot ${on?(h.drv?'good':'warn'):'bad'}"></span> ${esc(h.name||'pilota')}</span><b class="small">${!on?'offline':h.drv?'in auto':h.lmu?'LMU aperto':'LMU chiuso'}</b></div>`;}).join(''):`<div class="muted small">${tr('Nessun bridge collegato.')}</div>`);
+    return `<div class="lvrow"><span><span class="dot ${on?(h.drv?'good':'warn'):'bad'}"></span> ${esc(h.name||'pilota')}</span><b class="small">${!on?'offline':h.drv?'in auto':h.lmu?'LMU aperto':'LMU chiuso'}</b></div>`;}).join(''):`<div class="muted small">${tr('Nessun bridge collegato')}</div>`);
   const fns={ov:lvOverview,lb:lvBoard,car:lvCar,str:lvStrategy,riv:lvRivals,wx:lvWeather,ev:lvEvents,tv:()=>{}};
   try{fns[sub](ctx);}catch(e){console.error(e);}
 }
@@ -243,7 +243,7 @@ function lvOverview(x){const {sc,I,kind,stt,c,S2,names,now,rows,me,rec}=x;
   const flt=rows.filter(r=>r.inPit&&!r.gar).length;if(sc)B.push(['Auto ai box ora',flt]);
   $('#lvBrief').innerHTML=B.map(([l,v])=>`<div class="lvrow"><span>${l}</span><b>${v}</b></div>`).join('')||`<div class="muted small">${tr('In attesa dei dati…')}</div>`;
   try{lvCond(x);lvCons(x);lvRel(x);}catch(e){console.error(e);}
-  $('#lvEvShort').innerHTML=lvEventList(x,'us').slice(0,8).join('')||`<div class="muted small">${tr('Nessun evento per ora.')}</div>`;}
+  $('#lvEvShort').innerHTML=lvEventList(x,'us').slice(0,8).join('')||`<div class="muted small">${tr('Nessun evento per ora')}</div>`;}
 function liveLoss(stt){const P=(stt.Ds||[]).filter(D=>D.pit).sort((a,b)=>(b.pitAt||0)-(a.pitAt||0))[0]?.pit||LIVE.rec?.pitRec;const losses=liveLapsLoss(stt);const lanes=losses.filter(x=>Number.isFinite(x.stop)).map(x=>x.loss-x.stop);
   const lane=med_(lanes);const stored=LS.get('pitloss:'+(LIVE.sc?.i?.trk||''),null);const tot=P?.est?.total;
   // other cars' measured lanes at this track are a good stand-in for ours
@@ -317,7 +317,7 @@ function lvCar(x){const {c,stt}=x;
         ${losses.slice(-3).map(l=>`<div class="lvrow"><span>Sosta al giro ${l.lap}</span><b>${fx(l.loss,1)} s${Number.isFinite(l.stop)?` (fermo ${fx(l.stop,1)})`:''}</b></div>`).join('')}</div></div>`;}
   const L=stt.laps;const best=Math.min(...L.filter(l=>!l.inv&&!l.pit&&l.t>0).map(l=>l.t));
   $('#lvLaps').innerHTML=L.length?`<table><thead><tr><th>Giro</th><th class="l">Pilota</th><th>Tempo</th><th>Carb.</th><th>VE</th><th>Usura %</th><th>Carcassa</th><th>Asfalto</th><th></th></tr></thead><tbody>${[...L].reverse().slice(0,120).map(l=>`<tr class="${l.inv?'inv':''}${l.t===best?' best':''}">
-    <td>${l.n}</td><td class="l">${esc(l.drv||'')}</td><td class="lt">${fmtLap(l.t)}</td><td>${l.fuel>0?fx(l.fuel,2):'—'}</td><td>${l.ve>0?fx(l.ve*100,2):'—'}</td><td>${fx((l.wear||[]).reduce((a,b)=>a+b,0)/4,2)}</td><td>${fx((l.carc||[]).reduce((a,b)=>a+b,0)/4,0)}</td><td>${fx(l.trk,1)}</td><td>${l.pit?'<span class="tag info">box</span>':''}${l.inv?' <span class="tag bad">inv.</span>':''}</td></tr>`).join('')}</tbody></table>`:`<div class="muted small">${tr('I giri compaiono qui man mano che vengono completati.')}</div>`;}
+    <td>${l.n}</td><td class="l">${esc(l.drv||'')}</td><td class="lt">${fmtLap(l.t)}</td><td>${l.fuel>0?fx(l.fuel,2):'—'}</td><td>${l.ve>0?fx(l.ve*100,2):'—'}</td><td>${fx((l.wear||[]).reduce((a,b)=>a+b,0)/4,2)}</td><td>${fx((l.carc||[]).reduce((a,b)=>a+b,0)/4,0)}</td><td>${fx(l.trk,1)}</td><td>${l.pit?'<span class="tag info">box</span>':''}${l.inv?' <span class="tag bad">inv.</span>':''}</td></tr>`).join('')}</tbody></table>`:`<div class="muted small">${tr('I giri compaiono qui man mano che vengono completati')}</div>`;}
 
 // ---------- Strategia ----------
 function lvStrategy(x){const {sc,I,kind,stt,c,S2,rows,me}=x;
@@ -325,14 +325,14 @@ function lvStrategy(x){const {sc,I,kind,stt,c,S2,rows,me}=x;
       liveTile('Ultimo giro utile per la sosta',Number.isFinite(S2.lastLap)?'giro '+S2.lastLap:'—',''),liveTile('Giri alla bandiera',Number.isFinite(fl)?'≈ '+fl:Number.isFinite(S2.toGo)?'≈ '+S2.toGo:'—',I.maxLaps>0&&I.maxLaps<99999?'gara a giri':'il leader chiude il giro dopo lo scadere del tempo'),
       liveTile('Soste ancora necessarie',Number.isFinite(S2.stops)?S2.stops:'—',Number.isFinite(S2.stint)&&S2.stint<999?'stint pieno ≈ '+fx(S2.stint,0)+' giri':''),
       liveTile('Carburante per finire',Number.isFinite(S2.need)?fx(S2.need,1)+' L':'—','oltre a quello a bordo'),liveTile('Consumo',`${fx(S2.fpl,2)} L · ${Number.isFinite(S2.vpl)?fx(S2.vpl*100,2)+' %':'—'}`,'per giro (benzina · energia)')].join('')}</div>
-      <p class="muted small" style="margin:8px 0 0">${S2.n?`Medie sugli ultimi ${S2.n} giri senza soste.`:'Le medie compaiono dopo il primo giro completo senza soste.'}${kind!=='race'?' '+tr('In prova e qualifica i numeri servono a preparare la gara.'):''}</p>`;}
-  else $('#lvStr').innerHTML=`<div class="muted small">${tr('Serve la nostra auto in pista con il bridge acceso.')}</div>`;
+      <p class="muted small" style="margin:8px 0 0">${S2.n?`Medie sugli ultimi ${S2.n} giri senza soste.`:'Le medie compaiono dopo il primo giro completo senza soste.'}${kind!=='race'?' '+tr('In prova e qualifica i numeri servono a preparare la gara'):''}</p>`;}
+  else $('#lvStr').innerHTML=`<div class="muted small">${tr('Serve la nostra auto in pista con il bridge acceso')}</div>`;
   // saver
   if(S2&&c&&Number.isFinite(S2.left)){const lim=S2.lim,cur=lim==='ve'?S2.vpl:S2.fpl,amount=lim==='ve'?c.ve:c.fuel;const n=Math.floor(S2.left);const needOne=amount/(n+1);const pct=(needOne/cur-1)*100;
     const rowsS=[[`Fare ${n+1} giri invece di ${n}`,`${lim==='ve'?fx(needOne*100,2)+' %':fx(needOne,2)+' L'} ${tr('per giro')}`,`${fx(pct,1)}%`]];
     if(Number.isFinite(S2.toGo)&&S2.stops>0){const total=S2.toGo;const st=S2.stops-1;const tank=lim==='ve'?1:(c.fuelCap||NaN);const need=(amount+st*tank)/total;rowsS.push([st===0?'Arrivare senza altre soste':`Fare ${st} ${st===1?'sosta':'soste'} invece di ${S2.stops}`,`${lim==='ve'?fx(need*100,2)+' %':fx(need,2)+' L'} ${tr('per giro')}`,`${fx((need/cur-1)*100,1)}%`]);}
     $('#lvSave2').innerHTML=rowsS.map(([a,b,p])=>`<div class="lvrow"><span>${a}</span><b>${b} <span class="${parseFloat(p)<-6?'neg':'muted'}">(${p})</span></b></div>`).join('')+`<p class="muted small">${lim==='ve'?'L\'energia virtuale è il limite di questo stint.':'Il carburante è il limite di questo stint.'} Sotto il −5% di solito serve lift-and-coast deciso: valuta se il tempo perso vale la sosta risparmiata (≈ ${fx(liveLoss(stt),0)} s).</p>`;}
-  else $('#lvSave2').innerHTML=`<div class="muted small">${tr('Serve almeno un giro completo senza soste.')}</div>`;
+  else $('#lvSave2').innerHTML=`<div class="muted small">${tr('Serve almeno un giro completo senza soste')}</div>`;
   // pit window, undercut / overcut, end of race (ui18.js)
   const loss=liveLoss(stt);const po=pitOut(rows,me,loss);try{lvPitWindow(x,loss);lvUndercut(x,loss);lvFinish(x);lvDrivers(x);}catch(e){console.error(e);}
   try{lvGame(x);}catch(e){console.error(e);}
@@ -341,12 +341,12 @@ function lvStrategy(x){const {sc,I,kind,stt,c,S2,rows,me}=x;
   $('#lvStints').innerHTML=st.length?`<table><thead><tr><th>Stint</th><th class="l">Pilota</th><th>Giri</th><th>Best</th><th>Passo</th><th>Degrado s/giro</th><th>Carb./giro</th><th>VE/giro</th><th>Usura/giro</th><th>Asfalto</th></tr></thead><tbody>${st.map((s,i)=>{const cl=s.laps.filter(l=>!l.pit&&!l.inv&&l.t>0);const b=Math.min(...cl.map(l=>l.t));const g=cl.filter(l=>l.t<=b*1.05);
     const xs=g.map((l,j)=>j),ys=g.map(l=>l.t);let slope=NaN;if(g.length>=4){const mx=avg_(xs),my=avg_(ys);slope=xs.reduce((a,x,j)=>a+(x-mx)*(ys[j]-my),0)/xs.reduce((a,x)=>a+(x-mx)**2,0);}
     return `<tr><td>${i+1}</td><td class="l">${esc([...new Set(s.laps.map(l=>l.drv).filter(Boolean))].join(', '))}</td><td>${s.laps.length}</td><td>${fmtLap(b)}</td><td>${fmtLap(med_(g.map(l=>l.t)))}</td><td class="${slope>0.05?'neg':''}">${sgn(slope,3)}</td><td>${fx(med_(cl.map(l=>l.fuel).filter(v=>v>0)),2)}</td><td>${fx(med_(cl.map(l=>l.ve).filter(v=>v>0))*100,2)}</td><td>${fx(med_(cl.map(l=>avg_(l.wear||[]))),2)}</td><td>${fx(avg_(s.laps.map(l=>l.trk)),1)}</td></tr>`;}).join('')}</tbody></table>
-    <p class="muted small">Degrado = quanto peggiora il tempo a ogni giro nello stint (giri entro il 105% del migliore). Include l'effetto del carburante che cala, che di solito lo fa sembrare più basso.</p>`:`<div class="muted small">${tr('I giri compaiono qui man mano che vengono completati.')}</div>`;}
+    <p class="muted small">Degrado = quanto peggiora il tempo a ogni giro nello stint (giri entro il 105% del migliore). Include l'effetto del carburante che cala, che di solito lo fa sembrare più basso.</p>`:`<div class="muted small">${tr('I giri compaiono qui man mano che vengono completati')}</div>`;}
 
 // ---------- Rivali ----------
 function lvRivals(x){const {sc,I,kind,rows,me,names}=x;const us=LIVE.focus;let riv=liveRivals().filter(v=>v!==us&&rows.some(r=>r.veh===v));
   if(!riv.length&&me){const cl=rows.filter(r=>r.cls===me.cls).sort((a,b)=>kind==='race'?a.pos-b.pos:(a.best||1e9)-(b.best||1e9));const i=cl.indexOf(me);riv=[cl[i-1],cl[i+1]].filter(Boolean).map(r=>r.veh);}
-  if(!me||!riv.length){$('#lvRiv').innerHTML=`<div class="muted small">${tr('Servono la classifica e la nostra auto in pista.')}</div>`;drawGap([]);}
+  if(!me||!riv.length){$('#lvRiv').innerHTML=`<div class="muted small">${tr('Servono la classifica e la nostra auto in pista')}</div>`;drawGap([]);}
   else{const ms=carStats(me.veh,me);const lt=ms.pace5||me.estL;const tot=r=>r.gapL+r.lapsL*lt;const loss=liveLoss(liveCarState(us));const series=[];
     const body=riv.map((v,i)=>{const r=rows.find(z=>z.veh===v);const s=carStats(v,r);const rel=tot(me)-tot(r);const gs=gapSeries(us,v);const col=DRV_COL[(i+1)%6];series.push({v,col,gs});
       const tr5=gs.length>=4?(gs[gs.length-1][1]-gs[Math.max(0,gs.length-6)][1])/Math.min(5,gs.length-1):NaN;const after=Number.isFinite(loss)?rel+loss:NaN;const lp=s.lastPit;
@@ -364,7 +364,7 @@ function lvRivals(x){const {sc,I,kind,rows,me,names}=x;const us=LIVE.focus;let r
   // pace of everyone
   const F=LIVE.field?.cars||{};const ps=Object.entries(F).filter(([v,c])=>!LIVE.cls||c.cls===LIVE.cls).map(([v,c])=>{const r=rows.find(z=>z.veh===v);const s=carStats(v,r);const t=s.cl.map(l=>l[1]);
     return {v,label:r?.label,name:r?.drv||c.name,cls:c.cls,pos:r?r.pos:NaN,n:t.length,best:s.best,a5:s.pace5,a10:s.pace10,all:s.paceAll,medn:med_(t),sd:s.sd};}).filter(p=>p.n>0);
-  if(!ps.length)$('#lvPace').innerHTML=`<div class="muted small">I tempi compaiono man mano che le auto completano i giri.</div>`;
+  if(!ps.length)$('#lvPace').innerHTML=`<div class="muted small">I tempi compaiono man mano che le auto completano i giri</div>`;
   else{const ourA=ps.find(p=>p.v===us)?.a5;const key=LIVE.paceSort||'a5',dir=LIVE.paceDir||1;ps.sort((a,b)=>{const p=a[key],q=b[key];if(typeof p==='string')return dir*p.localeCompare(q);return dir*((Number.isFinite(p)?p:1e9)-(Number.isFinite(q)?q:1e9));});
     const cb={};ps.forEach(p=>{['best','a5','a10','all'].forEach(k=>{if(Number.isFinite(p[k])&&(!cb[p.cls+k]||p[k]<cb[p.cls+k]))cb[p.cls+k]=p[k];});});
     const th=(k,l,cls='')=>`<th class="${cls}" data-ps="${k}" style="cursor:pointer">${l}${key===k?(dir>0?' ▲':' ▼'):''}</th>`;const td=(p,k)=>`<td class="${p[k]===cb[p.cls+k]?'bestc':''}">${fmtLap(p[k])}</td>`;
@@ -381,7 +381,7 @@ function lvWeather(x){const {I}=x;const wx=LIVE.wx;try{lvNow(x);}catch(e){consol
       return `<div class="lvwn${Number.isFinite(I.et)&&Number.isFinite(t)&&I.et>=t&&(i===nn-1||I.et<end*(i+1)/(nn-1))?' cur':''}"><div class="t">${i===0?'inizio':i===nn-1?'fine':Math.round(fr*100)+'%'}${Number.isFinite(t)?`<small>${hms(t)}${Number.isFinite(tod0)?' · '+hhmm((tod0+t)/60):''}</small>`:''}</div>
         <div class="i">${SKYI[sky]||'·'}</div><div class="s">${esc(tr(SKY[sky]||''))}</div><div class="v">${fx(n.temp,0)} °C</div><div class="rb"><i style="width:${Math.min(100,rc||0)}%"></i></div><div class="s">pioggia ${fx(rc,0)}%</div>${n.hum>0&&n.hum<=100?`<div class="s">${tr('umidità')} ${fx(n.hum,0)}%</div>`:''}</div>`;}).join('')}</div>`;}
   const H=LIVE.wxh||[];const cv=$('#lvWxC');if(!cv)return;const r=cv.getBoundingClientRect(),dpr=devicePixelRatio||1;if(!r.width)return;cv.width=r.width*dpr;cv.height=r.height*dpr;const c=cv.getContext('2d');c.scale(dpr,dpr);c.font='11px "JetBrains Mono",monospace';
-  if(H.length<2){c.fillStyle=tok('muted');c.fillText(tr('Il grafico si riempie durante la sessione (un punto ogni 30 s).'),8,18);$('#lvWxNote').textContent='';return;}
+  if(H.length<2){c.fillStyle=tok('muted');c.fillText(tr('Il grafico si riempie durante la sessione (un punto ogni 30 s)'),8,18);$('#lvWxNote').textContent='';return;}
   const L=40,Rr=40,T=12,B=22,W=r.width-L-Rr,Hh=r.height-T-B;const x0=H[0][0],x1=H[H.length-1][0];const X=t=>L+(t-x0)/((x1-x0)||1)*W;
   const temps=H.flatMap(h=>[h[1],h[2]]).filter(Number.isFinite);let t0=Math.floor(Math.min(...temps)-1),t1=Math.ceil(Math.max(...temps)+1);const Yt=v=>T+(1-(v-t0)/(t1-t0))*Hh,Yp=v=>T+(1-v)*Hh;
   c.strokeStyle=tok('grid');c.fillStyle=tok('faint');c.textAlign='right';niceTicks(t0,t1,4).forEach(v=>{const y=Yt(v);c.beginPath();c.moveTo(L,y);c.lineTo(L+W,y);c.stroke();c.fillText(v+'°',L-4,y+3);});
@@ -411,7 +411,7 @@ function lvEvents(x){const T=LS.get('live:evT',{hit:1,tl:1,pen:1,pit:1,swap:1,ch
   const names={us:'Nostra auto',pit:'Soste',swap:'Cambi pilota',hit:'Contatti e danni',tl:'Limiti di pista',pen:'Penalità',chat:'Chat'};
   $('#lvEvT').innerHTML=Object.entries(names).map(([k,l])=>`<label class="chk"><input type="checkbox" data-evt="${k}"${T[k]?' checked':''}> ${l}</label>`).join('');
   $$('#lvEvT [data-evt]').forEach(i=>i.onchange=()=>{T[i.dataset.evt]=i.checked?1:0;LS.set('live:evT',T);renderLive(true);});
-  const list=lvEventList(x,LS.get('live:evF','cls'));$('#lvEv').innerHTML=list.slice(0,300).join('')||`<div class="muted small">${tr('Nessun evento per ora.')}</div>`;}
+  const list=lvEventList(x,LS.get('live:evF','cls'));$('#lvEv').innerHTML=list.slice(0,300).join('')||`<div class="muted small">${tr('Nessun evento per ora')}</div>`;}
 
 // ---------- car detail ----------
 function openCarModal(veh){let m=$('#mCar');if(!m){m=document.createElement('div');m.className='modal';m.id='mCar';m.hidden=true;m.innerHTML='<div class="mbox wide"><div class="panel-h"><h2 id="mCarT"></h2><button class="btn" type="button" data-close>Chiudi</button></div><div id="mCarB"></div></div>';document.body.appendChild(m);}
@@ -426,13 +426,13 @@ function openCarModal(veh){let m=$('#mCar');if(!m){m=document.createElement('div
   const inc=(LIVE.field?.stream||[]).filter(e=>drvs.includes(e.drv)||drvs.includes(e.other)).slice(-40).reverse().map(e=>`<div class="lve ${e.tag==='TrackLimits'?'warn':'bad'}"><span class="t">${hms(e.et)}</span><span>${esc(e.tag==='Incident'?(e.wall?tr('contro le barriere'):`${e.drv} ↔ ${e.other}`)+` (${fx(e.mag,0)})`:e.txt)}</span></div>`).join('');
   $('#mCarB').innerHTML=`<div class="kpis">${k.join('')}</div>${drvs.length>1?`<p class="small" style="margin:10px 0 0">${tr('Piloti')}: ${drvs.map(esc).join(', ')}${s.swaps.length?` · ${s.swaps.length} ${tr('cambi pilota')}`:''}</p>`:''}
     <canvas id="mCarC" style="width:100%;height:160px;margin-top:12px"></canvas>
-    <h3 style="margin-top:14px">Soste</h3>${pits?`<div class="tw"><table><thead><tr><th>#</th><th>Giro</th><th>Ora</th><th>Fermo s</th><th>Corsia s</th><th>Benzina</th><th>VE</th><th>Gomme</th><th class="l">Pilota</th><th></th></tr></thead><tbody>${pits}</tbody></table></div>`:`<p class="muted small">${tr('Nessuna sosta registrata.')}</p>`}
+    <h3 style="margin-top:14px">Soste</h3>${pits?`<div class="tw"><table><thead><tr><th>#</th><th>Giro</th><th>Ora</th><th>Fermo s</th><th>Corsia s</th><th>Benzina</th><th>VE</th><th>Gomme</th><th class="l">Pilota</th><th></th></tr></thead><tbody>${pits}</tbody></table></div>`:`<p class="muted small">${tr('Nessuna sosta registrata')}</p>`}
     <div style="margin-top:14px"><div><h3>Giri</h3><div class="tw" style="max-height:380px;overflow:auto"><table><thead><tr><th>Giro</th><th>Tempo</th><th>S1</th><th>S2</th><th>S3</th><th>Pos</th><th>Benzina</th><th>VE</th><th class="l">Pilota</th><th></th></tr></thead><tbody>${laps}</tbody></table></div></div>
-    <div style="margin-top:14px"><h3>Contatti e limiti</h3><div class="lvev" style="max-height:260px">${inc||`<p class="muted small">${tr('Nessun evento.')}</p>`}</div></div></div>`;
+    <div style="margin-top:14px"><h3>Contatti e limiti</h3><div class="lvev" style="max-height:260px">${inc||`<p class="muted small">${tr('Nessun evento')}</p>`}</div></div></div>`;
   openModal('#mCar');
   // lap chart
   const cv=$('#mCarC');const rr=cv.getBoundingClientRect(),dpr=devicePixelRatio||1;if(!rr.width)return;cv.width=rr.width*dpr;cv.height=rr.height*dpr;const g=cv.getContext('2d');g.scale(dpr,dpr);g.font='11px "JetBrains Mono",monospace';
-  const P=L.filter(l=>l[1]>0&&l[1]<best*1.15);if(P.length<2){g.fillStyle=tok('muted');g.fillText(tr('Servono almeno due giri.'),8,18);return;}
+  const P=L.filter(l=>l[1]>0&&l[1]<best*1.15);if(P.length<2){g.fillStyle=tok('muted');g.fillText(tr('Servono almeno due giri'),8,18);return;}
   const x0=P[0][0],x1=P[P.length-1][0],y0=best*0.995,y1=Math.max(...P.map(l=>l[1]));const Lp=54,W=rr.width-Lp-10,H=rr.height-24;const X=n=>Lp+(n-x0)/((x1-x0)||1)*W,Y=t=>6+(1-(t-y0)/((y1-y0)||1))*H;
   g.strokeStyle=tok('grid');g.fillStyle=tok('faint');g.textAlign='right';niceTicks(y0,y1,4).forEach(t=>{const y=Y(t);g.beginPath();g.moveTo(Lp,y);g.lineTo(Lp+W,y);g.stroke();g.fillText(fmtLap(t).replace(/^0:/,''),Lp-4,y+3);});
   g.strokeStyle=tok('lapA');g.lineWidth=1.6;g.beginPath();P.forEach((l,i)=>i?g.lineTo(X(l[0]),Y(l[1])):g.moveTo(X(l[0]),Y(l[1])));g.stroke();

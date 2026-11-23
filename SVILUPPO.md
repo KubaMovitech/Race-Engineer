@@ -86,3 +86,29 @@ pezzo di comportamento che dipende dall'ordine.
   elenca le classi vecchie riportate allo stile. Le linee dei grafici non hanno alone (`GL()` in charts.js).
 - Regole CSS del menu (`.pmain`, `.psec`) sempre sotto `#proNav`: gli stessi nomi esistono nella striscia della
   sessione (`.pstrip .pmain`, `.pstrip .psec`).
+
+## Fiamma: nuova tavolozza della grafica unica (dalla 2.24, ancora da pubblicare)
+- Stessa grafica unica (`data-pal="grafite"`, gli attributi non cambiano): cambiano colori, carbonio e testi.
+  I valori sono nella prima regola di `app/grafite.css`; le regole nuove nella sezione «FIAMMA» in fondo.
+- Colori: neri carbonio neutri (fondo #0C0D0F, pannelli #141518, rialzato #1C1E22), un solo accento arancione fiamma
+  #FF5A1F, giro A blu ghiaccio #8DB6FF. Restano riservati viola e verde a tempi e settori, giallo e rosso agli avvisi.
+  Sul pulsante arancione il testo è scuro (`--accent-ink`): il bianco su #FF5A1F non arriva a 4,5:1.
+- Carbonio (twill 2×2 in SVG dentro `--carbon`) solo sulla barra in alto, sulla riga delle sezioni e sulla striscia della
+  sessione. Pannelli, grafici e tabelle restano su fondo pieno.
+- Firma: riga arancione di 2 px su ciò che è attivo (sezione, pagina, scheda, la nostra riga in classifica).
+- Testi: niente maiuscolo né spaziatura larga (una regola in fondo a grafite.css lo toglie ovunque, svg esclusi); i testi nuovi
+  si scrivono già in maiuscolo/minuscolo normale. Etichette e messaggi brevi di una frase senza punto finale.
+  Icone del meteo a linea (`SKYI` in `ui13.js`), non emoji. I verdi e rossi accesi scritti nel JS sono stati portati ai toni
+  della tavolozza (#4CC38A, #E5484D).
+- Numeri da cronometraggio: tempi, distacchi, settori e KPI grandi in Barlow Condensed con cifre tabellari
+  (`--f-timing`, sezione «TIMING» in fondo a grafite.css); JetBrains Mono resta per tabelle e numeri piccoli.
+  Sui PC la striscia della sessione è una barra di timing: prima la riga del contesto, poi i tre valori in fila.
+  In Telemetria e Analisi tecnica i valori grandi restano nascosti (`data-pnav="tel"`/`"tech"`).
+
+## Movimento (2.24, regole di Emil Kowalski)
+- Il cambio pagina è istantaneo (tolta la dissolvenza `pv-enter`): si fa centinaia di volte al giorno.
+- Niente animazioni infinite su elementi che restano a schermo: il puntino live, «In pista», il settore in corso nella
+  classifica e la barra «Direzione gara» (ora ferma, il messaggio più recente per primo). Restano gli allarmi veri
+  (BOX, avviso rosso del Muretto), spinner e skeleton di caricamento.
+- Restano: finestre e menu del telefono (200 ms), toast (entrano di 12 px), il lampo leggero quando un valore live cambia,
+  il disegno del giro nella pagina iniziale. Gli scroll «smooth» rispettano `MOTION_OK()` (riduci movimento).

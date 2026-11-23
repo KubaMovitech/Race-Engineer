@@ -6,7 +6,7 @@ const CAR_HALF='M100.5 10 L80 11 C71 12 66 19 64 30 L61 58 C50 60 43 69 41 82 L4
 const CAR_WHEELS=[['FL',35,113],['FR',165,113],['RL',35,319],['RR',165,319]];
 let carTopN=0;
 // the drawing as SVG elements in the 200 × 400 box; wheel colours by position (front, rear) or by data
-function carTopG({wheels=true,wheelFill=null,front='#2BE38A',rear='#FFC53D'}={}){const id='ctg'+(++carTopN);
+function carTopG({wheels=true,wheelFill=null,front='#4CC38A',rear='#F2C230'}={}){const id='ctg'+(++carTopN);
   const half=`<path d="${CAR_HALF}"/>`;
   const wh=wheels?CAR_WHEELS.map(([k,x,y])=>{const f=k[0]==='F';const w=f?22:26,h=f?54:60;
     return `<rect x="${x-w/2}" y="${y-h/2}" width="${w}" height="${h}" rx="6" fill="${wheelFill?wheelFill(k):'#0A0A0C'}" stroke="${f?front:rear}" stroke-width="2.2"/>`;}).join(''):'';

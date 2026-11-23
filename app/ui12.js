@@ -199,7 +199,7 @@ function liveNewTeam(){openModal('#mLive');const sel=$('#lvBroker');sel.innerHTM
 function liveTile(l,v,s,cls=''){return `<div class="kpi ${cls}"><div class="l">${l}</div><div class="v">${v}</div>${s?`<div class="s">${s}</div>`:''}</div>`;}
 function drawLiveMap(sc,ours){const cv=$('#lvMap');if(!cv)return;const r=cv.getBoundingClientRect(),dpr=devicePixelRatio||1;if(!r.width)return;cv.width=r.width*dpr;cv.height=r.height*dpr;const c=cv.getContext('2d');c.scale(dpr,dpr);
   const pts=[...LIVE.trail.values()];const cars=(sc?.v||[]).filter(v=>!v[30]&&(v[21]||v[22]));const all=pts.length>30?pts:cars.map(v=>[v[21],v[22]]);
-  if(!all.length){c.fillStyle=tok('muted');c.font='12px "Titillium Web",sans-serif';c.fillText(tr('La pista si disegna dai dati dopo qualche giro.'),10,20);return;}
+  if(!all.length){c.fillStyle=tok('muted');c.font='12px "Titillium Web",sans-serif';c.fillText(tr('La pista si disegna dai dati dopo qualche giro'),10,20);return;}
   let x0=Infinity,x1=-Infinity,z0=Infinity,z1=-Infinity;all.forEach(([x,z])=>{x0=Math.min(x0,x);x1=Math.max(x1,x);z0=Math.min(z0,z);z1=Math.max(z1,z);});
   const pad=16,s=Math.min((r.width-2*pad)/((x1-x0)||1),(r.height-2*pad)/((z1-z0)||1));const ox=(r.width-(x1-x0)*s)/2,oz=(r.height-(z1-z0)*s)/2;
   const T=(x,z)=>[ox+(x-x0)*s,r.height-(oz+(z-z0)*s)];

@@ -10,7 +10,7 @@ function drvCons(stt){const L=stt.laps.filter(l=>!l.pit&&l.n>1&&l.t>0);const by=
     const ok=ls.filter(l=>!l.inv).map(l=>l.t);return {drv:d,n:ls.length,vpl:v,fpl:f,pace:med_(ok.slice(-10)),best:ok.length?Math.min(...ok):NaN,ratio:v>0&&f>0?f/(v*100):NaN};}).sort((a,b)=>b.n-a.n);}
 
 function lvDrivers(x){const {stt,c}=x;const el=$('#lvDrv');if(!el)return;const D=drvCons(stt);
-  if(!D.length||!c){el.innerHTML=`<div class="muted small">${tr('Servono giri completi senza soste.')}</div>`;return;}
+  if(!D.length||!c){el.innerHTML=`<div class="muted small">${tr('Servono giri completi senza soste')}</div>`;return;}
   const cap=c.fuelCap>0?c.fuelCap:NaN;
   el.innerHTML=`<table><thead><tr><th class="l">${tr('Pilota')}</th><th>${tr('Giri')}</th><th>${tr('Consumo/giro')}</th><th>Ratio</th><th>${tr('Giri con l\'attuale')}</th><th>${tr('Stint pieno')}</th></tr></thead><tbody>${D.map(d=>{
     const lv=c.ve>0&&d.vpl>0?c.ve/d.vpl:NaN,lf=c.fuel>0&&d.fpl>0?c.fuel/d.fpl:NaN;const now=Math.min(Number.isFinite(lv)?lv:Infinity,Number.isFinite(lf)?lf:Infinity);
@@ -41,7 +41,7 @@ function lvFinish(x){const {stt,c,S2}=x;const el=$('#lvFin');if(!el)return;const
   const D=drvCons(stt);const opts=`<option value="cur">${esc(tr('Ultimi 5 giri'))}</option>`+D.map(d=>`<option value="${esc(d.drv)}">${esc(d.drv)}</option>`).join('');
   if(sel&&sel.dataset.o!==opts){sel.innerHTML=opts;sel.dataset.o=opts;sel.value=LS.get('live:finD','cur');if(!sel.value)sel.value='cur';sel.onchange=e=>{LS.set('live:finD',e.target.value);renderLive(true);};}
   const P=finPlan(x,sel?sel.value:'cur');
-  if(!P){el.innerHTML=`<div class="muted small">${tr('Serve la nostra auto in pista e almeno un giro completo senza soste.')}</div>`;return;}
+  if(!P){el.innerHTML=`<div class="muted small">${tr('Serve la nostra auto in pista e almeno un giro completo senza soste')}</div>`;return;}
   const k=[liveTile(tr('Giri alla bandiera'),'≈ '+fx(P.toGo,1),P.lt>0?`${tr('passo')} ${fmtLap(P.lt)}`:''),
     liveTile(tr('Giri con quello che hai'),fx(P.lapsNow,1),P.hasVE?`VE ${fmtPct(c.ve)} · ${fmtL(c.fuel)}`:fmtL(c.fuel)),
     liveTile(tr('Soste ancora necessarie'),P.spare!=null?'0':P.stops.length||'—',Number.isFinite(P.stintMax)&&P.stintMax<999?`${tr('stint pieno')} ≈ ${fx(P.stintMax,1)} ${tr('giri')}`:''),
@@ -72,7 +72,7 @@ function rejoin(x,loss,k){const pr=pitProj(x,loss,k);if(!pr)return null;const {m
 function lvPitWindow(x,loss){const {stt,c,S2,me,I,kind}=x;const el=$('#lvPitOut');if(!el)return;const trk=I.trk||'';
   const man=+LS.get('pitloss:man:'+trk,0);
   const inp=`<div class="row" style="gap:10px;align-items:flex-end;margin-bottom:10px"><label class="f" style="min-width:170px">${tr('Tempo perso al box (s)')}<input type="number" id="lvLossIn" min="5" max="200" step="1" value="${man>0?man:''}" placeholder="${Number.isFinite(loss)?fx(loss,0):'30'}"></label><span class="muted small">${man>0?tr('valore impostato a mano'):Number.isFinite(loss)?tr('stimato da soste e menu box · scrivi un valore per correggerlo'):tr('nessuna sosta misurata: scrivi il tempo perso')}</span></div>`;
-  if(!me||kind!=='race'){el.innerHTML=inp+`<div class="muted small">${tr('In gara: dove rientri fermandoti adesso o nei prossimi giri.')}</div>`;wireLoss(trk);return;}
+  if(!me||kind!=='race'){el.innerHTML=inp+`<div class="muted small">${tr('In gara: dove rientri fermandoti adesso o nei prossimi giri')}</div>`;wireLoss(trk);return;}
   if(!Number.isFinite(loss)){el.innerHTML=inp;wireLoss(trk);return;}
   const kmax=Math.max(1,Math.min(6,S2&&Number.isFinite(S2.lastLap)&&c?S2.lastLap-(c.lap-1):4));const W=[];for(let k=0;k<=kmax;k++)W.push(rejoin(x,loss,k));
   const score=w=>w.pic*10+(w.traffic?3:0)+w.k*0.1;const best=W.reduce((a,b)=>score(b)<score(a)?b:a);
@@ -308,16 +308,16 @@ function renderSuCmp(){const box=$('#suCmp');if(!box)return;const S=svms();const
   [ta,tb].forEach(s=>{if(s.dataset.o!==lo){const v=s.value;s.innerHTML=lo;s.dataset.o=lo;s.value=v;}});
   const A=byId(sa.value),B=byId(sb.value);
   if(S.length<2){box.innerHTML=`<div class="empty">${tr('Carica almeno due file setup .svm (la base e quello da provare) con «Carica» in alto.')}</div>`;return;}
-  if(!A||!B||A===B){box.innerHTML=`<div class="empty">${tr('Scegli due setup diversi.')}</div>`;return;}
+  if(!A||!B||A===B){box.innerHTML=`<div class="empty">${tr('Scegli due setup diversi')}</div>`;return;}
   const {ch,tot}=suCompare(A,B);const warn=A.car&&B.car&&A.car!==B.car?`<div class="warnbar" style="margin-bottom:10px">${tr('I due setup sono di auto diverse')}: ${esc(A.car)} · ${esc(B.car)}</div>`:'';
-  if(!ch.length){box.innerHTML=warn+`<div class="empty">${tr('I due setup sono identici.')}</div>`;return;}
+  if(!ch.length){box.innerHTML=warn+`<div class="empty">${tr('I due setup sono identici')}</div>`;return;}
   const chips=SU_DIM.map(([k,l,p,n])=>{const v=tot[k]||0;if(Math.abs(v)<0.25)return '';const s=Math.min(3,Math.round(Math.abs(v)));return `<div class="suc d-${k} ${v>0?"up":"dn"}"><span>${tr(l)}</span><b>${tr(v>0?p:n)}</b><i>${'●'.repeat(Math.max(1,s))}${'○'.repeat(3-Math.max(1,s))}</i></div>`;}).join('');
   const groups={};ch.forEach(c=>{(groups[suGroupName(c.sec)]=groups[suGroupName(c.sec)]||[]).push(c);});
   const effTxt=c=>Object.entries(c.eff).filter(([d,v])=>Math.abs(v)>=0.3).map(([d,v])=>{const D=SU_DIM.find(z=>z[0]===d);return `<span class="sue">${tr(v>0?D[2]:D[3])}</span>`;}).join('');
   // the strongest causes of the balance change
   const top=ch.filter(c=>Math.abs(c.eff.bal||0)>=0.5).sort((a,b)=>Math.abs(b.eff.bal)-Math.abs(a.eff.bal)).slice(0,4);
   const concl=[];if(Math.abs(tot.bal)>=0.5)concl.push(`${tr('Il confronto dovrebbe avere')} <b>${tr(tot.bal>0?'più sottosterzo':'più sovrasterzo')}</b> ${tr('della base')}${top.length?` (${top.map(c=>esc(tr(c.label))+(c.pos?' '+tr(c.pos):'')).join(', ')})`:''}.`);
-  else concl.push(tr('Il bilanciamento complessivo resta simile: le modifiche si compensano.'));
+  else concl.push(tr('Il bilanciamento complessivo resta simile: le modifiche si compensano'));
   if(Math.abs(tot.top)>=0.5)concl.push(`${tr('In rettilineo')}: <b>${tr(tot.top>0?'più veloce':'più lenta')}</b>${Math.abs(tot.df)>=0.5?`, ${tr('con')} ${tr(tot.df>0?'più carico in curva veloce':'meno carico in curva veloce')}`:''}.`);
   if(Math.abs(tot.brk)>=0.5)concl.push(`${tr('In frenata')}: <b>${tr(tot.brk>0?'più stabile':'più nervosa')}</b>.`);
   if(Math.abs(tot.trac)>=0.5)concl.push(`${tr('In uscita')}: <b>${tr(tot.trac>0?'più trazione':'meno trazione')}</b>.`);
@@ -332,7 +332,7 @@ function suTelCmp(SA,SB,A,B){if(!SA||!SB)return `<p class="muted small" style="m
     return {best:best.time,avg:m(s=>s.time),n:L.length,vmax:m(s=>s.vmax),fuel:m(s=>s.fuel>0?s.fuel:NaN),F:{I:avg_(['FL','FR'].map(w=>wm(w,x=>x.I))),O:avg_(['FL','FR'].map(w=>wm(w,x=>x.O))),C:avg_(['FL','FR'].map(w=>wm(w,x=>x.C))),p:avg_(['FL','FR'].map(w=>wm(w,x=>x.p)))},
       R:{I:avg_(['RL','RR'].map(w=>wm(w,x=>x.I))),O:avg_(['RL','RR'].map(w=>wm(w,x=>x.O))),C:avg_(['RL','RR'].map(w=>wm(w,x=>x.C))),p:avg_(['RL','RR'].map(w=>wm(w,x=>x.p)))},
       brk:avg_(['FL','FR','RL','RR'].map(w=>wm(w,x=>x.bMax))),rh:Math.min(...['FL','FR','RL','RR'].map(w=>wm(w,x=>x.rhMin)).filter(Number.isFinite)),wear:avg_(['FL','FR','RL','RR'].map(w=>wm(w,x=>x.wear)))};};
-  const a=st(SA),b=st(SB);if(!a||!b)return `<div class="muted small">${tr('Servono giri lanciati completi in entrambe le telemetrie.')}</div>`;
+  const a=st(SA),b=st(SB);if(!a||!b)return `<div class="muted small">${tr('Servono giri lanciati completi in entrambe le telemetrie')}</div>`;
   const R=[['Miglior giro',a.best,b.best,fmtLap,-1,3],['Media giri veloci',a.avg,b.avg,fmtLap,-1,3],['Velocità massima (km/h)',a.vmax,b.vmax,v=>fx(v,1),1,1],['Benzina per giro (L)',a.fuel,b.fuel,v=>fx(v,2),-1,2],
     ['Gomme ant. int / centro / est (°C)',a.F,b.F,v=>`${fx(v.I,0)} / ${fx(v.C,0)} / ${fx(v.O,0)}`,0],['Gomme post. int / centro / est (°C)',a.R,b.R,v=>`${fx(v.I,0)} / ${fx(v.C,0)} / ${fx(v.O,0)}`,0],
     ['Pressione ant. / post. (kPa)',[a.F.p,a.R.p],[b.F.p,b.R.p],v=>`${fx(v[0],1)} / ${fx(v[1],1)}`,0],['Freni max (°C)',a.brk,b.brk,v=>fx(v,0),0],['Altezza minima (mm)',a.rh,b.rh,v=>fx(v,1),0],['Usura gomme per giro (%)',a.wear,b.wear,v=>fx(v,2),-1,2]];
