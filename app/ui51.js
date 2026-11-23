@@ -149,7 +149,7 @@ function techPlatHTML(S,X,XB){const P=X.pl,PB=XB?.pl;if(P.none)return `<div clas
     :`<p class="muted small">${tr('Carico aerodinamico')}: ${S.deadCh?.['Front Downforce']?tr('i canali ci sono ma valgono sempre 0 per questa auto: non disponibile'):tr('non presente nel file')} ${tr('Senza mappe aerodinamiche dell\'auto non si può dire quanto carico c\'è né come si ripartisce: le altezze con la velocità mostrano come si muove la piattaforma, non il carico.')}</p>`;
   const low=P.lowG.slice(0,8).map(g=>{const e=g.ev[0];const W=techWhere(S,g.d,lapTrace(S,S.laps[e.li]).len);const gv=vdMed(g.ev.map(x=>x.gv));
     return `<tr class="tevr" data-k="low" data-w="${g.w}" data-d="${Math.round(g.d)}" data-li="${e.li}" data-t="${e.t}"><td class="l">${esc(W.txt)}</td><td>${g.w}</td><td>${techPhN(g.ph)}</td><td>${g.n}/${X.laps.length}${g.rep?' ✓':''}</td><td>${fx(vdMed(g.ev.map(x=>x.min)),1)} mm</td><td>${g.kerb>0.5?tr('su cordolo'):Number.isFinite(gv)&&gv>2?tr('possibile contatto col suolo (picco')+' '+fx(gv,1)+' g)':'—'}</td></tr>`;}).join('');
-  return `<div class="tctl">${techRel(X.rel.plat,'Piattaforma')}${techRel(X.rel.aero,'Aerodinamica')}</div>${charts}
+  return `<div class="tctl">${techRel(X.rel.plat,'Piattaforma')}${techRel(X.rel.aero,'Aerodinamica')}</div>${typeof p3HTML==='function'?p3HTML(S,X):''}${charts}
     ${techInfo(tr('Rake = altezza posteriore − anteriore, in mm: non è un angolo (servirebbe il passo dell\'auto). Più rake non vuol dire sempre più carico anteriore: dipende dalla vettura. Per capire l\'effetto sulla tua auto: prova controllata, cambia solo l\'altezza posteriore di 1 mm e confronta le curve veloci a parità di carburante e gomme.'))}
     <h4>${tr('Per fase')}</h4>${tab}<div class="tkv small">${osc}</div>
     <h4>${tr('Altezze sotto')} ${P.rhMin} mm <span class="muted small">(${tr('soglia in Obiettivi di riferimento')})</span></h4>${low?`<table class="lbt tpt tev"><thead><tr><th class="l">${tr('Dove')}</th><th>${tr('Ruota')}</th><th>${tr('Fase')}</th><th>${tr('Giri')}</th><th>${tr('Minima')}</th><th>${tr('Indizi')}</th></tr></thead><tbody>${low}</tbody></table>`:`<p class="small">${tr('Nessun punto sotto la soglia')}</p>`}
@@ -359,7 +359,7 @@ function techDraw(S,laps){const host=$('#techP');const X=techData(S,laps);const 
    <nav class="ttabs" role="tablist">${TECH_TABS.map(([k,l])=>`<button type="button" role="tab" data-tt="${k}" aria-selected="${k===tab}">${tr(l)}</button>`).join('')}</nav>
    <div class="tbody">${body}</div></div>`;
   host.querySelectorAll('.tbody table').forEach(t=>{const wrap=document.createElement('div');wrap.className='ttable';t.before(wrap);wrap.append(t);});
-  techBind(S,X);sesSetupBind(S);setTimeout(techFocus,60);}
+  techBind(S,X);sesSetupBind(S);if(tab==='plat'&&typeof p3Mount==='function')p3Mount(S,X);setTimeout(techFocus,60);}
 function techBind(S,X){const host=$('#techP');const setSel=o=>{LS.set('vd:sel',{...techSel(),...o});renderTech();};
   const setup=$('#techSetup');if(setup)setup.onchange=()=>{const original=$('#suFile');original.value=setup.value;original.dispatchEvent(new Event('change'));};
   host.querySelectorAll('[data-tt]').forEach(b=>b.onclick=()=>{TECH.tab=b.dataset.tt;LS.set('vd:tab',TECH.tab);TECH.ev=null;renderTech();});

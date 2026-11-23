@@ -295,6 +295,36 @@ function vdPlatform(S,laps,opt={}){const key='vdpl:'+laps.map(l=>l.i).join(',')+
   R.lowG=vdGroup(R.low.map(e=>({...e,k:'low'})),laps.length);
   S.cache.set(key,R);return R;}
 
+// ---------- pose of the car by phase (for the 3D view of Analisi tecnica) ----------
+// For each phase of the lap, the medians of: the ride height of each corner (mm), the suspension of each corner relative
+// to its own median over the laps (mm, + = more compressed; only with a verified or probable compression sign), the body
+// roll when the game exports it (°, + = the car leans to its left) and the inner / centre / outer tyre temperatures (°C).
+// Everything is measured; what is missing stays NaN and the page says so.
+const VD_POSE_PH=['str','brk','ent','mid','ext'];
+function vdPose(S,laps){const key='vdpose:'+laps.map(l=>l.i).join(',');if(S.cache.has(key))return S.cache.get(key);
+  const ch=n=>vdChan(S,n);const base=ch('Ride Height FL')||ch('Ride Height RL')||ch('Ground Speed');
+  const R={have:{rh:VD_W.every(w=>ch('Ride Height '+w)),susp:false,roll:!!ch('Body Roll'),temp:VD_W.some(w=>ch('Tyre Temp '+w+' Centre'))},ph:{},sign:{}};
+  if(!base||!laps.length){R.none=true;S.cache.set(key,R);return R;}
+  VD_W.forEach(w=>{const g=ch('Susp Pos '+w)?vdSign(S,laps,w):{sign:0};R.sign[w]=g;});R.have.susp=VD_W.every(w=>R.sign[w].sign);
+  const acc={};const push=(p,k,v)=>{if(Number.isFinite(v))((acc[p]??={})[k]??=[]).push(v);};const all={};
+  for(const lap of laps){const seg=vdSeg(base,lap.t0,lap.t1,0);const f0=seg.f,n0=seg.b-seg.a;if(n0<10)continue;
+    // about 50 samples a second are plenty for medians
+    const st=Math.max(1,Math.round(f0/50)),f=f0/st,n=Math.floor(n0/st),ts=seg.ts+seg.a/f0;
+    const g=k=>{const c=ch(k);return c?vdAt(c,ts,f,n):null;};
+    const sp=g('Ground Speed'),br=g('Brake Pos'),th=g('Throttle Pos'),la=g('G Force Lat'),ro=g('Body Roll');if(!sp)continue;
+    const dla=la?vdDeriv(Float32Array.from(la,Math.abs),f,Math.max(2,Math.round(0.1*f))):null;
+    const rh={},sp_={},tt={};VD_W.forEach(w=>{rh[w]=g('Ride Height '+w);sp_[w]=R.sign[w].sign?g('Susp Pos '+w):null;tt[w]=['Inner','Centre','Outer'].map(k=>g('Tyre Temp '+w+' '+k));});
+    for(let i=0;i<n;i++){if(!(sp[i]>=VD_TH.spd))continue;const p=vdPhase(sp[i],br?.[i],th?.[i],la?.[i]??0,dla?.[i]??0);if(!VD_POSE_PH.includes(p))continue;
+      push(p,'v',sp[i]);if(ro)push(p,'roll',ro[i]);
+      VD_W.forEach(w=>{if(rh[w])push(p,'rh'+w,rh[w][i]);if(sp_[w]){const c=sp_[w][i]*R.sign[w].sign;push(p,'c'+w,c);if(Number.isFinite(c))(all[w]??=[]).push(c);}
+        tt[w].forEach((a,j)=>{if(a)push(p,'t'+w+j,a[i]);});});}}
+  const ref={};VD_W.forEach(w=>ref[w]=all[w]?.length?vdMed(all[w]):NaN);
+  for(const p of VD_POSE_PH){const o=acc[p];if(!o?.v?.length)continue;const m=k=>o[k]?.length?vdMed(o[k]):NaN;
+    const rhW={},cW={},tW={};VD_W.forEach(w=>{rhW[w]=m('rh'+w);cW[w]=m('c'+w)-ref[w];tW[w]=[0,1,2].map(j=>m('t'+w+j));});
+    const F=(rhW.FL+rhW.FR)/2,Rr=(rhW.RL+rhW.RR)/2;
+    R.ph[p]={n:o.v.length,s:o.v.length/50,v:m('v'),rh:rhW,rhF:F,rhR:Rr,rake:Rr-F,side:((rhW.FR+rhW.RR)-(rhW.FL+rhW.RL))/2,roll:m('roll'),comp:cW,t:tW};}
+  S.cache.set(key,R);return R;}
+
 // ---------- comparisons: before / after, A / B ----------
 // a, b: one value per lap. better: −1 if lower is better, +1 if higher is better, 0 when only the change matters.
 // The difference counts only when it is larger than twice its standard error AND than `minDiff`; otherwise «inconcludente».
