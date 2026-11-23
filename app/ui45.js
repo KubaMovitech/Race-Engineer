@@ -26,8 +26,8 @@ function compPanelHTML(){const SA=TW.SA,lA=SA?.laps.find(l=>l.i===TW.a);if(!lA)r
   const now=lB?compDiffs(lapComp(SA,lA),lapComp(SB,lB)):null;const sug=compSuggest(SA,lA);
   const lapTxt=(S,l)=>`${S===SA?'':esc((S.meta?.date||'')+' ')}${tr('G')}${l.num} · ${fmtLap(l.time)}`;
   return `<div class="panel pcomp"><div class="panel-h"><h3>${tr('Confronto equo')}</h3><span class="muted small">${tr('carburante, gomme, pista e tipo di giro di A e B')}</span></div>
-    ${now?(now.length?`<div class="pcw2"><b>⚠ ${tr('A e B non sono nelle stesse condizioni')}:</b> ${now.map(d=>`<span>${d.t}</span>`).join('')}<small>${tr('Le differenze di tempo possono venire da qui e non dalla guida.')}</small></div>`
-      :`<div class="pcok">✓ ${tr('A e B sono confrontabili: stesso tipo di giro, carburante, gomme e pista simili.')}</div>`):`<p class="muted small">${tr('Scegli un giro B o usa uno di quelli suggeriti.')}</p>`}
+    ${now?(now.length?`<div class="pcw2"><b>⚠ ${tr('A e B non sono nelle stesse condizioni')}:</b> ${now.map(d=>`<span>${d.t}</span>`).join('')}<small>${tr('Le differenze di tempo possono venire da qui e non dalla guida')}</small></div>`
+      :`<div class="pcok">✓ ${tr('A e B sono confrontabili: stesso tipo di giro, carburante, gomme e pista simili.')}</div>`):`<p class="muted small">${tr('Scegli un giro B o usa uno di quelli suggeriti')}</p>`}
     ${sug.length?`<div class="psug"><span class="muted small">${tr('Giri più confrontabili con A')}:</span>${sug.map(x=>`<button type="button" class="btn psb${SB===x.S&&TW.b===x.l.i?' on':''}" data-s="${esc(x.S.id)}" data-l="${x.l.i}"><b>${lapTxt(x.S,x.l)}</b><small>${x.D.length?x.D.map(d=>d.t).join(' · '):tr('stesse condizioni')}</small></button>`).join('')}</div>`:''}</div>`;}
 (function(){const rt=RENDER.tele;RENDER.tele=()=>{rt();const head=$('#twBody .twhead');if(!head||!TW.SA)return;
   try{head.insertAdjacentHTML('afterend',compPanelHTML());
@@ -145,7 +145,7 @@ function adviceShape(card,f){if(card.dataset.shaped)return;card.dataset.shaped=1
 
 (function(){const st=document.createElement('style');st.textContent=`
 .pcomp{margin-bottom:16px}.pcw2{border:1px solid rgba(255,159,67,.4);background:rgba(255,159,67,.08);border-radius:8px;padding:8px 12px;font-size:.9rem}.pcw2 span{display:inline-block;margin:0 10px 0 4px;color:#fff}.pcw2 small{display:block;color:var(--muted);margin-top:4px}
-.pcok{color:#2BE38A;font-size:.92rem}
+.pcok{color:#4CC38A;font-size:.92rem}
 .psug{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px}.psb{display:flex;flex-direction:column;align-items:flex-start;gap:2px;height:auto!important;padding:6px 12px;text-align:left}
 .psb b{font:600 .85rem var(--f-mono)}.psb small{font-size:.76rem;color:var(--muted);text-transform:none;letter-spacing:0}.psb.on{border-color:var(--pacc,#C9A54C)}
 .ptest2{margin-bottom:16px;border-color:var(--pacc,#C9A54C)!important}
@@ -156,7 +156,7 @@ function adviceShape(card,f){if(card.dataset.shaped)return;card.dataset.shaped=1
 .ptt{max-width:520px;margin-bottom:10px}
 .pthist{margin-top:12px}.pthist summary{cursor:pointer;color:var(--muted)}.pth{font-size:.86rem;padding:4px 0;border-bottom:1px solid var(--line)}
 .ef .eh{font:600 .72rem var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:10px 0 4px}
-.ef .echk{font-size:.88rem;color:var(--psil,#C9CDD3);border-left:2px solid #2BE38A;padding:2px 0 2px 8px}
+.ef .echk{font-size:.88rem;color:var(--psil,#C9CDD3);border-left:2px solid #4CC38A;padding:2px 0 2px 8px}
 .ef .ewhy{margin-top:8px}.ef .ewhy summary{cursor:pointer;color:var(--muted);font-size:.84rem}.ef .ewhy p{margin:6px 0 0}
 .ef .ppb{margin-top:10px}
 .ppl .ptgo,.ppl .ppd{grid-column:3}.ppl .ptgo{align-self:end}.ppl .ppd{align-self:start}.ppl>span.ppn{grid-row:span 2}.ppl>div{grid-row:span 2}

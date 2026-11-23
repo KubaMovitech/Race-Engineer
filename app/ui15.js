@@ -23,7 +23,7 @@ function lvCond(x){const {I,me,c,kind}=x;if(!LIVE.sc){$('#lvCond').innerHTML=`<d
 // consumption block in the spirit of the in-game fuel widget
 function lvCons(x){const {stt,c,S2,me}=x;const L=stt.laps.filter(l=>!l.pit&&l.n>1&&l.t>0);const ve=c&&c.ve>0;const unit=ve?'%':'L';
   $('#lvConsT').textContent=tr(ve?'Energia virtuale':'Carburante');
-  if(!c){$('#lvCons').innerHTML=`<div class="muted small">${tr('Serve la nostra auto in pista con il bridge acceso.')}</div>`;return;}
+  if(!c){$('#lvCons').innerHTML=`<div class="muted small">${tr('Serve la nostra auto in pista con il bridge acceso')}</div>`;return;}
   const per=L.map(l=>ve?l.ve*100:l.fuel).filter(v=>v>0);const amount=ve?c.ve*100:c.fuel;const pace=S2?.lt||med_(L.filter(l=>!l.inv).map(l=>l.t))||c.estL;
   const last=per[per.length-1],avg5=avg_(per.slice(-5)),mx=per.length?Math.max(...per.slice(-10)):NaN,mn=per.length?Math.min(...per.slice(-10)):NaN;
   const row=(lbl,u)=>{const laps=u>0?amount/u:NaN;return `<tr><td class="l">${lbl}</td><td>${fx(laps,1)}</td><td>${Number.isFinite(laps)&&pace?Math.round(laps*pace/60)+' min':'—'}</td><td>${fx(u,2)} ${unit}</td></tr>`;};
@@ -31,11 +31,11 @@ function lvCons(x){const {stt,c,S2,me}=x;const L=stt.laps.filter(l=>!l.pit&&l.n>
   const coast=L.length?L[L.length-1].coast:NaN;
   $('#lvCons').innerHTML=`<div class="lvbig"><b>${fx(amount,ve?1:1)}${ve?' %':' L'}</b><span>${tr('a bordo')}${ve&&c.fuel>0?` · ${fx(c.fuel,1)} L`:''}</span></div>
     <table class="lvmini"><thead><tr><th class="l"></th><th>${tr('Giri')}</th><th>${tr('Tempo')}</th><th>${tr('Per giro')}</th></tr></thead><tbody>
-    ${per.length?row(tr('Ultimo giro'),last)+row(tr('Media ultimi 5'),avg5)+row(tr('Consumo massimo'),mx)+row(tr('Consumo minimo'),mn):`<tr><td class="l muted" colspan="4">${tr('Serve almeno un giro completo senza soste.')}</td></tr>`}</tbody></table>
+    ${per.length?row(tr('Ultimo giro'),last)+row(tr('Media ultimi 5'),avg5)+row(tr('Consumo massimo'),mx)+row(tr('Consumo minimo'),mn):`<tr><td class="l muted" colspan="4">${tr('Serve almeno un giro completo senza soste')}</td></tr>`}</tbody></table>
     <div class="lvrow"><span>${tr('Ratio carburante/EV')}</span><b>${fx(ratio,2)}</b></div>${Number.isFinite(coast)?`<div class="lvrow"><span>${tr('Senza pedali nell\'ultimo giro')}</span><b>${fx(coast,1)} s</b></div>`:''}`;}
 
 // cars nearest on track (TinyPedal-style relative)
-function lvRel(x){const {rows,me,I}=x;const LD=I.lapDist;if(!me||!(LD>0)){$('#lvRel').innerHTML=`<div class="muted small">${tr('Servono la classifica e la nostra auto in pista.')}</div>`;return;}
+function lvRel(x){const {rows,me,I}=x;const LD=I.lapDist;if(!me||!(LD>0)){$('#lvRel').innerHTML=`<div class="muted small">${tr('Servono la classifica e la nostra auto in pista')}</div>`;return;}
   const lt=carStats(me.veh,me).pace5||me.estL||100;const myP=me.laps+me.ld/LD;
   const rel=rows.filter(r=>r!==me&&!r.gar&&r.fin===0).map(r=>{let d=((r.ld-me.ld)%LD+LD*1.5)%LD-LD/2;const prog=r.laps+r.ld/LD;const lapd=Math.round(prog-myP-d/LD);return {r,d,t:d/LD*lt,lapd};}).sort((a,b)=>b.d-a.d);
   const ahead=rel.filter(o=>o.d>0).slice(-4),behind=rel.filter(o=>o.d<=0).slice(0,4);const list=[...ahead,{me:true},...behind];
@@ -64,7 +64,7 @@ function sgnT(d){return Number.isFinite(d)?`${d>0?'▲':d<0?'▼':''} ${fx(Math.
 
 const GAME_N={currentFuel:'Carburante attuale',maxFuel:'Serbatoio',fuelCapacity:'Serbatoio',currentVirtualEnergy:'Energia attuale',maxVirtualEnergy:'Energia massima',fuelRatio:'Ratio carburante/EV',fuelPerLap:'Carburante per giro',energyPerLap:'Energia per giro',lapsRemaining:'Giri rimanenti'};
 function lvGame(x){const {stt}=x;const Dp=(stt.Ds||[]).filter(D=>D.pit).sort((a,b)=>(b.pitAt||0)-(a.pitAt||0))[0];const g=Dp?.pit?.game||LIVE.rec?.pitRec?.game;
-  if(!g||!Object.keys(g).length){$('#lvGame').innerHTML=`<div class="muted small">${tr('Appare con il bridge 1.3 quando il pilota è in pista.')}</div>`;return;}
+  if(!g||!Object.keys(g).length){$('#lvGame').innerHTML=`<div class="muted small">${tr('Appare con il bridge 1.3 quando il pilota è in pista')}</div>`;return;}
   const nice=k=>{const last=k.split('.').slice(-2).filter(p=>!/^\d+$/.test(p));const key=last[last.length-1]||k;return tr(GAME_N[key]||key.replace(/([a-z])([A-Z])/g,'$1 $2').replace(/^./,c=>c.toUpperCase()));};
   const groups={};Object.entries(g).forEach(([k,v])=>{const grp=k.split('.')[0];(groups[grp]=groups[grp]||[]).push([nice(k),v]);});
   const GN={fuelInfo:'Carburante ed energia',pitRecommendations:'Consigli per la sosta',pitStopLength:'Durata della sosta'};

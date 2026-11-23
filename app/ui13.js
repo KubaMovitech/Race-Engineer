@@ -1,6 +1,14 @@
 // ================= MURETTO: piano squadra, sosta, meteo, rivali, passo, registrazioni =================
 const SKY=['sereno','poco nuvoloso','parzialmente nuvoloso','molto nuvoloso','coperto','nuvoloso con pioviggine','nuvoloso con pioggia leggera','coperto con pioggia leggera','coperto con pioggia','coperto con pioggia forte','temporale'];
-const SKYI=['☀','🌤','⛅','🌥','☁','🌦','🌦','🌧','🌧','🌧','⛈'];
+// sky icons: line drawings in the text colour (lucide shapes), one per sky level 0–10
+const SKYP={sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+ psun:'<path d="M12 2v2M4.9 4.9l1.4 1.4M20 12h2M19.1 4.9l-1.4 1.4M15.9 13A4 4 0 0 0 8.4 9.7"/><path d="M13 22H7a5 5 0 1 1 4.9-6H13a3 3 0 0 1 0 6Z"/>',
+ cloud:'<path d="M17.5 19H9a7 7 0 1 1 6.7-9h1.8a4.5 4.5 0 1 1 0 9Z"/>',
+ drizzle:'<path d="M4 14.9A7 7 0 1 1 15.7 8h1.8a4.5 4.5 0 0 1 2.5 8.2"/><path d="M8 19v1M8 14v1M16 19v1M16 14v1M12 21v1M12 16v1"/>',
+ rain:'<path d="M4 14.9A7 7 0 1 1 15.7 8h1.8a4.5 4.5 0 0 1 2.5 8.2"/><path d="M16 14v6M8 14v6M12 16v6"/>',
+ storm:'<path d="M6 16.3A7 7 0 1 1 15.7 8h1.8a4.5 4.5 0 0 1 .5 9"/><path d="m13 12-3 5h4l-3 5"/>'};
+const skyIco=k=>`<svg class="skyi" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${SKYP[k]}</svg>`;
+const SKYI=['sun','psun','psun','cloud','cloud','drizzle','drizzle','rain','rain','rain','storm'].map(skyIco);
 const EST_N={total:'Totale da fermo',fuel:'Rifornimento',ve:'Energia',virtualEnergy:'Energia',tires:'Gomme',tyres:'Gomme',damage:'Riparazioni',repair:'Riparazioni',driverSwap:'Cambio pilota',penalty:'Penalità',penalties:'Penalità'};
 function liveRivals(){return LS.get('live:rivals',[]);}
 const med_=a=>{const s=a.filter(Number.isFinite).sort((x,y)=>x-y);return s.length?s[s.length>>1]:NaN;};
@@ -24,7 +32,7 @@ function liveLapsLoss(stt){ // measured pit losses for our car: pit laps − pac
 
 function drawGap(series){const cv=$('#lvGap');if(!cv)return;const r=cv.getBoundingClientRect(),dpr=devicePixelRatio||1;if(!r.width)return;cv.width=r.width*dpr;cv.height=r.height*dpr;const c=cv.getContext('2d');c.scale(dpr,dpr);
   const S=series.map(s=>({...s,gs:s.gs.slice(-40)})).filter(s=>s.gs.length>1);c.font='11px "JetBrains Mono",monospace';
-  if(!S.length){c.fillStyle=tok('muted');c.fillText(tr('Il grafico dei distacchi compare dopo qualche giro.'),8,18);return;}
+  if(!S.length){c.fillStyle=tok('muted');c.fillText(tr('Il grafico dei distacchi compare dopo qualche giro'),8,18);return;}
   const xs=S.flatMap(s=>s.gs.map(g=>g[0])),ys=S.flatMap(s=>s.gs.map(g=>g[1]));const x0=Math.min(...xs),x1=Math.max(...xs);let y0=Math.min(0,...ys),y1=Math.max(0,...ys);const pad=(y1-y0)*0.1||1;y0-=pad;y1+=pad;
   const L=44,R=10,T=10,B=22,W=r.width-L-R,H=r.height-T-B;const X=x=>L+(x-x0)/((x1-x0)||1)*W,Y=y=>T+(1-(y-y0)/(y1-y0))*H;
   c.strokeStyle=tok('grid');c.fillStyle=tok('faint');c.textAlign='right';niceTicks(y0,y1,4).forEach(t=>{const y=Y(t);c.beginPath();c.moveTo(L,y);c.lineTo(L+W,y);c.stroke();c.fillText((t>0?'+':'')+t,L-5,y+3);});

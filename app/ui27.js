@@ -2,7 +2,7 @@
 
 // ---------- 1. the bell: every alert of the session in a list; pop-ups only for us and the rivals, only in the Muretto ----------
 function bellList(){const l=$('#lvBellList');if(!l)return;const ago=t=>{const s=Math.round((Date.now()-t)/1000);return s<60?`${s} s`:`${Math.round(s/60)} min`;};
-  l.innerHTML=NOTIF.length?NOTIF.map(n=>`<div class="bl ${n.k||''}"${n.veh?` data-car="${esc(n.veh)}"`:''}><div class="blh"><b>${n.t}</b><span>${ago(n.at)}</span></div><div>${n.s}</div></div>`).join(''):`<div class="muted small">${tr('Nessun avviso per ora.')}</div>`;
+  l.innerHTML=NOTIF.length?NOTIF.map(n=>`<div class="bl ${n.k||''}"${n.veh?` data-car="${esc(n.veh)}"`:''}><div class="blh"><b>${n.t}</b><span>${ago(n.at)}</span></div><div>${n.s}</div></div>`).join(''):`<div class="muted small">${tr('Nessun avviso per ora')}</div>`;
   l.querySelectorAll('[data-car]').forEach(e=>e.onclick=()=>openCarModal(e.dataset.car));}
 function bellUpdate(){const b=$('#lvBell');if(!b)return;const n=NOTIF.filter(x=>x.at>(LIVE.bellSeen||0)).length;b.querySelector('i').textContent=n||'';b.classList.toggle('on',n>0);if(!$('#lvBellList')?.hidden)bellList();}
 window.bellUpdate=bellUpdate;
@@ -30,7 +30,7 @@ function welcomeHTML(){const mine=lds().filter(x=>!x.sample).slice(-4).reverse()
     if(a)return;
     if(curView()==='stint'){h.innerHTML=welcomeHTML();h.querySelectorAll('[data-w]').forEach(b=>b.onclick=()=>{const w=b.dataset.w;if(w==='load')$('#fileIn').click();else if(w==='sync')syncLMU();else showView(w);});
       h.querySelectorAll('.wsess').forEach(b=>b.onclick=()=>{$('#gSess').value=b.dataset.id;LS.set('sess',b.dataset.id);renderHero();RENDER[curView()]();});}
-    else{h.innerHTML=`<div class="muted small">${tr('Nessuna telemetria aperta.')} <button class="btn" type="button" id="hLoad">${tr('Carica file')}</button></div>`;$('#hLoad').onclick=()=>$('#fileIn').click();}};
+    else{h.innerHTML=`<div class="muted small">${tr('Nessuna telemetria aperta')} <button class="btn" type="button" id="hLoad">${tr('Carica file')}</button></div>`;$('#hLoad').onclick=()=>$('#fileIn').click();}};
   const rs=RENDER.stint;RENDER.stint=()=>{rs();if(!active())$('#stBody').innerHTML='';};
   // ---------- 6. the session menu only when there is something to choose ----------
   const fs=fillSelects;window.fillSelects=fillSelects=function(){fs();const g=$('#gSess');if(g)g.hidden=!g.options.length;};})();

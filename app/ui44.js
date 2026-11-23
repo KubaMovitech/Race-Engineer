@@ -3,9 +3,9 @@
 // Setup Builder: the car seen from above with the values of the .svm on each corner, and the other versions of the setup.
 
 // ---------- quick actions: what you want from the car → the guide's answer for that symptom ----------
-const PRO_ACT=[['rot','Più rotazione in ingresso','Sottosterzo in ingresso','var(--pacc2)'],['stab','Più stabilità in frenata','Frena forte, poi si gira in trail braking','#FF5A6A'],
-  ['tra','Migliora trazione','Perde trazione in uscita','#2BE38A'],['wear','Riduci usura gomme','Le gomme calano nello stint','#FFC53D'],
-  ['vmax','Più velocità sul dritto','Lenta sul dritto','#22D3EE'],['aero','Bilanciamento nel veloce','Sottosterzo nelle curve veloci','#B57BFF']];
+const PRO_ACT=[['rot','Più rotazione in ingresso','Sottosterzo in ingresso','var(--pacc2)'],['stab','Più stabilità in frenata','Frena forte, poi si gira in trail braking','#EE6B6F'],
+  ['tra','Migliora trazione','Perde trazione in uscita','#4CC38A'],['wear','Riduci usura gomme','Le gomme calano nello stint','#F2C230'],
+  ['vmax','Più velocità sul dritto','Lenta sul dritto','#4FB3C8'],['aero','Bilanciamento nel veloce','Sottosterzo nelle curve veloci','#B07CFF']];
 const PRO_ACT_IC={rot:'<path d="M12 4a8 8 0 1 1-7.4 5"/><path d="M4 4v5h5"/>',stab:'<circle cx="12" cy="12" r="8"/><path d="M12 8v4"/><circle cx="12" cy="16" r=".6"/>',tra:'<circle cx="12" cy="12" r="8"/><path d="M8 12l3 3 5-6"/>',
   wear:'<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/>',vmax:'<path d="M4 18L14 8M14 8h-5M14 8v5"/><path d="M12 18l8-8"/>',aero:'<path d="M3 14c4-6 14-6 18 0"/><path d="M7 14v3M17 14v3M12 10v7"/>'};
 function proActBox(id){const a=PRO_ACT.find(x=>x[0]===id);const s=typeof GUIDE_SYM!=='undefined'&&GUIDE_SYM.find(x=>x.s===a[2]);if(!s)return '';
@@ -47,7 +47,7 @@ function proEngHTML(S,D,laps){const F=engFindings(D,S,D.su||null,laps);const P=e
     // the comparison with the previous run goes in the right column, with the speed of both best laps when that session is loaded
     const pt=$('#pTest'),cm=el.querySelector('.ecmp');if(pt&&cm){const P=proPrevRun(S);const PS=P&&lds().find(x=>x.id===P.id);
       pt.insertAdjacentHTML('beforeend',P?(PS?proTestChart(S,PS):'')+`<div class="ptcm">${cm.innerHTML.replace(/^[\s\S]*?<\/div>/,'')}</div>`
-        :`<div class="ptfirst"><b>${tr('Prima prova salvata con questa auto su questa pista.')}</b><ol><li>${tr('Fai una modifica del piano d\'azione.')}</li><li>${tr('Gira 3–5 giri puliti nelle stesse condizioni.')}</li><li>${tr('Carica la nuova telemetria (o lascia che arrivi da sola dal gioco).')}</li></ol><span>${tr('Qui vedrai prima e dopo: tempi, settori, velocità e se il problema è sparito.')}</span></div>`);
+        :`<div class="ptfirst"><b>${tr('Prima prova salvata con questa auto su questa pista')}</b><ol><li>${tr('Fai una modifica del piano d\'azione.')}</li><li>${tr('Gira 3–5 giri puliti nelle stesse condizioni')}</li><li>${tr('Carica la nuova telemetria (o lascia che arrivi da sola dal gioco)')}</li></ol><span>${tr('Qui vedrai prima e dopo: tempi, settori, velocità e se il problema è sparito.')}</span></div>`);
       const h=cm.querySelector('.panel-h span');if(h)pt.querySelector('.panel-h').append(h.cloneNode(true));cm.remove();}
     el.querySelectorAll('.pab').forEach(b=>b.onclick=()=>{const on=b.getAttribute('aria-pressed')!=='true';el.querySelectorAll('.pab').forEach(x=>x.setAttribute('aria-pressed',x===b&&on));
       const box=$('#pActBox');box.innerHTML=on?proActBox(b.dataset.a):'';box.querySelectorAll('[data-gp]').forEach(c=>c.onclick=()=>openGuide(c.dataset.gp));});
@@ -82,7 +82,7 @@ function proCarHTML(su,ref,links=[]){const C={FL:'FRONTLEFT',FR:'FRONTRIGHT',RL:
 function proVersions(su){const car=(su?.car||'').toLowerCase();const L=svms().filter(x=>!car||(x.car||'').toLowerCase()===car);
   const current=x=>x===su||(x.id===su.id&&svmHash(x.text||setupText(x))===svmHash(su.text||setupText(su)));
   const nd=(a,b)=>{let n=0;for(const [sec,it] of Object.entries(a.sec||{}))for(const i of it){const o=b.sec?.[sec]?.find(x=>x.key===i.key);if(o&&o.raw!==i.raw)n++;}return n;};
-  return L.map(x=>`<button type="button" class="pvr${current(x)?' cur':''}" data-id="${esc(x.id)}"><i></i><div><b>${esc(x.label||x.name)}</b><small>${current(x)?tr('in uso'):nd(su,x)+' '+tr('differenze')}</small></div></button>`).join('')||`<p class="muted small">${tr('Carica altri .svm della stessa auto per vederli qui.')}</p>`;}
+  return L.map(x=>`<button type="button" class="pvr${current(x)?' cur':''}" data-id="${esc(x.id)}"><i></i><div><b>${esc(x.label||x.name)}</b><small>${current(x)?tr('in uso'):nd(su,x)+' '+tr('differenze')}</small></div></button>`).join('')||`<p class="muted small">${tr('Carica altri .svm della stessa auto per vederli qui')}</p>`;}
 function proSetupPanel(){const old=$('#pSetCar');const su=analysisSetup();const nav=$('#suTabs');if(!nav||!proLook()){old?.remove();return;}
   const S=active()?.S;const R=S?proFindings(S):null;const F=R?[...R.F].filter(f=>f.s>0).sort((a,b)=>b.s-a.s).slice(0,3):[];
   const car=(su?.car||'').toLowerCase();const others=su?svms().filter(x=>x!==su&&(!car||(x.car||'').toLowerCase()===car)):[];const ref=others.find(x=>x.id===LS.get('setb:ref',''))||null;
@@ -92,7 +92,7 @@ function proSetupPanel(){const old=$('#pSetCar');const su=analysisSetup();const 
       <label class="f pref">${tr('Confronta con')}<select id="pRef"><option value="">${tr('nessun riferimento')}</option>${others.map(o=>`<option value="${esc(o.id)}"${o===ref?' selected':''}>${esc(o.label||o.name)}</option>`).join('')}</select></label></div>
       ${ref?`<p class="muted small pdiffl">${tr('In giallo i valori diversi dal riferimento')} «${esc(ref.label||ref.name)}».</p>`:''}${links.length?`<p class="muted small">${tr('I numeri accanto ai valori sono le schede di Analisi tecnica che propongono di cambiarli.')}</p>`:''}${proCarHTML(su,ref,links)}</div>
      <div class="pset-r"><div class="panel"><div class="panel-h"><h3>${tr('Versioni setup')}</h3><span class="muted small">${tr('stessa auto')}</span></div><div class="pvl">${proVersions(su)}</div></div>
-     ${S?`<div class="panel"><div class="panel-h"><h3>${tr('Problemi rilevati dai dati')}</h3><button type="button" class="btn" id="pToEng">${tr('Race Engineer')} →</button></div>${F.length?F.map(proFindRow).join(''):`<p class="muted small">${tr('Niente di urgente.')}</p>`}</div>`:''}</div>`
+     ${S?`<div class="panel"><div class="panel-h"><h3>${tr('Problemi rilevati dai dati')}</h3><button type="button" class="btn" id="pToEng">${tr('Race Engineer')} →</button></div>${F.length?F.map(proFindRow).join(''):`<p class="muted small">${tr('Niente di urgente')}</p>`}</div>`:''}</div>`
      :`<div class="panel"><div class="empty">${tr('Carica un file setup .svm (Documenti o cartella UserData/player/Settings di Le Mans Ultimate).')}</div></div>`}</div>`;
   if(old)old.outerHTML=h;else nav.insertAdjacentHTML('afterend',h);
   $$('#pSetCar .pvr').forEach(b=>b.onclick=()=>{if(S)LS.set('sesMode:'+sesKey(S),'selected');const s=$('#suFile');s.value=b.dataset.id;s.onchange&&s.onchange();});
@@ -116,12 +116,12 @@ html[data-look="pro"] .ecount span{border-radius:10px;background:var(--panel2);b
 .pactb{margin-top:12px;border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:rgba(255,255,255,.02)}.pactb ol{margin:8px 0;padding-left:20px}.pactb li{margin:3px 0}
 .pdlm{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end}.pdlm .seg button{padding:4px 10px;font-size:.8rem}
 .pdt{table-layout:fixed;width:100%}.pdt th:nth-child(1){width:34%}.pdt th:nth-child(2){width:18%}.pdt th:nth-child(3){width:12%}.pdt td{vertical-align:top;white-space:normal!important;overflow-wrap:anywhere}.pdt td b{color:#fff}.pdt .pdi{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:6px;margin-right:8px;font-weight:600;font-size:.8rem}
-.pdt tr.s2 .pdi{background:rgba(255,59,78,.15);color:#FF3B4E}.pdt tr.s1 .pdi{background:var(--pwarnbg);color:var(--pwarn)}.pdt tr.s0 .pdi{background:rgba(43,227,138,.12);color:#2BE38A}
-.pdt em{font-style:normal;font:600 .72rem "Titillium Web",sans-serif;padding:4px 10px;border-radius:6px;white-space:nowrap}.pdt em.hi{background:rgba(255,59,78,.15);color:#FF5A6A}.pdt em.mid{background:var(--pwarnbg);color:var(--pwarn)}.pdt em.ok{background:rgba(43,227,138,.12);color:#2BE38A}
+.pdt tr.s2 .pdi{background:rgba(255,59,78,.15);color:#E5484D}.pdt tr.s1 .pdi{background:var(--pwarnbg);color:var(--pwarn)}.pdt tr.s0 .pdi{background:rgba(43,227,138,.12);color:#4CC38A}
+.pdt em{font-style:normal;font:600 .72rem "Titillium Web",sans-serif;padding:4px 10px;border-radius:6px;white-space:nowrap}.pdt em.hi{background:rgba(255,59,78,.15);color:#EE6B6F}.pdt em.mid{background:var(--pwarnbg);color:var(--pwarn)}.pdt em.ok{background:rgba(43,227,138,.12);color:#4CC38A}
 .ppl{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
 .ppn{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--psel);color:#fff;font-weight:600}
 .ppl b{color:#fff}.ppl small{display:block;color:var(--muted);margin-top:2px;font-size:.86rem}.ppl.done{opacity:.6}.ppl.done .ppn{background:#14532D}
-.ppd[aria-pressed="true"]{color:#2BE38A;border-color:#2BE38A}
+.ppd[aria-pressed="true"]{color:#4CC38A;border-color:#4CC38A}
 .ppb{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 .ptc svg{width:100%;height:auto;display:block}.ptc .pg line{stroke:rgba(255,255,255,.07)}.ptc .pg text{fill:var(--muted);font:10px "JetBrains Mono",monospace}
 .ptl{display:flex;gap:16px;flex-wrap:wrap;font-size:.8rem;color:var(--psil)}.ptl i{display:inline-block;width:14px;height:3px;margin-right:6px;vertical-align:middle}.ptl i.pdash{background:repeating-linear-gradient(90deg,var(--lapB) 0 5px,transparent 5px 8px)!important}
@@ -134,7 +134,7 @@ html[data-look="pro"] .ecount span{border-radius:10px;background:var(--panel2);b
 .pcFL{grid-column:1;grid-row:1}.pcFR{grid-column:3;grid-row:1}.pcRL{grid-column:1;grid-row:2}.pcRR{grid-column:3;grid-row:2}
 .pcw,.pcb{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:rgba(255,255,255,.025)}
 .pcw h4,.pcb h4{margin:0 0 6px;font:600 .78rem "Titillium Web",sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#fff;display:flex;align-items:center;gap:8px}
-.pcw .pwd{width:8px;height:8px;border-radius:50%;background:#2BE38A}.pcRL .pwd,.pcRR .pwd{background:#FFC53D}
+.pcw .pwd{width:8px;height:8px;border-radius:50%;background:#4CC38A}.pcRL .pwd,.pcRR .pwd{background:#F2C230}
 .pcw>div,.pcb>div{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:.82rem;padding:2px 0}.pcw b small,.pcb b small{display:block;font:500 .72rem var(--f-mono);color:var(--warn);text-align:right}.pdiff>span{color:var(--warn)!important}
 .plink{margin-left:6px;min-width:20px;height:20px;border-radius:10px;border:1px solid var(--warn);background:transparent;color:var(--warn);font:600 .72rem var(--f-mono);cursor:pointer}
 .pwgo{margin-left:auto;border:1px solid var(--line);border-radius:6px;background:transparent;color:var(--psil,#C9CDD3);font:600 .72rem var(--f-body);padding:2px 8px;cursor:pointer;text-transform:none;letter-spacing:0}.pwgo:hover{border-color:var(--pacc)}.pwgo em{font-style:normal;color:var(--warn);margin-right:6px}
@@ -142,7 +142,7 @@ html[data-look="pro"] .ecount span{border-radius:10px;background:var(--panel2);b
 .pcmid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px}
 .pvl{display:flex;flex-direction:column;gap:6px}
 .pvr{display:flex;gap:10px;align-items:center;text-align:left;border:1px solid var(--line);border-radius:8px;background:transparent;color:inherit;padding:8px 10px;cursor:pointer;font:inherit}
-.pvr i{width:10px;height:10px;border-radius:50%;border:2px solid var(--faint);flex:none}.pvr.cur{border-color:var(--pacc,var(--pacc));background:var(--psel)}.pvr.cur i{border-color:#FFC53D;background:#FFC53D}
+.pvr i{width:10px;height:10px;border-radius:50%;border:2px solid var(--faint);flex:none}.pvr.cur{border-color:var(--pacc,var(--pacc));background:var(--psel)}.pvr.cur i{border-color:#F2C230;background:#F2C230}
 .pvr b{display:block;font-size:.85rem;color:#fff}.pvr small{color:var(--muted);font-size:.74rem}
 @media (max-width:1200px){.pre1,.pre2,.pset{grid-template-columns:1fr}}
 @media (max-width:760px){.pactg{grid-template-columns:1fr 1fr}.pcar2{grid-template-columns:1fr 1fr}.pcc2{display:none}.pcFL,.pcFR,.pcRL,.pcRR{grid-column:auto;grid-row:auto}.pcmid{grid-template-columns:1fr 1fr}.ppl{grid-template-columns:30px 1fr}.ppl .ppd{grid-column:2}}

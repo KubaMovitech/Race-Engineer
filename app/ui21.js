@@ -14,7 +14,7 @@ function gwTyres(c){if(!c?.w)return '';const K=[gwLetter(c.cf),gwLetter(c.cf),gw
 // per-lap use → highest / average / last, with the laps and minutes left on what is in the car
 function gwCons(title,level,levelTxt,use,lapT,fmtU,extra){const ok=use.filter(v=>v>0);
   const head=`<div class="gwh">${title}<span>${levelTxt}</span></div>`;
-  if(!ok.length||!(level>=0))return `<div class="gwbox">${head}<div class="muted small">${tr('Servono un paio di giri completi.')}</div></div>`;
+  if(!ok.length||!(level>=0))return `<div class="gwbox">${head}<div class="muted small">${tr('Servono un paio di giri completi')}</div></div>`;
   const rows=[[tr('Consumo massimo'),Math.max(...ok)],[tr('Consumo medio'),avg_(ok)],[tr('Ultimo'),ok[ok.length-1]]];
   return `<div class="gwbox">${head}<table class="gwtab"><thead><tr><th></th><th>${tr('Giri')}</th><th>${tr('Tempo')}</th><th>${tr('Consumo')}</th></tr></thead><tbody>${rows.map(([l,u],i)=>{const laps=level/u;
     return `<tr${i===1?' class="avg"':''}><td>${l}</td><td>${fx(laps,1)}</td><td>${lapT>0?Math.floor(laps*lapT/60)+' min':'—'}</td><td>${fmtU(u)}</td></tr>`;}).join('')}</tbody></table>${extra||''}</div>`;}
@@ -28,7 +28,7 @@ function gwSaver(c,fu,vu,lapT,x){const fA=avg_(fu),vA=avg_(vu);const lf=c.fuel>0
   const base=Math.floor(laps+1e-6);const rows=[1,2,3].map(k=>row(`${base+k} ${tr('giri')} (+${k})`,base+k));
   let end='';if(Number.isFinite(toEnd)&&toEnd>0){if(toEnd<=laps)end=`<p class="small pos" style="margin:6px 0 0">${tr('Arriviamo alla bandiera senza fermarci')} (${toEnd} ${tr('giri')}).</p>`;
     else{const need=Math.max(Number.isFinite(lf)?(1-lf/toEnd)*100:0,Number.isFinite(lv)?(1-lv/toEnd)*100:0);if(need<=25)rows.push(row(`${tr('Alla bandiera')} (${toEnd})`,toEnd,'avg'));
-      end=`<p class="small ${need>12?'muted':'pos'}" style="margin:6px 0 0">${need>25?`${tr('Alla bandiera mancano')} ${toEnd} ${tr('giri: servono ancora soste.')}`:need>12?tr('Alla bandiera serve un\'altra sosta: risparmiare il')+` ${fx(need,0)}% `+tr('è troppo.'):tr('Alla bandiera si arriva risparmiando il')+` ${fx(need,1)}% `+tr('per giro.')}</p>`;}}
+      end=`<p class="small ${need>12?'muted':'pos'}" style="margin:6px 0 0">${need>25?`${tr('Alla bandiera mancano')} ${toEnd} ${tr('giri: servono ancora soste')}`:need>12?tr('Alla bandiera serve un\'altra sosta: risparmiare il')+` ${fx(need,0)}% `+tr('è troppo'):tr('Alla bandiera si arriva risparmiando il')+` ${fx(need,1)}% `+tr('per giro')}</p>`;}}
   return `<div class="gwbox gwsave"><div class="gwh">${tr('Risparmio')}<span>${fx(laps,1)} ${tr('giri nel serbatoio')}</span></div><table class="gwtab"><thead><tr><th>${tr('Obiettivo')}</th><th>${tr('Benzina per giro')}</th><th>${tr('Energia per giro')}</th><th>${tr('Risparmio')}</th></tr></thead><tbody>${rows.join('')}</tbody></table>${end}
     <p class="muted small" style="margin:6px 0 0">${tr('Consumo per giro da tenere per fare quei giri con quello che c\'è in auto (con il consumo medio degli ultimi giri). Fino al 5–6% si fa con lift & coast, oltre costa tempo.')}</p></div>`;}
 function gwOurs(c,stt,x){if(!c?.w)return `<div class="muted small">${tr('Nessun dato: l\'auto non è in pista.')}</div>`;
@@ -71,8 +71,8 @@ function lvCrossPanel(x){const el=$('#lvCross');if(!el)return;const W=wetCross(x
   if(!W){el.innerHTML=`<div class="muted small">${tr('In attesa dei dati…')}</div>`;return;}
   const g=(n,t,laps,cars)=>`<div class="kpi"><div class="l">${n}</div><div class="v">${fmtLap(t)}</div><div class="s">${laps} ${tr('giri')} · ${cars} ${tr('auto')}</div></div>`;
   let msg;if(!W.ok)msg=tr('Per il confronto servono almeno 2 giri recenti con le slick e 2 con le wet nella nostra classe.');
-  else if(!W.better)msg=tr('Slick e wet vanno quasi uguali: è il momento del cambio.');
-  else msg=`${tr(W.better==='wet'?'Le wet sono più veloci di':'Le slick sono più veloci di')} <b>${fx(Math.abs(W.d),1)} s</b> ${tr('al giro')}.`+(W.better!==W.ours?` <b class="neg">${tr(W.better==='wet'?'Conviene montare le wet.':'Conviene montare le slick.')}</b>`:` <span class="pos">${tr('Abbiamo le gomme giuste.')}</span>`);
+  else if(!W.better)msg=tr('Slick e wet vanno quasi uguali: è il momento del cambio');
+  else msg=`${tr(W.better==='wet'?'Le wet sono più veloci di':'Le slick sono più veloci di')} <b>${fx(Math.abs(W.d),1)} s</b> ${tr('al giro')}.`+(W.better!==W.ours?` <b class="neg">${tr(W.better==='wet'?'Conviene montare le wet.':'Conviene montare le slick.')}</b>`:` <span class="pos">${tr('Abbiamo le gomme giuste')}</span>`);
   el.innerHTML=`<div class="kpis">${g(tr('Con le slick'),W.slick,W.ns,W.cs)}${g(tr('Con le wet'),W.wet,W.nw,W.cw)}</div><p class="small" style="margin:8px 0 0">${msg}</p>`;}
 
 // ---------- drivers and stints of our car: time at the wheel, when to change, who is next ----------

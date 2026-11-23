@@ -64,7 +64,7 @@ function renderLib(){
       return `<div class="lbrow${on?' on':''}" data-id="${esc(it.id)}"><div class="lbn"><b title="${esc(it.file)}">${esc(it.label)}</b><small>${[info,mb(it.size),it.sample?tr('esempio'):''].filter(Boolean).join(' · ')}</small></div>
         ${k!=='svm'?`<button type="button" class="btn" data-a="open">${tr('Apri')}</button>`:''}${k==='ld'?`<button type="button" class="btn${isRef(it)?' on':''}" data-a="ref" title="${esc(tr('Giro di riferimento nel Coach'))}">${isRef(it)?'★':'☆'}</button>`:''}<button type="button" class="btn" data-a="del" aria-label="${esc(tr('Rimuovi'))}">×</button></div>`;};
     return `<div class="lbcard" data-k="${k}"><div class="lbh"><b>${tr(title)}</b><span class="mono">${ext} · ${its.length}</span></div><p class="muted small">${tr(what)}</p>
-      <div class="lblist">${its.map(row).join('')||`<div class="muted small">${tr('Nessun file.')}</div>`}</div><p class="small" style="color:var(--faint)">${tr('In LMU di solito in')}: <span class="mono">${esc(where)}</span></p></div>`;};
+      <div class="lblist">${its.map(row).join('')||`<div class="muted small">${tr('Nessun file')}</div>`}</div><p class="small" style="color:var(--faint)">${tr('In LMU di solito in')}: <span class="mono">${esc(where)}</span></p></div>`;};
   const nLd=lds().filter(x=>!x.sample).length;const samples=store.items.filter(x=>x.sample);
   el.innerHTML=`<div class="lbtop"><button type="button" class="btn primary" data-a="add">${tr('Aggiungi file')}</button><span class="muted small">${tr('oppure trascinali qui (.ld · .xml · .svm, anche più insieme)')}</span><span class="sp"></span>
       ${samples.length?`<button type="button" class="btn" data-a="nosamples">${tr('Togli gli esempi')}</button>`:''}${store.items.some(x=>!x.sample)?`<button type="button" class="btn" data-a="clear">${tr('Togli tutti i miei file')}</button>`:''}</div>
@@ -143,7 +143,7 @@ RENDER.stint=()=>{
 };
 function stintXML(R,sess,body){
   const di=myDriverIdx(R,sess);const D=sess.drivers[di],laps=D.laps;
-  if(!laps.length){body.innerHTML=(sess.drivers.length>1?driverPicker(R,sess,di):'')+'<div class="panel empty">Questo pilota non ha giri registrati in questa sessione.</div>';if(sess.drivers.length>1){body.insertAdjacentHTML('beforeend',paceHTML(sess,D));wirePace(sess,D);$('#xDrv').onchange=e=>{LS.set('xmldrv:'+R.id+'|'+sess.name,e.target.value);RENDER.stint();};}return;}
+  if(!laps.length){body.innerHTML=(sess.drivers.length>1?driverPicker(R,sess,di):'')+'<div class="panel empty">Questo pilota non ha giri registrati in questa sessione</div>';if(sess.drivers.length>1){body.insertAdjacentHTML('beforeend',paceHTML(sess,D));wirePace(sess,D);$('#xDrv').onchange=e=>{LS.set('xmldrv:'+R.id+'|'+sess.name,e.target.value);RENDER.stint();};}return;}
   const A=stintAnalysis(laps);
   const wearAvg=mean(W.map(w=>A.wear[w])),wearMax=Math.max(...W.map(w=>A.wear[w]).filter(Number.isFinite));
   const lapsFuel=1/A.fuelPerLap,lapsVE=1/A.vePerLap;
@@ -205,7 +205,7 @@ function drawLap(S,lap){
   drawLapChart(true);
   lapReadout(null);
   $('#lapCorners').innerHTML=corners.length?`<table><thead><tr><th>Curva</th><th>Apice m</th><th>Frenata m</th><th>Vel. frenata</th><th>Freno max</th><th>Vel. min</th><th>Marcia</th><th>Gas pieno m</th><th>Uscita</th><th>Tratto s</th></tr></thead><tbody>
-    ${corners.map(c=>`<tr class="clickable" data-d="${c.dApex}"><td>T${c.k}</td><td>${fx(c.dApex,0)}</td><td>${c.brake!=null?fx(c.brake,0):'<span class="muted">lift</span>'}</td><td>${fx(c.brakeV,0)}</td><td>${c.brakePeak?fx(c.brakePeak,0)+'%':'—'}</td><td><b>${fx(c.vMin,0)}</b></td><td>${fx(c.gear,0)}</td><td>${fx(c.fullThr,0)}</td><td>${fx(c.vExit,0)}</td><td>${fx(c.time,2)}</td></tr>`).join('')}</tbody></table>`:'<div class="empty">Nessuna curva rilevata.</div>';
+    ${corners.map(c=>`<tr class="clickable" data-d="${c.dApex}"><td>T${c.k}</td><td>${fx(c.dApex,0)}</td><td>${c.brake!=null?fx(c.brake,0):'<span class="muted">lift</span>'}</td><td>${fx(c.brakeV,0)}</td><td>${c.brakePeak?fx(c.brakePeak,0)+'%':'—'}</td><td><b>${fx(c.vMin,0)}</b></td><td>${fx(c.gear,0)}</td><td>${fx(c.fullThr,0)}</td><td>${fx(c.vExit,0)}</td><td>${fx(c.time,2)}</td></tr>`).join('')}</tbody></table>`:'<div class="empty">Nessuna curva rilevata</div>';
   $$('#lapCorners tr.clickable').forEach(tr=>tr.onclick=()=>{const d=+tr.dataset.d;lapChart.setRange(d-300,d+250);$('#lapChartPanel').scrollIntoView({behavior:'smooth',block:'start'});});
   $('#lapTyres').innerHTML=tyreBlock(stt);
   drawLimits(S);
@@ -282,7 +282,7 @@ function drawCmp(SA,la,SB,lb){
   drawCmpChart(true);
   cmpReadout(null);
   $('#cmpCorners').innerHTML=rows.length?`<table><thead><tr><th>Curva</th><th>Tratto m</th><th>Frenata A</th><th>Frenata B</th><th>Vel. min A</th><th>Vel. min B</th><th>Gas pieno A</th><th>Gas pieno B</th><th>Tempo A</th><th>Tempo B</th><th>Δ</th></tr></thead><tbody>
-  ${rows.map(r=>`<tr class="clickable" data-d="${r.dApex}"><td>T${r.k}</td><td>${fx(r.dS,0)}–${fx(r.dE,0)}</td><td>${r.brake!=null?fx(r.brake,0):'lift'}</td><td>${r.brakeB!=null?fx(r.brakeB,0):'lift'}${r.brake!=null&&r.brakeB!=null?` <span class="muted small">(${fsign(r.brakeB-r.brake,0)})</span>`:''}</td><td>${fx(r.vMin,0)}</td><td>${fx(r.vMinB,0)} <span class="muted small">(${fsign(r.vMinB-r.vMin,0)})</span></td><td>${fx(r.fullThr,0)}</td><td>${fx(r.fullB,0)}</td><td>${fx(r.tA,2)}</td><td>${fx(r.tB,2)}</td><td><b style="color:${r.dt>0.02?'var(--lapA)':r.dt<-0.02?'var(--lapB)':'inherit'}">${fsign(r.dt,3)}</b></td></tr>`).join('')}</tbody></table>`:'<div class="empty">Nessuna curva rilevata.</div>';
+  ${rows.map(r=>`<tr class="clickable" data-d="${r.dApex}"><td>T${r.k}</td><td>${fx(r.dS,0)}–${fx(r.dE,0)}</td><td>${r.brake!=null?fx(r.brake,0):'lift'}</td><td>${r.brakeB!=null?fx(r.brakeB,0):'lift'}${r.brake!=null&&r.brakeB!=null?` <span class="muted small">(${fsign(r.brakeB-r.brake,0)})</span>`:''}</td><td>${fx(r.vMin,0)}</td><td>${fx(r.vMinB,0)} <span class="muted small">(${fsign(r.vMinB-r.vMin,0)})</span></td><td>${fx(r.fullThr,0)}</td><td>${fx(r.fullB,0)}</td><td>${fx(r.tA,2)}</td><td>${fx(r.tB,2)}</td><td><b style="color:${r.dt>0.02?'var(--lapA)':r.dt<-0.02?'var(--lapB)':'inherit'}">${fsign(r.dt,3)}</b></td></tr>`).join('')}</tbody></table>`:'<div class="empty">Nessuna curva rilevata</div>';
   $$('#cmpCorners tr.clickable').forEach(tr=>tr.onclick=()=>{const d=+tr.dataset.d;cmpChart.setRange(d-300,d+250);$('#cmpChartPanel').scrollIntoView({behavior:'smooth',block:'start'});});
 }
 function drawCmpChart(reset){

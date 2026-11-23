@@ -16,6 +16,6 @@ function rcBar(){let b=$('#rcBar');const on=curView()==='live';
   const L=N.length?[]:[...$$('#lvEvShort .lve, #lvEv .lve')].slice(0,10);
   const html=N.length?N.map(n=>`<span class="${esc(n.k||'info')}"><i>${new Date(n.at).toTimeString().slice(0,5)}</i><b>${esc(strip(n.t))}</b> · ${esc(strip(n.s||''))}</span>`).join('')
     :L.length?L.map(e=>`<span class="${esc([...e.classList].find(c=>c!=='lve')||'info')}"><i>${esc(strip(e.querySelector('.t')?.innerHTML||''))}</i>${esc(strip(e.lastElementChild?.innerHTML||''))}</span>`).join('')
-    :`<span><i>—</i>${tr('Nessun evento per ora.')}</span>`;
+    :`<span><i>—</i>${tr('Nessun evento per ora')}</span>`;
   const s=b.querySelector('.rcs');if(s.dataset.h!==html){s.dataset.h=html;s.innerHTML=html;s.style.setProperty('--rcdur',Math.max(25,strip(html).length/7)+'s');}}
 setInterval(()=>{if(curView()==='live')rcBar();},3000);

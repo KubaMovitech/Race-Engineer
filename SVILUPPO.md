@@ -86,3 +86,17 @@ pezzo di comportamento che dipende dall'ordine.
   elenca le classi vecchie riportate allo stile. Le linee dei grafici non hanno alone (`GL()` in charts.js).
 - Regole CSS del menu (`.pmain`, `.psec`) sempre sotto `#proNav`: gli stessi nomi esistono nella striscia della
   sessione (`.pstrip .pmain`, `.pstrip .psec`).
+
+## Fiamma: nuova tavolozza della grafica unica (dalla 2.24, ancora da pubblicare)
+- Stessa grafica unica (`data-pal="grafite"`, gli attributi non cambiano): cambiano colori, carbonio e testi.
+  I valori sono nella prima regola di `app/grafite.css`; le regole nuove nella sezione «FIAMMA» in fondo.
+- Colori: neri carbonio neutri (fondo #0C0D0F, pannelli #141518, rialzato #1C1E22), un solo accento arancione fiamma
+  #FF5A1F, giro A blu ghiaccio #8DB6FF. Restano riservati viola e verde a tempi e settori, giallo e rosso agli avvisi.
+  Sul pulsante arancione il testo è scuro (`--accent-ink`): il bianco su #FF5A1F non arriva a 4,5:1.
+- Carbonio (twill 2×2 in SVG dentro `--carbon`) solo sulla barra in alto, sulla riga delle sezioni e sulla striscia della
+  sessione. Pannelli, grafici e tabelle restano su fondo pieno.
+- Firma: riga arancione di 2 px su ciò che è attivo (sezione, pagina, scheda, la nostra riga in classifica).
+- Testi: niente maiuscolo né spaziatura larga (una regola in fondo a grafite.css lo toglie ovunque, svg esclusi); i testi nuovi
+  si scrivono già in maiuscolo/minuscolo normale. Etichette e messaggi brevi di una frase senza punto finale.
+  Icone del meteo a linea (`SKYI` in `ui13.js`), non emoji. I verdi e rossi accesi scritti nel JS sono stati portati ai toni
+  della tavolozza (#4CC38A, #E5484D).

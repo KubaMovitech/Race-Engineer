@@ -13,7 +13,7 @@ RENDER.setup=()=>{
   if(S)sesSetupBind(S,context);
   if(!S){$('#suDiag').innerHTML='<div class="empty">Scegli una telemetria .ld in alto: i controlli partono da lì.</div>';DIAG=null;renderDoctor();return;}
   const use=engLaps(S);
-  if(!use.length){$('#suDiag').innerHTML='<div class="empty">Servono giri completi.</div>';return;}
+  if(!use.length){$('#suDiag').innerHTML='<div class="empty">Servono giri completi</div>';return;}
   $('#suDiagNote').textContent=`${use.length} ${use.length===1?'giro':'giri'} · ${S.label}`;
   const D=diagnose(S,use,mismatch?null:su);DIAG=D;DIAG.S=S;DIAG.su=mismatch?null:su;
   const order=['Gomme','Freni e trazione','Assetto e aerodinamica','Motore e rapporti','Bilanciamento'];
@@ -43,7 +43,7 @@ function diagnose(S,laps,su){
   {const io=+c.iomin,iomax=+c.iomax;let worst='good';const fixes=[];
     const li=W.map(w=>{const d=T[w].I-T[w].O;let s='good',txt='ok';if(!Number.isFinite(d)){s='';txt='n.d.';}else if(d>iomax){s='warn';txt='troppa campanatura negativa';fixes.push(`${w}: meno negativa${now('CamberSetting',SEC_OF[w])}`);}else if(d<io){s=d<0?'bad':'warn';txt=d<0?'esterno più caldo':'poca campanatura negativa';fixes.push(`${w}: più negativa${now('CamberSetting',SEC_OF[w])}`);}
       if(s==='bad'||(s==='warn'&&worst==='good'))worst=s;return `<li><b>${w}</b> int−est ${fsign(d,1)} °C · ${txt}</li>`;});
-    cards.push({sec:'Gomme',title:'Campanatura',st:worst,tag:`obiettivo ${io}–${iomax} °C`,html:`<ul>${li.join('')}</ul>`,fix:fixes.length?fixes.join('<br>')+'<br><span class="muted">Un click alla volta, poi riguarda le temperature.</span>':null});
+    cards.push({sec:'Gomme',title:'Campanatura',st:worst,tag:`obiettivo ${io}–${iomax} °C`,html:`<ul>${li.join('')}</ul>`,fix:fixes.length?fixes.join('<br>')+'<br><span class="muted">Un click alla volta, poi riguarda le temperature</span>':null});
     summary.push('Differenza temperatura interno−esterno (°C): '+W.map(w=>`${w} ${fx(T[w].I-T[w].O,1)}`).join(', '));}
   {let worst='good';const pmin=num(c.pmin),pmax=num(c.pmax),fixes=[];
     const li=W.map(w=>{const x=T[w],d=x.C-(x.I+x.O)/2;let s='good',txt='profilo uniforme';if(d>6){s='warn';txt='centro caldo → pressione alta';fixes.push(`${w}: −1 click${now('PressureSetting',SEC_OF[w])}`);}else if(d<-2){s='warn';txt='centro freddo → pressione bassa';fixes.push(`${w}: +1 click${now('PressureSetting',SEC_OF[w])}`);}
@@ -125,7 +125,7 @@ async function runAI(turns,outEl,tier='complex'){
   if(!SAMPLE)return null;
   const box=document.createElement('div');box.className='answer';box.innerHTML='<span class="spin"></span> <span class="muted small">L’ingegnere sta analizzando i dati…</span>';outEl.appendChild(box);
   try{const r=await SAMPLE(turns.map((t,i)=>i===0&&t.role==="user"?{...t,content:t.content+AI_LANG()}:t),{modelTier:tier,cache:false,onText:({text})=>{box.innerHTML=md(text);}});box.innerHTML=md(r.text);return r.text;}
-  catch(e){if(e?.code==='not_granted')box.innerHTML='<div class="note">Serve il tuo consenso per usare l’assistente: riprova e accetta la richiesta.</div>';else if(e?.code==='rate_limited')box.innerHTML='<div class="note">Troppe richieste ravvicinate: aspetta un minuto e riprova.</div>';else{box.innerHTML=`<div class="note">Nessuna risposta (${esc(e?.message||e?.code||'errore')}). Riprova tra poco.</div>`;if(e?.text)box.innerHTML+=md(e.text);}return null;}
+  catch(e){if(e?.code==='not_granted')box.innerHTML='<div class="note">Serve il tuo consenso per usare l’assistente: riprova e accetta la richiesta.</div>';else if(e?.code==='rate_limited')box.innerHTML='<div class="note">Troppe richieste ravvicinate: aspetta un minuto e riprova</div>';else{box.innerHTML=`<div class="note">Nessuna risposta (${esc(e?.message||e?.code||'errore')}). Riprova tra poco.</div>`;if(e?.text)box.innerHTML+=md(e.text);}return null;}
 }
 let suTurns=[];
 function setupPrompt(){

@@ -14,7 +14,7 @@ function proAIHTML(S){const R=proFindings(S);if(!R)return '';const F=[...R.F].so
   const n=F.filter(f=>f.s>0).length;
   return `<div class="panel pai"><div class="dt"><span class="psp">⚙</span> ${tr('Analisi automatica')}<span class="pai-r">${tr('regole e calcoli sulla telemetria')}</span></div>
     <div class="pai-h">${n?`${n} ${n===1?tr('elemento da guardare'):tr('elementi da guardare')}`:tr('Niente di urgente')}<button type="button" class="btn pai-all">${tr('Vedi tutti')} →</button></div>
-    ${list.map(proFindRow).join('')||`<p class="muted small">${tr('Servono giri completi.')}</p>`}
+    ${list.map(proFindRow).join('')||`<p class="muted small">${tr('Servono giri completi')}</p>`}
     <p class="muted small pai-n">${R.D.su?esc(R.D.su.name):tr('Solo telemetria: per i valori del setup scegli il .svm in Race Engineer.')} · ${esc(engLapsText(R.laps))}</p></div>`;}
 
 // track facts measured on the best lap
@@ -34,8 +34,8 @@ function proTelSVG(S,lap,W=900,H=230){const g=lapGrid(S,lap,5);const v=g.get('Gr
     <line x1="46" x2="${W-10}" y1="${yp(0,140)}" y2="${yp(0,140)}"/><line x1="46" x2="${W-10}" y1="${yp(0,176)}" y2="${yp(0,176)}"/><text x="40" y="${+yp(50,140)+4}" text-anchor="end">${tr('Gas')}</text><text x="40" y="${+yp(50,176)+4}" text-anchor="end">${tr('Freno')}</text></g>
     ${z}${cor.map(c=>`<text x="${X(c.apex)}" y="8" text-anchor="middle" class="pc">T${c.k}</text>`).join('')}
     <polyline points="${line(v,yv)}" fill="none" stroke="#fff" stroke-width="1.7"/>
-    ${th?`<polyline points="${line(th,x=>yp(x,140))}" fill="none" stroke="#2BE38A" stroke-width="1.3"/>`:''}
-    ${br?`<polyline points="${line(br,x=>yp(x,176))}" fill="none" stroke="#FF3B4E" stroke-width="1.3"/>`:''}
+    ${th?`<polyline points="${line(th,x=>yp(x,140))}" fill="none" stroke="#4CC38A" stroke-width="1.3"/>`:''}
+    ${br?`<polyline points="${line(br,x=>yp(x,176))}" fill="none" stroke="#E5484D" stroke-width="1.3"/>`:''}
     <g class="pg pax">${ax}</g>`;}
 
 function proTelDraw(S){const t=$('#stBody .dtel.ptel');if(!t)return;const L=S.laps.filter(l=>l.complete);const lap=L.find(l=>l.i===LS.get('pdl:'+S.id,S.best?.i))||S.best||L[0];if(!lap)return;
@@ -55,7 +55,7 @@ function proTelDraw(S){const t=$('#stBody .dtel.ptel');if(!t)return;const L=S.la
         t.querySelector('.plap b').textContent=`${tr('Giro')} ${lap.num} · ${fmtLap(lap.time)}${lap===S.best?' ★':''}`;
         proTelDraw(S);};
       t.classList.add('ptel');t.insertAdjacentHTML('beforeend',`<div class="plap"><button type="button" class="btn icon" data-k="-1" aria-label="${tr('Giro precedente')}">‹</button><b></b><button type="button" class="btn icon" data-k="1" aria-label="${tr('Giro successivo')}">›</button><button type="button" class="btn pcmp">${tr('Confronta')}</button></div>
-        <div class="plg"><span><i style="background:#fff"></i>${tr('Velocità')} (km/h)</span><span><i style="background:#2BE38A"></i>${tr('Gas')} (%)</span><span><i style="background:#FF3B4E"></i>${tr('Freno')} (%)</span><span><i style="background:rgba(229,53,75,.35)"></i>${tr('frenate')}</span></div>`);
+        <div class="plg"><span><i style="background:#fff"></i>${tr('Velocità')} (km/h)</span><span><i style="background:#4CC38A"></i>${tr('Gas')} (%)</span><span><i style="background:#E5484D"></i>${tr('Freno')} (%)</span><span><i style="background:rgba(229,53,75,.35)"></i>${tr('frenate')}</span></div>`);
       t.querySelectorAll('.plap [data-k]').forEach(b=>b.onclick=()=>{k=(k+ +b.dataset.k+L.length)%L.length;draw();});
       t.querySelector('.pcmp').onclick=()=>{TW.SA=S;TW.a=L[k].i;TW.auto=false;showView('tele');};
       draw();}
@@ -87,11 +87,11 @@ html[data-look="pro"] .dash.pdash .dlaps,html[data-look="pro"] .dash.pdash .den{
 .pai-h{display:flex;justify-content:space-between;align-items:center;gap:10px;font:600 1.05rem "Titillium Web",sans-serif;color:var(--pacc2);margin-bottom:10px}.pai-h .btn{height:30px;font-size:.78rem;color:var(--pacc2)}
 .pfr{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:12px;align-items:start;padding:12px;border:1px solid var(--line);border-radius:8px;background:rgba(255,255,255,.02);margin-bottom:8px}
 .pfr .pfi{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;font-weight:600;font-size:1.05rem}
-.pfr.s2 .pfi{background:rgba(255,59,78,.15);color:#FF3B4E}.pfr.s1 .pfi{background:var(--pwarnbg);color:var(--pwarn)}.pfr.s0 .pfi{background:rgba(43,227,138,.12);color:#2BE38A}
-.pfr b{display:block;color:#fff;font-size:.92rem}.pfr.s2 b{color:#FF5A6A}.pfr.s1 b{color:var(--pwarn)}
+.pfr.s2 .pfi{background:rgba(255,59,78,.15);color:#E5484D}.pfr.s1 .pfi{background:var(--pwarnbg);color:var(--pwarn)}.pfr.s0 .pfi{background:rgba(43,227,138,.12);color:#4CC38A}
+.pfr b{display:block;color:#fff;font-size:.92rem}.pfr.s2 b{color:#EE6B6F}.pfr.s1 b{color:var(--pwarn)}
 .pfr small{display:block;color:var(--psil3);font-size:.86rem;margin-top:2px}.pfr .pfx{color:var(--pacc2)}
 .pfr em{font-style:normal;font:600 .72rem "Titillium Web",sans-serif;padding:4px 10px;border-radius:6px;white-space:nowrap}
-.pfr em.hi{background:rgba(255,59,78,.15);color:#FF5A6A}.pfr em.mid{background:var(--pwarnbg);color:var(--pwarn)}.pfr em.ok{background:rgba(43,227,138,.12);color:#2BE38A}
+.pfr em.hi{background:rgba(255,59,78,.15);color:#EE6B6F}.pfr em.mid{background:var(--pwarnbg);color:var(--pwarn)}.pfr em.ok{background:rgba(43,227,138,.12);color:#4CC38A}
 .pai-n{margin:6px 0 0}
 html[data-look="pro"] #stBody .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr))}
 .pvmax .v small{font-size:.8rem;color:var(--muted)}

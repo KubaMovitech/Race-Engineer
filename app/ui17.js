@@ -67,7 +67,7 @@ const isHosted=()=>!isBridgeHost()&&!isFileHost();
 function newerV(a,b){const pa=String(a).split('.'),pb=String(b).split('.');for(let i=0;i<Math.max(pa.length,pb.length);i++){const x=+pa[i]||0,y=+pb[i]||0;if(x!==y)return x>y;}return false;}
 
 const updChannel=()=>(UPD.base||DEFAULT_UPD).replace(/\/?$/,'/');
-async function updFetchRemote(){if(!UPD.base&&!DEFAULT_UPD)throw new Error(tr('Imposta prima il canale degli aggiornamenti.'));const r=await fetch(updChannel()+'version.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);return r.json();}
+async function updFetchRemote(){if(!UPD.base&&!DEFAULT_UPD)throw new Error(tr('Imposta prima il canale degli aggiornamenti'));const r=await fetch(updChannel()+'version.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);return r.json();}
 async function updCheck(){UPD.err='';UPD.state='checking';updRender();
   try{if(isBridgeHost()){const q=UPD.base?'?channel='+encodeURIComponent(UPD.base):'';let r=null;try{const x=await fetch('/update'+q,{method:'POST'});if(x.ok)r=await x.json();}catch(e){}
       // bridges up to 1.7 have no updater: ask the channel directly and offer the new bridge as a download
@@ -96,7 +96,7 @@ async function updApply(){const R=UPD.remote;if(!R)return;UPD.state='working';up
       if(!h){toast(tr('Scegli il file Data_Engineer.html che stai usando: verrà sostituito con la nuova versione.'));h=await window.showSaveFilePicker({suggestedName:'Data_Engineer.html',types:[{description:'Data Engineer',accept:{'text/html':['.html']}}]});updIdb.set(h);}
       const w=await h.createWritable();await w.write(buf);await w.close();LS.set('updJust',R.version);UPD.state='done';updRender();
       toast(tr('Aggiornato: riapro l\'app…'));setTimeout(()=>location.reload(),1200);}
-    else{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([buf],{type:'text/html'}));a.download='Data_Engineer.html';document.body.appendChild(a);a.click();a.remove();UPD.state='done';updRender();toast(tr('Nuova versione scaricata: sostituisci il vecchio file.'));}}
+    else{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([buf],{type:'text/html'}));a.download='Data_Engineer.html';document.body.appendChild(a);a.click();a.remove();UPD.state='done';updRender();toast(tr('Nuova versione scaricata: sostituisci il vecchio file'));}}
   catch(e){if(e.name==='AbortError'){UPD.state='available';}else{UPD.state='error';UPD.err=e.message||String(e);}updRender();}}
 
 function updRender(){const chip=$('#verChip');if(chip){const av=UPD.state==='available';chip.classList.toggle('upd',av);chip.textContent=av?`${tr('Aggiorna')} → v${UPD.remote.version}`:'v'+APP_VERSION;chip.title=av?tr('È disponibile una nuova versione'):tr('Novità e aggiornamenti');}
@@ -106,7 +106,7 @@ function updRender(){const chip=$('#verChip');if(chip){const av=UPD.state==='ava
   h+=`<label class="f" style="margin-top:8px">${tr('Canale degli aggiornamenti')}<input type="text" id="updBase" value="${esc(UPD.base)}" placeholder="https://raw.githubusercontent.com/…/main/"></label>`;
   h+=`<div class="row" style="margin-top:8px"><button class="btn" type="button" id="updCheck"${UPD.state==='checking'||UPD.state==='working'?' disabled':''}>${tr('Controlla aggiornamenti')}</button>`;
   if(UPD.state==='available')h+=`<button class="btn primary" type="button" id="updGo">${UPD.oldBridge?tr('Scarica il nuovo bridge'):tr('Aggiorna alla')+' v'+esc(R.version)}</button>`;h+='</div>';
-  const msg={checking:tr('Controllo…'),working:tr('Aggiornamento in corso…'),latest:tr('Hai già l\'ultima versione.'),done:tr('Aggiornato.'),error:tr('Non riesco ad aggiornare')+': '+esc(UPD.err)}[UPD.state];if(msg)h+=`<p class="small ${UPD.state==='error'?'neg':'muted'}">${msg}</p>`;
+  const msg={checking:tr('Controllo…'),working:tr('Aggiornamento in corso…'),latest:tr('Hai già l\'ultima versione.'),done:tr('Aggiornato'),error:tr('Non riesco ad aggiornare')+': '+esc(UPD.err)}[UPD.state];if(msg)h+=`<p class="small ${UPD.state==='error'?'neg':'muted'}">${msg}</p>`;
   if(UPD.state==='available'&&R?.notes?.length)h+=`<div class="newsnew"><b>${tr('Novità della')} v${esc(R.version)}</b><ul>${R.notes.map(n=>`<li>${esc(n)}</li>`).join('')}</ul></div>`;
   if(isBridgeHost()&&UPD.oldBridge)h+=`<p class="small neg">${tr('Questo bridge è di una versione vecchia e non sa aggiornarsi da solo: scarica il nuovo DataEngineerBridge.exe e sostituisci quello vecchio (basta una volta).')}</p>`;
   else h+=`<p class="muted small">${isBridgeHost()?tr('Il bridge scarica la nuova versione sua e dell\'app e si riavvia da solo. Controlla gli aggiornamenti anche a ogni avvio.'):tr('Il file si sostituisce con un clic (Chrome o Edge); la prima volta scegli il file Data_Engineer.html che usi.')}</p>`;
@@ -132,5 +132,5 @@ function openNews(tab){let m=$('#mNews');if(!m){m=document.createElement('div');
   const t0=Date.now()+Math.random();const ch=new BroadcastChannel('de-app');
   ch.onmessage=e=>{const m=e.data||{};if(m.t!=='open'||!(m.at>t0))return;ch.close();
     try{LIVE.conns.forEach(c=>c.close());LIVE.conns=[];}catch(x){}window.close();
-    setTimeout(()=>{const d=document.createElement('div');d.className='modal';d.innerHTML=`<div class="mbox"><h2>${tr('Data Engineer è aperto in un\'altra finestra')}</h2><p class="muted">${tr('Questa finestra non si aggiorna più: chiudila e usa quella nuova.')}</p></div>`;document.body.appendChild(d);},300);};
+    setTimeout(()=>{const d=document.createElement('div');d.className='modal';d.innerHTML=`<div class="mbox"><h2>${tr('Data Engineer è aperto in un\'altra finestra')}</h2><p class="muted">${tr('Questa finestra non si aggiorna più: chiudila e usa quella nuova')}</p></div>`;document.body.appendChild(d);},300);};
   ch.postMessage({t:'open',at:t0});})();
