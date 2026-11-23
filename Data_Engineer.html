@@ -4778,7 +4778,7 @@ function lvOverview(x){const {sc,I,kind,stt,c,S2,names,now,rows,me,rec}=x;
     const i=L.indexOf(me);const part=L.slice(Math.max(0,i-3),i+4);const lt=carStats(me.veh,me).pace5||me.estL;
     $('#lvNear').innerHTML=`<table><thead><tr><th>Cl.</th><th class="l">Pilota</th>${kind==='race'?'<th>Distacco</th><th>Passo 5</th><th>Δ passo</th><th>Stint</th><th>Gomme</th>':'<th>Best</th><th>Δ</th><th>Ultimo</th><th>Gomme</th>'}</tr></thead><tbody>${part.map(r=>{const cs=carStats(r.veh,r);const myP=carStats(me.veh,me).pace5;
       if(kind==='race'){const g=(r.gapL+r.lapsL*lt)-(me.gapL+me.lapsL*lt);return `<tr class="${r===me?'ours':''}" data-car="${esc(r.veh)}"><td>P${r.pic}</td><td class="l">${esc(r.drv)}</td><td>${r===me?'—':g<0?'<span class="neg">'+fx(g,1)+'</span>':'<span class="pos">+'+fx(g,1)+'</span>'}</td><td>${fmtLap(cs.pace5)}</td><td>${r===me?'—':`<span class="${cs.pace5<myP?'neg':'pos'}">${sgn(cs.pace5-myP,2)}</span>`}</td><td>${cs.stintLaps}</td><td>${compHTML(r.comp,r.cf,r.cr)}</td></tr>`;}
-      return `<tr class="${r===me?'ours':''}" data-car="${esc(r.veh)}"><td>P${L.indexOf(r)+1}</td><td class="l">${esc(r.drv)}</td><td>${fmtLap(r.best)}</td><td>${r===me||!(r.best>0)||!(me.best>0)?'—':`<span class="${r.best<me.best?'neg':'pos'}">${sgn(r.best-me.best,3)}</span>`}</td><td class="${cs.lastInv?'neg':''}">${fmtLap(cs.lastT>0?cs.lastT:r.last)}</td><td>${compHTML(r.comp,r.cf,r.cr)}</td></tr>`;}).join('')}</tbody></table>`;}
+      return `<tr class="${r===me?'ours':''}" data-car="${esc(r.veh)}"><td>P${L.indexOf(r)+1}</td><td class="l">${esc(r.drv)}</td><td>${fmtLap(r.best)}</td><td>${r===me||!(r.best>0)||!(me.best>0)?'—':`<span class="${r.best<me.best?'neg':'pos'}">${sgn(r.best-me.best,3)}</span>`}</td><td class="${cs.lastInv?'neg':''}">${fmtLap(cs.lastT>0?cs.lastT:r.last)}</td><td>${compHTML(r.comp,r.cf,r.cr)}</td></tr>`;}).join('')}</tbody></table>`;lvFlip($('#lvNear'),kind+'|near');}
   else $('#lvNear').innerHTML='';
   // brief
   const B=[];if(S2&&kind==='race'){const fl=finishLaps(rows,me,sc);B.push(['Giri possibili con quello che hai',fx(S2.left,1)+(S2.lim==='ve'?' (energia)':' (carburante)')],['Ultimo giro utile per la sosta',Number.isFinite(S2.lastLap)?'giro '+S2.lastLap:'—'],['Giri alla bandiera',Number.isFinite(fl)?'≈ '+fl:'—'],['Soste ancora necessarie',Number.isFinite(S2.stops)?S2.stops:'—']);}
@@ -4832,7 +4832,34 @@ function lvBoard(x){const {sc,I,kind,rows,me,names}=x;if(!sc){$('#lvStand').inne
       const out=`<tr class="${ours.has(r.veh)?'ours':''}${riv.includes(r.veh)?' riv':''}${r.inPit||r.gar?' inpit':''}" data-car="${esc(r.veh)}"><td>${star(r)}</td><td>${r.best>0?i:'—'}</td><td><span class="clsdot" style="background:${LV_CLS(r.cls)}"></span>${r.best>0?cp[r.cls]:'—'}</td><td class="l">${name(r,s)}</td><td>${stat(r)}</td>${energyCell(r)}
         <td class="${r.best>0&&r.best===cbest[r.cls]?'bestc':''}" title="${esc(bl)}">${fmtLap(r.best)}</td><td>${r.best>0&&ref?(r.best===ref?'—':'+'+fx(r.best-ref,3)):'—'}</td><td>${pv&&r.best>0?'+'+fx(r.best-pv.best,3):'—'}</td>${secs}<td>${fmtLap(s.ideal)}</td>${hasV?vmaxCell(r,vbq):''}<td class="${s.lastInv?'neg':''}">${fmtLap(s.lastT>0?s.lastT:r.last)}</td><td>${r.laps}</td>${tyreCell(r)}</tr>`;
       if(r.best>0){prev[r.cls]=r;prev.all=r;}return out;}).join('');}
-  $('#lvStand').innerHTML=`<table class="lbt"><thead><tr>${H}</tr></thead><tbody>${B}</tbody></table>`;}
+  $('#lvStand').innerHTML=`<table class="lbt"><thead><tr>${H}</tr></thead><tbody>${B}</tbody></table>`;lvFlip($('#lvStand'),kind+'|'+(LIVE.cls||'')+'|'+gm);}
+
+// ---------- overtakes: rows slide to their new place and show the places gained or lost ----------
+// After each redraw (every second) the rows are compared with the previous one by car (data-car): a car that changed
+// place slides from its old row to the new one (FLIP, transform only, 260 ms, ease-in-out for movement on screen) and
+// gets «▲n» / «▼n» next to the name for 6 s. Nothing moves on the first draw, after a change of filter, or when more
+// than half of the table reorders at once (that is a new sort, not overtakes). With reduced motion only the mark stays.
+const LV_FLIP=new WeakMap(),LV_MOVES={};
+function lvFlip(host,key){const tb=host?.querySelector('tbody');if(!tb)return;const rows=[...tb.querySelectorAll('tr[data-car]')];if(!rows.length)return;
+  const prev=LV_FLIP.get(host);const now=Date.now();const cur={key,idx:{},top:{}};rows.forEach((r,i)=>{cur.idx[r.dataset.car]=i;cur.top[r.dataset.car]=r.offsetTop;});
+  if(prev&&prev.key===key&&host.offsetParent){const moved=rows.filter(r=>{const c=r.dataset.car;return c in prev.idx&&prev.idx[c]!==cur.idx[c];});
+    if(moved.length&&moved.length<=Math.max(2,rows.length/2)){
+      // places gained or lost: relative order among the cars of both draws, so a car joining or leaving the table does not count
+      const both=rows.map(r=>r.dataset.car).filter(c=>c in prev.idx);const rank=(o)=>Object.fromEntries(both.slice().sort((a,b)=>o[a]-o[b]).map((c,i)=>[c,i]));
+      const rp=rank(prev.idx),rc=rank(cur.idx);// while a mark is showing, further moves the same way add up (5th → 8th in three steps reads ▼3)
+      both.forEach(c=>{const d=rp[c]-rc[c];if(!d)return;const m=LV_MOVES[c];LV_MOVES[c]={d:m&&m.until>now&&Math.sign(m.d)===Math.sign(d)?m.d+d:d,until:now+6000};});
+      const motion=typeof MOTION_OK!=='function'||MOTION_OK();
+      if(motion)moved.forEach(r=>{const dy=prev.top[r.dataset.car]-cur.top[r.dataset.car];if(!dy||!r.animate)return;const up=dy>0;
+        r.style.position='relative';r.style.zIndex=up?'2':'1';
+        r.animate([{transform:`translateY(${dy}px)`},{transform:'translateY(0)'}],{duration:260,easing:'cubic-bezier(0.77,0,0.175,1)'}).onfinish=()=>{r.style.zIndex='';};});}}
+  // the marks, kept across the redraws until they expire
+  rows.forEach(r=>{const m=LV_MOVES[r.dataset.car];if(!m)return;if(m.until<now){delete LV_MOVES[r.dataset.car];return;}const td=r.querySelector('td.l');if(!td||td.querySelector('.lvmv'))return;
+    const left=m.until-now;td.insertAdjacentHTML('afterbegin',`<span class="lvmv ${m.d>0?'gain':'lose'}${left<700?' out':''}" title="${esc(tr(m.d>0?'posizioni guadagnate negli ultimi secondi':'posizioni perse negli ultimi secondi'))}">${m.d>0?'▲':'▼'}${Math.abs(m.d)}</span>`);});
+  LV_FLIP.set(host,cur);}
+(function(){const st=document.createElement('style');st.textContent=`
+.lvmv{display:inline-block;margin-right:6px;padding:0 5px;border-radius:3px;font:600 .78rem/1.4 var(--f-timing,var(--f-mono));font-variant-numeric:tabular-nums;vertical-align:1px;transition:opacity .3s ease}
+.lvmv.gain{color:var(--good);background:color-mix(in srgb,var(--good) 16%,transparent)}.lvmv.lose{color:var(--bad);background:color-mix(in srgb,var(--bad) 16%,transparent)}
+.lvmv.out{opacity:0}`;document.head.appendChild(st);})();
 
 // ---------- Auto ----------
 function lvCar(x){const {c,stt}=x;
@@ -5239,9 +5266,10 @@ const tr=s=>s;
 document.documentElement.lang='it';
 const AI_LANG=()=>'';
 // ================= VERSIONE, NOVITÀ E AGGIORNAMENTI =================
-const APP_VERSION='2.25.0';
+const APP_VERSION='2.25.1';
 const DEFAULT_UPD='https://raw.githubusercontent.com/KubaMovitech/Race-Engineer/main/';   // update channel (folder with version.json), set when the team repository exists
 const CHANGELOG=[
+{v:'2.25.1',d:'23/11/2026',items:['Muretto: nei sorpassi le righe della classifica e di «Intorno a noi» scorrono dalla vecchia posizione alla nuova, e accanto al nome compare per qualche secondo ▲ o ▼ con le posizioni guadagnate o perse. Con «riduci movimento» resta solo il segno.']},
 {v:'2.25.0',d:'23/11/2026',items:['Analisi tecnica › Piattaforma e aero: l\'auto in 3D appoggiata alle altezze delle quattro ruote misurate in ogni fase del giro (rettilineo, frenata, inserimento, appoggio, uscita), con rake, rollio, sospensioni e temperature interno/centro/esterno sulle gomme. Movimenti ingranditi ×5 disattivabili: i numeri sono sempre quelli misurati. Si ruota trascinando.','La sagoma è quella semplificata di una hypercar a ruote coperte, uguale per tutte le auto, senza livrea.','Temperature delle gomme in tasselli tinti invece che pieni, valori mancanti come un trattino, etichette sopra i titoli in grigio, niente più icona ⚙ su «Analisi automatica».']},
 {v:'2.24.0',d:'23/11/2026',items:['Nuova grafica «Fiamma»: neri carbonio, un solo arancione fiamma per ciò che è attivo, blu ghiaccio per il giro di riferimento. Trama di carbonio solo sulla barra in alto e sulla striscia della sessione; grafici e tabelle restano su fondo pieno.','Tempi, distacchi e settori grandi in caratteri da cronometraggio, con le cifre che non si spostano quando cambiano. Sul PC la striscia della sessione è una barra dei tempi: prima la sessione, poi passo, distacco e problema principale.','Etichette in maiuscolo/minuscolo normale, logo piatto, icone del meteo disegnate al posto delle emoji, colori meno accesi per verdi e rossi.','Meno movimento: il cambio pagina è istantaneo; il puntino della diretta, il settore in corso in classifica e la barra «Direzione gara» non lampeggiano né scorrono più. Restano gli avvisi veri (BOX, allarmi).','«Invita un amico» diventa «Invita un compagno».']},
 {v:'2.23.0',d:'10/11/2026',items:['Nuova grafica «Grafite», l\'unica dell\'app: fondo grafite, linee sottili, riquadri piatti. Blu = giro di riferimento, arancione = quello che analizzi o la tua auto, giallo e rosso solo per gli avvisi, viola e verde solo per tempi e settori.','Menu in una riga in alto: le 4 sezioni e le pagine della sezione aperta, niente più colonna a sinistra. La pagina ha più spazio.','Tolte le vecchie grafiche (Carbon, nero e oro, blu notte) e in Personalizza «Colore principale» e «Sfondo». Restano colori dei giri A/B, densità, backup e logo.','Telefono: il riquadro «Problema principale» in alto non è più tagliato; la barra degli stint mostra il numero dello stint.','Sistemati testi che uscivano dai riquadri, finestre con il vecchio fondo blu, intestazioni nere nelle tabelle del Muretto e la scritta sovrapposta nella mappa del Confronto.']},

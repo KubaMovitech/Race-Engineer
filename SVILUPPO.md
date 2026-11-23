@@ -126,3 +126,11 @@ pezzo di comportamento che dipende dall'ordine.
 - La sagoma è una hypercar a ruote coperte semplificata, ricavata dalle proporzioni di una LMDh (foto di riferimento):
   solo forma, niente livrea né loghi; è la stessa per tutte le auto e lo dice sotto il disegno.
 - Un solo contesto WebGL alla volta: `p3Mount` libera il precedente (`WEBGL_lose_context`) a ogni ridisegno della pagina.
+
+## Sorpassi nel Muretto (dopo la 2.25)
+- `lvFlip(host,key)` in `app/ui14.js`, chiamata dopo il ridisegno della Classifica (`#lvStand`) e di «Intorno a noi»
+  (`#lvNear`). Confronta le righe con il disegno precedente per `data-car`: chi cambia posto scorre dalla riga vecchia
+  alla nuova (FLIP, solo `transform`, 260 ms, `cubic-bezier(0.77,0,0.175,1)`) e ha «▲n» / «▼n» accanto al nome per 6 s;
+  i cambi nella stessa direzione si sommano finché il segno è visibile. Niente animazione al primo disegno, dopo un cambio
+  di filtro (`key`) o se si riordina più di metà tabella; con «riduci movimento» resta solo il segno.
+- Classi `.lvmv.gain` / `.lvmv.lose`: non `.up` / `.dn`, che in pro.css vogliono dire tempo peggiore / migliore.

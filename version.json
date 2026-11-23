@@ -1,16 +1,15 @@
 {
- "version": "2.25.0",
+ "version": "2.25.1",
  "date": "2026-11-23",
  "notes": [
-  "Analisi tecnica: l'auto in 3D con l'assetto misurato in ogni fase del giro",
-  "Temperature gomme più leggibili e ultimi ritocchi alla grafica"
+  "Muretto: le righe della classifica scorrono nei sorpassi, con le posizioni guadagnate o perse"
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "2c1771a1aff52b9dafb9439ddfc116ee8e8935dcbc6f10cc50ecebd37911306b"
+  "sha256": "f417bbacb53dda9a86a4578d6b263474aec8d3922c62db87788b73a0f6ab723f"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "25c8093fab912646e1c372d3de2bfa5bd2732d6421d171d01229f2fce2a44892"
+  "sha256": "7e88d65f1bd4bf64edc73ac47d624d47e32cb8b26c9c92f2eabc7d846091c3e6"
  }
 }
