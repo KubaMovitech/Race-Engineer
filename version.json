@@ -1,18 +1,16 @@
 {
- "version": "2.24.0",
+ "version": "2.25.0",
  "date": "2026-11-23",
  "notes": [
-  "Nuova grafica Fiamma: nero carbonio e arancione",
-  "Numeri da cronometraggio e barra dei tempi",
-  "Meno animazioni, niente più elementi che lampeggiano",
-  "Testi ed etichette ripuliti"
+  "Analisi tecnica: l'auto in 3D con l'assetto misurato in ogni fase del giro",
+  "Temperature gomme più leggibili e ultimi ritocchi alla grafica"
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "14e404f97f44cdc3c134b64b9419b29af353df5e4d3f795040e52568faf126ce"
+  "sha256": "2c1771a1aff52b9dafb9439ddfc116ee8e8935dcbc6f10cc50ecebd37911306b"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "ac037674b2854442b3512aad9671ba9f3ad869f148d5fe5ed6fa43b5fdfab173"
+  "sha256": "25c8093fab912646e1c372d3de2bfa5bd2732d6421d171d01229f2fce2a44892"
  }
 }

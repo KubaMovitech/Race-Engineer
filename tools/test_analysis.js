@@ -195,4 +195,10 @@ console.log('18. Prova locale: parametro della ruota e condizioni');
   const hotter=session({name:'hotter.ld',meta:{venue:'Test Local'},extra:[{name:'Track Temperature',unit:'C',f:1,v:gen(420,1,()=>40)}]});
   const J=C.techJudge(test,hotter,flying(hotter),su);
   ok(J.r==='inc'&&J.why.includes('pista'),'la scheda non dichiara migliorato un confronto a temperatura diversa');}
+console.log('Assetto per fase (vista 3D)');
+{const S=session({name:'pose.ld'});const P=C.vdPose(S,flying(S));const A=P.ph.str;
+  ok(P.have.rh&&A&&Object.keys(P.ph).join()==='str','solo rettilineo quando gas pieno, niente freno e poco laterale');
+  ok(near(A.rhF,50,0.5)&&near(A.rhR,50,0.5)&&near(A.rake,0,0.2),'altezze = mediana di 60 − posizione (50 mm), rake 0');
+  ok(P.have.susp&&near(A.comp.FL,0,0.5),'sospensione relativa alla mediana del giro: 0 quando c\'è una sola fase');
+  ok(Number.isNaN(A.t.FL[1])&&!P.have.temp&&!P.have.roll,'temperature e rollio mancanti restano NaN, non 0');}
 console.log(`\n${n-fails}/${n} controlli superati`);process.exit(fails?1:0);

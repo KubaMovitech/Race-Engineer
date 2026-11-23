@@ -279,3 +279,16 @@ html[data-look="pro"][data-pal="grafite"] .cchip b{font-family:var(--f-body);fon
   html[data-look="pro"][data-pal="grafite"] .pstrip .pmain .pprob .pl{order:0;margin:0 0 4px}
   html[data-look="pro"][data-pal="grafite"] .pstrip .pmain .pprob :is(.pv,.pn1,b){font-family:var(--f-body)}
 }
+
+/* ================= LAST PASS (2.25) ================= */
+/* a missing value is a quiet dash, not a dashed «manca» box (the word stays for screen readers) */
+html[data-pal="grafite"] .dmiss{border:0!important;padding:0!important;font:400 0/1 var(--f-body)!important;color:var(--faint)!important;font-style:normal!important}
+html[data-pal="grafite"] .dmiss::before{content:"—";font-size:1.4rem;line-height:1}
+/* labels above page titles are labels: grey, not accent */
+html[data-look="pro"][data-pal="grafite"] :is(.ttl .ey,.eh1 .ey,.ehead .ey){font:400 .82rem/1.3 var(--f-body)!important;color:var(--muted)!important}
+/* automatic analysis: nothing urgent reads green, as in the session strip */
+html[data-look="pro"][data-pal="grafite"] .pai-h.ok{color:var(--good)}
+/* workflow steps: words in the text font, the counts as figures */
+html[data-look="pro"][data-pal="grafite"] .tstep strong{font-family:var(--f-body);font-weight:400;font-variant-numeric:tabular-nums;color:var(--ink)}
+/* tyre temperature chips: tinted, coloured number, the full colour as a 2 px bar */
+html[data-pal="grafite"] i.tchip{background:color-mix(in srgb,var(--c) 18%,transparent)!important;color:var(--c)!important;box-shadow:inset 0 -2px 0 var(--c);border-radius:2px;font-style:normal}

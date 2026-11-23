@@ -112,3 +112,17 @@ pezzo di comportamento che dipende dall'ordine.
   (BOX, avviso rosso del Muretto), spinner e skeleton di caricamento.
 - Restano: finestre e menu del telefono (200 ms), toast (entrano di 12 px), il lampo leggero quando un valore live cambia,
   il disegno del giro nella pagina iniziale. Gli scroll «smooth» rispettano `MOTION_OK()` (riduci movimento).
+
+## Assetto in 3D (Analisi tecnica › Piattaforma e aero)
+- `vdPose(S,laps)` in `app/vdyn.js`: per fase (rettilineo, frenata, inserimento, appoggio, uscita) mediane di altezza delle
+  4 ruote, sospensione di ogni ruota rispetto alla sua mediana sui giri (+ = più compressa, solo con segno verificato o
+  probabile da `vdSign`), rollio (`Body Roll`, se c'è) e temperature interno/centro/esterno. Controllata in `tools/test_analysis.js`.
+- `app/pose3d.js` (dopo ui51.js in build.sh): WebGL scritto apposta (nessuna libreria). La carrozzeria è un campo di
+  altezze sul fondo (`p3Height`: forme lisce unite con un massimo morbido, griglia 128×260) con i passaruota aperti
+  (`p3ArchY`); ala, pinna, splitter, specchietti e diffusore sono pezzi a parte (`p3Parts`). La parte fissa si carica una
+  volta; l'assetto (4 altezze) si applica nel vertex shader, ruote e sospensioni si ricaricano a ogni disegno.
+  Luce per pixel con un riflesso leggero (più forte sui vetri), ombra verso il fondo. Etichette e rake su un canvas 2D sopra. La scocca poggia sulle 4 altezze misurate (bilineare), movimenti ×5
+  disattivabili; i numeri a lato sono sempre quelli misurati. Senza WebGL restano solo i valori.
+- La sagoma è una hypercar a ruote coperte semplificata, ricavata dalle proporzioni di una LMDh (foto di riferimento):
+  solo forma, niente livrea né loghi; è la stessa per tutte le auto e lo dice sotto il disegno.
+- Un solo contesto WebGL alla volta: `p3Mount` libera il precedente (`WEBGL_lose_context`) a ogni ridisegno della pagina.
