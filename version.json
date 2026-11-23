@@ -1,18 +1,18 @@
 {
- "version": "2.23.0",
- "date": "2026-11-10",
+ "version": "2.24.0",
+ "date": "2026-11-23",
  "notes": [
-  "Nuova grafica Grafite, l'unica dell'app",
-  "Menu in una riga in alto",
-  "Tolte le vecchie grafiche",
-  "Telefono e testi fuori dai riquadri sistemati"
+  "Nuova grafica Fiamma: nero carbonio e arancione",
+  "Numeri da cronometraggio e barra dei tempi",
+  "Meno animazioni, niente più elementi che lampeggiano",
+  "Testi ed etichette ripuliti"
  ],
  "bridge": {
   "file": "DataEngineerBridge.exe",
-  "sha256": "1848bd15acdf4fccc3a523e1a7f63b4f56243b35d1ffffa47fa9c8402629ecbf"
+  "sha256": "14e404f97f44cdc3c134b64b9419b29af353df5e4d3f795040e52568faf126ce"
  },
  "app": {
   "file": "Data_Engineer.html",
-  "sha256": "dded230790580860d8c2774830308dcd60195b4e4d31ee6ed33fc8cdafd3cc66"
+  "sha256": "ac037674b2854442b3512aad9671ba9f3ad869f148d5fe5ed6fa43b5fdfab173"
  }
 }
