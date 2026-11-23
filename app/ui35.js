@@ -216,7 +216,7 @@ function twInspect(D,i){if(i==null)return `<div class="muted small">${tr('Passa 
 function twWheels(D,i,useB){const g=useB&&D.gB?D.gB:D.gA;if(i==null)return '';const v=n=>{const a=twArr(g,n);return a?a[i]:NaN;};
   const tcol=t=>!Number.isFinite(t)?'#2C2F34':t<70?'#5B8DEF':t<80?'#4FB3C8':t<95?'#4CC38A':t<105?'#F2C230':'#E5484D';
   const tyre=w=>{const I=v(`Tyre Temp ${w} Inner`),C=v(`Tyre Temp ${w} Centre`),O=v(`Tyre Temp ${w} Outer`);const left=w.endsWith('L');const order=left?[O,C,I]:[I,C,O];const grip=v('Grip Fract '+w);
-    return `<div class="twty"><div class="tt"><b>${w}</b><span>${twFmt(v('Tyre Pressure '+w),1)} kPa</span></div><div class="bars">${order.map(t=>`<i style="background:${tcol(t)}" title="${twFmt(t,0)} °C">${twFmt(t,0)}</i>`).join('')}</div>
+    return `<div class="twty"><div class="tt"><b>${w}</b><span>${twFmt(v('Tyre Pressure '+w),1)} kPa</span></div><div class="bars">${order.map(t=>`<i class="tchip" style="--c:${tcol(t)}" title="${twFmt(t,0)} °C">${twFmt(t,0)}</i>`).join('')}</div>
       <div class="kv"><span>${tr('Carico')}</span><b>${twFmt(v('Tyre Load '+w)/1000,1)} kN</b></div><div class="kv"><span>${tr('Aderenza')}</span><b>${twFmt(grip,0)}%</b></div><div class="gb"><i style="width:${Math.max(0,Math.min(100,grip||0))}%"></i></div>
       <div class="kv"><span>${tr('Freno')}</span><b>${twFmt(v('Brake Temp '+w),0)} °C</b></div><div class="kv"><span>${tr('Altezza')}</span><b>${twFmt(v('Ride Height '+w),1)} mm</b></div><div class="kv"><span>${tr('Scivol.')}</span><b>${twFmt(Math.hypot(v('Lat Patch Vel '+w),v('Long Patch Vel '+w)),2)} m/s</b></div></div>`;};
   return `<div class="twcar">${tyre('FL')}${tyre('FR')}<div class="body"></div>${tyre('RL')}${tyre('RR')}</div>`;}

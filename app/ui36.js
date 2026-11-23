@@ -44,7 +44,7 @@ function dashCar(d){const w=d.st.w;const S=.58,CX=275,CY=126;
   [['RL',6,6],['RR',6,134],['FL',394,6],['FR',394,134]].forEach(([k,x,y])=>{const t=w[k];const order=k.endsWith('L')?[t.O,t.C,t.I]:[t.I,t.C,t.O];
     c+=`<g transform="translate(${x},${y})"><rect width="150" height="116" rx="8" fill="rgba(11,12,15,.92)" stroke="rgba(255,255,255,.18)"/>
      <text x="10" y="20" fill="#fff" font-weight="600" font-size="15">${k}</text><text x="140" y="20" text-anchor="end" fill="#8B9098" font-size="12">${tr('usura')} ${fx(t.wear,2)}%</text>
-     ${order.map((v,j)=>`<rect x="${10+j*38}" y="30" width="34" height="22" fill="${dTc(v)}"/><text x="${27+j*38}" y="46" text-anchor="middle" fill="#0B0C0F" font-weight="600" font-size="13">${fx(v,0)}</text>`).join('')}
+     ${order.map((v,j)=>`<rect x="${10+j*38}" y="30" width="34" height="22" rx="2" fill="${dTc(v)}" fill-opacity=".18"/><rect x="${10+j*38}" y="50" width="34" height="2" fill="${dTc(v)}"/><text x="${27+j*38}" y="46" text-anchor="middle" fill="${dTc(v)}" font-weight="600" font-size="13">${fx(v,0)}</text>`).join('')}
      <text x="10" y="72" fill="#8B9098" font-size="12">${tr('carcassa')}</text><text x="140" y="72" text-anchor="end" fill="#fff" font-weight="600" font-size="13">${fx(t.carc,0)}°</text>
      <text x="10" y="89" fill="#8B9098" font-size="12">${tr('pressione')}</text><text x="140" y="89" text-anchor="end" fill="#fff" font-weight="600" font-size="13">${fx(t.p,0)} kPa</text>
      <text x="10" y="106" fill="#8B9098" font-size="12">${tr('freno max')}</text><text x="140" y="106" text-anchor="end" fill="${t.bMax>600?'#E5484D':'#F2C230'}" font-weight="600" font-size="13">${fx(t.bMax,0)}°</text></g>`;});
