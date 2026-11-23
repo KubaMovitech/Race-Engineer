@@ -1,12 +1,9 @@
-// ================= MOTION: page entry, scroll reveal, loading skeleton, toast kinds =================
-// Only transform and opacity move, 100–300 ms (one exception: the lap drawing of ui47), and with prefers-reduced-motion only short fades remain (see pro.css «motion»).
+// ================= MOTION: scroll reveal, loading skeleton, toast kinds =================
+// Only transform and opacity move, 100–300 ms (one exception: the lap drawing of ui47), and with prefers-reduced-motion only short fades remain (see pro.css «motion»). Changing page is instant (2.24).
 // The Muretto refreshes every second: it never gets entry animations, so live numbers do not flicker.
 const MOTION_OK=()=>!matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// ---------- page entry: the new page fades in once (150 ms), answering the click on the menu ----------
-let pvTimer=0;
-function pvEnter(v){const sec=$('#v-'+v);if(!sec||v==='live')return;clearTimeout(pvTimer);sec.classList.remove('pv-enter');void sec.offsetWidth;sec.classList.add('pv-enter');pvTimer=setTimeout(()=>sec.classList.remove('pv-enter'),300);}
-(function(){const sv=showView;window.showView=showView=function(v){sv(v);try{pvEnter(v);}catch(e){}};})();
+// (page entry fade removed in 2.24: changing page happens hundreds of times a day, the new page appears at once)
 
 // ---------- loading: a skeleton of the session strip while the files are read ----------
 (function(){const hf=window.handleFiles;if(typeof hf!=='function')return;window.handleFiles=handleFiles=async function(files){

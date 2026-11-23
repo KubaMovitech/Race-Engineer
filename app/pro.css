@@ -285,12 +285,10 @@ html[data-look="pro"] .ecount span{letter-spacing:.05em}
 
 /* ================= MOTION (ui46.js, ui47.js): tokens, page change, press, focus, overlays =================
    Durations 100 / 150 / 200 / 300 ms only; ease-out to enter, ease-in to leave; only transform and opacity.
-   Motion answers an action (open, press, change page). The one designed moment is the lap drawing (ui47.js). */
-:root{--m-100:100ms;--m-150:150ms;--m-200:200ms;--m-300:300ms;--m-out:cubic-bezier(.16,1,.3,1);--m-in:cubic-bezier(.7,0,.84,0)}
+   Motion answers an action (open, press); changing page has no animation. The one designed moment is the lap drawing (ui47.js). */
+:root{--m-100:100ms;--m-150:150ms;--m-200:200ms;--m-300:300ms;--m-out:cubic-bezier(.16,1,.3,1)}
 
-/* page change: a 150 ms fade of the new page */
 @keyframes fIn{from{opacity:0}to{opacity:1}}
-.view.pv-enter{animation:fIn var(--m-150) var(--m-out)}
 
 /* controls: colour and border change on hover, a short press; no lifting cards */
 html[data-look="pro"] .btn,html[data-look="pro"] .pn,html[data-look="pro"] .tab,html[data-look="pro"] .sutabs button,html[data-look="pro"] .seg button,
@@ -330,7 +328,7 @@ html[data-look="pro"] #toastStack .toast[data-kind="info"] .tk{color:var(--pacc)
 /* reduced motion: nothing slides or scales; overlays and pages keep a 100 ms fade at most */
 @media (prefers-reduced-motion:reduce){
   html[data-look="pro"] .modal:not([hidden]) .mbox,html[data-look="pro"] #proNav.pmopen nav,html[data-look="pro"] #toastStack .toast{animation:fIn var(--m-100) linear}
-  .view.pv-enter,html[data-look="pro"] details[open]>:not(summary){animation:none}
+  html[data-look="pro"] details[open]>:not(summary){animation:none}
   .pskel .sk::after{animation:none}
   html[data-look="pro"] .btn:active,html[data-look="pro"] .pn:active,html[data-look="pro"] .seg button:active{transform:none}
 }

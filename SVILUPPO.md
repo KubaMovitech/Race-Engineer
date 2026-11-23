@@ -100,3 +100,15 @@ pezzo di comportamento che dipende dall'ordine.
   si scrivono già in maiuscolo/minuscolo normale. Etichette e messaggi brevi di una frase senza punto finale.
   Icone del meteo a linea (`SKYI` in `ui13.js`), non emoji. I verdi e rossi accesi scritti nel JS sono stati portati ai toni
   della tavolozza (#4CC38A, #E5484D).
+- Numeri da cronometraggio: tempi, distacchi, settori e KPI grandi in Barlow Condensed con cifre tabellari
+  (`--f-timing`, sezione «TIMING» in fondo a grafite.css); JetBrains Mono resta per tabelle e numeri piccoli.
+  Sui PC la striscia della sessione è una barra di timing: prima la riga del contesto, poi i tre valori in fila.
+  In Telemetria e Analisi tecnica i valori grandi restano nascosti (`data-pnav="tel"`/`"tech"`).
+
+## Movimento (2.24, regole di Emil Kowalski)
+- Il cambio pagina è istantaneo (tolta la dissolvenza `pv-enter`): si fa centinaia di volte al giorno.
+- Niente animazioni infinite su elementi che restano a schermo: il puntino live, «In pista», il settore in corso nella
+  classifica e la barra «Direzione gara» (ora ferma, il messaggio più recente per primo). Restano gli allarmi veri
+  (BOX, avviso rosso del Muretto), spinner e skeleton di caricamento.
+- Restano: finestre e menu del telefono (200 ms), toast (entrano di 12 px), il lampo leggero quando un valore live cambia,
+  il disegno del giro nella pagina iniziale. Gli scroll «smooth» rispettano `MOTION_OK()` (riduci movimento).

@@ -252,3 +252,30 @@ html[data-pal="grafite"] .skyi{display:block;margin:2px auto;color:var(--muted)}
 html[data-look="pro"][data-pal="grafite"] .lvwn.cur .skyi{color:var(--ink)}
 /* scrollbars in the ramp */
 html[data-pal="grafite"]{scrollbar-color:#33363B transparent}
+
+/* ================= TIMING (2.24, frontend-design) =================
+   Lap times, gaps and sector figures in Barlow Condensed with tabular digits, like a timing tower;
+   JetBrains Mono stays for tables and small numbers. The session strip reads as a timing bar:
+   first the context (what session), then the three answers on the carbon, no boxes between them. */
+html[data-pal="grafite"]{--f-timing:"Barlow Condensed","Arial Narrow",var(--f-body)}
+html[data-look="pro"][data-pal="grafite"] :is(.pstrip .pv,.kpi .v:not(.txt),.dsecs .dv,.lrb b,.lvbig b){font-family:var(--f-timing);font-weight:500;font-variant-numeric:tabular-nums;letter-spacing:0}
+html[data-look="pro"][data-pal="grafite"] .kpi .v:not(.txt){font-size:1.75rem;line-height:1.1}
+html[data-look="pro"][data-pal="grafite"] .dsecs .dv{font-size:2.4rem;line-height:1.05}
+html[data-look="pro"][data-pal="grafite"] .lrb b{font-size:1.7rem;line-height:1.1}
+/* words in the Muretto session row are words, not code */
+html[data-look="pro"][data-pal="grafite"] .cchip b{font-family:var(--f-body);font-weight:600}
+
+/* the timing bar (wide screens; the phone keeps its stacked layout) */
+@media (min-width:761px){
+  html[data-look="pro"][data-pal="grafite"] .pstrip .pline{order:-1;border-top:0;padding:12px 24px 0;background:none;color:var(--muted)}
+  html[data-look="pro"][data-pal="grafite"] .pstrip .pline>b{color:var(--ink);font-weight:600}
+  html[data-look="pro"][data-pal="grafite"]:not([data-pnav="tel"]):not([data-pnav="tech"]) .pstrip .pmain{display:flex;align-items:flex-end;gap:56px;padding:4px 24px 16px}
+  html[data-look="pro"][data-pal="grafite"]:is([data-pnav="tel"],[data-pnav="tech"]) .pstrip .pline{padding-bottom:12px}
+  html[data-look="pro"][data-pal="grafite"] .pstrip .pmain .pk{flex:none;padding:0;border:0;min-width:0;background:none}
+  html[data-look="pro"][data-pal="grafite"] .pstrip .pmain .pprob{flex:1 1 auto;align-self:stretch;justify-content:flex-end;padding:0 0 4px;border-radius:4px}
+  html[data-look="pro"][data-pal="grafite"] .pstrip .pmain .pk .pv{font-size:3rem;line-height:1;order:0;margin:0}
+  html[data-look="pro"][data-pal="grafite"] .pstrip .pmain .pk .pl{order:1;margin-top:6px}
+  html[data-look="pro"][data-pal="grafite"] .pstrip .pmain .pk>small,html[data-look="pro"][data-pal="grafite"] .pstrip .pmain .pk .pm{order:2}
+  html[data-look="pro"][data-pal="grafite"] .pstrip .pmain .pprob .pl{order:0;margin:0 0 4px}
+  html[data-look="pro"][data-pal="grafite"] .pstrip .pmain .pprob :is(.pv,.pn1,b){font-family:var(--f-body)}
+}

@@ -130,7 +130,7 @@ function adviceShape(card,f){if(card.dataset.shaped)return;card.dataset.shaped=1
 
 (function(){const re=renderEng;window.renderEng=renderEng=function(){re();const el=$('#suEng');const S=active()?.S;const D=typeof DIAG!=='undefined'?DIAG:null;if(!el||!S||!D||D.S!==S)return;
   try{const laps=engLaps(S);const F=engFindings(D,S,D.su||null,laps);
-    const start=f=>{ptStart(S,D,laps,f);renderEng();el.querySelector('.ptest2')?.scrollIntoView({behavior:'smooth',block:'start'});};
+    const start=f=>{ptStart(S,D,laps,f);renderEng();el.querySelector('.ptest2')?.scrollIntoView({behavior:MOTION_OK()?'smooth':'auto',block:'start'});};
     el.querySelectorAll('.ef').forEach(card=>{const t=card.querySelector('.eft b')?.textContent;const f=F.find(x=>x.t===t||tr(x.t)===t);if(!f)return;adviceShape(card,f);card.querySelector('.ptgo')?.addEventListener('click',()=>start(f));});
     // the plan of Race Engineer: the same button
     const P=engPlan(F);el.querySelectorAll('.ppl').forEach((row,i)=>{const f=P[i];if(!f||row.querySelector('.ptgo'))return;row.querySelector('.ppd')?.insertAdjacentHTML('beforebegin',`<button type="button" class="btn ptgo">${tr('Prova')}</button>`);row.querySelector('.ptgo').onclick=()=>start(f);});

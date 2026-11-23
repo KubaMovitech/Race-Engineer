@@ -94,8 +94,7 @@ table.lbt tbody tr:nth-child(even) td{background:rgba(255,255,255,.015)}
 
 /* ---------- toasts: stacked, never on top of each other ---------- */
 #toastStack{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;z-index:90;pointer-events:none;max-width:calc(100% - 32px)}
-#toastStack .toast{position:static;transform:none;left:auto;bottom:auto;background:linear-gradient(180deg,#141B23,#0C1116);color:var(--ink);border:1px solid var(--edge2);border-left:3px solid var(--cyan);border-radius:0;padding:9px 16px;font-family:var(--f-mono);font-size:.8rem;box-shadow:0 10px 30px rgba(0,0,0,.5);animation:tin .22s ease-out}
-@keyframes tin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+#toastStack .toast{position:static;transform:none;left:auto;bottom:auto;background:linear-gradient(180deg,#141B23,#0C1116);color:var(--ink);border:1px solid var(--edge2);border-left:3px solid var(--cyan);border-radius:0;padding:9px 16px;font-family:var(--f-mono);font-size:.8rem;box-shadow:0 10px 30px rgba(0,0,0,.5)}
 
 /* ---------- modals ---------- */
 .modal{background:rgba(2,3,5,.72)!important;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
@@ -116,9 +115,9 @@ table.lbt tbody tr:nth-child(even) td{background:rgba(255,255,255,.015)}
 .kpi.hl .v,b.bestv,.best{text-shadow:0 0 16px rgba(177,56,221,.45)}
 
 /* ---------- motion: values that change flash once ---------- */
-.flash{animation:flash .9s ease-out}
-@keyframes flash{0%{background-color:rgba(32,240,208,.22)}100%{background-color:transparent}}
-@media (prefers-reduced-motion:reduce){.flash,#toastStack .toast{animation:none}}
+.flash{animation:flash .6s cubic-bezier(.16,1,.3,1)}
+@keyframes flash{0%{background-color:rgba(255,255,255,.10)}100%{background-color:transparent}}
+@media (prefers-reduced-motion:reduce){.flash{animation:none}}
 
 /* ---------- phone: compact header, sections at the bottom ---------- */
 #botnav{display:none}
